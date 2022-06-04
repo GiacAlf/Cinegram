@@ -1,0 +1,631 @@
+<?php
+
+class FFilm {
+
+    private static string $nomeClasse = "FFilm";  // ci potrebbe essere utile con il FPersistentManager
+    private static string $nomeTabella = "film";  // da cambiare se cambia il nome della tabella Film in DB
+    private static string $chiaveTabella = "IdFilm";   // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeAttributoTitolo = "Titolo";  // nome dell'attributo titolo nel DB
+    private static string $nomeAttributoAnno = "Anno";  // nome dell'attributo anno nel DB
+    private static string $nomeAttributoDurata = "Durata";
+    private static string $nomeAttributoSinossi = "Sinossi";
+    private static string $nomeAttributoVotoMedio = "Voto";  // nome dell'attributo voto nel DB
+
+    private static string $nomeTabellaRecensione = "recensione";    // da cambiare se cambia il nome della tabella Recensione in DB
+    private static string $chiave1TabellaRecensione = "IdFilmRecensito";   // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeAttributoRecensioneUsernameAutore = "UsernameAutore";
+    private static string $nomeAttributoRecensioneVoto = "Voto";
+    private static string $nomeAttributoRecensioneTesto = "Testo";
+    private static string $nomeAttributoRecensioneDataScrittura = "DataScrittura";  // nome dell'attributo Data Scrittura nel DB
+
+    private static string $nomeTabellaRisposta = "risposta";
+    private static string $nomeAttributoRispostaIdFilmRecensito = "IdFilmRecensito";
+
+    private static string $nomeTabellaFilmVisti = "filmvisti";  // da cambiare se cambia il nome della tabella in DB
+    private static string $chiave1TabellaFilmVisti = "idFilmVisto";   // da cambiare se cambia il nome della chiave in DB
+
+    private static string $nomeTabellaRegisti = "persona";   // da cambiare se cambia il nome della tabella in DB
+    private static string $nomeTabellaAttori = "persona";
+    private static string $nomeChiaveTabellaRegisti = "IdPersona";   // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeChiaveTabellaAttori = "IdPersona";   // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeAttributoPersonaCognome = "Cognome";    // nome dell'attributo Cognome nel DB
+    private static string $nomeAttributoPersonaNome = "Nome";    // nome dell'attributo Cognome nel DB
+    private static string $nomeAttributoPersonaRuolo = "Ruolo";    // nome dell'attributo Cognome nel DB
+    private static string $valoreAttributoPersonaAttore = "Attore";    // nome dell'attributo Cognome nel DB
+    private static string $valoreAttributoPersonaRegista = "Regista";    // nome dell'attributo Cognome nel DB
+
+    private static string $nomeTabellaPersoneFilm = "personefilm"; // da cambiare se cambia il nome della tabella in DB
+    private static string $nomeChiave1TabellaPersoneFilm = "IdFilm";    // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeChiave2TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave in DB
+
+
+
+    // metodo che verifica l'esistenza di un film in db passando il EFilm, tramite il valore della chiave idFilm
+    public static function existById(EFilm $film): ?bool {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che verifica l'esistenza di un film in db passando EFilm, attraverso il titolo del film
+    public static function existByTitolo(string $titolo): ?bool {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che verifica l'esistenza di un film in db passando EFilm, attraverso il titolo e l'anno del film
+    public static function existByTitoloEAnno(string $titolo, int $anno): ?bool {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
+                " AND YEAR( " . self::$nomeAttributoAnno . " ) = '" . $anno . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // recupero dati dal DB per creazione oggetto film passando EFilm, attraverso la chiave idFilm
+    // settando i valori booleani a true si caricheranno anche gli array che costituiscono i rispettivi attributi
+    // di EFilm
+    public static function loadById(EFilm $film, bool $registi, bool $attori, bool $recensioni): ?EFilm {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResultFilm = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // caricamento del numero delle views
+            $queryResultViews = FFilm::loadNumeroViews($film);
+
+            // caricamento del voto medio
+            $queryResultVoto = FFilm::loadVotoMedio($film);
+
+            // caricamento lista registi se $registi è settato a true
+            $queryResultRegisti = array();
+            if($registi) $queryResultRegisti = FFilm::loadListaRegisti($film);
+
+            // caricamento lista attori se $attori è settato a true
+            $queryResultAttori = array();
+            if($attori) $queryResultAttori = FFilm::loadListaAttori($film);
+
+            // caricamento lista recensioni se $recensioni è settato a true
+            $queryResultRecensioni = array();
+            if($recensioni) $queryResultRecensioni = FFilm::loadListaRecensioni($film);
+
+            if($queryResultFilm) {
+                return new EFilm($queryResultFilm[self::$chiaveTabella], $queryResultFilm[self::$nomeAttributoTitolo],
+                    new DateTime($queryResultFilm[self::$nomeAttributoAnno]), $queryResultFilm[self::$nomeAttributoDurata],
+                    $queryResultFilm[self::$nomeAttributoSinossi], $queryResultViews, $queryResultVoto,
+                    $queryResultRegisti, $queryResultAttori, $queryResultRecensioni);
+            }
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // recupero dati dal DB per creazione oggetto film passando il titolo come parametro
+    // questa servirà solo per caricare una lista di film ordinati cronologicamente per anno da cui scegliere e poi
+    // fare una loadById e caricarlo con tutti gli altri parametri
+    public static function loadByTitolo(string $titolo): ?array {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
+                " ORDER BY " . self::$nomeAttributoAnno . " ASC" . ";";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // array di EFilm
+            $filmByTitoloResult = array();
+            if($queryResult) {
+                foreach($queryResult as $row) {
+                    $filmByTitoloResult[] = new EFilm($row[self::$chiaveTabella], $row[self::$nomeAttributoTitolo],
+                        new DateTime($row[self::$nomeAttributoAnno]), $row[self::$nomeAttributoDurata],
+                        $row[self::$nomeAttributoSinossi], null, null, null,
+                        null, null);
+                }
+            }
+            return $filmByTitoloResult;
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // recupero dati dal DB per creazione oggetto film passando il titolo e l'anno come parametro
+    // potrebbe non servire ma era praticamente gratis, ho lasciato aperta la possibilità che possa dare più di
+    // un risultato da cui scegliere e poi fare una loadById e caricarlo con tutti gli altri parametri
+    public static function loadByTitoloEAnno(string $titolo, int $anno): ?array {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
+                " AND YEAR( " . self::$nomeAttributoAnno . " ) = '" . $anno . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // array di EFilm
+            $filmByTitoloResult = array();
+            if($queryResult) {
+                foreach($queryResult as $row) {
+                    $filmByTitoloResult[] = new EFilm($row[self::$chiaveTabella], $row[self::$nomeAttributoTitolo],
+                        new DateTime($row[self::$nomeAttributoAnno]), $row[self::$nomeAttributoDurata],
+                        $row[self::$nomeAttributoSinossi], null, null, null,
+                        null, null);
+                }
+            }
+            return $filmByTitoloResult;
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // caricamento del numero di views del film passato per parametro, usando il suo id
+    public static function loadNumeroViews(EFilm $film): ?int {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT COUNT(*) AS NumeroViews FROM " . self::$nomeTabella .
+                " JOIN " . self::$nomeTabellaFilmVisti .
+                " ON " . self::$chiaveTabella . " = " . self::$chiave1TabellaFilmVisti .
+                " WHERE " . self::$chiave1TabellaFilmVisti . " = '" . $film->getId() . "'";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            return $queryResult["NumeroViews"]; // questo sarà un solo valore intero, anche zero
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+    // caricamento del voto medio del film passato per parametro, usando il suo id
+    public static function loadVotoMedio(EFilm $film): ?float {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT AVG(" . self::$nomeAttributoVotoMedio . ") AS VotoMedio" .
+                " FROM " . self::$nomeTabella .
+                " JOIN " . self::$nomeTabellaRecensione .
+                " ON " . self::$chiaveTabella . " = " . self::$chiave1TabellaRecensione . "" .
+                " WHERE " . self::$chiave1TabellaRecensione . " = '" . $film->getId() . "'";
+
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            return $queryResult["VotoMedio"]; // questo sarà un solo valore float, anche zero
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // carica tutti i registi associati al film passato per parametro, restituendoli in un array di ERegisti
+    public static function loadListaRegisti(EFilm $film): ?array {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT " . "pe." . self::$nomeChiaveTabellaRegisti . ", pe." . self::$nomeAttributoPersonaNome .
+                ", pe." . self::$nomeAttributoPersonaCognome .
+                " FROM " . self::$nomeTabellaRegisti . " pe " .
+                " JOIN " . self::$nomeTabellaPersoneFilm . " pef " .
+                " ON " . "pe." . self::$nomeChiaveTabellaRegisti . " = " . "pef." . self::$nomeChiave2TabellaPersoneFilm .
+                " JOIN " . self::$nomeTabella . " f " .
+                " ON " . "pef." . self::$nomeChiave1TabellaPersoneFilm . " = " . "f." . self::$chiaveTabella .
+                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " AND " . self::$nomeAttributoPersonaRuolo . " = '" . self::$valoreAttributoPersonaRegista . "'" .
+                " ORDER BY " . "pe." . self::$nomeAttributoPersonaCognome . " ASC;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // array di ERegisti
+            $registiResult = array();
+            if($queryResult) {
+                foreach($queryResult as $row) {
+                    $registiResult[] = new ERegista($row[self::$nomeChiaveTabellaRegisti],
+                        $row[self::$nomeAttributoPersonaNome], $row[self::$nomeAttributoPersonaCognome]);
+                }
+            }
+            return $registiResult;
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // carica tutti gli attori associati al film passato per parametro, restituendoli in un array di EAttori
+    public static function loadListaAttori(EFilm $film): ?array {
+
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT " . "pe." . self::$nomeChiaveTabellaAttori . ", pe." . self::$nomeAttributoPersonaNome .
+                ", pe." . self::$nomeAttributoPersonaCognome .
+                " FROM " . self::$nomeTabellaAttori . " pe " .
+                " JOIN " . self::$nomeTabellaPersoneFilm . " pef " .
+                " ON " . "pe." . self::$nomeChiaveTabellaAttori . " = " . "pef." . self::$nomeChiave2TabellaPersoneFilm .
+                " JOIN " . self::$nomeTabella . " f " .
+                " ON " . "pef." . self::$nomeChiave1TabellaPersoneFilm . " = " . "f." . self::$chiaveTabella .
+                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " AND " . self::$nomeAttributoPersonaRuolo . " = '" . self::$valoreAttributoPersonaAttore . "'" .
+                " ORDER BY " . "pe." . self::$nomeAttributoPersonaCognome . " ASC;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // array di EAttori
+            $attoriResult = array();
+            if($queryResult) {
+                foreach($queryResult as $row) {
+                    $attoriResult[] = new EAttore($row[self::$nomeChiaveTabellaAttori],
+                        $row[self::$nomeAttributoPersonaNome], $row[self::$nomeAttributoPersonaCognome]);
+                }
+            }
+            return $attoriResult;
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // carica tutte le recensioni associate al film passato per parametro, restituendole in un array di ERecensioni
+    // le risposte di ciascuna recensione non verranno caricate in questo momento ma solo quando si selezionerà una di
+    // esse cliccandoci sopra
+    // TODO considerare un numero limite di recensioni da caricare, da passare per parametro (le prime $n)
+    public static function loadListaRecensioni(EFilm $film): ?array {
+
+        // connessione al DB con oggetto $pdo
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabellaRecensione .
+                " JOIN " . self::$nomeTabella .
+                " ON " . self::$chiave1TabellaRecensione . " = " . self::$chiaveTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " ORDER BY " . self::$nomeAttributoRecensioneDataScrittura . " DESC;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            // array di ERecensioni
+            $recensioniResult = array();
+            if($queryResult) {
+                foreach($queryResult as $row) {
+                    $recensioniResult[] = new ERecensione($row[self::$chiave1TabellaRecensione],
+                        $row[self::$nomeAttributoRecensioneUsernameAutore], $row[self::$nomeAttributoRecensioneVoto],
+                        $row[self::$nomeAttributoRecensioneTesto], new DateTime($row[self::$nomeAttributoRecensioneDataScrittura]),
+                        null);
+                }
+            }
+            return $recensioniResult;
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // salva l'oggetto film sul DB incluse le lise attori e registi
+    public static function store(EFilm $film, ?array $listaAttori, ?array $listaRegisti): void {
+
+        // si controlla se il film non è presente in DB prima di procedere
+        if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "INSERT INTO " . self::$nomeTabella .
+                    " VALUES (null, :Titolo, :Anno, :Durata, :Sinossi, null, null, null);";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ":Titolo" => $film->getTitolo(),
+                    ":Anno" => $film->getAnno()->format('Y-m-d'),
+                    ":Durata" => $film->getDurata(),
+                    ":Sinossi" => $film->getSinossi()));
+
+                // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
+                if($listaAttori) {
+                    foreach ($listaAttori as $attore) {
+                        FAttore::store($attore);
+                        FAttore::storePersoneFilm($attore, $film);
+                    }
+                }
+
+                // ogni regista della lista, se non vuota, verrà salvato in persona e in personefilm
+                if($listaRegisti) {
+                    foreach ($listaRegisti as $regista) {
+                        FRegista::store($regista);
+                        FRegista::storePersoneFilm($regista, $film);
+                    }
+                }
+                $pdo->commit();
+                echo "\nInserimento avvenuto con successo!";
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nInserimento annullato!";
+            }
+        }
+    }
+
+
+    // questo update, per ora, salverà solo gli attributi di EFilm che vanno salvati nella tabella Film del DB, tramite il suo idFilm
+    public static function update(EFilm $film, string $nomeAttributo, $nuovoValore): void {
+
+        if((FFilm::existById($film))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
+                    " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
+            }
+        }
+    }
+
+
+    // cancella un film dal db ovvero dalle tabelle film, filmvisti recensione e risposta
+    public static function delete(EFilm $film): void {
+
+        if(FFilm::existById($film)) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabella .
+                    " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                /* il codice seguete, funzionante, è sostituito dal FFilm::deleteFromPersoneFilm
+                // ogni attore, se l'array è di almeno un elemento, verrà rimosso da personefilm
+                if($listaAttori) {
+                    foreach ($listaAttori as $attore) {
+                        $idPersona = $attore->getId();
+                        $idFilm = $film->getId();
+                        FPersona::deletePersoneFilm($idPersona, $idFilm);
+                    }
+                }
+                // ogni regista, se l'array è di almeno un elemento, verrà rimosso da personefilm
+                if($listaRegisti) {
+                    foreach ($listaRegisti as $regista) {
+                        $idPersona = $regista->getId();
+                        $idFilm = $film->getId();
+                        FPersona::deletePersoneFilm($idPersona, $idFilm);
+                    }
+                }
+                */
+                FFilm::deleteFromRecensione($film);
+                FFilm::deleteFromRisposta($film);
+                FFilm::deleteFromFilmVisti($film);
+                FFilm::deleteFromPersoneFilm($film);
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nCancellazione annullata!";
+            }
+        }
+    }
+
+
+    // cancella le recensioni riferite al film passato per parametro dal DB
+    private static function deleteFromPersoneFilm(EFilm $film): void {
+
+        if (FFilm::existById($film)) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabellaPersoneFilm .
+                    " WHERE " . self::$nomeChiave1TabellaPersoneFilm . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nCancellazione annullata!";
+            }
+        }
+    }
+
+
+    // cancella le recensioni riferite al film passato per parametro dal DB
+    private static function deleteFromRecensione(EFilm $film): void {
+
+        if (FFilm::existById($film)) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabellaRecensione .
+                    " WHERE " . self::$chiave1TabellaRecensione . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nCancellazione annullata!";
+            }
+        }
+    }
+
+
+    // cancella le risposte riferite al film passato per parametro dal DB
+    private static function deleteFromRisposta(EFilm $film): void {
+
+        if (FFilm::existById($film)) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabellaRisposta .
+                    " WHERE " . self::$nomeAttributoRispostaIdFilmRecensito . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nCancellazione annullata!";
+            }
+        }
+    }
+
+
+    // cancella le risposte riferite al film passato per parametro dal DB
+    private static function deleteFromFilmVisti(EFilm $film): void {
+
+        if (FFilm::existById($film)) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabellaFilmVisti .
+                    " WHERE " . self::$chiave1TabellaFilmVisti . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nCancellazione annullata!";
+            }
+        }
+    }
+}
