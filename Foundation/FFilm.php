@@ -6,7 +6,7 @@ class FFilm {
     private static string $nomeTabella = "film";  // da cambiare se cambia il nome della tabella Film in DB
     private static string $chiaveTabella = "IdFilm";   // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoTitolo = "Titolo";  // nome dell'attributo titolo nel DB
-    private static string $nomeAttributoAnno = "Anno";  // nome dell'attributo anno nel DB
+    private static string $nomeAttributoAnno = "Anno";  // nome dell'attributo data nel DB
     private static string $nomeAttributoDurata = "Durata";
     private static string $nomeAttributoSinossi = "Sinossi";
     private static string $nomeAttributoVotoMedio = "Voto";  // nome dell'attributo voto nel DB
@@ -443,20 +443,11 @@ class FFilm {
                     ":Sinossi" => $film->getSinossi()));
 
                 // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
-                if($listaAttori) {
-                    foreach ($listaAttori as $attore) {
-                        FAttore::store($attore);
-                        FAttore::storePersoneFilm($attore, $film);
-                    }
-                }
+                if($listaAttori) FFilm::storeAttori($film, $listaAttori);
 
                 // ogni regista della lista, se non vuota, verrà salvato in persona e in personefilm
-                if($listaRegisti) {
-                    foreach ($listaRegisti as $regista) {
-                        FRegista::store($regista);
-                        FRegista::storePersoneFilm($regista, $film);
-                    }
-                }
+                if($listaRegisti) FFilm::storeRegisti($film, $listaRegisti);
+
                 $pdo->commit();
                 echo "\nInserimento avvenuto con successo!";
             }
@@ -469,8 +460,33 @@ class FFilm {
     }
 
 
-    // questo update, per ora, salverà solo gli attributi di EFilm che vanno salvati nella tabella Film del DB, tramite il suo idFilm
-    public static function update(EFilm $film, string $nomeAttributo, $nuovoValore): void {
+    // metodo che salva gli attori nel DB legati ad un particolare film $film
+    // l'array è settato anche con di null perchè ci fa comodo con il Persistent Manager, dove chiamiamo
+    // i due metodi storeAttori e storeRegisti insieme
+    private static function storeAttori(EFilm $film, ?array $listaAttori): void {
+
+        foreach ($listaAttori as $attore) {
+            FAttore::store($attore);
+            FAttore::storePersoneFilm($attore, $film);
+        }
+    }
+
+
+    // metodo che salva i registi nel DB legati ad un particolare film $film
+    // l'array è settato anche con di null perchè ci fa comodo con il Persistent Manager, dove chiamiamo
+    // i due metodi storeAttori e storeRegisti insieme
+    private static function storeRegisti(EFilm $film, ?array $listaRegisti): void {
+
+        foreach ($listaRegisti as $regista) {
+            FRegista::store($regista);
+            FRegista::storePersoneFilm($regista, $film);
+        }
+    }
+
+
+    // questo update, per ora, salverà solo i seguenti attributi di EFilm nel DB: Titolo, Durata e Sinossi (la durata
+    // anche se intera verrà convertita in stringa con la concatenazione)
+    public static function update(EFilm $film, string $nomeAttributo, string $nuovoValore): void {
 
         if((FFilm::existById($film))) {
             $pdo = FConnectionDB::connect();
@@ -491,6 +507,47 @@ class FFilm {
             }
         }
     }
+
+
+    // questo update aggiorna solo la data di uscita del film, che sul DB si chiama Anno
+    public static function updateData(EFilm $film, DateTime $nuovaData): void {
+
+        if((FFilm::existById($film))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . self::$nomeAttributoAnno . " = '" . $nuovaData->format('Y-m-d') . "'" .
+                    " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
+            }
+        }
+    }
+
+
+    // L'update è intesto come sostituzione di un vecchio parametro con un nuovo ma in questo caso si tratta di più
+    // parametri che vanno aggiornati, quindi, non potendo usare una singola istruzione di update, si procederà
+    // con la cancellazione degli esistenti e l'inserimento dei nuovi
+    public static function updateAttoriERegisti(EFilm $film, ?array $listaAttori, ?array $listaRegisti): void {
+
+        // cancellando il film dalla tabella PersoneFilm si eliminano tutti gli attori e registi ad esso collegato, che
+        // é proprio quello che vogliamo fare quì, e si considererà trascurabile l'aver inserito un attore o un regista
+        // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
+        // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
+        FFilm::deleteFromPersoneFilm($film);
+        FFilm::storeAttori($film, $listaAttori);
+        FFilm::storeRegisti($film, $listaRegisti);
+    }
+
+
 
 
     // cancella un film dal db ovvero dalle tabelle film, filmvisti recensione e risposta

@@ -95,18 +95,18 @@ class FRisposta {
     }
 
 
-    // aggiorna l'oggetto risposta nella tabella del DB
-    public static function update(string $usernameAutore, DateTime $dataScrittura, string $nomeAttributo, $nuovoValore): void {
+    // aggiorna l'oggetto risposta nella tabella del DB, si può aggiornare solo il testo
+    public static function updateTesto(ERisposta $risposta, ?string $nuovoTesto): void {
 
-        if((FRisposta::exist($usernameAutore, $dataScrittura))) {
+        if((FRisposta::exist($risposta->getUsernameAutore(), $risposta->getDataScrittura()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
-                    " WHERE " . self::$chiaveTabella1 . " = '" . $usernameAutore . "'" .
-                    " AND " . self::$chiaveTabella2 . " = '" . $dataScrittura->format("Y-m-d H:i:s") . "';";
+                    " SET " . self::$nomeAttributoTesto . " = '" . $nuovoTesto . "'" .
+                    " WHERE " . self::$chiaveTabella1 . " = '" . $risposta->getUsernameAutore() . "'" .
+                    " AND " . self::$chiaveTabella2 . " = '" . $risposta->getDataScrittura()->format("Y-m-d H:i:s") . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();

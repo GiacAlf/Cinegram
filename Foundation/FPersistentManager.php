@@ -13,6 +13,7 @@ class FPersistentManager {
         if($FClass == "FRecensione") return $FClass::exist($id, $username);
         if($FClass == "FPersona") return $FClass::exist($id);
         if($FClass == "FAttore" || $FClass == "FRegista") return $FClass::exist($nome, $cognome);
+
         if($FClass == "FFilm") {
             if($film)
                 return $FClass::existById($film);
@@ -33,16 +34,18 @@ class FPersistentManager {
                                 ?string $titolo, ?int $anno, ?DateTime $data, bool $completo): ?object {
 
         $FClass = str_replace("E", "F", $EClass);
-        // in base al valore di $FClass si verrà indirizzati verso il corretto metodo foundation
+
         if($FClass == "FAdmin") return $FClass::load($username);
         if($FClass == "FMember") return $FClass::load($username, $completo, $completo, $completo, $completo);
         if($FClass == "FRisposta") return $FClass::load($username, $data);
         if($FClass == "FRecensione") return $FClass::load($id, $username, $completo);
+
         if($FClass == "FAttore" || $FClass == "FRegista") {
             if($nome == null && $cognome == null)
                 return $FClass::loadById($id);
             return $FClass::loadByNomeECognome($nome, $cognome);
         }
+
         if($FClass == "FFilm") {
             if($film)
                 return $FClass::loadById($film, $completo, $completo, $completo);
@@ -58,46 +61,55 @@ class FPersistentManager {
     // Per Attore e Regista: se si vuole salvare un nuovo attore nella tabella Persona si deve usare lo store con il
     // solo parametro $object, se si vuole invece salvare sulla tabella PersoneFilm fornire anche il $film, se si vuole
     // fare entrambe le cose usare due store diverse.
-    public static function store(object $object, ?EFilm $film, ?string $password, ?array $attori, ?array $registi): void {
+    public static function store(object $object, ?EFilm $film, ?string $password, ?array $attori, ?array $registi): ?bool {
 
         $EClass = get_class($object);
         $FClass = str_replace("E", "F", $EClass);
 
-        // in base al valore di $FClass si verrà indirizzati verso il corretto metodo foundation
-        if($FClass == "FRisposta" || $FClass == "FRecensione") {
-            $FClass::store($object);
-            return;
-        }
+        if($FClass == "FRisposta" || $FClass == "FRecensione") return $FClass::store($object);
+        if($FClass == "FAdmin" || $FClass == "FMember") return $FClass::store($object, $password);
+        if($FClass == "FFilm") return $FClass::store($object, $attori, $registi);
 
-        if($FClass == "FAdmin" || $FClass == "FMember") {
-            $FClass::store($object, $password);
-            return;
+        if($FClass == "FAttore" || $FClass == "FRegista") {
+            if($film)
+                return$FClass::storePersoneFilm($object, $film);
+            return $FClass::store($object);
+        }
+        return null;
+    }
+
+
+    // fare attenzione ai campi che si compilano, il parametro nuovoValore è una stringa ma è usato anche per
+    // l'update di interi, come la durata del film
+    public static function update(object $object, ?string $nomeAttributo, ?string $nuovoValore, ?string $nuovaPassword,
+                                  ?string $nuovaBio, ?DateTime $nuovaData, ?array $listaAttori, ?array $listaRegisti): ?bool {
+
+        $EClass = get_class($object);
+        $FClass = str_replace("E", "F", $EClass);
+
+        if($FClass == "FAdmin") return $FClass::updatePassword($object, $nuovaPassword);
+        if($FClass == "FRisposta") return $FClass::updateTesto($object, $nuovoValore);
+        if($FClass == "FAttore" || $FClass == "FRegista" || $FClass == "FRecensione")
+            return $FClass::update($object, $nomeAttributo, $nuovoValore);
+
+        if($FClass == "FMember") {
+            if($nuovaPassword)
+                return $FClass::update($object, $nuovaPassword);
+            return $FClass::updateBio($object, $nuovaBio);
         }
 
         if($FClass == "FFilm") {
-            $FClass::store($object, $attori, $registi);
-            return;
+            if($nuovaData)
+                return $FClass::updateData($object, $nuovaData);
+            if($listaAttori || $listaRegisti)
+                return $FClass::updateAttoriERegisti($object, $listaAttori, $listaRegisti);
+            return $FClass::update($object, $nomeAttributo, $nuovoValore);
         }
-
-        if($FClass == "FAttore" || $FClass == "FRegista") {
-            if($film) {
-                $FClass::storePersoneFilm($object, $film);
-            }
-            else $FClass::store($object);
-        }
+        return null;
     }
 
 
-    // TODO da completare
-    public static function update(object $object, $vecchioValore, $nuovoValore): void {
-
-        $EClass = get_class($object);
-        $FClass = str_replace("E", "F", $EClass);
-        $FClass::update($object, $vecchioValore, $nuovoValore);
-    }
-
-
-    // esegue il delete
+    // esegue il delete, fare riferimento alle relative foundation per capire meglio i parametri in ingresso
     public static function delete(string $EClass, ?string $username, ?EFilm $film, ?int $idPersona, ?int $idFilm,
                                   ?DateTime $dataScrittura): ?bool {
 
@@ -107,6 +119,7 @@ class FPersistentManager {
         if($FClass == "FFilm") return $FClass::delete($film);
         if($FClass == "FRecensione") return $FClass::delete($idFilm, $username);
         if($FClass == "FRisposta") return $FClass::delete($username, $dataScrittura);
+
         if($FClass == "FPersona") {
             if ($idPersona && $idFilm)
                 return $FClass::deletePersoneFilm($idPersona, $idFilm);
