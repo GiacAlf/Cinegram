@@ -150,18 +150,21 @@ class FRecensione {
     }
 
 
-    // aggiorna l'oggetto recensione nella tabella del DB
-    public static function update(int $idFilmRecensito, string $usernameAutore, string $nomeAttributo, $nuovoValore): void {
+    // aggiorna l'oggetto recensione nella tabella del DB, si può aggiornare solo il voto o il testo della recensione:
+    // in base a come setto il nome dell'attributo $nomeAttributo (dovrà essere esattamente Voto o Testo) si sceglie
+    // cosa aggiornare, si sfrutterà, per il voto, il fatto che in inserimento esso sarà comunque una stringa e una
+    // stringa è proprio quella che finirà nella query
+    public static function update(ERecensione $recensione, string $nomeAttributo, ?string $nuovoValore): void {
 
-        if((FRecensione::exist($idFilmRecensito, $usernameAutore))) {
+        if((FRecensione::exist($recensione->getIdFilmRecensito(), $recensione->getUsernameAutore()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
-                    " WHERE " . self::$chiave1Tabella . " = '" . $idFilmRecensito . "'" .
-                    " AND " . self::$chiave2Tabella . " = '" . $usernameAutore . "';";
+                    " WHERE " . self::$chiave1Tabella . " = '" . $recensione->getIdFilmRecensito() . "'" .
+                    " AND " . self::$chiave2Tabella . " = '" . $recensione->getUsernameAutore() . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();
