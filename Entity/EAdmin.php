@@ -2,12 +2,12 @@
 
 class EAdmin extends EUser {
 
-    private string $ioSono = "Admin";
     public static int $warningMassimi = 3;
 
 
     public function __construct(string $username) {
         $this->username = $username;
+        $this->ioSono = "Admin";
     }
 
 

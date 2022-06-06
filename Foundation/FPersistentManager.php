@@ -2,7 +2,7 @@
 
 class FPersistentManager {
 
-    // verifica l'esistenza in DB, segue le regole degli altri metodi
+    // verifica l'esistenza in DB, seguire i metodi foundation per i relativi passaggi dei parametri
     public static function exist(string $EClass, ?int $id, ?string $username, ?string $nome, ?string $cognome,
                                  ?EFilm $film, ?string $titolo, ?int $anno, ?DateTime $dataScrittura): ?bool {
 
@@ -129,8 +129,8 @@ class FPersistentManager {
     }
 
 
-    /* quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent manager chiamerà
-    l'omonimo metodo del FMember  */
+            /* quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent
+            manager chiamerà l'omonimo metodo del FMember  */
 
     /* nota per me: se ci fossero ambiguità inserire la stringa $FClass per discriminare */
 
@@ -248,9 +248,52 @@ class FPersistentManager {
     }
 
 
+            /* ----- metodi di FPersona ----- */
 
 
+    public static function existPersoneFilm(int $idPersona, int $idFilm): ?bool {
+        return FPersona::existPersoneFilm($idPersona, $idFilm);
+    }
 
+
+    public static function deletePersoneFilm(int $idPersona, int $idFilm): void {
+        FPersona::deletePersoneFilm($idPersona, $idFilm);
+    }
+
+            /* ----- metodi di FRecensione ----- */
+
+
+    public static function loadRisposte(int $idFilmRecensito, string $usernameAutoreRecensione): ?array {
+        return FRecensione::loadRisposte($idFilmRecensito, $usernameAutoreRecensione);
+    }
+
+
+            /* ----- metodi di FUser ----- */
+
+
+    public static function userRegistrato(string $username, string $password): ?bool {
+        return FUser::userRegistrato($username, $password);
+    }
+
+
+    public static function userBannato(string $username): ?bool {
+        return FUser::userBannato($username);
+    }
+
+
+    public static function tipoUserRegistrato(string $username, string $password): ?string {
+        return FUser::tipoUserRegistrato($username, $password);
+    }
+
+
+    public static function bannaUser(string $username): void {
+        FUser::bannaUser($username);
+    }
+
+
+    public static function sbannaUser(string $username): void {
+        FUser::sbannaUser($username);
+    }
 
 
 

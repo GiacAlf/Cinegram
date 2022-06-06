@@ -2,7 +2,6 @@
 
 class EMember extends EUser {
 
-    private string $ioSono = "Member";
     private DateTime $dataIscrizione;
     private ?string $bio; // per gli argomenti facoltativi basterà inserire null o stringa vuota nel costruttore
     private ?int $warning;
@@ -17,6 +16,7 @@ class EMember extends EUser {
                                 ?array $listaFollower, ?array $listaFollowing, ?array $recensioniScritte) {
 
         $this->username = $username;
+        $this->ioSono = "Member";
         $this->dataIscrizione = $dataIscrizione;
         $this->bio = $bio;
         $this->warning = $warning;

@@ -3,6 +3,7 @@
 abstract class EUser {
 
     protected String $username;
+    protected string $ioSono;
 
 
     public function getUsername(): string {
