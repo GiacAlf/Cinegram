@@ -248,6 +248,34 @@ class FPersistentManager {
     }
 
 
+            /* ----- metodi di FFilm ----- */
+
+
+    public static function loadNumeroViews(EFilm $film): ?int {
+        return FFilm::loadNumeroViews($film);
+    }
+
+
+    public static function loadVotoMedio(EFilm $film): ?float {
+        return FFilm::loadVotoMedio($film);
+    }
+
+
+    public static function loadListaRegisti(EFilm $film): ?array {
+        return FFilm::loadListaRegisti($film);
+    }
+
+
+    public static function loadListaAttori(EFilm $film): ?array {
+        return FFilm::loadListaAttori($film);
+    }
+
+
+    public static function loadListaRecensioniFilm(EFilm $film): ?array {
+        return FFilm::loadListaRecensioniFilm($film);
+    }
+
+
             /* ----- metodi di FPersona ----- */
 
 
@@ -365,17 +393,4 @@ class FPersistentManager {
     public static function caricaFilmRecenti(int $numeroDiEstrazioni): ?array {
         return FStatisticheFilm::caricaFilmRecenti($numeroDiEstrazioni);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

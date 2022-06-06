@@ -152,7 +152,7 @@ class FFilm {
 
             // caricamento lista recensioni se $recensioni è settato a true
             $queryResultRecensioni = array();
-            if($recensioni) $queryResultRecensioni = FFilm::loadListaRecensioni($film);
+            if($recensioni) $queryResultRecensioni = FFilm::loadListaRecensioniFilm($film);
 
             if($queryResultFilm) {
                 return new EFilm($queryResultFilm[self::$chiaveTabella], $queryResultFilm[self::$nomeAttributoTitolo],
@@ -387,7 +387,7 @@ class FFilm {
     // le risposte di ciascuna recensione non verranno caricate in questo momento ma solo quando si selezionerà una di
     // esse cliccandoci sopra
     // TODO considerare un numero limite di recensioni da caricare, da passare per parametro (le prime $n)
-    public static function loadListaRecensioni(EFilm $film): ?array {
+    public static function loadListaRecensioniFilm(EFilm $film): ?array {
 
         // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
