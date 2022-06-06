@@ -129,20 +129,134 @@ class FPersistentManager {
     }
 
 
-    // permette allo $usernameFollower di seguire lo $usernameFollowing
+    /* quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent manager chiamerà
+    l'omonimo metodo del FMember  */
+
+    /* nota per me: se ci fossero ambiguità inserire la stringa $FClass per discriminare */
+
     public static function follow(EMember $usernameFollower, EMember $usernameFollowing): void {
-
-        $EClass = get_class($usernameFollower);
-        $FClass = str_replace("E", "F", $EClass);
-        $FClass::follow($usernameFollower, $usernameFollowing);
+        // $EClass = get_class($usernameFollower);
+        // $FClass = str_replace("E", "F", $EClass);
+        FMember::follow($usernameFollower, $usernameFollowing);
     }
 
 
-    // rimuove il follow dello $usernameFollower verso lo $usernameFollowing
     public static function unfollow(EMember $usernameFollower, EMember $usernameFollowing): void {
-
-        $EClass = get_class($usernameFollower);
-        $FClass = str_replace("E", "F", $EClass);
-        $FClass::unfollow($usernameFollower, $usernameFollowing);
+        // $EClass = get_class($usernameFollower);
+        // $FClass = str_replace("E", "F", $EClass);
+        FMember::unfollow($usernameFollower, $usernameFollowing);
     }
+
+
+    public static function loadListaFilmVisti(string $username): ?array {
+        return FMember::loadListaFilmVisti($username);
+    }
+
+
+    public static function loadListaFollower(string $username): ?array {
+        return FMember::loadListaFollower($username);
+    }
+
+
+    public static function loadListaFollowing(string $username): ?array {
+        return FMember::loadListaFollowing($username);
+    }
+
+
+    public static function loadListaRecensioni(string $username): ?array {
+        return FMember::loadListaRecensioni($username);
+    }
+
+
+    public static function vediFilm(EMember $member, EFilm $film): void {
+        FMember::vediFilm($member, $film);
+    }
+
+
+    public static function updateBio(EMember $member, ?string $nuovaBio): void {
+        FMember::updateBio($member, $nuovaBio);
+    }
+
+
+    public static function incrementaWarning(EMember $member): void {
+        FMember::incrementaWarning($member);
+    }
+
+
+    public static function decrementaWarning(EMember $member): void {
+        FMember::decrementaWarning($member);
+    }
+
+
+    public static function updatePassword(EMember $member, string $nuovaPassword): void {
+        FMember::updatePassword($member, $nuovaPassword);
+    }
+
+
+    public static function calcolaNumeroFilmVisti(EMember $member): ?int {
+        return FMember::calcolaNumeroFilmVisti($member);
+    }
+
+
+    public static function calcolaNumeroFollowing(EMember $member): ?int {
+        return FMember::calcolaNumeroFollowing($member);
+    }
+
+
+    public static function calcolaNumeroFollower(EMember $member): ?int {
+        return FMember::calcolaNumeroFollower($member);
+    }
+
+
+    public static function calcolaNumeroRecensioni(EMember $member): ?int {
+        return FMember::calcolaNumeroRecensioni($member);
+    }
+
+
+    public static function calcolaNumeroRisposte(EMember $member): ?int {
+        return FMember::calcolaNumeroRisposte($member);
+    }
+
+
+    public static function caricaUltimeRecensioniScritteUtente(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeRecensioniScritteUtente($member, $numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeRisposteScritteUtente(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeRisposteScritteUtente($member, $numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeAttivita(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeAttivita($member, $numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeRecensioniScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeRecensioniScritteUtentiSeguiti($member, $numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeRisposteScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeRisposteScritteUtentiSeguiti($member, $numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeAttivitaUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeAttivitaUtentiSeguiti($member, $numeroDiEstrazioni);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
