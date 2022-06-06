@@ -129,8 +129,8 @@ class FPersistentManager {
     }
 
 
-            /* quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent
-            manager chiamerà l'omonimo metodo del FMember  */
+            /* ----- quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent
+            manager chiamerà l'omonimo metodo del FMember ----- */
 
     /* nota per me: se ci fossero ambiguità inserire la stringa $FClass per discriminare */
 
@@ -228,8 +228,8 @@ class FPersistentManager {
     }
 
 
-    public static function caricaUltimeAttivita(EMember $member, int $numeroDiEstrazioni): ?array {
-        return FMember::caricaUltimeAttivita($member, $numeroDiEstrazioni);
+    public static function caricaUltimeAttivitaMember(EMember $member, int $numeroDiEstrazioni): ?array {
+        return FMember::caricaUltimeAttivitaMember($member, $numeroDiEstrazioni);
     }
 
 
@@ -294,6 +294,82 @@ class FPersistentManager {
     public static function sbannaUser(string $username): void {
         FUser::sbannaUser($username);
     }
+
+
+            /* ----- metodi di FStatisticheMember ----- */
+
+
+    public static function caricaUtentiConPiuFilmVisti(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiConPiuFilmVisti($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUtentiConPiuRecensioni(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiConPiuRecensioni($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUtentiConPiuRisposteRecenti(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiConPiuRisposteRecenti($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUtentiConPiuFollower(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiConPiuFollower($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUtentiConPiuFollowing(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiConPiuFollowing($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUtentiPiuPopolari(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUtentiPiuPopolari($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeRecensioniScritte(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUltimeRecensioniScritte($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeRisposteScritte(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUltimeRisposteScritte($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaUltimeAttivita(int $numeroDiEstrazioni): ?array {
+        return FStatisticheMember::caricaUltimeAttivita($numeroDiEstrazioni);
+    }
+
+
+            /* ----- metodi di FStatisticheFilm ----- */
+
+
+    public static function caricaFilmPiuVisti(int $numeroDiEstrazioni): ?array {
+        return FStatisticheFilm::caricaFilmPiuVisti($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaFilmPiuRecensiti(int $numeroDiEstrazioni): ?array {
+        return FStatisticheFilm::caricaFilmPiuRecensiti($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaFilmConVotoMedioPiuAlto(int $numeroDiEstrazioni): ?array {
+        return FStatisticheFilm::caricaFilmConVotoMedioPiuAlto($numeroDiEstrazioni);
+    }
+
+
+    public static function caricaFilmRecenti(int $numeroDiEstrazioni): ?array {
+        return FStatisticheFilm::caricaFilmRecenti($numeroDiEstrazioni);
+    }
+
+
+
+
+
 
 
 

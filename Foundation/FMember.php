@@ -746,7 +746,7 @@ class FMember {
 
 
     //metodo che carica le ultime attivita' svolte dal member passato come parametro
-    public static function caricaUltimeAttivita( EMember $member, int $numeroDiEstrazioni): ?array {
+    public static function caricaUltimeAttivitaMember( EMember $member, int $numeroDiEstrazioni): ?array {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtente($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtente($member,$numeroDiEstrazioni/2);
