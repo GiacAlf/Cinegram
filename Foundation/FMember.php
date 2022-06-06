@@ -305,10 +305,10 @@ class FMember {
 
 
     // salva il film con id $idFilm guardato dal member $username nella tabella filmVisti
-    public static function vediFilm(string $username, int $idFilm): void {
+    public static function vediFilm(EMember $member, EFilm $film): void {
 
         // si controlla se il member non sia già presente in DB prima di procedere
-        if(!(FUser::exist($username))) {
+        if(!(FUser::exist($member->getUsername()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -318,8 +318,8 @@ class FMember {
                     " VALUES (:IdFilmVisto, :UtenteCheHaVisto);";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(
-                    ":IdFilmVisto" => $idFilm,
-                    ":UtenteCheHaVisto" => $username));
+                    ":IdFilmVisto" => $film->getId(),
+                    ":UtenteCheHaVisto" => $member->getUsername()));
                 $pdo->commit();
                 echo "\nInserimento avvenuto con successo!";
             }
@@ -334,20 +334,22 @@ class FMember {
 
     // da usare quando l'EMember usa il metodo follow verso uno $usernameFollowing
     // inserisce uno $usernameFollower nella tabella partesocial del DB che seguirà lo $usernameFollowing
-    public static function follow(string $usernameFollower, string $usernameFollowing): void {
+    public static function follow(EMember $follower, EMember $following): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
-            $query =
-                "INSERT INTO " . self::$nomeTabellaParteSocial .
-                " VALUES (:UtenteFollower, :UtenteFollowing);";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute(array(
-                ":UtenteFollower" => $usernameFollower,
-                ":UtenteFollowing" => $usernameFollowing));
-            $pdo->commit();
-            echo "\nInserimento avvenuto con successo!";
+            if(FUser::exist($following->getUsername())) {
+                $query =
+                    "INSERT INTO " . self::$nomeTabellaParteSocial .
+                    " VALUES (:UtenteFollower, :UtenteFollowing);";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ":UtenteFollower" => $follower->getUsername(),
+                    ":UtenteFollowing" => $following->getUsername()));
+                $pdo->commit();
+                echo "\nInserimento avvenuto con successo!";
+            }
         }
         catch (PDOException $e) {
             $pdo->rollback();
@@ -359,16 +361,16 @@ class FMember {
 
     // da usare quando l'EMember usa il metodo unfollow
     // cancella un $usernameFollowing dalla tabella partesocial del DB che figura come following del $usernameFollower
-    public static function unfollow(string $usernameFollower, string $usernameFollowing): void {
+    public static function unfollow(EMember $follower, EMember $following): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
-            if(FUser::exist($usernameFollower)) {
+            if(FUser::exist($following->getUsername())) {
                 $query =
                     "DELETE FROM " . self::$nomeTabellaParteSocial .
-                    " WHERE " . self::$chiave1TabellaParteSocial . " = '" . $usernameFollower .  "'" .
-                    " AND " . self::$chiave2TabellaParteSocial . " = '" . $usernameFollowing . "';";
+                    " WHERE " . self::$chiave1TabellaParteSocial . " = '" . $follower->getUsername() .  "'" .
+                    " AND " . self::$chiave2TabellaParteSocial . " = '" . $following->getUsername() . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();
@@ -744,55 +746,13 @@ class FMember {
 
 
     //metodo che carica le ultime attivita' svolte dal member passato come parametro
-    public static function caricaUltimeAttivita( EMember $member,int $numeroDiEstrazioni): ?array {
+    public static function caricaUltimeAttivita( EMember $member, int $numeroDiEstrazioni): ?array {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtente($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtente($member,$numeroDiEstrazioni/2);
         $arrayUltimeAttivita = array_merge($arrayRecensioni, $arrayRisposte);
         // shuffle($arrayUltimeAttivita);
         return $arrayUltimeAttivita;
-    }
-
-
-    //metodo che restituisce un array contenente le ultime Recensioni scritte dai membri seguiti dal membro
-    // passato come parametro
-    public static function caricaUltimeRisposteScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
-
-        if(!(FUser::exist($member->getUsername()))) {
-            print("Questo member non esiste");
-            return null;
-        }
-        $pdo = FConnectionDB::connect();
-        $pdo->beginTransaction();
-        try {
-            $query =
-                "SELECT * FROM " . self::$nomeTabellaRisposta.
-                " INNER JOIN ".self::$nomeTabellaParteSocial .
-                " ON " . self::$chiave1TabellaRisposta.
-                " = ". self::$chiave2TabellaParteSocial .
-                " WHERE " . self::$chiave1TabellaParteSocial .
-                " = '" . $member->getUsername(). "'" .
-                " ORDER BY " . self::$nomeAttributoRecensioneDataScrittura .
-                " DESC LIMIT " . $numeroDiEstrazioni;
-            $stmt = $pdo->prepare($query);
-            $stmt->execute();
-            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $pdo->commit();
-            $risposte= array();
-
-            foreach ($queryResult as $res){
-                $risposta = new ERisposta($res[self::$chiave1TabellaRisposta], new DateTime($res[self::$nomeAttributoRispostaDataScrittura]),
-                    $res[self::$nomeAttributoRispostaTesto], $res[self::$nomeAttributoRispostaIdFilmRecensito],
-                    $res[self::$nomeAttributoRispostaUsernameAutoreRecensione]);
-                $risposte[] = $risposta;
-            }
-            return $risposte;
-        }
-        catch (PDOException $e) {
-            $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();
-        }
-        return null;
     }
 
 
@@ -829,6 +789,48 @@ class FMember {
                 $recensioni[] = $recensione;
             }
             return $recensioni;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();
+        }
+        return null;
+    }
+
+
+    //metodo che restituisce un array contenente le ultime Recensioni scritte dai membri seguiti dal membro
+    // passato come parametro
+    public static function caricaUltimeRisposteScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
+
+        if(!(FUser::exist($member->getUsername()))) {
+            print("Questo member non esiste");
+            return null;
+        }
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabellaRisposta.
+                " INNER JOIN ".self::$nomeTabellaParteSocial .
+                " ON " . self::$chiave1TabellaRisposta.
+                " = ". self::$chiave2TabellaParteSocial .
+                " WHERE " . self::$chiave1TabellaParteSocial .
+                " = '" . $member->getUsername(). "'" .
+                " ORDER BY " . self::$nomeAttributoRecensioneDataScrittura .
+                " DESC LIMIT " . $numeroDiEstrazioni;
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+            $risposte= array();
+
+            foreach ($queryResult as $res){
+                $risposta = new ERisposta($res[self::$chiave1TabellaRisposta], new DateTime($res[self::$nomeAttributoRispostaDataScrittura]),
+                    $res[self::$nomeAttributoRispostaTesto], $res[self::$nomeAttributoRispostaIdFilmRecensito],
+                    $res[self::$nomeAttributoRispostaUsernameAutoreRecensione]);
+                $risposte[] = $risposta;
+            }
+            return $risposte;
         }
         catch (PDOException $e) {
             $pdo->rollback();
