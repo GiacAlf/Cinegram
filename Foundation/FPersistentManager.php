@@ -175,6 +175,11 @@ class FPersistentManager {
     }
 
 
+    public static function rimuoviFilmVisto(EMember $member, EFilm $film): void {
+        FMember::rimuoviFilmVisto($member, $film);
+    }
+
+
     public static function updateBio(EMember $member, ?string $nuovaBio): void {
         FMember::updateBio($member, $nuovaBio);
     }
