@@ -316,29 +316,49 @@ class FMember {
     // salva il film con id $idFilm guardato dal member $username nella tabella filmVisti
     public static function vediFilm(EMember $member, EFilm $film): void {
 
-        // si controlla se il member non sia già presente in DB prima di procedere
-        if(!(FUser::exist($member->getUsername()))) {
-            $pdo = FConnectionDB::connect();
-            $pdo->beginTransaction();
-            try {
-                // salvataggio nella tabella filmVisti
-                $query =
-                    "INSERT INTO " . self::$nomeTabellaFilmVisti .
-                    " VALUES (:IdFilmVisto, :UtenteCheHaVisto);";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute(array(
-                    ":IdFilmVisto" => $film->getId(),
-                    ":UtenteCheHaVisto" => $member->getUsername()));
-                $pdo->commit();
-                echo "\nInserimento avvenuto con successo!";
-            }
-            catch (PDOException $e) {
-                $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
-                echo "\nInserimento annullato!";
-            }
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            // salvataggio nella tabella filmVisti
+            $query =
+                "INSERT INTO " . self::$nomeTabellaFilmVisti .
+                " VALUES (:IdFilmVisto, :UtenteCheHaVisto);";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(
+                ":IdFilmVisto" => $film->getId(),
+                ":UtenteCheHaVisto" => $member->getUsername()));
+            $pdo->commit();
+            echo "\nInserimento avvenuto con successo!";
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nInserimento annullato!";
         }
     }
+
+
+    // rimuove il film con id $idFilm guardato dal member $username dalla tabella filmVisti
+    public static function rimuoviFilmVisto(EMember $member, EFilm $film): void {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "DELETE FROM " . self::$nomeTabellaFilmVisti .
+                " WHERE " . self::$chiave1TabellaFilmVisti . " = '" . $film->getId() . "'" .
+                " AND " . self::$chiave2TabellaFilmVisti . " = '" . $member->getUsername() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $pdo->commit();
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nCancellazione annullata!";
+        }
+    }
+
 
 
     // da usare quando l'EMember usa il metodo follow verso uno $usernameFollowing

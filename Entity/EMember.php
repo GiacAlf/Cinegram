@@ -38,20 +38,20 @@ class EMember extends EUser {
     }
 
 
-    public function scriviRecensione(EFilm $filmRecensito, ERecensione $recensioneScritta): void {  //ok
+    public function scriviRecensione(EFilm $filmRecensito, ERecensione $recensioneScritta): void {
         $this->recensioniScritte[$filmRecensito->getId()] = $recensioneScritta;
         $filmRecensito->aggiungiRecensione($recensioneScritta);
     }
 
 
-    public function rimuoviRecensione(EFilm $filmRecensito, ERecensione $recensioneDaRimuovere): void { //ok
+    public function rimuoviRecensione(EFilm $filmRecensito, ERecensione $recensioneDaRimuovere): void {
         $key = $filmRecensito->getId();
         unset($this->recensioniScritte[$key]);
         $filmRecensito->rimuoviRecensione($recensioneDaRimuovere);
     }
 
 
-    public function scriviRisposta(ERisposta $rispostaScritta, ERecensione $recensioneInteressata): void { //ok
+    public function scriviRisposta(ERisposta $rispostaScritta, ERecensione $recensioneInteressata): void {
         $recensioneInteressata->AggiungiRisposta($rispostaScritta, $this->username);
     }
 
@@ -61,13 +61,13 @@ class EMember extends EUser {
     }
 
 
-    public function Follow(EMember $memberDaSeguire): void { //ok, fino a che non aggiungi i follower, da lì il casino totale
-        $this->listaFollowing[] = $memberDaSeguire; //pare funzioni, attenzione alla lettura del print
+    public function Follow(EMember $memberDaSeguire): void {
+        $this->listaFollowing[] = $memberDaSeguire;
         $memberDaSeguire->AggiungiFollower($this); //aggiungi te stesso
     }
 
 
-    public function UnFollow(EMember $memberDaNonSeguire): void { //stessa cosa di sopra
+    public function UnFollow(EMember $memberDaNonSeguire): void {
         $key = array_search( $memberDaNonSeguire, $this->listaFollowing);
         unset($this->listaFollowing[$key]);
         $memberDaNonSeguire->RimuoviFollower($this);

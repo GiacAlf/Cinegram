@@ -662,7 +662,7 @@ class FFilm {
     // cancella le risposte riferite al film passato per parametro dal DB
     private static function deleteFromFilmVisti(EFilm $film): void {
 
-        if (FFilm::existById($film)) {
+        if(FFilm::existById($film)) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
