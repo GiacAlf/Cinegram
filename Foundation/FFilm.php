@@ -728,6 +728,7 @@ class FFilm {
                 // se $grande è settato a false si caricherà la locandina piccola
                 if(!$grande)
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]); //TODO
+
                 return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
                     $queryResultFilm[self::$nomeAttributoSizeLocandina]);
             }
@@ -767,7 +768,7 @@ class FFilm {
     }
 
 
-    // metodo che cancella una nuova locandina facendo update a null
+    // metodo che cancella una locandina facendo "update a null"
     public static function deleteLocandina(EFilm $film): void {
 
         if((FFilm::existById($film))) {

@@ -8,6 +8,9 @@ class FMember {
     private static string $nomeAttributoBio = "Bio";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoWarning = "Warning";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoDataIscrizione = "DataIscrizione";   // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoImmagineProfilo = "ImmagineProfilo";
+    private static string $nomeAttributoTipoImmagineProfilo = "TipoImmagineProfilo";
+    private static string $nomeAttributoSizeImmagineProfilo = "SizeImmagineProfilo";
 
     private static string $nomeTabellaRisposta = "risposta";
     private static string $chiave1TabellaRisposta = "UsernameAutore";
@@ -263,8 +266,9 @@ class FMember {
     }
 
 
-    // salva l'oggetto member sul DB
-    public static function store(EMember $member, string $password): void {
+    // salva l'oggetto member sul DB insieme alla sua immagine profilo
+    public static function store(EMember $member, string $password, ?string $immagineProfilo, ?string $tipoImmagineProfilo,
+                                 ?string $sizeImmagineProfilo): void {
 
         // si controlla se il member non sia già presente in DB prima di procedere
         if(!(FUser::exist($member->getUsername()))) {
@@ -284,13 +288,17 @@ class FMember {
                 // salvataggio nella tabella Member
                 $query =
                     "INSERT INTO " . self::$nomeTabella .
-                    " VALUES (:Username, :Bio, :Warning, :DataIscrizione, null, null, null);";
+                    " VALUES (:Username, :Bio, :Warning, :DataIscrizione, :ImmagineProfilo, :TipoImmagineProfilo, 
+                    :SizeImmagineProfilo);";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(
                     ":Username" => $member->getUsername(),
                     ":Bio" => $member->getBio(),
                     ":Warning" => $member->getWarning(),
-                    ":DataIscrizione" => $member->getDataIscrizione()->format('Y-m-d')));
+                    ":DataIscrizione" => $member->getDataIscrizione()->format('Y-m-d'),
+                    ":ImmagineProfilo" => $immagineProfilo,
+                    ":TipoImmagineProfilo" => $tipoImmagineProfilo,
+                    ":SizeImmagineProfilo" => $sizeImmagineProfilo));
 
                 $pdo->commit();
                 echo "\nInserimento avvenuto con successo!";
@@ -849,5 +857,117 @@ class FMember {
         $arrayUltimeAttivita = array_merge($arrayRecensioni, $arrayRisposte);
         // shuffle($arrayUltimeAttivita);
         return $arrayUltimeAttivita;
+    }
+
+
+    // metodo che verifica se per un dato member è presente la sua immagine profilo
+    public static function existImmagineProfilo(EMember $member): ?bool {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "'" .
+                " AND " . self::$nomeAttributoImmagineProfilo . " IS NOT NULL;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che carica l'immagine profilo di un dato member, restituisce un array con i dati dell'immagine, il tipo e
+    // la sua size
+    // se si setta il bool $grande a true si carica la corrispettiva immagine in formato grande, piccola se false
+    public static function loadImmagineProfilo(EMember $member, bool $grande): ?array {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResultMember = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResultMember) {
+                // se $grande è settato a false si caricherà la locandina piccola
+                if(!$grande)
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo]); //TODO
+
+                return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo],
+                    $queryResultMember[self::$nomeAttributoSizeImmagineProfilo]);
+            }
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che inserisce una nuova immagine profilo
+    public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
+                                           string $nuovaSizeImmagine): void {
+
+        if((FUser::exist($member->getUsername()))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $nuovaImmagine . "', " .
+                    self::$nomeAttributoTipoImmagineProfilo . " = '" . $nuovoTipoImmagine . "', " .
+                    self::$nomeAttributoSizeImmagineProfilo . " = '" . $nuovaSizeImmagine . "'" .
+                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
+            }
+        }
+    }
+
+
+    // metodo che cancella un'immagine profilo facendo "update a null"
+    public static function deleteImmagineProfilo(EMember $member): void {
+
+        if((FUser::exist($member->getUsername()))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . self::$nomeAttributoImmagineProfilo . " = null, " .
+                    self::$nomeAttributoTipoImmagineProfilo . " = null, "  .
+                    self::$nomeAttributoSizeImmagineProfilo . " = null " .
+                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
+            }
+        }
     }
 }

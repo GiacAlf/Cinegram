@@ -146,7 +146,7 @@ class EFilm {
     /**
      * @return int
      */
-    public function getNumeroViews(): int {
+    public function getNumeroViews(): ?int {
         return $this->numeroViews;
     }
 

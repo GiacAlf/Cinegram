@@ -112,7 +112,7 @@ class EMember extends EUser {
     }
 
 
-    public function getWarning(): int {
+    public function getWarning(): ?int {
         return $this->warning;
     }
 
@@ -122,7 +122,7 @@ class EMember extends EUser {
     }
 
 
-    public function getBio(): string {
+    public function getBio(): ?string {
         return $this->bio;
     }
 
@@ -132,22 +132,22 @@ class EMember extends EUser {
     }
 
 
-    public function getFilmVisti(): array {
+    public function getFilmVisti(): ?array {
         return $this->filmVisti;
     }
 
 
-    public function getListaFollower(): array {
+    public function getListaFollower(): ?array {
         return $this->listaFollower;
     }
 
 
-    public function getListaFollowing(): array {
+    public function getListaFollowing(): ?array {
         return $this->listaFollowing;
     }
 
 
-    public function getRecensioniScritte(): array {
+    public function getRecensioniScritte(): ?array {
         return $this->recensioniScritte;
     }
 }
