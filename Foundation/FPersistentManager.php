@@ -61,14 +61,17 @@ class FPersistentManager {
     // Per Attore e Regista: se si vuole salvare un nuovo attore nella tabella Persona si deve usare lo store con il
     // solo parametro $object, se si vuole invece salvare sulla tabella PersoneFilm fornire anche il $film, se si vuole
     // fare entrambe le cose usare due store diverse.
-    public static function store(object $object, ?EFilm $film, ?string $password, ?array $attori, ?array $registi): ?bool {
+    // i 3 parametri "immagine" serviranno sia per salvare l'immagine profilo del member che la locandina del film
+    public static function store(object $object, ?EFilm $film, ?string $password, ?array $attori, ?array $registi,
+                                 ?string $immagine, ?string $tipoImmagine, ?string $sizeImmagine): ?bool {
 
         $EClass = get_class($object);
         $FClass = str_replace("E", "F", $EClass);
 
         if($FClass == "FRisposta" || $FClass == "FRecensione") return $FClass::store($object);
-        if($FClass == "FAdmin" || $FClass == "FMember") return $FClass::store($object, $password);
-        if($FClass == "FFilm") return $FClass::store($object, $attori, $registi);
+        if($FClass == "FAdmin") return $FClass::store($object, $password);
+        if($FClass == "FMember") return $FClass::store($object, $password, $immagine, $tipoImmagine, $sizeImmagine);
+        if($FClass == "FFilm") return $FClass::store($object, $attori, $registi, $immagine, $tipoImmagine, $sizeImmagine);
 
         if($FClass == "FAttore" || $FClass == "FRegista") {
             if($film)
@@ -129,8 +132,7 @@ class FPersistentManager {
     }
 
 
-            /* ----- quì iniziano tutti i metodi legati alla foundation del member: ogni metodo del persistent
-            manager chiamerà l'omonimo metodo del FMember ----- */
+            /* ----- metodi di FMember ----- */
 
     /* nota per me: se ci fossero ambiguità inserire la stringa $FClass per discriminare */
 
@@ -248,6 +250,28 @@ class FPersistentManager {
     }
 
 
+    public static function existImmagineProfilo(EMember $member): ?bool {
+        return FMember::existImmagineProfilo($member);
+    }
+
+
+    // se $grande è true su caricherà l'immagine profilo grande
+    public static function loadImmagineProfilo(EMember $member, bool $grande): ?array {
+        return FMember::loadImmagineProfilo($member, $grande);
+    }
+
+
+    public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
+                                                 string $nuovaSizeImmagine): void {
+        FMember::updateImmagineProfilo($member, $nuovaImmagine, $nuovoTipoImmagine, $nuovaSizeImmagine);
+    }
+
+
+    public static function deleteImmagineProfilo(EMember $member): void {
+        FMember::deleteImmagineProfilo($member);
+    }
+
+
             /* ----- metodi di FFilm ----- */
 
 
@@ -273,6 +297,28 @@ class FPersistentManager {
 
     public static function loadListaRecensioniFilm(EFilm $film): ?array {
         return FFilm::loadListaRecensioniFilm($film);
+    }
+
+
+    public static function existLocandina(EFilm $film): ?bool {
+        return FFilm::existLocandina($film);
+    }
+
+
+    // se $grande è true su caricherà la locandina grande
+    public static function loadLocandina(EFilm $film, bool $grande): ?array {
+        return FFilm::loadLocandina($film, $grande);
+    }
+
+
+    public static function updateLocandina(EFilm $film, string $nuovaLocandina, string $nuovoTipoLocandina,
+                                           string $nuovaSizeLocandina): void {
+        FFilm::updateLocandina($film, $nuovaLocandina, $nuovoTipoLocandina, $nuovaSizeLocandina);
+    }
+
+
+    public static function deleteLocandina(EFilm $film): void {
+        FFilm::deleteLocandina($film);
     }
 
 

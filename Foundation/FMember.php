@@ -266,7 +266,8 @@ class FMember {
     }
 
 
-    // salva l'oggetto member sul DB insieme alla sua immagine profilo
+    // salva l'oggetto member sul DB insieme alla sua immagine profilo, se non si vuole salvare l'immagine del profilo
+    // per il momento inserire null nei 3 parametri relativi a essa
     public static function store(EMember $member, string $password, ?string $immagineProfilo, ?string $tipoImmagineProfilo,
                                  ?string $sizeImmagineProfilo): void {
 

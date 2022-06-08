@@ -416,10 +416,10 @@ class FFilm {
     }
 
 
-    // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina inserire
-    // null nei 3 parametri relativi alla locandina
-    public static function store(EFilm $film, ?string $locandina, ?string $tipoLocandina, ?string $sizeLocandina,
-                                 ?array $listaAttori, ?array $listaRegisti): void {
+    // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina per il
+    // momento inserire null nei 3 parametri relativi a essa
+    public static function store(EFilm $film, ?array $listaAttori, ?array $listaRegisti,
+                                 ?string $locandina, ?string $tipoLocandina, ?string $sizeLocandina): void {
 
         // si controlla se il film non è presente in DB prima di procedere
         if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()->format('Y')))) {
