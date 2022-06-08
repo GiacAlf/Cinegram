@@ -10,6 +10,9 @@ class FFilm {
     private static string $nomeAttributoDurata = "Durata";
     private static string $nomeAttributoSinossi = "Sinossi";
     private static string $nomeAttributoVotoMedio = "Voto";  // nome dell'attributo voto nel DB
+    private static string $nomeAttributoLocandina = "Locandina";
+    private static string $nomeAttributoTipoLocandina = "TipoLocandina";
+    private static string $nomeAttributoSizeLocandina = "SizeLocandina";
 
     private static string $nomeTabellaRecensione = "recensione";    // da cambiare se cambia il nome della tabella Recensione in DB
     private static string $chiave1TabellaRecensione = "IdFilmRecensito";   // da cambiare se cambia il nome della chiave in DB
@@ -43,7 +46,6 @@ class FFilm {
     // metodo che verifica l'esistenza di un film in db passando il EFilm, tramite il valore della chiave idFilm
     public static function existById(EFilm $film): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -69,7 +71,6 @@ class FFilm {
     // metodo che verifica l'esistenza di un film in db passando EFilm, attraverso il titolo del film
     public static function existByTitolo(string $titolo): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -124,7 +125,6 @@ class FFilm {
     // di EFilm
     public static function loadById(EFilm $film, bool $registi, bool $attori, bool $recensioni): ?EFilm {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -174,7 +174,6 @@ class FFilm {
     // fare una loadById e caricarlo con tutti gli altri parametri
     public static function loadByTitolo(string $titolo): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -212,7 +211,6 @@ class FFilm {
     // un risultato da cui scegliere e poi fare una loadById e caricarlo con tutti gli altri parametri
     public static function loadByTitoloEAnno(string $titolo, int $anno): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -248,7 +246,6 @@ class FFilm {
     // caricamento del numero di views del film passato per parametro, usando il suo id
     public static function loadNumeroViews(EFilm $film): ?int {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -274,7 +271,6 @@ class FFilm {
     // caricamento del voto medio del film passato per parametro, usando il suo id
     public static function loadVotoMedio(EFilm $film): ?float {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -303,7 +299,6 @@ class FFilm {
     // carica tutti i registi associati al film passato per parametro, restituendoli in un array di ERegisti
     public static function loadListaRegisti(EFilm $film): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -344,8 +339,6 @@ class FFilm {
     // carica tutti gli attori associati al film passato per parametro, restituendoli in un array di EAttori
     public static function loadListaAttori(EFilm $film): ?array {
 
-
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -389,7 +382,6 @@ class FFilm {
     // TODO considerare un numero limite di recensioni da caricare, da passare per parametro (le prime $n)
     public static function loadListaRecensioniFilm(EFilm $film): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -424,23 +416,28 @@ class FFilm {
     }
 
 
-    // salva l'oggetto film sul DB incluse le lise attori e registi
-    public static function store(EFilm $film, ?array $listaAttori, ?array $listaRegisti): void {
+    // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina inserire
+    // null nei 3 parametri relativi alla locandina
+    public static function store(EFilm $film, ?string $locandina, ?string $tipoLocandina, ?string $sizeLocandina,
+                                 ?array $listaAttori, ?array $listaRegisti): void {
 
         // si controlla se il film non è presente in DB prima di procedere
-        if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()))) {
+        if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()->format('Y')))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
                 $query =
                     "INSERT INTO " . self::$nomeTabella .
-                    " VALUES (null, :Titolo, :Anno, :Durata, :Sinossi, null, null, null);";
+                    " VALUES (null, :Titolo, :Anno, :Durata, :Sinossi, :Locandina, :TipoLocandina, :SizeLocandina);";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(
                     ":Titolo" => $film->getTitolo(),
                     ":Anno" => $film->getAnno()->format('Y-m-d'),
                     ":Durata" => $film->getDurata(),
-                    ":Sinossi" => $film->getSinossi()));
+                    ":Sinossi" => $film->getSinossi(),
+                    ":Locandina" => $locandina,
+                    ":TipoLocandina" => $tipoLocandina,
+                    ":SizeLocandina" => $sizeLocandina));
 
                 // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
                 if($listaAttori) FFilm::storeAttori($film, $listaAttori);
@@ -546,8 +543,6 @@ class FFilm {
         FFilm::storeAttori($film, $listaAttori);
         FFilm::storeRegisti($film, $listaRegisti);
     }
-
-
 
 
     // cancella un film dal db ovvero dalle tabelle film, filmvisti recensione e risposta
@@ -682,6 +677,117 @@ class FFilm {
                 $pdo->rollback();
                 echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
                 echo "\nCancellazione annullata!";
+            }
+        }
+    }
+
+
+    // metodo che verifica se per un dato film è presente la sua locandina
+    public static function existLocandina(EFilm $film): ?bool {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " AND " . self::$nomeAttributoLocandina . " IS NOT NULL;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che carica la locandina di un dato film, restituisce un array con i dati della locandina, il tipo e
+    // la sua size
+    // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    public static function loadLocandina(EFilm $film, bool $grande): ?array {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResultFilm = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResultFilm) {
+                // se $grande è settato a false si caricherà la locandina piccola
+                if(!$grande)
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]); //TODO
+                return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
+                    $queryResultFilm[self::$nomeAttributoSizeLocandina]);
+            }
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
+
+    // metodo che inserisce una nuova locandina
+    public static function updateLocandina(EFilm $film, string $nuovaLocandina, string $nuovoTipoLocandina,
+                                           string $nuovaSizeLocandina): void {
+
+        if((FFilm::existById($film))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . self::$nomeAttributoLocandina . " = '" . $nuovaLocandina . "', " .
+                    self::$nomeAttributoTipoLocandina . " = '" . $nuovoTipoLocandina . "', " .
+                    self::$nomeAttributoSizeLocandina . " = '" . $nuovaSizeLocandina . "'" .
+                    " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
+            }
+        }
+    }
+
+
+    // metodo che cancella una nuova locandina facendo update a null
+    public static function deleteLocandina(EFilm $film): void {
+
+        if((FFilm::existById($film))) {
+            $pdo = FConnectionDB::connect();
+            $pdo->beginTransaction();
+            try {
+                $query =
+                    "UPDATE " . self::$nomeTabella .
+                    " SET " . self::$nomeAttributoLocandina . " = null, " .
+                    self::$nomeAttributoTipoLocandina . " = null, "  .
+                    self::$nomeAttributoSizeLocandina . " = null " .
+                    " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+            catch (PDOException $e) {
+                $pdo->rollback();
+                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nUpdate annullato!";
             }
         }
     }

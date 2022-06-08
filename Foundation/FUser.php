@@ -172,7 +172,7 @@ class FUser {
     }
 
 
-    // cancella uno User dal DB, per cancella re un meber o un admin usare la loro delete
+    // cancella uno User dal DB, per cancellare un member o un admin usare la loro delete
     public static function delete(string $username): void {
 
         $pdo = FConnectionDB::connect();
