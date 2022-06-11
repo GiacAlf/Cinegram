@@ -123,36 +123,36 @@ class FFilm {
     // recupero dati dal DB per creazione oggetto film passando EFilm, attraverso la chiave idFilm
     // settando i valori booleani a true si caricheranno anche gli array che costituiscono i rispettivi attributi
     // di EFilm
-    public static function loadById(EFilm $film, bool $registi, bool $attori, bool $recensioni): ?EFilm {
+    public static function loadById(int $id, bool $registi, bool $attori, bool $recensioni): ?EFilm {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $id . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResultFilm = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
             // caricamento del numero delle views
-            $queryResultViews = FFilm::loadNumeroViews($film);
+            $queryResultViews = FFilm::loadNumeroViews($id);
 
             // caricamento del voto medio
-            $queryResultVoto = FFilm::loadVotoMedio($film);
+            $queryResultVoto = FFilm::loadVotoMedio($id);
 
             // caricamento lista registi se $registi è settato a true
             $queryResultRegisti = array();
-            if($registi) $queryResultRegisti = FFilm::loadListaRegisti($film);
+            if($registi) $queryResultRegisti = FFilm::loadListaRegisti($id);
 
             // caricamento lista attori se $attori è settato a true
             $queryResultAttori = array();
-            if($attori) $queryResultAttori = FFilm::loadListaAttori($film);
+            if($attori) $queryResultAttori = FFilm::loadListaAttori($id);
 
             // caricamento lista recensioni se $recensioni è settato a true
             $queryResultRecensioni = array();
-            if($recensioni) $queryResultRecensioni = FFilm::loadListaRecensioniFilm($film);
+            if($recensioni) $queryResultRecensioni = FFilm::loadListaRecensioniFilm($id);
 
             if($queryResultFilm) {
                 return new EFilm($queryResultFilm[self::$chiaveTabella], $queryResultFilm[self::$nomeAttributoTitolo],
@@ -244,7 +244,7 @@ class FFilm {
 
 
     // caricamento del numero di views del film passato per parametro, usando il suo id
-    public static function loadNumeroViews(EFilm $film): ?int {
+    public static function loadNumeroViews(int $id): ?int {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -253,7 +253,7 @@ class FFilm {
                 "SELECT COUNT(*) AS NumeroViews FROM " . self::$nomeTabella .
                 " JOIN " . self::$nomeTabellaFilmVisti .
                 " ON " . self::$chiaveTabella . " = " . self::$chiave1TabellaFilmVisti .
-                " WHERE " . self::$chiave1TabellaFilmVisti . " = '" . $film->getId() . "'";
+                " WHERE " . self::$chiave1TabellaFilmVisti . " = '" . $id . "'";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -269,7 +269,7 @@ class FFilm {
     }
 
     // caricamento del voto medio del film passato per parametro, usando il suo id
-    public static function loadVotoMedio(EFilm $film): ?float {
+    public static function loadVotoMedio(int $id): ?float {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -279,7 +279,7 @@ class FFilm {
                 " FROM " . self::$nomeTabella .
                 " JOIN " . self::$nomeTabellaRecensione .
                 " ON " . self::$chiaveTabella . " = " . self::$chiave1TabellaRecensione . "" .
-                " WHERE " . self::$chiave1TabellaRecensione . " = '" . $film->getId() . "'";
+                " WHERE " . self::$chiave1TabellaRecensione . " = '" . $id . "'";
 
             $stmt = $pdo->prepare($query);
             $stmt->execute();
@@ -297,7 +297,7 @@ class FFilm {
 
 
     // carica tutti i registi associati al film passato per parametro, restituendoli in un array di ERegisti
-    public static function loadListaRegisti(EFilm $film): ?array {
+    public static function loadListaRegisti(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -310,7 +310,7 @@ class FFilm {
                 " ON " . "pe." . self::$nomeChiaveTabellaRegisti . " = " . "pef." . self::$nomeChiave2TabellaPersoneFilm .
                 " JOIN " . self::$nomeTabella . " f " .
                 " ON " . "pef." . self::$nomeChiave1TabellaPersoneFilm . " = " . "f." . self::$chiaveTabella .
-                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $id . "'" .
                 " AND " . self::$nomeAttributoPersonaRuolo . " = '" . self::$valoreAttributoPersonaRegista . "'" .
                 " ORDER BY " . "pe." . self::$nomeAttributoPersonaCognome . " ASC;";
             $stmt = $pdo->prepare($query);
@@ -337,7 +337,7 @@ class FFilm {
 
 
     // carica tutti gli attori associati al film passato per parametro, restituendoli in un array di EAttori
-    public static function loadListaAttori(EFilm $film): ?array {
+    public static function loadListaAttori(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -350,7 +350,7 @@ class FFilm {
                 " ON " . "pe." . self::$nomeChiaveTabellaAttori . " = " . "pef." . self::$nomeChiave2TabellaPersoneFilm .
                 " JOIN " . self::$nomeTabella . " f " .
                 " ON " . "pef." . self::$nomeChiave1TabellaPersoneFilm . " = " . "f." . self::$chiaveTabella .
-                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " WHERE " . " pef." . self::$chiaveTabella . " = '" . $id . "'" .
                 " AND " . self::$nomeAttributoPersonaRuolo . " = '" . self::$valoreAttributoPersonaAttore . "'" .
                 " ORDER BY " . "pe." . self::$nomeAttributoPersonaCognome . " ASC;";
             $stmt = $pdo->prepare($query);
@@ -380,7 +380,7 @@ class FFilm {
     // le risposte di ciascuna recensione non verranno caricate in questo momento ma solo quando si selezionerà una di
     // esse cliccandoci sopra
     // TODO considerare un numero limite di recensioni da caricare, da passare per parametro (le prime $n)
-    public static function loadListaRecensioniFilm(EFilm $film): ?array {
+    public static function loadListaRecensioniFilm(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -389,7 +389,7 @@ class FFilm {
                 "SELECT * FROM " . self::$nomeTabellaRecensione .
                 " JOIN " . self::$nomeTabella .
                 " ON " . self::$chiave1TabellaRecensione . " = " . self::$chiaveTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "'" .
+                " WHERE " . self::$chiaveTabella . " = '" . $id . "'" .
                 " ORDER BY " . self::$nomeAttributoRecensioneDataScrittura . " DESC;";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
