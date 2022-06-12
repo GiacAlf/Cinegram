@@ -362,7 +362,7 @@ class FMember {
 
 
     // da usare quando l'EMember usa il metodo follow verso uno $usernameFollowing
-    // inserisce uno $usernameFollower nella tabella partesocial del DB che seguirà lo $usernameFollowing
+    // inserisce uno $usernameFollower nella tabella parteSocial del DB che seguirà lo $usernameFollowing
     public static function follow(EMember $follower, EMember $following): void {
 
         $pdo = FConnectionDB::connect();
