@@ -16,7 +16,7 @@ class FStatisticheFilm {
     private static string $nomeAttributoIdFilm = "IdFilm";
 
 
-    // metodo che restituisce un array di $numeroDiEstrazioni elementi contenente i film piu' visti
+    // metodo che restituisce u n array di $numeroDiEstrazioni elementi contenente i film piu' visti
     public static function caricaFilmPiuVisti(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();

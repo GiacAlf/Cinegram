@@ -509,7 +509,7 @@ class FMember {
     }
 
 
-    // cancella un Member dalla tabella user del DB e, grazie alle FK, anche da tutte le altre dove potrebbe comparire
+    // cancella un Member dalla tabella user del DB e,  grazie alle FK, anche da tutte le altre dove potrebbe comparire
     public static function delete(string $username): void {
 
         $pdo = FConnectionDB::connect();
