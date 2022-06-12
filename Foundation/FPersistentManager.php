@@ -30,8 +30,8 @@ class FPersistentManager {
     // Il booleano $completo sarà importante, se settato a true, solo per EMember ed EFilm, così da caricare le rispettive
     // entity complete di tutti gli attributi costituiti da array, e per ERecensione, che permetterà di caricare tutte
     // le sue risposte.
-    public static function load(string $EClass, ?int $id, ?string $username, ?EFilm $film, ?string $nome, ?string $cognome,
-                                ?string $titolo, ?int $anno, ?DateTime $data, bool $completo): ?object {
+    public static function load(string $EClass, ?int $id, ?string $username, ?string $nome, ?string $cognome,
+                                ?string $titolo, ?int $anno, ?DateTime $data, bool $completo){
 
         $FClass = str_replace("E", "F", $EClass);
 
@@ -47,8 +47,8 @@ class FPersistentManager {
         }
 
         if($FClass == "FFilm") {
-            if($film)
-                return $FClass::loadById($film, $completo, $completo, $completo);
+            if(!is_null($id))
+                return $FClass::loadById($id, $completo, $completo, $completo);
             if($titolo && $nome == null && $cognome == null)
                 return $FClass::loadByTitolo($titolo);
             return $FClass::loadByTitoloEAnno($titolo, $anno);
