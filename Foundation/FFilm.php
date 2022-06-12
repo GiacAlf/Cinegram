@@ -768,7 +768,7 @@ class FFilm {
     }
 
 
-    // metodo che cancella una locandina facendo "update a null"
+    // metodo che elimina una locandina facendo "update a null"
     public static function deleteLocandina(EFilm $film): void {
 
         if((FFilm::existById($film))) {
