@@ -2,5 +2,5 @@
 
 class CFrontController
 {
-
+// commento di prova
 }
