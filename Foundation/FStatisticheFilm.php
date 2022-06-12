@@ -42,7 +42,7 @@ class FStatisticheFilm {
                     new DateTime($ris[self::$nomeAttributoAnno]), $ris[self::$nomeAttributoDurata], $ris[self::$nomeAttributoSinossi],
                     $ris["NumVis"], null, null, null, null);
 
-                $avg = FFilm::loadVotoMedio($filmResult);
+                $avg = FFilm::loadVotoMedio($filmResult->getId());
                 $filmResult->setVotoMedio($avg);
                 $risultatoFilm[] = $filmResult;
             }
@@ -86,8 +86,8 @@ class FStatisticheFilm {
                         new DateTime($ris[self::$nomeAttributoAnno]), $ris[self::$nomeAttributoDurata], $ris[self::$nomeAttributoSinossi],
                         0, null, null, null, null);
 
-                    $views = FFilm::loadNumeroViews($filmResult);
-                    $avg = FFilm::loadVotoMedio($filmResult);
+                    $views = FFilm::loadNumeroViews($filmResult->getId());
+                    $avg = FFilm::loadVotoMedio($filmResult->getId());
                     /* nelle due variabili sopra sono contenuti i risultati delle query che mi restituiscono
                     rispettivamente il numero views e il voto medio nelle 2 righe sotto vado ad aggiungere questi due
                     attributi all'oggetto e lo aggiungo all'array
@@ -136,7 +136,7 @@ class FStatisticheFilm {
                 // in questo caso il voto medio non lo carico qui perche' l'ho gia caricato nel costruttore
                 // avendolo preso dalla select direttamente a differenza delle altre query
 
-                $views = FFilm::loadNumeroViews($filmResult);
+                $views = FFilm::loadNumeroViews($filmResult->getId());
                 $filmResult->setNumeroViews($views);
                 $risultatoFilm[] = $filmResult;
 
@@ -174,8 +174,8 @@ class FStatisticheFilm {
                     new DateTime($ris[self::$nomeAttributoAnno]), $ris[self::$nomeAttributoDurata], $ris[self::$nomeAttributoSinossi],
                     0, 0, null, null, null);
 
-                $views = FFilm::loadNumeroViews($filmResult);
-                $avg = FFilm::loadVotoMedio($filmResult);
+                $views = FFilm::loadNumeroViews($filmResult->getId());
+                $avg = FFilm::loadVotoMedio($filmResult->getId());
                 $filmResult->setNumeroViews($views);
                 $filmResult->setVotoMedio($avg);
                 $risultatoFilm[] = $filmResult;
