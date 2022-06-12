@@ -338,7 +338,7 @@ class FMember {
     }
 
 
-    // rimuove il film con id $idFilm guardato dal member $username dalla tabella filmVisti
+    // rimuove il film con $idFilm guardato dal member $username dalla tabella filmVisti
     public static function rimuoviFilmVisto(EMember $member, EFilm $film): void {
 
         $pdo = FConnectionDB::connect();
