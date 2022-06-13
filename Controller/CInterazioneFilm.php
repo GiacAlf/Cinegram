@@ -9,7 +9,7 @@ class CInterazioneFilm
 
         $titolo="suspiria";
 
-
+        $films = array();
         $films  =FPersistentManager::load("EFilm", null,null,null,
         null,null,$titolo,null,null,false);
        //caricare le locandine dell'array di film ricevute
@@ -91,7 +91,7 @@ class CInterazioneFilm
         $idFilm=2;
         $usernameAutoreRecensione="matteo";
 
-        $risposta=new ERisposta($usernameAutore, $date,$testo,$idFilm,$usernameAutoreRecensione);
+        $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
         FPersistentManager::store($risposta,null,null,null,null,null,null,null);
     }
 
