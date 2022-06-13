@@ -2,5 +2,5 @@
 
 class CGestioneAdmin
 {
-
+//commento di prova
 }

@@ -25,7 +25,7 @@ class CInterazioneFilm
     }
 
     /*questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
-    sara' associata una url (secondo lo standart Restful) fatta in get del tipo localhost/film/id
+    sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
     public static function CaricaFilm(int $id){
@@ -57,6 +57,7 @@ class CInterazioneFilm
            lo username è preso dalla sessione(?)
            $username=$SESSION["username"]
         */
+        //prova
          //prova
 
         $idFilm=2;
