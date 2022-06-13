@@ -200,6 +200,11 @@ class FPersistentManager {
     }
 
 
+    public static function memberRegistrato(string $username, string $password): ?bool {
+        return FMember::memberRegistrato($username, $password);
+    }
+
+
     public static function calcolaNumeroFilmVisti(EMember $member): ?int {
         return FMember::calcolaNumeroFilmVisti($member);
     }
