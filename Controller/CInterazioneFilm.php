@@ -26,7 +26,8 @@ class CInterazioneFilm
 
     /*questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
     sara' associata una url (secondo lo standart Restful) fatta in get del tipo localhost/film/id
-    ,parsificando la stringa il front controller passera' l'id come parametro */
+    ,parsificando la stringa il front controller passera' l'id come parametro
+     */
     public static function CaricaFilm(int $id){
 
         //restituzione del film completo
