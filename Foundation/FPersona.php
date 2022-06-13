@@ -41,7 +41,6 @@ class FPersona {
     // poichè possono esserci diverse associazioni tra la stessa persona e diversi film
     public static function existPersoneFilm(int $idPersona, int $idFilm): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -63,6 +62,45 @@ class FPersona {
         }
         return null;
     }
+
+
+
+    // metodo che restituisce un array di film in cui l'attore o il regista hanno partecipato
+    public static function loadFilmByNomeECognome(string $nome, string $cognome): ?array {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            // si assume come al solito che non ci siano omonimi tra gli attori o tra i registi
+            // ma può esserci un attore che è anche un regista e che quindi hanno id diversi
+            $attore = FAttore::loadByNomeECognome($nome, $cognome);
+            $regista = FRegista::loadByNomeECognome($nome, $cognome);
+
+            $query =
+                "SELECT " . self::$chiave2TabellaPersoneFilm . " FROM " . self::$nomeTabellaPersoneFilm .
+                " WHERE " . self::$chiave1TabellaPersoneFilm . " = '" . $attore->getId() . "'" .
+                " OR " . self::$chiave1TabellaPersoneFilm . " = '" . $regista->getId() . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            $arrayFilmResult = array();
+            if($queryResult) {
+                foreach ($queryResult as $arrrayIdFilm) {
+                    $arrayFilmResult[] = FFilm::loadById($arrrayIdFilm[self::$chiave2TabellaPersoneFilm], false, false, false);
+                }
+                $arrayFilmResult = array_unique($arrayFilmResult, SORT_REGULAR);
+            }
+            return $arrayFilmResult;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
 
 
     // cancella una persona dalla tabella persona del DB

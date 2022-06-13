@@ -344,6 +344,11 @@ class FPersistentManager {
         FPersona::deletePersoneFilm($idPersona, $idFilm);
     }
 
+
+    public static function loadFilmByNomeECognome(string $nome, string $cognome): ?array {
+        return FPersona::loadFilmByNomeECognome($nome, $cognome);
+    }
+
             /* ----- metodi di FRecensione ----- */
 
 
