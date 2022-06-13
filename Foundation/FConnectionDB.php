@@ -1,7 +1,6 @@
 <?php
 
-// volendo si può mettere il path assoluto di configDB
-if(file_exists("configDB.php")) require_once "configDB.php";
+// if(file_exists("configDB.php")) require_once "configDB.php";
 
 class FConnectionDB {
 

@@ -3,6 +3,7 @@
 class SessionHelper {
 
     public static function login(EMember $utente): void { //Qua bisogna passare il member minimale
+
         if (session_status() == PHP_SESSION_NONE) { //sessione è abilitata ma non esiste
             session_start();
             $temp = serialize($utente);
@@ -10,17 +11,19 @@ class SessionHelper {
         }
     }
 
+
     public static function logout(): void {
-        //var_dump($_SESSION);
+
         session_start(); //serve perché forse deve riprendere le robe da $_SESSION?
         session_unset();
         session_destroy();
         setcookie('PHPSESSID', '', time() - 3600);
-        //header('Location: /Museo/Utente/login'); //TODO: bisogna mettere la nostra pagina di login o in homepage
+        //header('Location: /Museo/Utente/login'); //TODO: bisogna mettere la nostra pagina di login o homepage
     }
 
 
     public static function isLogged(): bool {
+
         $identificato = false;
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -32,6 +35,7 @@ class SessionHelper {
     }
 
 
+    // TODO verificare che ritorni effettivamente un EMember...come lo costruisce? serve aggiungerci altro?
     public static function getUtente(): EMember {
         return unserialize($_SESSION['utente']);
     }

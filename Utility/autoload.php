@@ -1,6 +1,7 @@
 <?php
 
-function autoload($className){
+function autoload($className) {
+
     $firstLetter = $className[0];
     $fileName = '';
     switch ($firstLetter) {
@@ -19,12 +20,10 @@ function autoload($className){
         case 'C':
             $fileName = ('/Controller/' . $className . '.php');
             break;
-
     }
 
     if (file_exists($fileName) && is_readable($fileName)) {
         include($fileName);
     }
-
 }
 spl_autoload_register("autoload");
