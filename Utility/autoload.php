@@ -13,16 +13,18 @@ function autoload($className){
             break;
 
         case 'V':
-            $fileName = ('View/' . $className . '.php');
+            $fileName = ('/View/' . $className . '.php');
             break;
 
         case 'C':
-            $fileName = ('Controller/' . $className . '.php');
+            $fileName = ('/Controller/' . $className . '.php');
             break;
 
     }
 
     if (file_exists($fileName) && is_readable($fileName)) {
-        include_once($fileName);
+        include($fileName);
     }
+
 }
+spl_autoload_register("autoload");
