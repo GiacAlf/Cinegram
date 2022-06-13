@@ -9,7 +9,7 @@ class CInterazioneFilm
 
         $titolo="suspiria";
 
-
+        $films = array();
         $films  =FPersistentManager::load("EFilm", null,null,null,
         null,null,$titolo,null,null,false);
        //caricare le locandine dell'array di film ricevute
@@ -25,8 +25,9 @@ class CInterazioneFilm
     }
 
     /*questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
-    sara' associata una url (secondo lo standart Restful) fatta in get del tipo localhost/film/id
-    ,parsificando la stringa il front controller passera' l'id come parametro */
+    sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
+    ,parsificando la stringa il front controller passera' l'id come parametro
+     */
     public static function CaricaFilm(int $id){
 
         //restituzione del film completo
@@ -56,6 +57,7 @@ class CInterazioneFilm
            lo username è preso dalla sessione(?)
            $username=$SESSION["username"]
         */
+        //prova
          //prova
 
         $idFilm=2;
@@ -89,7 +91,7 @@ class CInterazioneFilm
         $idFilm=2;
         $usernameAutoreRecensione="matteo";
 
-        $risposta=new ERisposta($usernameAutore, $date,$testo,$idFilm,$usernameAutoreRecensione);
+        $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
         FPersistentManager::store($risposta,null,null,null,null,null,null,null);
     }
 
