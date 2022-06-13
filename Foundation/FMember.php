@@ -5,6 +5,7 @@ class FMember {
     private static string $nomeClasse = "FMember"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "member";   // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "Username"; // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeAttributoPassword = "Password";
     private static string $nomeAttributoBio = "Bio";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoWarning = "Warning";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoDataIscrizione = "DataIscrizione";   // da cambiare se cambia il nome dell'attributo in DB
@@ -530,6 +531,34 @@ class FMember {
             echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
             echo "\nCancellazione annullata!";
         }
+    }
+
+
+    // metodo che verifica l'esistenza di un member registrato in db inserendo il valore della chiave Username
+    // e l'attributo password
+    public static function memberRegistrato(string $username, string $password): ?bool {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT * FROM " . self::$nomeTabellaUser .
+                " WHERE " . self::$chiaveTabella . " = '" . $username . "'" .
+                " AND " . self::$nomeAttributoUserRuolo . " = '" . self::$valoreAttributoUserRuolo . "'" .
+                " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if($queryResult) return true;
+            return false;
+        }
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
     }
 
 

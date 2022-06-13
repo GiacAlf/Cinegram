@@ -43,7 +43,6 @@ class FUser {
     // e l'attributo password
     public static function userRegistrato(string $username, string $password): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
