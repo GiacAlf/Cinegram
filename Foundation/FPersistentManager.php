@@ -444,4 +444,5 @@ class FPersistentManager {
     public static function caricaFilmRecenti(int $numeroDiEstrazioni): ?array {
         return FStatisticheFilm::caricaFilmRecenti($numeroDiEstrazioni);
     }
+
 }
