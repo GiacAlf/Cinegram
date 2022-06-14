@@ -42,7 +42,7 @@ class FAdmin {
     }
 
 
-    // salva l'oggetto admin sul DB
+    // salva l'oggetto admin sul DB, la password verrà criptata
     public static function store(EAdmin $admin, string $password): void {
 
         // si controlla se l'admin non sia già presente in DB prima di procedere
@@ -57,7 +57,7 @@ class FAdmin {
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(
                     ":Username" => $admin->getUsername(),
-                    ":Password" => $password,
+                    ":Password" => EAdmin::criptaPassword($password),
                     ":Ruolo" => self::$valoreAttributoUserRuolo));
 
                 // salvataggio nella tabella Admin
@@ -81,6 +81,7 @@ class FAdmin {
 
     // aggiorna l'admin nel DB, per ora la sola cosa che si può aggiornare è la password visto che il resto è il ruolo
     // e lo username, che non è modificabile
+    // la password verrà criptata
     public static function updatePassword(EAdmin $admin, string $nuovaPassword): void {
 
         if(FUser::exist($admin->getUsername())) {
@@ -89,7 +90,7 @@ class FAdmin {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabellaUser .
-                    " SET " . self::$nomeAttributoUserPassword . " = '" . $nuovaPassword . "'" .
+                    " SET " . self::$nomeAttributoUserPassword . " = '" . EAdmin::criptaPassword($nuovaPassword) . "'" .
                     " WHERE " . self::$chiaveTabellaUser . " = '" . $admin->getUsername() . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
