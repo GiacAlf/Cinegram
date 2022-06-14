@@ -150,4 +150,11 @@ class EMember extends EUser {
     public function getRecensioniScritte(): ?array {
         return $this->recensioniScritte;
     }
+
+
+    // metodo che restituisce un immagine profilo più piccola dell'originale passata per parametro
+    // TODO: implementare con del codice che abbia senso, volendo mettere un parametro % di resize passato per parametro
+    public static function resizeImmagineProfilo(string $immagineProfilo): string {
+        return $immagineProfilo;
+    }
 }
