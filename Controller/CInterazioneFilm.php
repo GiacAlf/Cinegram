@@ -68,6 +68,8 @@ class CInterazioneFilm
         $recensione=new ERecensione($idFilm, $username,$voto,$testo,$data,null);
         FPersistentManager::store($recensione,null,null,null,null,null,null
         ,null);
+        //notifica che sto a salva le robe
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
 
     }
 
@@ -93,11 +95,13 @@ class CInterazioneFilm
 
         $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
         FPersistentManager::store($risposta,null,null,null,null,null,null,null);
+        //notifica che sto a salva le robe
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
     }
 
     /*metodo che verra' chiamato quando si vuole eliminare una recensione, adesso pero' dobbiamo fare
     delle considerazioni per quanto riguarda la URL da associare. Htlm prevede solo i metodi get e post quindi
-    possiamo fare richieste solo con questi due, propongo di associargli localhost/recensione/-1 (sappiamo grazie
+    possiamo fare richieste solo con questi due, propongo di associargli localhost/recensione/id=.../-1 (sappiamo grazie
     a -1 che chiameremo questo metodo), ovviamente in post */
 
     public static function EliminaRecensione(){
@@ -112,12 +116,14 @@ class CInterazioneFilm
         $idFilm=2;
         $usernameAutore="pippo";
         FPersistentManager::delete("ERecensione",$usernameAutore,null,null,$idFilm,null);
+        //notifica che sto a salva le robe
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
     }
 
 
 
     /*metodo che verra' chiamato quando si vuole eliminare una risposta
-    , propongo di associare ,localhost/risposta/-1, come fatto sopra. (sappiamo grazie
+    , propongo di associare ,localhost/risposta/data=...../-1/, come fatto sopra. (sappiamo grazie
    a -1 che chiameremo questo metodo), ovviamente in post */
 
     public static function EliminaRisposta(){
@@ -127,16 +133,18 @@ class CInterazioneFilm
         //recupero dalla view i dati inviati dal client in post
         /* ci facciamo inviare la data e lo username lo prendiamo dalla sessione
         */
-
+        $idFilm = 1;
         $data = new DateTime();
         $usernameAutore="matteo";
         FPersistentManager::delete("ERisposta",$usernameAutore,null,null,null,$data);
+        //notifica che sto a salva le robe
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
 
     }
 
 
     /* supponendo ci sia un pulsante per caricare le risposte della recensione (Vedi risposte)
-    allora associamo una url localhost/risposte in post */
+    allora associamo una url localhost/risposte/id=...&username=.... in post */
     public static function caricaRisposte(){
 
         //leggere dalla view corrispondente i dati inviati, saranno la chiave che identifica la recensione
@@ -156,7 +164,7 @@ class CInterazioneFilm
     }
 
     /*metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/-1 , non possiamo scrivere /localhost/film/id si confonde
+    propongo anche qui una url particolare: localhost/film/id=.../-1 , non possiamo scrivere /localhost/film/id si confonde
     con caricafilm , metodo post*/
     public static function vediFilm(){
         //controllo se utente è loggato
@@ -173,7 +181,7 @@ class CInterazioneFilm
 
 
     /*metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/-2 , non possiamo scrivere /localhost/film/id si confonde
+    propongo anche qui una url particolare: localhost/film/id=.../-2 , non possiamo scrivere /localhost/film/id si confonde
     con caricafilm ,metodo post */
     public static function rimuoviFilmVisto(){
         //controllo se utente è loggato

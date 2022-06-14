@@ -3,7 +3,7 @@
 class CGestioneProfilo
 {
     /* metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
-    bottone da premere), inviera' una url localhost/profilo
+    bottone da premere), inviera' una url localhost/profilo/username=....
     */
     public static function caricaProfilo(){
 
@@ -40,6 +40,8 @@ class CGestioneProfilo
         FPersistentManager:store*/
 
         //ricaricare la pagina del member col l'immagine cambiata tramite il metodo sopra.
+        //notifica che sto a salva le robe
+        header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
 
 
     }
@@ -63,7 +65,24 @@ class CGestioneProfilo
         FPersistentManager::updateBio($member,$updatedBio);
 
         //ricaricare la pagina con la bio aggiornata tramite il metodo sopra
+        //notifica che sto a salva le robe
+        header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
 
+    }
+
+    /*l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
+    localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password */
+
+    public static function AggiornaPasswordMember(){
+        /*recupero della nuova password dalla form, ma questa funzione puo' essere
+        chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
+        $nuovaPassword="paperino";
+        $username="damiano";
+        $member=FPersistentManager::load("EMember",null,$username,null,null,null,
+            null,null,false);
+        FPersistentManager::updatePassword($member,$nuovaPassword);
+        //notifica che sto a salva le robe
+        header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
     }
 
 

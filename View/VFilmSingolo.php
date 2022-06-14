@@ -99,6 +99,7 @@ class VFilmSingolo
         if(isset($_POST['voto'])){
             $voto_recensione = $_POST['voto'];
         }
+        //se non è settato ne il voto ne il testo vaffanculo -> oppure dall'html lo fa
         //creo la recensione
         //CControllore::store($recensione);
     }

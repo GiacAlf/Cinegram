@@ -23,8 +23,6 @@ class CHomepage
         tanto questa pagina è uguale per tutti*/
 
 
-
-
     }
 
 

@@ -25,6 +25,7 @@ class CInterazioneMember
         print_r($ultimeAttivita);
         print_r($ultimeAttivitaSeguiti);
         print_r($utentiPiuPopolari);
+        //ridai un booleano identificato. TRUE se è member registrato, FALSE se non lo è
         //carica le foto per ogni utente (avatar piccolo)
 
          /* passo questi dati ad un unico metodo di una view insieme ad un parametro
@@ -55,7 +56,7 @@ class CInterazioneMember
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in post
-    al seguente url localhost/member/-1, lo username da seguire lo dara' il bottone
+    al seguente url localhost/member/username=.../-1, lo username da seguire lo dara' il bottone
     cliccato. */
     public static function seguiMember(){
 
@@ -80,7 +81,7 @@ class CInterazioneMember
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' unfolloware il member, sara' una richiesta in post
-    al seguente url localhost/member/-2, lo username da unfolloware lo dara' il bottone
+    al seguente url localhost/member/username=..../-2, lo username da unfolloware lo dara' il bottone
     cliccato. */
 
     public static function togliMember(){
@@ -103,53 +104,6 @@ class CInterazioneMember
 
     }
 
-    /* metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
-    propongo una url localhost/member/-3 */
-    public static function loginMember(){
-        /* recupero i dati dalla view in $POST[username] e $POST[password]
-        inizializzo la sessione
-        */
-        $username="martin";
-        $password="scorsese";
-        if (FPersistentManager::userRegistrato($username,$password) && !FPersistentManager::userBannato($username)){
-            /*decidere se mettere tutto l'oggetto in sessione oppure solo lo username, io propongo per la seconda.
-
-            Dopo dobbiamo discriminare tra member ed admin quindi */
-            $cosaSei=FPersistentManager::tipoUserRegistrato($username,$password);
-            print($cosaSei);
-
-            /*chiamero' la view che gestira' l'admin se $cosaSei="Admin"
-            altrimenti chiamo quella del member, oppure faccio decidere a smarty(?)*/
-
-        }
-        if (FPersistentManager::userBannato($username)){
-            print("sei bannato");
-
-            /*chiamo una schermata di errore che dice che l'utente
-            che ha fatto il login è in realta bannato, dobbiamo notificarlo*/
-
-
-        }
-        if (!FPersistentManager::userRegistrato($username,$password)){
-            /* mostrare la classica schermata che dice che username e password non corrispondo*/
-            print ("username e password non corrispondo");
-
-
-
-        }
-    }
-
-    /*L'utente clicca su questo pulsante e semplicemente verra' effettuato il classico logout
-    associo una url localhost/member/-4
-    */
-    public static function logoutMember(){
-        /*
-        l'unica cosa da fare qui dentro è distruggere completamente la sessione cosi' che
-        l'utente dovra' fare nuovamente il login perche si distrugge la cartella associata a lui
-        sul server grazie a session_destroy(), eliminiamo gli array in ram con unset() e possiamo anche
-        inviare un cookie con chiave PHPSESSID e valore ""*/
-
-    }
 
     /*l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
     localhost/member/-5 , metodo post dove inviera' la nuova password */
@@ -163,5 +117,7 @@ class CInterazioneMember
         null,null,false);
         FPersistentManager::updatePassword($member,$nuovaPassword);
     }
+
+    //TODO: metodo per registrarsi
 
 }
