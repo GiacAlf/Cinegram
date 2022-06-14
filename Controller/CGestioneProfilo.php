@@ -6,19 +6,20 @@ class CGestioneProfilo
     bottone da premere), inviera' una url localhost/profilo/username=....
     */
     public static function caricaProfilo(){
+        //if(SessionHelper::isLogged()){
+          //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
-        /*bastera' controllare se l'utente è registrato e prendere
-        dalla sessione il suo username*/
         $username="pippo";
-
+        $view = new VUtenteSingolo();
         $member=FPersistentManager::load("EMember",null,$username,null,null,
-        null,null,null,null,true);
+        null,null,null,true);
         //FPersistentManager::loadImmagineProfilo($member,true):
         //carica immagina di profilo
         $filmvisti=FPersistentManager::calcolaNumeroFilmVisti($member);
         $following=FPersistentManager::calcolaNumeroFollowing($member);
         $follower=FPersistentManager::calcolaNumeroFollower($member);
-
+        $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
         //chiamare view responsabile della
 
     }
@@ -30,8 +31,16 @@ class CGestioneProfilo
     public static function aggiornaImmagineProfilo(){
 
         //verifica che l'utente sia registrato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
+        $username = "proz";
+        $view = new VUtenteSingolo();
         //recuperare dalla view giusta i dati dell'immagine
+        $nuova_foto = $view->aggiornaFoto();
+
+        //se nuova foto è null, si chiama da qua la schermata di errore?
 
         /*tramite un metodo che dopo faremo controllare che l'immagina caricata
         rispetti i requisiti da noi imposti, sul content-type, sulla size etc*/
@@ -54,10 +63,14 @@ class CGestioneProfilo
     public static function aggiornaBioProfilo(){
 
         //verificare che l'utente è registrato e caricare il suo username dalla sessione
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
+        $view = new VUtenteSingolo();
         //recupero dalla view la nuova bio
         $updatedBio="ciao questa è la bio di prova inviata tramite richiesta http col metodo post";
-
+        $updatedBio = $view->aggiornaBio();
         $username="matteo";
         $member=FPersistentManager::load("EMember",null,$username,null,
             null,null,null,null,false);
@@ -76,7 +89,15 @@ class CGestioneProfilo
     public static function AggiornaPasswordMember(){
         /*recupero della nuova password dalla form, ma questa funzione puo' essere
         chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
+        $view = new VUtenteSingolo();
         $nuovaPassword="paperino";
+        $nuovaPassword = $view->aggiornaPassword();
+
+        //se nuova foto è null, si chiama da qua la schermata di errore?
+
         $username="damiano";
         $member=FPersistentManager::load("EMember",null,$username,null,null,null,
             null,null,false);
@@ -84,10 +105,5 @@ class CGestioneProfilo
         //notifica che sto a salva le robe
         header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
     }
-
-
-
-
-
 
 }

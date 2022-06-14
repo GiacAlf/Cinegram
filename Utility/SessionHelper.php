@@ -36,6 +36,7 @@ class SessionHelper {
 
 
     // TODO verificare che ritorni effettivamente un EMember...come lo costruisce? serve aggiungerci altro?
+    //pare che effettivamente restituisca un EMember
     public static function getUtente(): EMember {
         return unserialize($_SESSION['utente']);
     }

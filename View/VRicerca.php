@@ -6,22 +6,56 @@ class VRicerca
 
     //il costruttore della home page richiama l'oggetto smarty configurato
     //e se lo salva
-    public function __construct(array $risultato_ricerca){
-        $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaRicerca($risultato_ricerca);
+    public function __construct(){
+        $this->smarty = StartSmarty::configuration();;
     }
 
     //metodo che mi fa vedere la pagina dopo aver eseguito la ricerca: dato che io avrò
     //sempre un array da far visualizzare io prima faccio vedere quanti risultati ci sono
     //poi se ho effettivamente dei risultati li assegno a smarty. In ogni caso faccio display del template
     public function avviaPaginaRicerca(array $risultato_ricerca): void{
-        //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
+        //servirà qualcosa per gli array
         $this->smarty->assign('andamento', 'La ricerca ha prodotto'. count($risultato_ricerca) .' risultati');
         if (count($risultato_ricerca) >= 1){
             $this->smarty->assign('risultati', $risultato_ricerca);
         }
         $this->smarty->display('ricerca.tpl');
     }
+
+    //metodo che restituisce al controller il prompt scritto dall'utente
+    public function eseguiRicerca(): ?string {
+        $ricerca = null;
+        if (isset($_GET['ricerca'])) {
+            $ricerca = $_GET['ricerca'];
+        }
+        return $ricerca;
+    }
+
+    //metodo che restituisce al controller il tipo di ricerca che vuole effettuare
+    //con la checkbox dell'HTML
+    public function tipoRicerca(): ?string{
+        $tipo_ricerca = null;
+        if(isset($_GET['tipo'])){
+            $tipo_ricerca = $_GET['tipo'];
+        }
+        return $tipo_ricerca;
+    }
+
+
+
+
+
+
+
+
+
+    //------------------------------------metodi vecchi-----------------------------------------
+
+
+
+
+
+
 
     //Essendo la parte superiore del layout dell'app uguale per tutte le pagine i 3 metodi successivi
     //si ripetono per ogni view
@@ -56,7 +90,7 @@ class VRicerca
     //metodo che effettua la ricerca dal campo Search in cui si apre quella piccola form
     //la logica è: uso il controllore per cercare un film, se il risultato è null, forse è un attore
     //se non lo è, è un regista e così via. Se è proprio null, unlucky, si scrive Nessun Risultato
-    public function eseguiRicerca(): object{
+    public function seguiRicerca(): object{
         $risultato = array();
         $ricerca = null;
 

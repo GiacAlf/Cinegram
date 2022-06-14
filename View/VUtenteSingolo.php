@@ -4,18 +4,17 @@ class VUtenteSingolo
 {
     private Smarty $smarty;
 
-    //il costruttore della pagina del film singolo richiama l'oggetto smarty configurato
+    //il costruttore della pagina dell'utente singolo richiama l'oggetto smarty configurato
     //e se lo salva
     public function __construct(EMember $utente_selezionato){
         $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaUtente($utente_selezionato); //volendo si può fare così ma devo passare la roba al costruttore, oppure fare come scrivo
     }
 
     //metodo che ci fa vedere la pagina dell'utente singolo, prendendo
     //come parametro l'utente selezionato
-    private function avviaPaginaUtente(EMember $utente_selezionato){
-        //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
-        $this->smarty->assign('immagine', $utente_selezionato->getImmagineProfilo()); //chiamo il Controller che chiama la Foundation per darmi l'immagine?
+    public function avviaPaginaUtente(EMember $utente_selezionato, int $numero_film_visti, int $numero_following,
+    int $numero_follower){
+        //$this->smarty->assign('immagine', $utente_selezionato->getImmagineProfilo()); //me lo dovrà dare con calma il controllore
         $this->smarty->assign('username', $utente_selezionato->getUsername());
         $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione());
         $this->smarty->assign('bio', $utente_selezionato->getBio());
@@ -23,8 +22,65 @@ class VUtenteSingolo
         $this->smarty->assign('lista_follower', $utente_selezionato->getListaFollower()); //bisognerebbe recuperare il numero dei follower e following
         $this->smarty->assign('lista_following', $utente_selezionato->getListaFollowing());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
+        $this->smarty->assign('numero_film_visti', $numero_film_visti);
+        $this->smarty->assign('numero_following', $numero_following);
+        $this->smarty->assign('numero_follower', $numero_follower);
         $this->smarty->display('utente_singolo.tpl');
     }
+
+    //metodo che restituisce l'array contenente tutte le info
+    //della nuova foto profilo
+    public function aggiornaFoto(): ?array{
+        $foto = null;
+        if(isset($_FILES['foto'])){
+            $foto = $_POST['foto'];
+        }
+        if ($this::checkFoto($foto)){
+            return $foto;
+        }
+        else{
+            //chiamo la schermata di errore-> e se lo facesse il controllore quando gli viene ritornato null?
+        }
+        return $foto;
+    }
+
+    //metodo che controlla che sia tutto ok
+    public function checkFoto(array $files): bool{
+        //TODO: qua bisogna vedere se è tutto corretto, poi vedremo come
+        return true;
+    }
+
+    public function aggiornaBio(): ?string{
+        $bio = null;
+        if(isset($_POST['bio'])){
+            $bio = $_POST['bio'];
+        }
+        return $bio;
+    }
+
+    public function aggiornaPassword(): ?string{
+        $password = null;
+        if(isset($_POST['password'])){
+            $password = $_POST['password'];
+        }
+        else{
+            //faccio vedere la schermata di errore->e se lo facesse il controllore quando gli viene ritornato null?
+        }
+        return $password;
+    }
+
+
+
+
+
+
+
+    //---------------------------------------metodi vecchi--------------------------------------------
+
+
+
+
+
 
     //Essendo la parte superiore del layout dell'app uguale per tutte le pagine i 3 metodi successivi
     //si ripetono per ogni view
@@ -132,21 +188,5 @@ class VUtenteSingolo
         //nel template tolgo il visto? Nel caso come si fa?
     }
 
-    public function aggiornaBio(): void{
-        //se l'utente loggato è uguale all'utente in pagina
-        $bio = null;
-        if(isset($_POST['bio'])){
-            $bio = $_POST['bio'];
-        }
-        CControllore::updateBio($bio);
-    }
 
-    public function aggiornaFoto(): void{
-        //se l'utente loggato è uguale all'utente in pagina
-        $foto = null;
-        if(isset($_FILES['foto'])){
-            $foto = $_POST['foto'];
-        }
-        CControllore::updateFoto($foto);
-    }
 }

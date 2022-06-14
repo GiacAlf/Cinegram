@@ -3,24 +3,42 @@
 class CInterazioneFilm
 {
     /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
-    del tipo localhost/film?titolo=titanic*/
+    del tipo localhost/film?titolo=titanic
+    io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
+    tipo localhost/member/.... chiamo il cercaMember -> da fare per ora*/
     public static function cercaFilm(){
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
+        $view = new VRicerca();
+        $titolo = $view->eseguiRicerca();
+        $tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
+        //per film o per persone
 
         $titolo="suspiria";
 
         $films = array();
-        $films  =FPersistentManager::load("EFilm", null,null,null,
-        null,null,$titolo,null,null,false);
-       //caricare le locandine dell'array di film ricevute
-
+        if ($tipo == "Film") {
+            $films = FPersistentManager::load("EFilm", null, null, null,
+                null, null, $titolo, null, null, false);
+            //caricare le locandine dell'array di film ricevute
+        }
+        else{
+            //qua dato che ci stanno nome e cognome devo stare attento, specie se uno, tipo Francis Ford Coppola, ha più nomi
+            $array = explode(" ", $titolo);
+            if(count($array) > 2){
+                $nome = $array[0] . $array[1];
+                $cognome = $array[2];
+            }
+            else {
+                $nome = $array[0];
+                $cognome = $array[1];
+            }
+            $films = FPersistentManager::loadFilmByNomeECognome($nome, $cognome);
+        }
 
         /*dovro' adesso dare questi film alla view che si occupa della visualizzazione dei risultati
         della ricerca
-
-        view->impostaVisualizzazioneRisultati
          */
-
+        $view->avviaPaginaRicerca($films);
 
     }
 
@@ -31,16 +49,15 @@ class CInterazioneFilm
     public static function CaricaFilm(int $id){
 
         //restituzione del film completo
-
+        $view = new VFilmSingolo();
         $film=FPersistentManager::load("EFilm",$id,null,null,
         null,null,null,null,true);
         //$locandina=FPersistentManager::loadLocandina($film,true);
         //print_r($film);
-
         /*qui dovro' passare alla view che fara' il display della pagina
         del film singolo
-        view->impostaPagina($films)
          */
+        $view->avviaPaginaFilm($film);
 
     }
 

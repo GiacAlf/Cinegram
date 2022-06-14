@@ -120,4 +120,6 @@ class CInterazioneMember
 
     //TODO: metodo per registrarsi
 
+    //TODO:metodo cercaMember -> si guardi il metodo cercaFilm in CInterazioneFilm
+
 }

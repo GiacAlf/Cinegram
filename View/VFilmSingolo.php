@@ -6,16 +6,14 @@ class VFilmSingolo
 
     //il costruttore della pagina del film singolo richiama l'oggetto smarty configurato
     //e se lo salva
-    public function __construct(EFilm $film_selezionato){
+    public function __construct(){
         $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaFilm($film_selezionato); //volendo si può fare così ma devo passare la roba al costruttore, oppure fare come scrivo
     }
 
     //metodo che ci fa vedere la pagina del film singolo, prendendo
     //come parametro il film che ha selezionato l'utente
-    private function avviaPaginaFilm(EFilm $film_selezionato){
-        //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
-        $this->smarty->assign('locandina', $film_selezionato->getLocandina()); //chiamo il Controller che chiama la Foundation per darmi l'immagine?
+    public function avviaPaginaFilm(EFilm $film_selezionato){
+        //$this->smarty->assign('locandina', $film_selezionato->getLocandina()); //mi passerà anche la locandina
         $this->smarty->assign( 'titolo', $film_selezionato->getTitolo());
         $this->smarty->assign('durata', $film_selezionato->getDurata());
         $this->smarty->assign('anno', $film_selezionato->getAnno());

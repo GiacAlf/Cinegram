@@ -8,36 +8,37 @@ class VHomePage
     //e se lo salva
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
-        //$this->avviaHomePage(); -> volendo si può fare così ma devo passare la roba al costruttore, oppure fare come scrivo
     }
 
     //COME GESTISCO SE L'UTENTE è GIà LOGGATO O MENO, FACCIO COMPARIRE UN ICONCINA CON IL MEMBER? BOH
     //Provo così: metto un'etichetta là sopra con scritto LOGIN di default, se l'utente è loggato sostituisco l'etichetta
     //con il suo username sennò lascio l'etichetta di default
 
-
-    //unico metodo di output dati(?)
     //metodo per farmi comparire l'home page riempita con tutti i dati necessari -> dato che il display è un print
     //è ok il ritorno void, credo
     public function avviaHomePage(array $film_recenti, array $film_recensiti, array $ultime_recensioni
         , array $utenti_popolari): void{
-        /*La versione non commentata prevede che il controllore corretto richiami i metodi di Foundation
-        e poi richiami questa view, nel caso il controllore non debba costruire view allora si fa:
-
-        $film_recenti = CControllore::caricaFilmRecenti();
-        $film_recensiti = CControllore::caricaFilmPiuRecensiti();
-        $ultime_recensioni = CControllore::caricaUltimeRecensioniScritte();
-        $utenti_popolari = CControllore::caricaFilmRecenti();
-
-         */
-
         //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
+        //serviranno altri assign per le varie locandine
         $this->smarty->assign('film_recenti', $film_recenti);
         $this->smarty->assign('film_recensiti', $film_recensiti);
         $this->smarty->assign('ultime_recensioni', $ultime_recensioni);
         $this->smarty->assign('utenti_popolari', $utenti_popolari);
         $this->smarty->display('home_page.tpl');
+        //passo gli interi array a smarty, che poi si preoccuperà di prendere le robe che gli interessano
     }
+
+
+
+
+
+
+
+
+    //--------------------------metodi vecchi, magari potrebbero servire --------------------------------------------
+
+
+
 
     //metodo che prende in input un film cliccato dall'utente e restituisce la
     //view del film singolo corrispondente
