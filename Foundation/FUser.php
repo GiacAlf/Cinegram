@@ -48,14 +48,15 @@ class FUser {
         try {
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $username . "'" .
-                " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
+            // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) return true;
+            // verificaPassword controlla se la password inserita corrisponde alla password hash recuperata da DB
+            if($queryResult && EUser::verificaPassword($password, $queryResult[self::$nomeAttributoPassword])) return true;
             return false;
         }
         catch (PDOException $e) {
@@ -66,8 +67,8 @@ class FUser {
     }
 
 
-    // metodo che restituisce il ruolo dello user inserendo il valore della chiave Username e l'attributo password
-    public static function tipoUserRegistrato(string $username, string $password): ?string {
+    // metodo che restituisce il ruolo dello user inserendo il valore della chiave Username
+    public static function tipoUserRegistrato(string $username): ?string {
 
         // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
@@ -76,8 +77,8 @@ class FUser {
             $query =
                 "SELECT " . self::$nomeAttributoRuolo .
                 " FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $username . "'" .
-                " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
+                // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);

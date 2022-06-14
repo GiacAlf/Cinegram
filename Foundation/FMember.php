@@ -269,6 +269,7 @@ class FMember {
 
     // salva l'oggetto member sul DB insieme alla sua immagine profilo, se non si vuole salvare l'immagine del profilo
     // per il momento inserire null nei 3 parametri relativi a essa
+    // la password verrà criptata
     public static function store(EMember $member, string $password, ?string $immagineProfilo, ?string $tipoImmagineProfilo,
                                  ?string $sizeImmagineProfilo): void {
 
@@ -284,7 +285,7 @@ class FMember {
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(
                     ":Username" => $member->getUsername(),
-                    ":Password" => $password,
+                    ":Password" => EMember::criptaPassword($password),
                     ":Ruolo" => self::$valoreAttributoUserRuolo));
 
                 // salvataggio nella tabella Member
@@ -495,7 +496,7 @@ class FMember {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabellaUser .
-                    " SET " . self::$nomeAttributoUserPassword . " = '" . $nuovaPassword . "'" .
+                    " SET " . self::$nomeAttributoUserPassword . " = '" . EMember::criptaPassword($nuovaPassword) . "'" .
                     " WHERE " . self::$chiaveTabellaUser . " = '" . $member->getUsername() . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
@@ -544,14 +545,15 @@ class FMember {
             $query =
                 "SELECT * FROM " . self::$nomeTabellaUser .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "'" .
-                " AND " . self::$nomeAttributoUserRuolo . " = '" . self::$valoreAttributoUserRuolo . "'" .
-                " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
+                " AND " . self::$nomeAttributoUserRuolo . " = '" . self::$valoreAttributoUserRuolo . "';";
+                // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) return true;
+            // verificaPassword controlla se la password inserita corrisponde alla password hash recuperata da DB
+            if($queryResult && EMember::verificaPassword($password, $queryResult[self::$nomeAttributoPassword])) return true;
             return false;
         }
         catch (PDOException $e) {
