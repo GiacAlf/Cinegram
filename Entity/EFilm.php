@@ -215,4 +215,11 @@ class EFilm {
     public function setListaRecensioni(?array $listaRecensioni): void {
         $this->listaRecensioni = $listaRecensioni;
     }
+
+
+    // metodo che restituisce una locandina più piccola dell'originale passata per parametro
+    // TODO: implementare con del codice che abbia senso, volendo mettere un parametro % di resize passato per parametro
+    public static function resizeLocandina(string $locandina): string {
+        return $locandina;
+    }
 }

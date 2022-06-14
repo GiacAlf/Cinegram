@@ -953,9 +953,11 @@ class FMember {
             $pdo->commit();
 
             if($queryResultMember) {
-                // se $grande è settato a false si caricherà la locandina piccola
-                if(!$grande)
-                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo]); //TODO
+                // se $grande è settato a true si caricherà l'immagine profilo grande
+                if($grande)
+                    $immagineProfilo = $queryResultMember[self::$nomeAttributoImmagineProfilo];
+                else
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo]);
 
                 return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo],
                     $queryResultMember[self::$nomeAttributoSizeImmagineProfilo]);
@@ -966,6 +968,23 @@ class FMember {
             echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
         }
         return null;
+    }
+
+
+    // metodo che restituisce un array con chiavi gli username e valori array d'immagini profilo, tipo e size
+    // se si setta il bool $grande a true si carica la corrispettiva immagine profilo in formato grande, piccola se false
+    public static function loadImmaginiProfiloMembers(array $arrayMembers, bool $grande): ?array {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        // questo array avrà come chiave lo username e come valore un array d'immagini profilo, tipo e size
+        $arrayUsernameImmagineProfilo = array();
+
+        foreach($arrayMembers as $member) {
+            $arrayUsernameImmagineProfilo[$member->getUsername()] = FMember::loadImmagineProfilo($member, $grande);;
+        }
+        $pdo->commit();
+        return $arrayUsernameImmagineProfilo;
     }
 
 

@@ -271,6 +271,13 @@ class FPersistentManager {
     }
 
 
+    // metodo che restituisce un array con chiavi gli username e valori array d'immagini profilo, tipo e size
+    // se si setta il bool $grande a true si carica la corrispettiva immagine profilo in formato grande, piccola se false
+    public static function loadImmaginiProfiloMembers(array $arrayMembers, bool $grande): ?array {
+        return FMember::loadImmaginiProfiloMembers($arrayMembers, $grande);
+    }
+
+
     public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
                                                  string $nuovaSizeImmagine): void {
         FMember::updateImmagineProfilo($member, $nuovaImmagine, $nuovoTipoImmagine, $nuovaSizeImmagine);
@@ -285,28 +292,28 @@ class FPersistentManager {
             /* ----- metodi di FFilm ----- */
 
 
-    public static function loadNumeroViews(EFilm $film): ?int {
-        return FFilm::loadNumeroViews($film);
+    public static function loadNumeroViews(int $id): ?int {
+        return FFilm::loadNumeroViews($id);
     }
 
 
-    public static function loadVotoMedio(EFilm $film): ?float {
-        return FFilm::loadVotoMedio($film);
+    public static function loadVotoMedio(int $id): ?float {
+        return FFilm::loadVotoMedio($id);
     }
 
 
-    public static function loadListaRegisti(EFilm $film): ?array {
-        return FFilm::loadListaRegisti($film);
+    public static function loadListaRegisti(int $id): ?array {
+        return FFilm::loadListaRegisti($id);
     }
 
 
-    public static function loadListaAttori(EFilm $film): ?array {
-        return FFilm::loadListaAttori($film);
+    public static function loadListaAttori(int $id): ?array {
+        return FFilm::loadListaAttori($id);
     }
 
 
-    public static function loadListaRecensioniFilm(EFilm $film): ?array {
-        return FFilm::loadListaRecensioniFilm($film);
+    public static function loadListaRecensioniFilm(int $id): ?array {
+        return FFilm::loadListaRecensioniFilm($id);
     }
 
 
@@ -316,8 +323,16 @@ class FPersistentManager {
 
 
     // se $grande è true su caricherà la locandina grande
+    // restituisce un array con i dati della locandina, il tipo e la sua size
     public static function loadLocandina(EFilm $film, bool $grande): ?array {
         return FFilm::loadLocandina($film, $grande);
+    }
+
+
+    // metodo che restituisce un array con chiavi gli idFilm e valori array di locandine, tipo e size
+    // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    public static function loadLocandineFilms(array $arrayFilm, bool $grande): ?array {
+        return FFilm::loadLocandineFilms($arrayFilm, $grande);
     }
 
 
@@ -454,5 +469,4 @@ class FPersistentManager {
     public static function caricaFilmRecenti(int $numeroDiEstrazioni): ?array {
         return FStatisticheFilm::caricaFilmRecenti($numeroDiEstrazioni);
     }
-
 }

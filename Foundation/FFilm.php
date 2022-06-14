@@ -725,10 +725,12 @@ class FFilm {
             $pdo->commit();
 
             if($queryResultFilm) {
-                // se $grande è settato a false si caricherà la locandina piccola
-                if(!$grande)
-                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]); //TODO
-
+                // se $grande è settato a true si caricherà la locandina grande
+                if($grande)
+                    $locandina = $queryResultFilm[self::$nomeAttributoLocandina];
+                else
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]);
+                
                 return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
                     $queryResultFilm[self::$nomeAttributoSizeLocandina]);
             }
@@ -738,6 +740,23 @@ class FFilm {
             echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
         }
         return null;
+    }
+
+
+    // metodo che restituisce un array con chiavi gli idFilm e valori array di locandine, tipo e size
+    // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    public static function loadLocandineFilms(array $arrayFilms, bool $grande): ?array {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        // questo array avrà come chiave l'idFilm e come valore un array di locandine, tipo e size
+        $arrayIdFilmLocandine = array();
+
+        foreach($arrayFilms as $film) {
+            $arrayIdFilmLocandine[$film->getId()] = FFilm::loadLocandina($film, $grande);;
+        }
+        $pdo->commit();
+        return $arrayIdFilmLocandine;
     }
 
 
