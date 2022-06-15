@@ -39,7 +39,7 @@ class CGestioneAdmin{
         $film=FPersistentManager::load("EFilm" , $id ,null ,null ,
         null , null , null ,null ,false);
 
-        $nuovoValore= new DateTime();
+        $nuovoValore= array();
         $nomeAttributo="sinossi";
 
         if($nomeAttibuto="data")
@@ -47,16 +47,16 @@ class CGestioneAdmin{
             FPersistentManager::update( $film , null , null ,null, null,
             $nuovoValore , null , null );
 
-        if (gettype($nuovoValore)="array") {
+        if($nomeAttributo="attori")
 
-            if($nomeAttributo="attori")
             FPersistentManager::update($film, null, null, null,
                 null, null, $nuovoValore, null);
 
-            if($nomeAttributo="registi")
-                FPersistentManager::update($film, null, null, null,
+        if($nomeAttributo="registi")
+
+            FPersistentManager::update($film, null, null, null,
                     null, null, null , $nuovoValore);
-        }
+
         else
         {
             FPersistentManager::update($film , $nomeAttributo , $nuovoValore , null ,
