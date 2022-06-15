@@ -16,10 +16,20 @@ class EAdmin extends EUser {
     }
 
 
-    public function ammonisciUser(EMember $memberDaAmmonire): void {
-        $memberDaAmmonire->incrementaWarning();
-        if($memberDaAmmonire->getWarning() == EAdmin::$warningMassimi)
-            $this->BannaUser($memberDaAmmonire);
+    public function ammonisciUser(string $usernameMemberDaAmmonire): void {
+
+        // si carica l'EMember
+        $memberDaAmmonire = FMember::load($usernameMemberDaAmmonire, false, false,
+            false, false);
+        // calcolo dei warning attuali
+        $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
+        if($warningMemberDaAmmonire < self::$warningMassimi) {
+            $memberDaAmmonire->incrementaWarning();
+            if($memberDaAmmonire->getWarning() == self::$warningMassimi) {
+                $this->bannaUser($memberDaAmmonire);
+            }
+        }
+        else echo "\nL'utente è già bannato!";
     }
 
 
@@ -29,7 +39,8 @@ class EAdmin extends EUser {
 
 
     //metodo che dovrà evolversi con Foundation
-    private function BannaUser(EMember $member): bool {
+    private function bannaUser(EMember $member): void {
+        FUser::bannaUser($member->getUsername());
             /*Banno il membro, lui avra' magari nella sua tabella nel db un attributo bannato e lo metto a true(?)
             cosi quando proverà a fare un nuovo account con le stesse credenziali se la prende in culo?
             quando fa login dobbiamo controllare se ci sono username, password e bannato a false? Sì
@@ -37,8 +48,7 @@ class EAdmin extends EUser {
             sei stato bannato ed essere cacciato da Cinegram altrimenti lui se non slogga rimane all'infinito dentro
             come nulla fosse successo
             */
-        echo "Utente bannato!";  // TODO la stampa non la facciamo ad un livello più alto?
-        return true;    //  TODO non è come un set? dovrebbe essere un metodo void?
+        echo "Utente bannato!";
     }
 
 

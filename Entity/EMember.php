@@ -154,7 +154,28 @@ class EMember extends EUser {
 
     // metodo che restituisce un immagine profilo più piccola dell'originale passata per parametro
     // TODO: implementare con del codice che abbia senso, volendo mettere un parametro % di resize passato per parametro
-    public static function resizeImmagineProfilo(string $immagineProfilo): string {
-        return $immagineProfilo;
+    public static function resizeImmagineProfilo(string $immagineStringa): string {
+
+        $larghezzaInPixel = 20;
+        $altezzaInPixel = 20;
+        // $immagineStringa = FPersistentManager::caricaImmagine();
+        // $tipoImmagine = FPersistentManager::caricaTipo();
+
+        // ricrea l'immagine dalla stringa presa dal db come blob
+        $immagineReale = imagecreatefromstring($immagineStringa);
+
+        $immagineRidimensionata = imagecreatetruecolor($larghezzaInPixel, $altezzaInPixel);
+        $X = imagesx($immagineReale);
+        $Y = imagesy($immagineReale);
+
+        imagecopyresampled($immagineRidimensionata, $immagineReale, 0, 0, 0, 0, $larghezzaInPixel, $altezzaInPixel, $X, $Y);
+
+        // svuota la variabile
+        imagedestroy($immagineReale);
+
+        // header('Content-type: image / jpeg');
+
+        imagejpeg($immagineRidimensionata, "/Users/giacomoalfani/Downloads/imm.jpeg", 75);
+        return $immagineRidimensionata;
     }
 }
