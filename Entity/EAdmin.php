@@ -47,7 +47,7 @@ class EAdmin extends EUser {
         //Damiano ha scritto che lui fa il parsing e crea il film, non sara' una classe a parte a farlo ed a passargli un film gia' fatto?
         // Oppure un metodo di EFilm chiamato Parsing come fatto a Programmazione Mobile?
         $recensioni = array();
-        return new EFilm($id, $titolo, $anno, $durata, $sinossi, null, null, $registi, $attori,
+        return new EFilm($id, $titolo, new DateTime($anno), $durata, $sinossi, null, null, $registi, $attori,
             $recensioni, null);
         //dopo questo, dopo l'eventuale parsing, parte la query
     }
@@ -75,7 +75,7 @@ class EAdmin extends EUser {
 
 
     public function modificaAnnoFilm(EFilm $filmDaModificare, int $nuovoAnno): void {
-            $filmDaModificare->setAnno($nuovoAnno);
+            $filmDaModificare->setAnno(new DateTime($nuovoAnno));
             //poi faremo la query di update passando come parametro il fatto che voglio modificare l'anno
     }
 
