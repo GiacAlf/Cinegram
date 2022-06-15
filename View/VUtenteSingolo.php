@@ -32,14 +32,8 @@ class VUtenteSingolo
     //della nuova foto profilo
     public function aggiornaFoto(): ?array{
         $foto = null;
-        if(isset($_FILES['foto'])){
+        if(isset($_FILES['foto']) && $this->checkFoto($_FILES)){
             $foto = $_POST['foto'];
-        }
-        if ($this::checkFoto($foto)){
-            return $foto;
-        }
-        else{
-            //chiamo la schermata di errore-> e se lo facesse il controllore quando gli viene ritornato null?
         }
         return $foto;
     }
@@ -50,6 +44,7 @@ class VUtenteSingolo
         return true;
     }
 
+    //metodo che aggiorna la bio
     public function aggiornaBio(): ?string{
         $bio = null;
         if(isset($_POST['bio'])){
@@ -58,13 +53,11 @@ class VUtenteSingolo
         return $bio;
     }
 
+    //metodo che aggiorna la password
     public function aggiornaPassword(): ?string{
         $password = null;
         if(isset($_POST['password'])){
             $password = $_POST['password'];
-        }
-        else{
-            //faccio vedere la schermata di errore->e se lo facesse il controllore quando gli viene ritornato null?
         }
         return $password;
     }

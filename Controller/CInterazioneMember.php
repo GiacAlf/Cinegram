@@ -8,38 +8,49 @@ class CInterazioneMember
     richiamiamo noi dentro questo metodo. Sara' associata una url del tipo localhost/members*/
 
     public static function caricaMembers(){
-
+        $ultimeAttivita = array();
+        $identificato = false;
         //controlli per quanto riguarda l'utente loggato o meno
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+
+        //}
 
         //lo username come sempre lo prendo dalla sessione
-        $username="Matteo";
-        $member=FPersistentManager::load("EMember",null,$username,null,
-        null,null,null,null,null,false);
-        $ultimeAttivitaSeguiti=FPersistentManager::caricaUltimeAttivitaUtentiSeguiti($member,6);
+        //prima controllo se l'utente è loggato ed è un member (metodo Foundation apposito)
+        //e poi discrimino
+        if($identificato){
+            $username="Matteo";
+            $member=FPersistentManager::load("EMember",null,$username,null,
+                null,null,null,null,null,false);
+            $ultimeAttivita=FPersistentManager::caricaUltimeAttivitaUtentiSeguiti($member,6);
+        }
+        else{
+            $ultimeAttivita=FPersistentManager::caricaUltimeAttivita(5);
+        }
         $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(3);
 
-
-        $ultimeAttivita=FPersistentManager::caricaUltimeAttivita(5);
-
+        $view = new VMembers();
         //caricare di tutti i members le locandine small
         print_r($ultimeAttivita);
-        print_r($ultimeAttivitaSeguiti);
+        print_r($ultimeAttivita);
         print_r($utentiPiuPopolari);
         //ridai un booleano identificato. TRUE se è member registrato, FALSE se non lo è
         //carica le foto per ogni utente (avatar piccolo)
+        //al metodo della view vengono passati comunque due array, un booleano e le foto poi
 
          /* passo questi dati ad un unico metodo di una view insieme ad un parametro
          per discriminare l'utente registrato da quello non registrato oppure ci saranno
          due metodi della view separati, uno per la grafica di ogni tipologia di utente(la
          prima è sicuramente migliore)*/
-
+        $view->avviaPaginaMembers($ultimeAttivita, $utentiPiuPopolari, $identificato);
 
     }
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
-    url localhost/member/username con metodo get */
+    url localhost/member/username con metodo get-> infatti lo username viene passato dall'url */
     public static function caricaMember($username){
 
-
+        $view = new VUtenteSingolo();
         $member=FPersistentManager::load("EMember",null,$username,null,null,
         null,null,null,true);
         $filmvisti=FPersistentManager::calcolaNumeroFilmVisti($member);
@@ -49,8 +60,7 @@ class CInterazioneMember
         //FPersistentManager::loadImmagineProfilo($member,true);
 
         /* dare tutti i dati alla view che fara' il display*/
-
-
+        $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
 
     }
 
@@ -61,11 +71,15 @@ class CInterazioneMember
     public static function seguiMember(){
 
         //verificare che l'utente sia registrato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
 
-        //recuperare dalla view nell'array $post lo username del membro da seguire
-        $following="giangiacomo";
+        //}
 
-        //recupero dalla sessione il mio username
+
+        $following="giangiacomo"; //lo si recupera dall'url
+
+        //recupero dalla sessione il mio username => $follower = $username
         $follower="matteo";
         $following=FPersistentManager::load("EMember",null,$following,null,null,
         null,null,null,false);
@@ -88,11 +102,14 @@ class CInterazioneMember
 
 
         //verificare che l'utente sia registrato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
 
-        //recuperare dalla view nell'array $post lo username del membro da seguire
-        $following="giangiacomo";
+        //}
 
-        //recupero dalla sessione il mio username
+        $following="giangiacomo"; //lo si recupera dall'url
+
+        //recupero dalla sessione il mio username => $follower = $username
         $follower="matteo";
 
         $following=FPersistentManager::load("EMember",null,$following,null,null,
@@ -104,22 +121,40 @@ class CInterazioneMember
 
     }
 
-
-    /*l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
-    localhost/member/-5 , metodo post dove inviera' la nuova password */
-
-    public static function AggiornaPasswordMember(){
-        /*recupero della nuova password dalla form, ma questa funzione puo' essere
-        chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
-        $nuovaPassword="paperino";
-        $username="damiano";
-        $member=FPersistentManager::load("EMember",null,$username,null,null,null,
-        null,null,false);
-        FPersistentManager::updatePassword($member,$nuovaPassword);
+    //TODO: metodo per registrarsi
+    //url boh, qualcosa del tipo localhost/registrazione vedi tu matte' ahaha
+    public static function registrazione(){
+        $view = new VLogin();
+        $array_credenziali = $view->RegistrazioneCredenziali();
+        if($array_credenziali[0] == null || $array_credenziali[1] == null){
+            $view_errore = new VErrore();
+            $view_errore->error(6);
+        }
+        else{
+            $username = $array_credenziali[0];
+            $password = $array_credenziali[1];
+            $bio = $array_credenziali[2];
+            $data = new DateTime(); //il format giusto poi lo fa Foundation
+            $foto_profilo = $view->RegistrazioneImmagineProfilo();
+            $member = new EMember($username, $data, $bio, 0, null, null, null, null);
+            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'], $foto_profilo['type'],
+            $foto_profilo['size']); //immagino si chiami così poi boh
+        }
     }
 
-    //TODO: metodo per registrarsi
-
     //TODO:metodo cercaMember -> si guardi il metodo cercaFilm in CInterazioneFilm
+    //url sarà tipo localhost/member/?username=.... poi vedi tu matte' sia se il metodo è corretto
+    //sia se l'url è ok
+    public static function cercaMember(){
+        /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
+        //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come
+        //avevamo discusso l'url nella riunione del 14/6
+        $view = new VRicerca();
+        $username = $view->eseguiRicerca();
+        $member=FPersistentManager::load("EMember",null,$username,null,null,
+            null,null,null,false);
+        $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
+        $view->avviaPaginaRicerca($array_risultati);
+    }
 
 }

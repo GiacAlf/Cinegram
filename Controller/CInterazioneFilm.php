@@ -25,7 +25,7 @@ class CInterazioneFilm
             //qua dato che ci stanno nome e cognome devo stare attento, specie se uno, tipo Francis Ford Coppola, ha più nomi
             $array = explode(" ", $titolo);
             if(count($array) > 2){
-                $nome = $array[0] . $array[1];
+                $nome = $array[0] . " " . $array[1];
                 $cognome = $array[2];
             }
             else {
@@ -64,9 +64,12 @@ class CInterazioneFilm
     /*questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
     localhost/recensione   */
-    public static function ScriviRecensione(){
+    public static function ScriviRecensione(int $idFilm){
 
         //verificare se lo username è loggato, dopo vedro' come fare.
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
         //chiamo la view che mi restituisce i dati per la creazione della recensione(presi dalla form)
         /* idfilm verra' restituito cosi' come il voto ed il testo
@@ -76,11 +79,13 @@ class CInterazioneFilm
         */
         //prova
          //prova
-
-        $idFilm=2;
-        $username="damiano";
-        $voto=3;
-        $testo="prova";
+        $view = new VFilmSingolo();
+        $idFilm=2; //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
+        //solo nella pagina del film singolo
+        $username="damiano"; //lo si prende dalla sessione
+        $array_post = $view->scriviRecensione();
+        $testo = "prova"; //$testo = $array_post[0]
+        $voto = 3; //$voto = $array_post[1]
         $data= new DateTime();
         $recensione=new ERecensione($idFilm, $username,$voto,$testo,$data,null);
         FPersistentManager::store($recensione,null,null,null,null,null,null
@@ -93,7 +98,7 @@ class CInterazioneFilm
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
     localhost/risposta i dati come nella recensione vengono passati con una form */
 
-    public static function ScriviRisposta(){
+    public static function ScriviRisposta(string $usernameAutoreRecensione){
         //anche qui dobbiamo verificare se l'utente è loggato
 
         //chiamo la view che mi restituisce i dati per la creazione della risposta(presi dalla form)
@@ -101,14 +106,18 @@ class CInterazioneFilm
            la data viene creato in questo metodo al momento
            lo usernameautore è preso dalla sessione(?)
            $username=$SESSION["username"]*/
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
         //prova
-
+        $view = new VFilmSingolo();
         $date= new DateTime();
-        $usernameAutore="damiano";
+        $usernameAutore="damiano"; //dalle sessioni
+        $testo = $view->scriviRisposta();
         $testo="prova risposta";
-        $idFilm=2;
-        $usernameAutoreRecensione="matteo";
+        $idFilm=2; //presa dall'url
+        $usernameAutoreRecensione="matteo"; //dall'url (?)
 
         $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
         FPersistentManager::store($risposta,null,null,null,null,null,null,null);
@@ -119,19 +128,23 @@ class CInterazioneFilm
     /*metodo che verra' chiamato quando si vuole eliminare una recensione, adesso pero' dobbiamo fare
     delle considerazioni per quanto riguarda la URL da associare. Htlm prevede solo i metodi get e post quindi
     possiamo fare richieste solo con questi due, propongo di associargli localhost/recensione/id=.../-1 (sappiamo grazie
-    a -1 che chiameremo questo metodo), ovviamente in post */
+    a -1 che chiameremo questo metodo), ovviamente in post -> qua la URL ha una sola chiave di recensione, ma poi dovrà avere
+    anche l'altra chiave della recensione e cioè lo username autore per farla eliminare dall'admin */
 
     public static function EliminaRecensione(){
 
         //verificare se utente è loggato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
         /*avendo inviato in post la richiesta dovremmo sempre leggere
         dalla view
         ci facciamo inviare l'id del film ,che insieme allo usernameAutore(letto dalla sessione)
         formano la chiave primaria che identifica la recensione */
 
-        $idFilm=2;
-        $usernameAutore="pippo";
+        $idFilm=2; //recupero da Url
+        $usernameAutore="pippo"; //recupero dalla sessione
         FPersistentManager::delete("ERecensione",$usernameAutore,null,null,$idFilm,null);
         //notifica che sto a salva le robe
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
@@ -141,18 +154,22 @@ class CInterazioneFilm
 
     /*metodo che verra' chiamato quando si vuole eliminare una risposta
     , propongo di associare ,localhost/risposta/data=...../-1/, come fatto sopra. (sappiamo grazie
-   a -1 che chiameremo questo metodo), ovviamente in post */
+   a -1 che chiameremo questo metodo), ovviamente in post-> qua la URL ha una sola chiave di risposta, ma poi dovrà avere
+    anche l'altra chiave della risposta e cioè lo username autore per farla eliminare dall'admin */
 
     public static function EliminaRisposta(){
 
         //verificare utente loggato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
 
         //recupero dalla view i dati inviati dal client in post
         /* ci facciamo inviare la data e lo username lo prendiamo dalla sessione
         */
-        $idFilm = 1;
-        $data = new DateTime();
-        $usernameAutore="matteo";
+        $idFilm = 1; //non serve questo qui, giusto?
+        $data = new DateTime(); //recupero da url
+        $usernameAutore="matteo"; //recupero da sessione
         FPersistentManager::delete("ERisposta",$usernameAutore,null,null,null,$data);
         //notifica che sto a salva le robe
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
@@ -167,14 +184,15 @@ class CInterazioneFilm
         //leggere dalla view corrispondente i dati inviati, saranno la chiave che identifica la recensione
         //quindi usernameAutore e idfilm
 
-        $usernameAutore="damiano";
+        $usernameAutore="damiano"; //vengono dall'url questi due paramentri
         $idFilm=2;
 
         $risposte=FPersistentManager::loadRisposte($idFilm,$usernameAutore);
         print_r($risposte);
 
-        /*dire alla view di farle vedere a schermo(?) o semplicemente
-        cliccando sul buttone parte un js che carica una finestra (?) ,non ne ho idea*/
+        /* semplicemente
+        cliccando sul buttone parte un js che carica una finestra (?) ,non ne ho idea
+        Sì, dovrebbe essere il js a fare sta roba, si spera*/
 
 
 
@@ -185,12 +203,15 @@ class CInterazioneFilm
     con caricafilm , metodo post*/
     public static function vediFilm(){
         //controllo se utente è loggato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
         //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
-        $id=3;
-        $username="matteo";
-        $film=FPersistentManager::load("EFilm",$id,null,null,
+        $id = 3; //dall'url
+        $username = "matteo"; //dalla sessione
+        $film = FPersistentManager::load("EFilm",$id,null,null,
             null,null,null,null,null,false);
-        $member=FPersistentManager::load("EMember",null,$username,null,null,
+        $member = FPersistentManager::load("EMember",null,$username,null,null,
         null,null,null,null,false);
         FPersistentManager::vediFilm($member, $film);
     }
@@ -202,12 +223,15 @@ class CInterazioneFilm
     con caricafilm ,metodo post */
     public static function rimuoviFilmVisto(){
         //controllo se utente è loggato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
         //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
-        $id=1;
-        $username="matteo";
-        $film=FPersistentManager::load("EFilm",$id,null,null,
+        $id = 1; //dall'url
+        $username = "matteo"; //dalla sessione
+        $film = FPersistentManager::load("EFilm",$id,null,null,
             null,null,null,null,null,false);
-        $member=FPersistentManager::load("EMember",null,$username,null,null,
+        $member = FPersistentManager::load("EMember",null,$username,null,null,
             null,null,null,null,false);
         FPersistentManager::rimuoviFilmVisto($member,$film);
 
@@ -216,24 +240,22 @@ class CInterazioneFilm
     /* metodo associato al bottone per caricare la pagina dove ci sono tutti i film
     sara' una semplice get con url localhost/films */
     public static function caricaFilms(){
-
-        $filmPiuVisti=FPersistentManager::caricaFilmPiuVisti(5);
-        $filmPiuRecensiti=FPersistentManager::caricaFilmPiuRecensiti(5);
-        $filmPiuRecenti=FPersistentManager::caricaFilmRecenti(5);
-        $filmVotoMedioPiuAlto=FPersistentManager::caricaFilmConVotoMedioPiuAlto(5);
+        $numero_estrazioni = 5;
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti($numero_estrazioni);
+        $filmPiuRecensiti = FPersistentManager::caricaFilmPiuRecensiti($numero_estrazioni);
+        $filmPiuRecenti = FPersistentManager::caricaFilmRecenti($numero_estrazioni);
+        $filmVotoMedioPiuAlto = FPersistentManager::caricaFilmConVotoMedioPiuAlto($numero_estrazioni);
 
         //caricare le locandine piccole dei film
 
         //passare questi array alla view che gestisce i films (damiano l'ha chiamata proprio films)
-
+        $view = new VFilms();
         print_r($filmPiuRecensiti);
         print_r($filmPiuRecenti);
         print_r($filmVotoMedioPiuAlto);
         print_r($filmPiuVisti);
         //far fare il display della pagina alla view
-
-
-
+        $view->avviaPaginaFilms($filmPiuVisti, $filmPiuRecensiti, $filmVotoMedioPiuAlto, $filmPiuRecenti);
     }
 
 

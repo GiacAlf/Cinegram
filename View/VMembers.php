@@ -8,28 +8,43 @@ class VMembers
     //e se lo salva
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaMembers();
     }
 
     //metodo per creare la pagina dei members: per forza di cose qua credo che sia necessario
     //chiedere le statistiche ai Controller direttamente nel metodo
     //La pagina cambia a seconda se si è registrati o meno
-    public function avviaPaginaMembers(): void{
-        if (true){ //se l'utente è loggato, vedo una pagina
-            //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
-            $attività = CControllore::caricaUltimeAttivitaUtentiSeguiti(); //come parametro va messo l'utente loggato
-            $utenti = CControllore::caricaUtentiPiuPopolari();
+    public function avviaPaginaMembers(array $attività, array $utenti, bool $identificato): void{
+        if ($identificato){ //se l'utente è loggato, vedo una pagina
+            //qua si sistemano le img profilo
             $this->smarty->assign('attività', $attività);
             $this->smarty->assign('utenti', $utenti);
+            $this->smarty->display('members_registrato.tpl');
         }
         else{ //altrimenti vedo l'altra
-            $attività = CControllore::caricaUltimeAttivita(); //come parametro va messo l'utente loggato
-            $utenti = CControllore::caricaUtentiPiuPopolari();
+            //qua si sistemano le img profilo
             $this->smarty->assign('attività', $attività);
             $this->smarty->assign('utenti', $utenti);
+            $this->smarty->display('members_non_registrato.tpl');
         }
-        $this->smarty->display('members.tpl');
+
     }
+
+
+    //--------------------------------metodi vecchi---------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //Essendo la parte superiore del layout dell'app uguale per tutte le pagine i 3 metodi successivi

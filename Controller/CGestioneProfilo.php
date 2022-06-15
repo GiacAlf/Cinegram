@@ -20,7 +20,6 @@ class CGestioneProfilo
         $following=FPersistentManager::calcolaNumeroFollowing($member);
         $follower=FPersistentManager::calcolaNumeroFollower($member);
         $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
-        //chiamare view responsabile della
 
     }
 
@@ -41,6 +40,10 @@ class CGestioneProfilo
         $nuova_foto = $view->aggiornaFoto();
 
         //se nuova foto è null, si chiama da qua la schermata di errore?
+        if ($nuova_foto == null){
+            $view_errore = new VErrore();
+            $view_errore->error(4);
+        }
 
         /*tramite un metodo che dopo faremo controllare che l'immagina caricata
         rispetti i requisiti da noi imposti, sul content-type, sulla size etc*/
@@ -96,7 +99,12 @@ class CGestioneProfilo
         $nuovaPassword="paperino";
         $nuovaPassword = $view->aggiornaPassword();
 
-        //se nuova foto è null, si chiama da qua la schermata di errore?
+        //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
+        //regolare? O lo si fa nella view?
+        if ($nuovaPassword == null){
+            $view_errore = new VErrore();
+            $view_errore->error(5);
+        }
 
         $username="damiano";
         $member=FPersistentManager::load("EMember",null,$username,null,null,null,
