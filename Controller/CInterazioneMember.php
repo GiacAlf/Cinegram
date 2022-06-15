@@ -79,7 +79,7 @@ class CInterazioneMember
 
         $following="giangiacomo"; //lo si recupera dall'url
 
-        //recupero dalla sessione il mio username
+        //recupero dalla sessione il mio username => $follower = $username
         $follower="matteo";
         $following=FPersistentManager::load("EMember",null,$following,null,null,
         null,null,null,false);
@@ -109,7 +109,7 @@ class CInterazioneMember
 
         $following="giangiacomo"; //lo si recupera dall'url
 
-        //recupero dalla sessione il mio username
+        //recupero dalla sessione il mio username => $follower = $username
         $follower="matteo";
 
         $following=FPersistentManager::load("EMember",null,$following,null,null,
@@ -121,9 +121,40 @@ class CInterazioneMember
 
     }
 
-
     //TODO: metodo per registrarsi
+    //url boh, qualcosa del tipo localhost/registrazione vedi tu matte' ahaha
+    public static function registrazione(){
+        $view = new VLogin();
+        $array_credenziali = $view->RegistrazioneCredenziali();
+        if($array_credenziali[0] == null || $array_credenziali[1] == null){
+            $view_errore = new VErrore();
+            $view_errore->error(6);
+        }
+        else{
+            $username = $array_credenziali[0];
+            $password = $array_credenziali[1];
+            $bio = $array_credenziali[2];
+            $data = new DateTime(); //il format giusto poi lo fa Foundation
+            $foto_profilo = $view->RegistrazioneImmagineProfilo();
+            $member = new EMember($username, $data, $bio, 0, null, null, null, null);
+            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'], $foto_profilo['type'],
+            $foto_profilo['size']); //immagino si chiami così poi boh
+        }
+    }
 
     //TODO:metodo cercaMember -> si guardi il metodo cercaFilm in CInterazioneFilm
+    //url sarà tipo localhost/member/?username=.... poi vedi tu matte' sia se il metodo è corretto
+    //sia se l'url è ok
+    public static function cercaMember(){
+        /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
+        //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come
+        //avevamo discusso l'url nella riunione del 14/6
+        $view = new VRicerca();
+        $username = $view->eseguiRicerca();
+        $member=FPersistentManager::load("EMember",null,$username,null,null,
+            null,null,null,false);
+        $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
+        $view->avviaPaginaRicerca($array_risultati);
+    }
 
 }

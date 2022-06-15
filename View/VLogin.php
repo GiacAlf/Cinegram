@@ -16,45 +16,68 @@ class VLogin
         $this->smarty->display('login.tpl');
     }
 
+    //due template diversi per il login e la registrazione? Sennò
+    //penso vada bene uno solo comunque
+    public function avviaPaginaRegistrazione(): void{
+        $this->smarty->display('registrazione.tpl');
+    }
+
     //metodo per verificare il login, devo discriminare dai campi registrazione
-    public function verificaLogin(): void{
+    public function verificaLogin(): array{
         $username = null;
         $password = null;
         if(isset($_POST['username_login']) && isset($_POST['password_login'])){
             $username = $_POST['username_login'];
             $password = $_POST['password_login'];
         }
-        else{
-            echo('metti le robe'); //se almeno uno dei due campi non è pieno devo avvertire l'utente
-        }
-        if(true /*CController::userRegistrato(username, password) */){
-            $view = new VHomePage();
-            //inoltre dico al controllore che l'utente con quell' username e quella password è loggato -> CControllore::setIsLogged(true)
-            //return view //serve effettivamente il return o dato che chiamo il display all'interno del costruttore non serve?
-        }
-        else{
-            echo('non ok, ripeti'); //se il login fallisce serve una segnalazione
-        }
+        return array($username, $password);
     }
 
     //metodo per registrarsi, devo discriminare dai campi login
-    public function Registrazione(): void{
+    public function RegistrazioneCredenziali(): array{
         $username = null;
         $password = null;
+        $bio = null;
         if(isset($_POST['username_registrazione']) && isset($_POST['password_registrazione'])){
             $username = $_POST['username_registrazione'];
             $password = $_POST['password_registrazione'];
         }
-        else{
-            echo('metti le robe'); //se almeno uno dei due campi non è pieno devo avvertire l'utente
+        if(isset($_POST['bio'])){
+            $bio = $_POST['bio'];
         }
-        //se va tutto bene (espressioni regolari qua?), salvo in db e faccio vedere l'home page
-        CControllore::store($username, $password);
-        //inoltre dico al controllore che l'utente con quell' username e quella password è loggato -> CControllore::setIsLogged(true)
-        $view = new VHomePage();
-        //return view //serve effettivamente il return o dato che chiamo il display all'interno del costruttore non serve?
-
+        return array($username, $password, $bio);
     }
+
+    //metto a parte la roba per le foto, non ho idea per ora di come gestirlo $_Files
+    public function RegistrazioneImmagineProfilo(): array{
+        $array_foto = null;
+        if(isset($_FILES) && $this->checkFoto($_FILES)){
+            $array_foto = $_FILES;
+        }
+        return $array_foto;
+    }
+
+    public function checkFoto(array $files): bool{
+        //TODO: qua bisogna vedere se è tutto corretto, poi vedremo come
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //------------------------metodi vecchi------------------------------
+
+
+
+
+
 
     //Essendo la parte superiore del layout dell'app uguale per tutte le pagine i 3 metodi successivi
     //si ripetono per ogni view

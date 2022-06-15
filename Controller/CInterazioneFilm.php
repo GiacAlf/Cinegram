@@ -64,7 +64,7 @@ class CInterazioneFilm
     /*questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
     localhost/recensione   */
-    public static function ScriviRecensione(){
+    public static function ScriviRecensione(int $idFilm){
 
         //verificare se lo username è loggato, dopo vedro' come fare.
         //if(SessionHelper::isLogged()){
@@ -98,7 +98,7 @@ class CInterazioneFilm
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
     localhost/risposta i dati come nella recensione vengono passati con una form */
 
-    public static function ScriviRisposta(){
+    public static function ScriviRisposta(string $usernameAutoreRecensione){
         //anche qui dobbiamo verificare se l'utente è loggato
 
         //chiamo la view che mi restituisce i dati per la creazione della risposta(presi dalla form)
