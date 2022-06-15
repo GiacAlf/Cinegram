@@ -65,5 +65,78 @@ class CGestioneAdmin{
         //da rivedere non mi piace per nulla
     }
 
+    /*
+     metodo che serve all'admin quando vuole eliminare una recensione di un member.
+    Url localhost/admin/rimuoviRecensione...... anche qui username e id film vengono inviati nella url(?)
+    quindi nel template dobbiamo mettere anche una url per l'admin(?)(vedere bene, non ho troppo le idee chiare)
+    */
+    public static function rimuoviRecensione(){
+
+        //dati che qualcuno mi dara'
+        $idFilm=2;
+        $usernameAutore="pippo";
+        FPersistentManager::delete("ERecensione",$usernameAutore,null,null,$idFilm,null);
+        //notifica che sto eliminando la recensione.
+
+    }
+
+     //idem come sopra()
+    public static function rimuoviRisposta(){
+
+        //qualcuno mi procurera' i dati
+
+        $idFilm = 1;
+        $data = new DateTime();
+        $usernameAutore="matteo";
+        FPersistentManager::delete("ERisposta",$usernameAutore,null,null,null,$data);
+
+        //notifica che ho eliminato la risposta
+    }
+
+    /*
+    metodo che permette all'admin di ammonire il member,
+    url localhost/admin/ammonisci
+    */
+    public static function ammonisciUser(){
+        //qualcuno mi da lo username
+
+        //recupero lo username dell'admin dalla sessione
+        $username="admin";
+        $usernameMember="matteo";
+        $admin= new EAdmin($username);
+        if(!FPersistentManager::userBannato($username))
+            $admin->ammonisciUser($usernameMember);
+        else
+            print("Utente bannato");
+    }
+
+    public static function sbannaUser(){
+
+        $username ="giangiacomo";
+
+        $usernameAdmin="alberto";
+        $admin=new EAdmin($usernameAdmin);
+
+        if (FPersistentManager::userBannato($username)){
+            FPersistentManager::sbannaUser($username);
+            //$admin->
+
+
+
+        }
+
+
+
+
+        else
+            print ("l'utente non è bannato");
+
+
+
+    }
+
+
+
+
 
 }
