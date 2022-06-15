@@ -385,8 +385,8 @@ class FPersistentManager {
     }
 
 
-    public static function tipoUserRegistrato(string $username, string $password): ?string {
-        return FUser::tipoUserRegistrato($username, $password);
+    public static function tipoUserRegistrato(string $username): ?string {
+        return FUser::tipoUserRegistrato($username);
     }
 
 
