@@ -118,11 +118,13 @@ class CGestioneAdmin{
         $admin=new EAdmin($usernameAdmin);
 
         if (FPersistentManager::userBannato($username)){
+            if(FPersistentManager::tipoUserRegistrato($username)=="admin")
             FPersistentManager::sbannaUser($username);
-            //$admin->
-
-
-
+            else
+            {
+                FPersistentManager::sbannaUser($username);
+                $admin->ammonisciUser($username);
+                }
         }
 
 
