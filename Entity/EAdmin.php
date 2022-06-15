@@ -38,7 +38,7 @@ class EAdmin extends EUser {
             false, false);
         // calcolo dei warning attuali
         $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
-        if ($warningMemberDaAmmonire>0 && $warningMemberDaAmmonire<3)
+        if ($warningMemberDaAmmonire>0)
            $memberDaAmmonire->decrementaWarning();
         else
             print ("Errore");
