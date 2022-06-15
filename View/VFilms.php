@@ -8,7 +8,6 @@ class VFilms
     //e se lo salva
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaFilms();
     }
 
 
@@ -18,18 +17,31 @@ class VFilms
     //metodo per creare la pagina dei films: per forza di cose qua credo che sia necessario
     //chiedere le statistiche ai Controller direttamente nel metodo
     //La pagina cambia a seconda se si è registrati o meno
-    public function avviaPaginaFilms(): void{
-        //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
-            $film_visti = CControllore::caricaFilmPiuVisti(10); //mettiamo un'estrazione alta
-            $film_recensiti = CControllore::caricaFilmPiuRecensiti(10);
-            $film_votati = CControllore::caricaFilmConVotoMedioPiuAlto(10);
-            $film_recenti = CControllore::caricaFilmPiuRecenti(10);
+    public function avviaPaginaFilms(array $film_visti, array $film_recensiti, array $film_votati,
+    array $film_recenti): void{
+        //vedremo poi il problema delle locandine
             $this->smarty->assign('recenti', $film_recenti);
             $this->smarty->assign('recensiti', $film_recensiti);
             $this->smarty->assign('visti', $film_visti);
             $this->smarty->assign('votati', $film_votati);
             $this->smarty->display('films.tpl');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //_----------------------------------metodi vecchi--------------------------------------------
 
     //metodo che prende in input un film cliccato dall'utente e restituisce la
     //view del film singolo corrispondente

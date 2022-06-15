@@ -25,6 +25,52 @@ class VFilmSingolo
         $this->smarty->display('film_singolo.tpl');
     }
 
+    //metodo che restituisce al controllore il testo e il voto della recensione
+    //se tutti e due sono null lo impedisce l'html
+    public function scriviRecensione(): ?array{
+        $array_recensione = array();
+        $testo_recensione = null;
+        $voto_recensione = null;
+        if(isset($_POST['testo'])){
+            $testo_recensione = $_POST['testo'];
+        }
+        if(isset($_POST['voto'])){
+            $voto_recensione = $_POST['voto'];
+        }
+        //se non è settato ne il voto ne il testo vaffanculo -> oppure dall'html lo fa
+        $array_recensione[] = $testo_recensione;
+        $array_recensione[] = $voto_recensione;
+        return $array_recensione;
+    }
+
+    //metodo che restituisce al controllore il testo della risposta
+    public function scriviRisposta(): string{
+        $testo_risposta = null;
+        if(isset($_POST['risposta'])){
+            $testo_risposta = $_POST['risposta'];
+        }
+        return $testo_risposta;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //Essendo la parte superiore del layout dell'app uguale per tutte le pagine i 3 metodi successivi
     //si ripetono per ogni view
 
@@ -83,7 +129,7 @@ class VFilmSingolo
     }
 
     //metodo per scrivere una recensione
-    public function scriviRecensione(): void{
+    public function scriefviRecensione(): void{
         //se l'utente è loggato -> metodo che in FillSpace sta nei controllori
         $testo_recensione = null;
         $voto_recensione = null;
@@ -104,7 +150,7 @@ class VFilmSingolo
 
     //metodo per scrivere una risposta su una recensione grazie a
     //una form che da invisibile diventa visibile, contrassegnata da una chiave nell'HTML -> copiato da VHomePage, sicuro c'è roba da cambiare
-    public function scriviRisposta(): void{
+    public function scrivigrRisposta(): void{
         //se l'utente è loggato
         $testo_risposta = null;
         //si costruisce la risposta qui? Oppure lo fa il controllore?

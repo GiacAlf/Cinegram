@@ -50,6 +50,7 @@ class VUtenteSingolo
         return true;
     }
 
+    //metodo che aggiorna la bio
     public function aggiornaBio(): ?string{
         $bio = null;
         if(isset($_POST['bio'])){
@@ -58,6 +59,7 @@ class VUtenteSingolo
         return $bio;
     }
 
+    //metodo che aggiorna la password
     public function aggiornaPassword(): ?string{
         $password = null;
         if(isset($_POST['password'])){

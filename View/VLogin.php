@@ -8,7 +8,6 @@ class VLogin
     //e se lo salva
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
-        $this->avviaPaginaLogin();
     }
 
     //il metodo di avvio della pagina non fa altro che presentare la form di login
