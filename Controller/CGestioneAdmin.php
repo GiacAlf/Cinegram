@@ -8,6 +8,7 @@ class CGestioneAdmin{
     */
     public static function caricaFilm(){
         //prendere dalla view le informazioni del film
+        //verifica che sei l'admin
         $titolo = "prova";
         $data= new DateTime('now');
         $durata=120;
@@ -31,6 +32,7 @@ class CGestioneAdmin{
     url localhost/admin/modificafilm
     */
     public static function modificaFilm(){
+        //verifica che sei l'admin
 
         /*possiamo fare una checkbox dove l'admin seleziona l'attributo da eliminare, pero' ci
         deve per forza inviare l'id */
@@ -72,6 +74,8 @@ class CGestioneAdmin{
     */
     public static function rimuoviRecensione(){
 
+        //verifica che sei l'admin
+
         //dati che qualcuno mi dara'
         $idFilm=2;
         $usernameAutore="pippo";
@@ -97,8 +101,10 @@ class CGestioneAdmin{
     metodo che permette all'admin di ammonire il member,
     url localhost/admin/ammonisci
     */
+
     public static function ammonisciUser(){
         //qualcuno mi da lo username
+        //verifica che sei l'admin
 
         //recupero lo username dell'admin dalla sessione
         $username="admin";
@@ -110,7 +116,15 @@ class CGestioneAdmin{
             print("Utente bannato");
     }
 
+
+    /*
+      metodo che permette all'admin di sbannare il member o l'admin
+    url localhost/admin/sbanna
+     */
+
     public static function sbannaUser(){
+        //la view mi da lo username del member
+        //verifica che sei l'admin
 
         $username ="giangiacomo";
 
@@ -118,23 +132,37 @@ class CGestioneAdmin{
         $admin=new EAdmin($usernameAdmin);
 
         if (FPersistentManager::userBannato($username)){
-            if(FPersistentManager::tipoUserRegistrato($username)=="admin")
-            FPersistentManager::sbannaUser($username);
+            if(FPersistentManager::tipoUserRegistrato($username)=="Admin")
+                FPersistentManager::sbannaUser($username);
             else
             {
                 FPersistentManager::sbannaUser($username);
                 $admin->ammonisciUser($username);
-                }
+            }
         }
-
-
-
-
         else
             print ("l'utente non è bannato");
+    }
 
+    /*
+     metodo che permette di decrementare un warning al member
+    url
+    */
+    public static function togliAmmonizione(){
+        //la view mi da lo username del member
+        //verifica che sei l'admin
 
+        $username ="giangiacomo";
 
+        $usernameAdmin="alberto";
+        $admin=new EAdmin($usernameAdmin);
+
+        if (!FPersistentManager::userBannato($username)){
+            if(FPersistentManager::tipoUserRegistrato($username)=="Member")
+                $admin->ammonisciUser($username);
+        }
+        else
+            print ("l'utente è bannato");
     }
 
 
