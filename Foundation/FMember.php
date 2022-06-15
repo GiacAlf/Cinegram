@@ -440,16 +440,16 @@ class FMember {
 
 
     // update da usare per aumentare il numero dei warning del member e si verifica anche che non sia già bannato
-    public static function incrementaWarning(EMember $member): void {
+    public static function incrementaWarning(string $username): void {
 
-        if(FUser::exist($member->getUsername()) && !FUser::userBannato($member->getUsername())) {
+        if(FUser::exist($username) && !FUser::userBannato($username)) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoWarning . " = " . self::$nomeAttributoWarning . " +1" .
-                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                    " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();
@@ -464,16 +464,16 @@ class FMember {
 
 
     // update da usare per diminuire il numero dei warning del member e si verifica anche che non sia già bannato
-    public static function decrementaWarning(EMember $member): void {
+    public static function decrementaWarning(string $username): void {
 
-        if(FUser::exist($member->getUsername()) && !FUser::userBannato($member->getUsername())) {
+        if(FUser::exist($username) && !FUser::userBannato($username)) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoWarning . " = " . self::$nomeAttributoWarning . " -1" .
-                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                    " WHERE " . self::$chiaveTabella . " = '" . $username. "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();

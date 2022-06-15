@@ -185,13 +185,13 @@ class FPersistentManager {
     }
 
 
-    public static function incrementaWarning(EMember $member): void {
-        FMember::incrementaWarning($member);
+    public static function incrementaWarning(string $username): void {
+        FMember::incrementaWarning($username);
     }
 
 
-    public static function decrementaWarning(EMember $member): void {
-        FMember::decrementaWarning($member);
+    public static function decrementaWarning(string $username): void {
+        FMember::decrementaWarning($username);
     }
 
 

@@ -33,14 +33,25 @@ class EAdmin extends EUser {
     }
 
 
-    public function TogliAmmonizione(EMember $member): void { //potrebbe essere utile, magari vogliamo mettere
-        $member->decrementaWarning(); //che dopo un tot di tempo le ammonizioni vengono tolte
+    public function TogliAmmonizione(string $usernameMemberDaAmmonire): void { //potrebbe essere utile, magari vogliamo mettere
+        $memberDaAmmonire = FMember::load($usernameMemberDaAmmonire, false, false,
+            false, false);
+        // calcolo dei warning attuali
+        $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
+        if ($warningMemberDaAmmonire>0 && $warningMemberDaAmmonire<3)
+           $memberDaAmmonire->decrementaWarning();
+        else
+            print ("Errore");
+
+
+
+
     }
 
 
     //metodo che dovrà evolversi con Foundation
     private function bannaUser(EMember $member): void {
-        FUser::bannaUser($member->getUsername());
+        FPersistentManager::bannaUser($member->getUsername());
             /*Banno il membro, lui avra' magari nella sua tabella nel db un attributo bannato e lo metto a true(?)
             cosi quando proverà a fare un nuovo account con le stesse credenziali se la prende in culo?
             quando fa login dobbiamo controllare se ci sono username, password e bannato a false? Sì
