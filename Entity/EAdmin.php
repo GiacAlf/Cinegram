@@ -19,8 +19,8 @@ class EAdmin extends EUser {
     public function ammonisciUser(string $usernameMemberDaAmmonire): void {
 
         // si carica l'EMember
-        $memberDaAmmonire = FMember::load($usernameMemberDaAmmonire, false, false,
-            false, false);
+        $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMemberDaAmmonire,null,
+        null, null ,null, null, false);
         // calcolo dei warning attuali
         $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
         if($warningMemberDaAmmonire < self::$warningMassimi) {
@@ -34,8 +34,8 @@ class EAdmin extends EUser {
 
 
     public function TogliAmmonizione(string $usernameMemberDaAmmonire): void { //potrebbe essere utile, magari vogliamo mettere
-        $memberDaAmmonire = FMember::load($usernameMemberDaAmmonire, false, false,
-            false, false);
+        $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMemberDaAmmonire,null,
+            null, null ,null, null, false);
         // calcolo dei warning attuali
         $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
         if ($warningMemberDaAmmonire>0)
