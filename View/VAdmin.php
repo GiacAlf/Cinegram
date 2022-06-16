@@ -3,6 +3,7 @@
 class VAdmin
 {
     private Smarty $smarty;
+    private static int $maxSizeImmagineProfilo = 8192;
 
     //il costruttore inizializza l'oggetto Smarty e basta
     public function __construct(){
@@ -63,17 +64,33 @@ class VAdmin
     }
 
     //metodo che controlla che sia tutto ok
-    public function checkFoto(array $files): bool{
-        //TODO: qua bisogna vedere se è tutto corretto, poi vedremo come
-        return true;
+    public function checkFoto(): bool{
+        $check = false;
+        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
+            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+                $view_errore = new VErrore();
+                $view_errore->error(4);
+            }
+            elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
+                $_FILES['file']['type'] != 'image/png'){
+                $view_errore = new VErrore();
+                $view_errore->error(4);
+            }
+            else{
+                $check = true;
+            }
+        }
+        return $check;
     }
 
     //per ora facciamo che restituisco tutto $_FILES poi vedrò (o vedremo, perché io sono debilitato ahah)
     //come funziona il controllo e se bisogna discriminare tra le chiavi di $_FILES
+    //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
+    //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function getLocandina(): ?array{
         $locandina = null;
-        if(isset($_FILES) && $this->checkFoto($_FILES)){
-            $locandina = $_FILES;
+        if(isset($_FILES['file']) && $this->checkFoto()){
+            $locandina = $_FILES['file'];
         }
         return $locandina;
     }

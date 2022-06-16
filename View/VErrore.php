@@ -24,7 +24,7 @@ class VErrore
                 $titolo = 'HTTP/1.1 405 Method Not Allowed';
                 break;
             case '4':
-                $testo = 'Immagine caricata non è del tipo corretto jpeg' ; //qua lo famo per le foto
+                $testo = 'Immagine caricata non è del tipo corretto jpeg oppure è troppo pesante' ; //qua lo famo per le foto
                 $titolo = 'Errore immagine caricata';
                 break;
             case '5' :

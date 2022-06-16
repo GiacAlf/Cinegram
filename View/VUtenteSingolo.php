@@ -3,6 +3,7 @@
 class VUtenteSingolo
 {
     private Smarty $smarty;
+    private static int $maxSizeImmagineProfilo = 8192;
 
     //il costruttore della pagina dell'utente singolo richiama l'oggetto smarty configurato
     //e se lo salva
@@ -30,18 +31,34 @@ class VUtenteSingolo
 
     //metodo che restituisce l'array contenente tutte le info
     //della nuova foto profilo
+    //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
+    //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function aggiornaFoto(): ?array{
         $foto = null;
-        if(isset($_FILES['foto']) && $this->checkFoto($_FILES)){
-            $foto = $_POST['foto'];
+        if(isset($_FILES['file']) && $this->checkFoto()){
+            $foto = $_FILES['file'];
         }
         return $foto;
     }
 
     //metodo che controlla che sia tutto ok
-    public function checkFoto(array $files): bool{
-        //TODO: qua bisogna vedere se è tutto corretto, poi vedremo come
-        return true;
+    public function checkFoto(): bool{
+        $check = false;
+        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
+        if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+            $view_errore = new VErrore();
+            $view_errore->error(4);
+        }
+        elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
+            $_FILES['file']['type'] != 'image/png'){
+            $view_errore = new VErrore();
+            $view_errore->error(4);
+        }
+        else{
+           $check = true;
+        }
+    }
+        return $check;
     }
 
     //metodo che aggiorna la bio
