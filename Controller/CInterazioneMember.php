@@ -136,6 +136,9 @@ class CInterazioneMember
             $bio = $array_credenziali[2];
             $data = new DateTime(); //il format giusto poi lo fa Foundation
             $foto_profilo = $view->RegistrazioneImmagineProfilo();
+            //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
+            //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
+            //qua se l'img è null pazienza
             $member = new EMember($username, $data, $bio, 0, null, null, null, null);
             FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'], $foto_profilo['type'],
             $foto_profilo['size']); //immagino si chiami così poi boh

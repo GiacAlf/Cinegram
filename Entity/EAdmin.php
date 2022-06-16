@@ -52,12 +52,10 @@ class EAdmin extends EUser {
     //metodo che dovrà evolversi con Foundation
     private function bannaUser(EMember $member): void {
         FPersistentManager::bannaUser($member->getUsername());
-            /*Banno il membro, lui avra' magari nella sua tabella nel db un attributo bannato e lo metto a true(?)
-            cosi quando proverà a fare un nuovo account con le stesse credenziali se la prende in culo?
-            quando fa login dobbiamo controllare se ci sono username, password e bannato a false? Sì
-            Inoltre come gestire questa cosa? Quando l'admin banna l'utente dovra' vedere una schermata con scritto
+
+            /* Quando l'admin banna l'utente dovra' vedere una schermata con scritto
             sei stato bannato ed essere cacciato da Cinegram altrimenti lui se non slogga rimane all'infinito dentro
-            come nulla fosse successo
+            come nulla fosse successo -> quì si verrà reindirizzati alla pagine di login iniziale
             */
         echo "Utente bannato!";
     }

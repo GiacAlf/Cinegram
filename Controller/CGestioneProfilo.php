@@ -47,6 +47,9 @@ class CGestioneProfilo
 
         /*tramite un metodo che dopo faremo controllare che l'immagina caricata
         rispetti i requisiti da noi imposti, sul content-type, sulla size etc*/
+        //TODO: io passerò sempre l'array $_FILES per intero, dopo aver fatto tutti i check dovuti
+        //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
+        //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
 
         /*se l'immagina supera i controlli allora chiamare
         FPersistentManager:store*/

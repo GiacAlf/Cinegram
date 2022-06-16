@@ -2,6 +2,8 @@
 
 class FMember {
 
+    private static int $maxSizeImmagineProfilo = 8192; // corrisponde ad 1 MByte (0 16MiB sul DB) di size massima consentita
+
     private static string $nomeClasse = "FMember"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "member";   // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "Username"; // da cambiare se cambia il nome della chiave in DB
@@ -990,9 +992,21 @@ class FMember {
     }
 
 
-    // metodo che inserisce una nuova immagine profilo
+    // metodo che inserisce una nuova immagine profilo, quella di default è l'omino grigio
+    // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
+    // questo $_FILES['file']['tmp_name'], cioè la $nuovaImmagine appena caricata, con $_FILES['file']['type'] il
+    // $nuovoTipoImmagine dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeImmagine
     public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
                                            string $nuovaSizeImmagine): void {
+
+        if($nuovaSizeImmagine > self::$maxSizeImmagineProfilo) {
+            print("Il file caricato è troppo grande!");
+            return;
+        }
+        // prendo il contenuto grezzo dell'immagine
+        $immagine = file_get_contents($nuovaImmagine);
+        // eseguo l'escape
+        $immagine = addslashes($immagine);
 
         if((FUser::exist($member->getUsername()))) {
             $pdo = FConnectionDB::connect();
@@ -1000,7 +1014,7 @@ class FMember {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $nuovaImmagine . "', " .
+                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $immagine . "', " .
                     self::$nomeAttributoTipoImmagineProfilo . " = '" . $nuovoTipoImmagine . "', " .
                     self::$nomeAttributoSizeImmagineProfilo . " = '" . $nuovaSizeImmagine . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";

@@ -3,6 +3,7 @@
 class VLogin
 {
     private Smarty $smarty;
+    private static int $maxSizeImmagineProfilo = 8192;
 
     //il costruttore della  page richiama l'oggetto smarty configurato
     //e se lo salva
@@ -51,15 +52,29 @@ class VLogin
     //metto a parte la roba per le foto, non ho idea per ora di come gestirlo $_Files
     public function RegistrazioneImmagineProfilo(): array{
         $array_foto = null;
-        if(isset($_FILES) && $this->checkFoto($_FILES)){
-            $array_foto = $_FILES;
+        if(isset($_FILES['file']) && $this->checkFoto()){
+            $array_foto = $_FILES['file'];
         }
         return $array_foto;
     }
 
-    public function checkFoto(array $files): bool{
-        //TODO: qua bisogna vedere se è tutto corretto, poi vedremo come
-        return true;
+    public function checkFoto(): bool{
+        $check = false;
+        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
+            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+                $view_errore = new VErrore();
+                $view_errore->error(4);
+            }
+            elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
+                $_FILES['file']['type'] != 'image/png'){
+                $view_errore = new VErrore();
+                $view_errore->error(4);
+            }
+            else{
+                $check = true;
+            }
+        }
+        return $check;
     }
 
 
