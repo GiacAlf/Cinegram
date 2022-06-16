@@ -2,6 +2,8 @@
 
 class FFilm {
 
+    private static int $maxSizeImmagineLocandina = 8192; // corrisponde ad 1 MByte (0 16MiB sul DB) di size massima consentita
+
     private static string $nomeClasse = "FFilm";  // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "film";  // da cambiare se cambia il nome della tabella Film in DB
     private static string $chiaveTabella = "IdFilm";   // da cambiare se cambia il nome della chiave in DB
@@ -761,8 +763,20 @@ class FFilm {
 
 
     // metodo che inserisce una nuova locandina
+    // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
+    // questo $_FILES['file']['tmp_name'], cioè la $nuovaLocandina appena caricata, con $_FILES['file']['type'] il
+    // $nuovoTipoLocandina dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeLocandina
     public static function updateLocandina(EFilm $film, string $nuovaLocandina, string $nuovoTipoLocandina,
                                            string $nuovaSizeLocandina): void {
+
+        if($nuovaSizeLocandina > self::$maxSizeImmagineLocandina) {
+            print("Il file caricato è troppo grande!");
+            return;
+        }
+        // prendo il contenuto grezzo dell'immagine
+        $locandina = file_get_contents($nuovaLocandina);
+        // eseguo l'escape
+        $locandina = addslashes($locandina);
 
         if((FFilm::existById($film))) {
             $pdo = FConnectionDB::connect();
@@ -770,7 +784,7 @@ class FFilm {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoLocandina . " = '" . $nuovaLocandina . "', " .
+                    " SET " . self::$nomeAttributoLocandina . " = '" . $locandina . "', " .
                     self::$nomeAttributoTipoLocandina . " = '" . $nuovoTipoLocandina . "', " .
                     self::$nomeAttributoSizeLocandina . " = '" . $nuovaSizeLocandina . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";

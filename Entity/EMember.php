@@ -161,8 +161,6 @@ class EMember extends EUser {
 
         $larghezzaInPixel = 20;
         $altezzaInPixel = 20;
-        // $immagineStringa = FPersistentManager::caricaImmagine();
-        // $tipoImmagine = FPersistentManager::caricaTipo();
 
         // ricrea l'immagine dalla stringa presa dal db come blob
         $immagineReale = imagecreatefromstring($immagineStringa);
