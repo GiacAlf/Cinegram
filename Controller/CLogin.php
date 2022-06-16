@@ -38,7 +38,7 @@ class CLogin
                 $view_admin = new VAdmin();
                 $utente = FPersistentManager::load("EAdmin", null, $username, null,
                 null, null, null, null, false);
-                //visualizzo l'admin $view_admin->avviaPaginaAdmin($utente);
+                $view_admin->avviaPaginaAdmin($utente); //visualizzo l'admin
             }
             SessionHelper::login($utente);
 
