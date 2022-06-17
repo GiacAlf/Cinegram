@@ -1,14 +1,14 @@
 <?php
 
-class VErrore
-{
+class VErrore {
+
     private Smarty $smarty;
 
     public function __construct() {
         $this->smarty = StartSmarty::configuration();
     }
 
-    public function error(int $id_errore){
+    public function error(int $id_errore): void{
         $this->smarty->assign('i', $id_errore);
         switch ($id_errore) {
             case '1' :
@@ -46,5 +46,4 @@ class VErrore
         $this->smarty->assign('titolo', $titolo);
         $this->smarty->display('error.tpl');
     }
-
 }

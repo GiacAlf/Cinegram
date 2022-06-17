@@ -1,7 +1,7 @@
 <?php
 
-class VFilms
-{
+class VFilms {
+
     private Smarty $smarty;
 
     //il costruttore della page richiama l'oggetto smarty configurato
@@ -18,7 +18,7 @@ class VFilms
     //chiedere le statistiche ai Controller direttamente nel metodo
     //La pagina cambia a seconda se si è registrati o meno
     public function avviaPaginaFilms(array $film_visti, array $film_recensiti, array $film_votati,
-    array $film_recenti): void{
+                                     array $film_recenti): void{
         //vedremo poi il problema delle locandine
             $this->smarty->assign('recenti', $film_recenti);
             $this->smarty->assign('recensiti', $film_recensiti);
@@ -26,19 +26,6 @@ class VFilms
             $this->smarty->assign('votati', $film_votati);
             $this->smarty->display('films.tpl');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //_----------------------------------metodi vecchi--------------------------------------------

@@ -6,7 +6,7 @@ class VHomePage
 
     //il costruttore della home page richiama l'oggetto smarty configurato
     //e se lo salva
-    public function __construct(){
+    public function __construct() {
         $this->smarty = StartSmarty::configuration();
     }
 
@@ -16,8 +16,8 @@ class VHomePage
 
     //metodo per farmi comparire l'home page riempita con tutti i dati necessari -> dato che il display è un print
     //è ok il ritorno void, credo
-    public function avviaHomePage(array $film_recenti, array $film_recensiti, array $ultime_recensioni
-        , array $utenti_popolari): void{
+    public function avviaHomePage(array $film_recenti, array $film_recensiti, array $ultime_recensioni,
+                                  array $utenti_popolari): void{
         //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
         //serviranno altri assign per le varie locandine
         $this->smarty->assign('film_recenti', $film_recenti);

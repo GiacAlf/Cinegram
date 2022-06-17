@@ -1,13 +1,13 @@
 <?php
 
-class VUtenteSingolo
-{
+class VUtenteSingolo {
+
     private Smarty $smarty;
     private static int $maxSizeImmagineProfilo = 8192;
 
     //il costruttore della pagina dell'utente singolo richiama l'oggetto smarty configurato
     //e se lo salva
-    public function __construct(EMember $utente_selezionato){
+    public function __construct(){
         $this->smarty = StartSmarty::configuration();
     }
 
@@ -45,12 +45,11 @@ class VUtenteSingolo
     public function checkFoto(): bool{
         $check = false;
         if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
-        if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
-            $view_errore = new VErrore();
-            $view_errore->error(4);
+            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+                $view_errore = new VErrore();
+                $view_errore->error(4);
         }
-        elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
-            $_FILES['file']['type'] != 'image/png'){
+        elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/png'){
             $view_errore = new VErrore();
             $view_errore->error(4);
         }

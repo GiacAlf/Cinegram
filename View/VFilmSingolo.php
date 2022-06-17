@@ -44,7 +44,7 @@ class VFilmSingolo
     }
 
     //metodo che restituisce al controllore il testo della risposta
-    public function scriviRisposta(): string{
+    public function scriviRisposta(): ?string{
         $testo_risposta = null;
         if(isset($_POST['risposta'])){
             $testo_risposta = $_POST['risposta'];

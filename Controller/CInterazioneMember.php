@@ -1,13 +1,13 @@
 <?php
 
-class CInterazioneMember
-{
+class CInterazioneMember {
+
     /*L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
     schermata con diversi dati, le diverse schermate le potrebbe gestire Smarty, noi gli passiamo
     un parametro registrato o non registrato e lei capisce, oppure fare due schermate diverse che
     richiamiamo noi dentro questo metodo. Sara' associata una url del tipo localhost/members*/
 
-    public static function caricaMembers(){
+    public static function caricaMembers(): void{
         $ultimeAttivita = array();
         $identificato = false;
         //controlli per quanto riguarda l'utente loggato o meno
@@ -20,9 +20,9 @@ class CInterazioneMember
         //prima controllo se l'utente è loggato ed è un member (metodo Foundation apposito)
         //e poi discrimino
         if($identificato){
-            $username="Matteo";
-            $member=FPersistentManager::load("EMember",null,$username,null,
-                null,null,null,null,null,false);
+            $username = "Matteo";
+            $member = FPersistentManager::load("EMember",null,$username,null,
+                null,null,null,null,false);
             $ultimeAttivita=FPersistentManager::caricaUltimeAttivitaUtentiSeguiti($member,6);
         }
         else{
@@ -32,9 +32,11 @@ class CInterazioneMember
 
         $view = new VMembers();
         //caricare di tutti i members le locandine small
-        print_r($ultimeAttivita);
+
+        /*print_r($ultimeAttivita);
         print_r($ultimeAttivita);
         print_r($utentiPiuPopolari);
+        */
         //ridai un booleano identificato. TRUE se è member registrato, FALSE se non lo è
         //carica le foto per ogni utente (avatar piccolo)
         //al metodo della view vengono passati comunque due array, un booleano e le foto poi
@@ -44,34 +46,33 @@ class CInterazioneMember
          due metodi della view separati, uno per la grafica di ogni tipologia di utente(la
          prima è sicuramente migliore)*/
         $view->avviaPaginaMembers($ultimeAttivita, $utentiPiuPopolari, $identificato);
-
     }
+
+
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/username con metodo get-> infatti lo username viene passato dall'url */
-    public static function caricaMember($username){
+    public static function caricaMember($username): void{
 
         $view = new VUtenteSingolo();
-        $member=FPersistentManager::load("EMember",null,$username,null,null,
-        null,null,null,true);
-        $filmvisti=FPersistentManager::calcolaNumeroFilmVisti($member);
-        $following=FPersistentManager::calcolaNumeroFollowing($member);
-        $follower=FPersistentManager::calcolaNumeroFollower($member);
+        $member = FPersistentManager::load("EMember",null,$username,null,null,
+            null,null,null,true);
+        $filmvisti = FPersistentManager::calcolaNumeroFilmVisti($member);
+        $following = FPersistentManager::calcolaNumeroFollowing($member);
+        $follower = FPersistentManager::calcolaNumeroFollower($member);
         //caricare l'immagine del profilo di tutti i member in size small
         //FPersistentManager::loadImmagineProfilo($member,true);
 
+        // TODO se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
+
         /* dare tutti i dati alla view che fara' il display*/
         $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
-
-        // se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
-
-
     }
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in post
     al seguente url localhost/member/username=.../-1, lo username da seguire lo dara' il bottone
     cliccato. */
-    public static function seguiMember(){
+    public static function seguiMember(): void{
 
         //verificare che l'utente sia registrato
         //if(SessionHelper::isLogged()){
@@ -79,20 +80,16 @@ class CInterazioneMember
 
         //}
 
-
         $following="giangiacomo"; //lo si recupera dall'url
 
         //recupero dalla sessione il mio username => $follower = $username
-        $follower="matteo";
-        $following=FPersistentManager::load("EMember",null,$following,null,null,
+        $follower = "matteo";
+        $following = FPersistentManager::load("EMember",null,$following,null,null,
         null,null,null,false);
-        $follower=FPersistentManager::load("EMember",null,$follower,null,null,
+        $follower = FPersistentManager::load("EMember",null,$follower,null,null,
             null,null,null,false);
 
         FPersistentManager::follow($follower, $following);
-
-
-
     }
 
 
@@ -101,8 +98,7 @@ class CInterazioneMember
     al seguente url localhost/member/username=..../-2, lo username da unfolloware lo dara' il bottone
     cliccato. */
 
-    public static function togliMember(){
-
+    public static function nonSeguiMember(): void{
 
         //verificare che l'utente sia registrato
         //if(SessionHelper::isLogged()){
@@ -110,14 +106,14 @@ class CInterazioneMember
 
         //}
 
-        $following="giangiacomo"; //lo si recupera dall'url
+        $following = "giangiacomo"; //lo si recupera dall'url
 
         //recupero dalla sessione il mio username => $follower = $username
-        $follower="matteo";
+        $follower = "matteo";
 
-        $following=FPersistentManager::load("EMember",null,$following,null,null,
+        $following = FPersistentManager::load("EMember",null,$following,null,null,
             null,null,null,false);
-        $follower=FPersistentManager::load("EMember",null,$follower,null,null,
+        $follower = FPersistentManager::load("EMember",null,$follower,null,null,
             null,null,null,false);
 
         FPersistentManager::unfollow($follower,$following);
@@ -126,7 +122,7 @@ class CInterazioneMember
 
     //TODO: metodo per registrarsi
     //url boh, qualcosa del tipo localhost/member/registrazione vedi tu matte' ahaha
-    public static function registrazione(){
+    public static function registrazione(): void{
         $view = new VLogin();
         $array_credenziali = $view->RegistrazioneCredenziali();
         if($array_credenziali[0] == null || $array_credenziali[1] == null){
@@ -143,24 +139,24 @@ class CInterazioneMember
             //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
             //qua se l'img è null pazienza
             $member = new EMember($username, $data, $bio, 0, null, null, null, null);
-            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'], $foto_profilo['type'],
-            $foto_profilo['size']); //immagino si chiami così poi boh
+            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'],
+                $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
         }
     }
+
 
     //TODO:metodo cercaMember -> si guardi il metodo cercaFilm in CInterazioneFilm
     //url sarà tipo localhost/member/?username=.... poi vedi tu matte' sia se il metodo è corretto
     //sia se l'url è ok
-    public static function cercaMember(){
+    public static function cercaMember(): void{
         /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
         //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come
         //avevamo discusso l'url nella riunione del 14/6
         $view = new VRicerca();
         $username = $view->eseguiRicerca();
-        $member=FPersistentManager::load("EMember",null,$username,null,null,
+        $member = FPersistentManager::load("EMember",null,$username,null,null,
             null,null,null,false);
         $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
         $view->avviaPaginaRicerca($array_risultati);
     }
-
 }

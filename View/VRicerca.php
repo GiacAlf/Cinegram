@@ -1,7 +1,7 @@
 <?php
 
-class VRicerca
-{
+class VRicerca {
+
     private Smarty $smarty;
 
     //il costruttore della home page richiama l'oggetto smarty configurato
@@ -23,7 +23,7 @@ class VRicerca
     }
 
     //metodo che restituisce al controller il prompt scritto dall'utente
-    public function eseguiRicerca(): ?string {
+    public function eseguiRicerca(): ?string{
         $ricerca = null;
         if (isset($_GET['ricerca'])) {
             $ricerca = $_GET['ricerca'];
@@ -40,13 +40,6 @@ class VRicerca
         }
         return $tipo_ricerca;
     }
-
-
-
-
-
-
-
 
 
     //------------------------------------metodi vecchi-----------------------------------------

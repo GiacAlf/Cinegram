@@ -1,8 +1,9 @@
 <?php
 
-class CFrontController{
+class CFrontController {
 
-    public static function run($path){
+    // TODO se non trova metodo o classe chiamare VErrore, vedi le view
+    public static function run($path): void{
 
 
 
@@ -52,5 +53,4 @@ class CFrontController{
 
 
     }
-
 }

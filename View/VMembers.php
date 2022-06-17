@@ -1,7 +1,7 @@
 <?php
 
-class VMembers
-{
+class VMembers {
+
     private Smarty $smarty;
 
     //il costruttore della page richiama l'oggetto smarty configurato
@@ -26,7 +26,6 @@ class VMembers
             $this->smarty->assign('utenti', $utenti);
             $this->smarty->display('members_non_registrato.tpl');
         }
-
     }
 
 

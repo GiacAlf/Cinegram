@@ -1,7 +1,7 @@
 <?php
 
-class VAdmin
-{
+class VAdmin {
+
     private Smarty $smarty;
     private static int $maxSizeImmagineProfilo = 8192;
 
@@ -12,8 +12,8 @@ class VAdmin
 
     //per ora immagino che il template dell'admin sia pieno di form in cui caricare tutte le informazioni
     //su un film e qualche altra form tipo per scrivere gli username dei tipi da ammonire e bannare
-    public function avviaPaginaAdmin(EAdmin $admin){
-        $this->smarty->assign('username_admin', $admin->getUsername());
+    public function avviaPaginaAdmin(string $admin){
+        $this->smarty->assign('username_admin', $admin);
         $this->smarty->display('admin.tpl');
     }
 
@@ -95,10 +95,12 @@ class VAdmin
         return $locandina;
     }
 
+    // TODO da modificare
+
     //per quanto riguarda il ban o l'ammonizione, possiamo immaginare per
     //semplicità che ci sia una piccola form dove l'admin scrive lo username
     //del tipo da bannare o ammonire
-    public function getUsernameDaAmmonireOBannare(): string{
+    public function getUsernameDaAmmonireOBannare(): ?string{
         $username = null;
         if(isset($_POST['username'])){
             $username = $_POST['username'];
@@ -111,7 +113,7 @@ class VAdmin
     //dovrebbe ricordare quanti warning ha l'utente. Io ce lo metto, nel caso, basta cancellare
 
     //il metodo di sopra servirebbe ad ammonire e basta
-    public function getUsernameDaBannare(): string{
+    public function getUsernameDaBannare(): ?string{
         $username_da_bannare = null;
         if(isset($_POST['username_ban'])){
             $username_da_bannare = $_POST['username_ban'];
@@ -127,7 +129,7 @@ class VAdmin
     Magari ripropongo la mia idea risalente tipo ad aprile di silurare l'opzione di modificare un film ahaha
      */
 
-    public function getTitoloDaModificare(): string{
+    public function getTitoloDaModificare(): ?string{
         $titolo_da_modificare = null;
         if(isset($_POST['titolo_modifica'])){
             $titolo = $_POST['titolo_modifica'];
@@ -140,7 +142,4 @@ class VAdmin
     + data scrittura, in questo modo si sa già quale risposta o recensione cancellare -> mettere un tastino elimina
     che è visibile solo all'admin? Boh
      */
-
-
-
 }

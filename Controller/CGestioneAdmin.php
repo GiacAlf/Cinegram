@@ -6,61 +6,61 @@ class CGestioneAdmin{
      *  una volta che l'admin è loggato per andare alla sua pagina,
      * url localhost/admin
      */
-    public static function caricaPaginaAdmin(){
+    public static function caricaPaginaAdmin(): void{
         //controllare se sei l'admin
         $view = new VAdmin();
-        $view->avviaPaginaAdmin();
+        // $admin dalla sessione
+        $view->avviaPaginaAdmin($admin);
     }
 
     /*
       metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
     localhost/admin/caricafilm
     */
-    public static function caricaFilm(){
+    public static function caricaFilm(): void{
         //prendere dalla view le informazioni del film
         //verifica che sei l'admin
         $titolo = "prova";
-        $data= new DateTime('now');
-        $durata=120;
-        $sinossi="un bel film di prova";
-        $listaRegisti=array();
-        $listaAttori=array();
-        $immagine="prova";
-        $tipoImmagine="jpeg";
-        $sizeImmagine="1920x1080";
+        $data = new DateTime('now'); // da cambiare in data presa
+        $durata = 120;
+        $sinossi = "un bel film di prova";
+        $listaRegisti = array();
+        $listaAttori = array();
+        $immagine = "prova";
+        $tipoImmagine = "jpeg";
+        $sizeImmagine = "1920x1080";
 
-
-        $film= new EFilm(null, $titolo , $data , $durata , $sinossi , null , null
-            , $listaRegisti , $listaAttori , null );
+        $film = new EFilm(null, $titolo , $data , $durata , $sinossi , null , null,
+            $listaRegisti , $listaAttori , null );
 
         FPersistentManager::store($film , $film ,null , null ,null ,
-        $immagine , $tipoImmagine , $sizeImmagine);
+            $immagine , $tipoImmagine , $sizeImmagine);
     }
+
 
     /*
     L'admin vuole modificare un attributo di un film,
     url localhost/admin/modificafilm/id
     */
-    public static function modificaFilm(int $id){
+    public static function modificaFilm(int $id): void{
         //verifica che sei l'admin
 
         /*possiamo fare una checkbox dove l'admin seleziona l'attributo da eliminare*/
 
+        $id = 2;
+        $film = FPersistentManager::load("EFilm" , $id ,null ,null ,
+            null , null , null ,null ,false);
 
-        $id=2;
-        $film=FPersistentManager::load("EFilm" , $id ,null ,null ,
-        null , null , null ,null ,false);
+        $nuovoValore = array();
+        $nomeAttributo = "sinossi";
 
-        $nuovoValore= array();
-        $nomeAttributo="sinossi";
-
-        if($nomeAttibuto="data")
-
-            FPersistentManager::update( $film , null , null ,null, null,
-            $nuovoValore , null , null );
+        if($nomeAttibuto == "data") {
+            FPersistentManager::update($film, null, null, null, null,
+                $nuovoValore, null, null);
+            return;
+        }
 
         if($nomeAttributo="attori")
-
             FPersistentManager::update($film, null, null, null,
                 null, null, $nuovoValore, null);
 
@@ -69,7 +69,7 @@ class CGestioneAdmin{
             FPersistentManager::update($film, null, null, null,
                     null, null, null , $nuovoValore);
 
-        else
+        else // è bruttissimo
         {
             FPersistentManager::update($film , $nomeAttributo , $nuovoValore , null ,
             null , null , null , null);
@@ -82,27 +82,26 @@ class CGestioneAdmin{
     Url localhost/admin/rimuoviRecensione...... anche qui username e id film vengono inviati nella url(?)
     quindi nel template dobbiamo mettere anche una url per l'admin(?)(vedere bene, non ho troppo le idee chiare)
     */
-    public static function rimuoviRecensione(){
+    public static function rimuoviRecensione(): void{
 
         //verifica che sei l'admin
 
         //dati che qualcuno mi dara'
-        $idFilm=2;
-        $usernameAutore="pippo";
+        $idFilm = 2;
+        $usernameAutore = "pippo";
         FPersistentManager::delete("ERecensione",$usernameAutore,null,null,$idFilm,null);
         //notifica che sto eliminando la recensione.
 
     }
 
      //idem come sopra()
-    public static function rimuoviRisposta(){
+    public static function rimuoviRisposta(): void{
 
         //qualcuno mi procurera' i dati
-
         $idFilm = 1;
         $data = new DateTime();
-        $usernameAutore="matteo";
-        FPersistentManager::delete("ERisposta",$usernameAutore,null,null,null,$data);
+        $usernameAutore = "matteo";
+        FPersistentManager::delete("ERisposta", $usernameAutore,null,null,null, $data);
 
         //notifica che ho eliminato la risposta
     }
@@ -111,15 +110,14 @@ class CGestioneAdmin{
     metodo che permette all'admin di ammonire il member,
     url localhost/admin/username/ammonisci
     */
-
-    public static function ammonisciUser(String $username){
+    public static function ammonisciUser(String $username): void{
 
         //verifica che sei l'admin
 
         //recupero lo username dell'admin dalla sessione
-        $username="admin";
-        $usernameMember="matteo";
-        $admin= new EAdmin($username);
+        $username = "admin";
+        $usernameMember = "matteo";
+        $admin = new EAdmin($username);
         if(!FPersistentManager::userBannato($username))
             $admin->ammonisciUser($usernameMember);
         else
@@ -132,13 +130,13 @@ class CGestioneAdmin{
     url localhost/admin/username/sbanna
      */
 
-    public static function sbannaUser(String $username){
+    public static function sbannaUser(String $username): void{
         //verifica che sei l'admin
 
-        $username ="giangiacomo";
+        $username = "giangiacomo";
 
-        $usernameAdmin="alberto";
-        $admin=new EAdmin($usernameAdmin);
+        $usernameAdmin = "alberto";
+        $admin = new EAdmin($usernameAdmin);
 
         if (FPersistentManager::userBannato($username)){
             if(FPersistentManager::tipoUserRegistrato($username)=="Admin")
@@ -157,13 +155,13 @@ class CGestioneAdmin{
      metodo che permette di decrementare un warning al member
     url localhost/admin/username/togliammonizione
     */
-    public static function togliAmmonizione($username){
+    public static function togliAmmonizione($username): void{
         //verifica che sei l'admin
 
-        $username ="giangiacomo";
+        $username = "giangiacomo";
 
-        $usernameAdmin="alberto";
-        $admin=new EAdmin($usernameAdmin);
+        $usernameAdmin = "alberto";
+        $admin = new EAdmin($usernameAdmin);
 
         if (!FPersistentManager::userBannato($username)){
             if(FPersistentManager::tipoUserRegistrato($username)=="Member")
@@ -172,9 +170,4 @@ class CGestioneAdmin{
         else
             print ("l'utente è bannato");
     }
-
-
-
-
-
 }
