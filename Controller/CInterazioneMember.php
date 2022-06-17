@@ -2,10 +2,12 @@
 
 class CInterazioneMember {
 
-    /*L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
+    /*
+     L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
     schermata con diversi dati, le diverse schermate le potrebbe gestire Smarty, noi gli passiamo
     un parametro registrato o non registrato e lei capisce, oppure fare due schermate diverse che
-    richiamiamo noi dentro questo metodo. Sara' associata una url del tipo localhost/members*/
+    richiamiamo noi dentro questo metodo. Sara' associata una url del tipo localhost/members
+    */
 
     public static function caricaMembers(): void{
         $ultimeAttivita = array();
