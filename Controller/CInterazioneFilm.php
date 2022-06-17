@@ -45,7 +45,6 @@ class CInterazioneFilm {
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
     public static function CaricaFilm(int $id): void{
-
         //restituzione del film completo
         $view = new VFilmSingolo();
         $film = FPersistentManager::load("EFilm",$id,null,null,
@@ -55,8 +54,14 @@ class CInterazioneFilm {
         /*qui dovro' passare alla view che fara' il display della pagina
         del film singolo
          */
-        // TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
-        $view->avviaPaginaFilm($film);
+        if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
+            $view_admin = new VAdmin();
+            $view_admin->avviaPaginaModificaFilm($film);
+        }
+        else {
+            //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
+            $view->avviaPaginaFilm($film);
+        }
     }
 
     /*questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione

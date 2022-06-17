@@ -28,6 +28,13 @@ class VHomePage
         //passo gli interi array a smarty, che poi si preoccuperà di prendere le robe che gli interessano
     }
 
+    //metodo per vedere le risposte della recensione, saranno utili? Boh
+    public function ShowRisposte(ERecensione $recensione): void{
+        $this->smarty->assign('risposte', $recensione->getRisposteDellaRecensione());
+        //e se qua non bisognasse fare il display? Solo un assign da chiamare quando serve e poi
+        //con il java script lo mostra quando serve?
+    }
+
 
 
 

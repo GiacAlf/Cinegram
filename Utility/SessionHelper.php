@@ -2,7 +2,7 @@
 
 class SessionHelper {
 
-    public static function login(EMember $utente): void { //Qua bisogna passare il member minimale
+    public static function login(EUser $utente): void { //Qua bisogna passare il member minimale
 
         if (session_status() == PHP_SESSION_NONE) { //sessione è abilitata ma non esiste
             session_start();
@@ -37,7 +37,7 @@ class SessionHelper {
 
     // TODO verificare che ritorni effettivamente un EMember...come lo costruisce? serve aggiungerci altro?
     //pare che effettivamente restituisca un EMember
-    public static function getUtente(): EMember {
+    public static function getUtente(): EUser {
         return unserialize($_SESSION['utente']);
     }
 }

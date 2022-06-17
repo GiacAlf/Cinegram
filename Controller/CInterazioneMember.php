@@ -63,9 +63,14 @@ class CInterazioneMember {
         //FPersistentManager::loadImmagineProfilo($member,true);
 
         // TODO se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
-
-        /* dare tutti i dati alla view che fara' il display*/
-        $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
+        if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
+            $view_admin = new VAdmin(); //in teoria la stringa a sinistra dovrebbe essere null, si spera
+            $view_admin->avviaPaginaModeraUtente($member);
+        }
+        else {
+            //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
+            $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
+        }
     }
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member

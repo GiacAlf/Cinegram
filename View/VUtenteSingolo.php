@@ -79,6 +79,13 @@ class VUtenteSingolo {
     }
 
 
+    //metodo per vedere le risposte della recensione, saranno utili? Boh
+    public function ShowRisposte(ERecensione $recensione): void{
+        $this->smarty->assign('risposte', $recensione->getRisposteDellaRecensione());
+        //e se qua non bisognasse fare il display? Solo un assign da chiamare quando serve e poi
+        //con il java script lo mostra quando serve?
+    }
+
 
 
 

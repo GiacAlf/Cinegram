@@ -17,6 +17,7 @@ class VFilmSingolo
         $this->smarty->assign( 'titolo', $film_selezionato->getTitolo());
         $this->smarty->assign('durata', $film_selezionato->getDurata());
         $this->smarty->assign('anno', $film_selezionato->getAnno());
+        $this->smarty->assign('sinossi', $film_selezionato->getSinossi());
         $this->smarty->assign('attori', $film_selezionato->getListaAttori());
         $this->smarty->assign('registi', $film_selezionato->getListaRegisti());
         $this->smarty->assign('recensioni', $film_selezionato->getListaRecensioni());
@@ -50,6 +51,13 @@ class VFilmSingolo
             $testo_risposta = $_POST['risposta'];
         }
         return $testo_risposta;
+    }
+
+    //metodo per vedere le risposte della recensione, saranno utili? Boh
+    public function ShowRisposte(ERecensione $recensione): void{
+        $this->smarty->assign('risposte', $recensione->getRisposteDellaRecensione());
+        //e se qua non bisognasse fare il display? Solo un assign da chiamare quando serve e poi
+        //con il java script lo mostra quando serve?
     }
 
 

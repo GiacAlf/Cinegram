@@ -31,9 +31,11 @@ class CLogin {
             if ($chiSei == "Member"){
                 $view_member = new VUtenteSingolo();
                 $utente = FPersistentManager::load("EMember",null, $username,null,
+                    null,null,null,null,false);
+                $utente_completo = FPersistentManager::load("EMember",null, $username,null,
                     null,null,null,null,true);
-                $view_member->avviaPaginaUtente($utente, FPersistentManager::calcolaNumeroFilmVisti($utente),
-                    FPersistentManager::calcolaNumeroFollowing($utente), FPersistentManager::calcolaNumeroFollower($utente));
+                $view_member->avviaPaginaUtente($utente_completo, FPersistentManager::calcolaNumeroFilmVisti($utente_completo),
+                    FPersistentManager::calcolaNumeroFollowing($utente_completo), FPersistentManager::calcolaNumeroFollower($utente_completo));
             }
             else{
                 $view_admin = new VAdmin();
