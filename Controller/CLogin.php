@@ -74,7 +74,7 @@ class CLogin
     }
 
     /*L'utente clicca su questo pulsante e semplicemente verra' effettuato il classico logout
-    associo una url localhost/member/-4
+    associo una url localhost/logout
     */
     public static function logoutMember(){
         /*

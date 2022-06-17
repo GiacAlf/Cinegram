@@ -1,6 +1,56 @@
 <?php
 
-class CFrontController
-{
-// commento di prova
+class CFrontController{
+
+    public static function run($path){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
 }

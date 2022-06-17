@@ -59,6 +59,8 @@ class CInterazioneFilm
          */
         $view->avviaPaginaFilm($film);
 
+        // se sei l'admin carica la pagina per modificare il film
+
     }
 
     /*questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione

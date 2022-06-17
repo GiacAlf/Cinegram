@@ -62,6 +62,9 @@ class CInterazioneMember
         /* dare tutti i dati alla view che fara' il display*/
         $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
 
+        // se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
+
+
     }
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
@@ -122,7 +125,7 @@ class CInterazioneMember
     }
 
     //TODO: metodo per registrarsi
-    //url boh, qualcosa del tipo localhost/registrazione vedi tu matte' ahaha
+    //url boh, qualcosa del tipo localhost/member/registrazione vedi tu matte' ahaha
     public static function registrazione(){
         $view = new VLogin();
         $array_credenziali = $view->RegistrazioneCredenziali();

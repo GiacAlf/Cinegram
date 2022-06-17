@@ -3,6 +3,16 @@
 class CGestioneAdmin{
 
     /*
+     *  una volta che l'admin è loggato per andare alla sua pagina,
+     * url localhost/admin
+     */
+    public static function caricaPaginaAdmin(){
+        //controllare se sei l'admin
+        $view = new VAdmin();
+        $view->avviaPaginaAdmin();
+    }
+
+    /*
       metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
     localhost/admin/caricafilm
     */
@@ -29,13 +39,13 @@ class CGestioneAdmin{
 
     /*
     L'admin vuole modificare un attributo di un film,
-    url localhost/admin/modificafilm
+    url localhost/admin/modificafilm/id
     */
-    public static function modificaFilm(){
+    public static function modificaFilm(int $id){
         //verifica che sei l'admin
 
-        /*possiamo fare una checkbox dove l'admin seleziona l'attributo da eliminare, pero' ci
-        deve per forza inviare l'id */
+        /*possiamo fare una checkbox dove l'admin seleziona l'attributo da eliminare*/
+
 
         $id=2;
         $film=FPersistentManager::load("EFilm" , $id ,null ,null ,
@@ -99,11 +109,11 @@ class CGestioneAdmin{
 
     /*
     metodo che permette all'admin di ammonire il member,
-    url localhost/admin/ammonisci
+    url localhost/admin/username/ammonisci
     */
 
-    public static function ammonisciUser(){
-        //qualcuno mi da lo username
+    public static function ammonisciUser(String $username){
+
         //verifica che sei l'admin
 
         //recupero lo username dell'admin dalla sessione
@@ -119,11 +129,10 @@ class CGestioneAdmin{
 
     /*
       metodo che permette all'admin di sbannare il member o l'admin
-    url localhost/admin/sbanna
+    url localhost/admin/username/sbanna
      */
 
-    public static function sbannaUser(){
-        //la view mi da lo username del member
+    public static function sbannaUser(String $username){
         //verifica che sei l'admin
 
         $username ="giangiacomo";
@@ -146,10 +155,9 @@ class CGestioneAdmin{
 
     /*
      metodo che permette di decrementare un warning al member
-    url
+    url localhost/admin/username/togliammonizione
     */
-    public static function togliAmmonizione(){
-        //la view mi da lo username del member
+    public static function togliAmmonizione($username){
         //verifica che sei l'admin
 
         $username ="giangiacomo";
