@@ -89,4 +89,17 @@ class ERisposta {
     public function setUsernameAutoreRecensione(string $usernameAutoreRecensione): void {
         $this->usernameAutoreRecensione = $usernameAutoreRecensione;
     }
+
+
+    public static function ConvertiDatainFormatoUrl(DateTime $date):string {
+        $YMD = $date->format("Y-m-d");
+        $HIS = $date->format("h:i:s");
+        return($YMD . "." . $HIS);
+    }
+
+
+    public static function ConvertiFormatoUrlInData(string $data):DateTime {
+        $array=explode("." , $data);
+        return(new DateTime($array[0] . " " . $array[1]));
+    }
 }
