@@ -25,7 +25,7 @@ class CFrontController {
 
             case("films"):
                 $controllore="CInterazionefilm";
-                $metodo=$arraypath[0];
+                $metodo="caricaFilms";
                 $controllore::$metodo();
                 break;
 
@@ -45,14 +45,24 @@ class CFrontController {
 
             case("risposta"):
                 $controllore="CInterazionefilm";
-
-
-
+                array_shift($arraypath);
+                if ($arraypath[0] = "?"){
+                    $metodo = "ScriviRisposta";
+                    $controllore::$metodo();
+                    return;
+                }
+                else {
+                    $metodo = "EliminaRisposta";
+                    $data=ERisposta::ConvertiFormatoUrlInData($arraypath[0]);
+                    $controllore::$metodo($data);
+                    return;
+                }
 
             case("risposte"):
                 $controllore="CInterazionefilm";
-
-
+                $metodo="caricaRisposte";
+                $controllore::$metodo();
+                return;
 
             case("homepage"):
                 $controllore="CHomepage";
@@ -66,6 +76,10 @@ class CFrontController {
 
 
             case("members"):
+            $controllore="CInterazioneMember";
+            $metodo="caricaMembers";
+            $controllore::$metodo();
+            break;
 
 
 

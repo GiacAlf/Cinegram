@@ -98,9 +98,9 @@ class CInterazioneFilm {
     }
 
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
-    localhost/risposta/id/username i dati come nella recensione vengono passati con una form */
+    localhost/risposta/?usernameAutoreRecensione=...&id=.. i dati come nella recensione vengono passati con una form */
 
-    public static function ScriviRisposta(string $usernameAutoreRecensione, int $idFilm): void{
+    public static function ScriviRisposta(): void{
         //anche qui dobbiamo verificare se l'utente è loggato
 
         //chiamo la view che mi restituisce i dati per la creazione della risposta(presi dalla form)
