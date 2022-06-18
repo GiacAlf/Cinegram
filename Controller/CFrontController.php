@@ -1,9 +1,11 @@
 <?php
+require "CInterazioneFilm.php";
+require "CHomepage.php";
 
 class CFrontController {
 
     // TODO se non trova metodo o classe chiamare VErrore, vedi le view
-    public static function run($path): void {
+    public function run($path): void {
 
         $arraypath = explode("/","$path");
         array_shift($arraypath);
@@ -12,18 +14,36 @@ class CFrontController {
             case("film"):
                 $controllore = "CInterazione".$arraypath[0];
                 array_shift($arraypath);
-                if ($arraypath[0] = "?"){
+                if ($arraypath[0][0] == "?" && count($arraypath)==1){
                     $metodo = "cercaFilm";
                     $controllore::$metodo();
                     return;
                 }
-                else {
+                elseif(count($arraypath)==1){
                     $metodo = "CaricaFilm";
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
+                elseif($arraypath[1]=="vedi" && count($arraypath)==2){
+                    $metodo="vediFilm";
+                    $controllore::$metodo($arraypath[0]);
+                    return;
+                }
+                elseif ($arraypath[1]=="toglivisto" && count($arraypath)==2){
+                    $metodo="rimuoviFilmVisto";
+                    $controllore::$metodo($arraypath[0]);
+                    return;
+                }
+                else{
+                    print ("errore 405");
+                    return;
+                }
 
             case("films"):
+                if(count($arraypath)>1){
+                    print ("errore 405");
+                    return;
+                }
                 $controllore="CInterazionefilm";
                 $metodo="caricaFilms";
                 $controllore::$metodo();
@@ -37,36 +57,57 @@ class CFrontController {
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
-                else{
+                elseif ($arraypath[1]=="elimina" && count($arraypath)==2){
                     $metodo="EliminaRecensione";
                     $controllore::$metodo($arraypath[0]);
+                    return;
+                }
+                else{
+                    print ("errore 405");
                     return;
                 }
 
             case("risposta"):
                 $controllore="CInterazionefilm";
                 array_shift($arraypath);
-                if ($arraypath[0] = "?"){
+                if ($arraypath[0][0] == "?" && count($arraypath)==1){
                     $metodo = "ScriviRisposta";
                     $controllore::$metodo();
                     return;
                 }
-                else {
+                elseif($arraypath[1] == "elimina" && count($arraypath) == 2) {
                     $metodo = "EliminaRisposta";
                     $data=ERisposta::ConvertiFormatoUrlInData($arraypath[0]);
                     $controllore::$metodo($data);
                     return;
                 }
+                else {
+                    print ("errore 405");
+                    return;
+                }
 
             case("risposte"):
+                array_shift($arraypath);
+                if($arraypath[0][0]=="?" && count($arraypath)==1){
                 $controllore="CInterazionefilm";
                 $metodo="caricaRisposte";
                 $controllore::$metodo();
                 return;
+                }
+                else {
+                    print("errore 405");
+                    return;
+
+                }
 
             case("homepage"):
+                if(count($arraypath)>1){
+                    print("errore 405");
+                    return;
+                }
                 $controllore="CHomepage";
-                $metodo="imposta".$arraypath[0];
+                $metodo="impostaHomePage";
+                $controllore::$metodo();
                 break;
 
 
@@ -185,9 +226,9 @@ class CFrontController {
                     $controllore::$metodo();
 
                 }
-
                 break;
         }
+        print("errore 404");
     }
 
 

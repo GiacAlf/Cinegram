@@ -8,14 +8,14 @@ class CInterazioneFilm {
     tipo localhost/member/.... chiamo il cercaMember -> da fare per ora*/
     public static function cercaFilm(): void{
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
-        $view = new VRicerca();
-        $titolo = $view->eseguiRicerca();
-        $tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
+        //$view = new VRicerca();
+        //$titolo = $view->eseguiRicerca();
+        //$tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
         //per film o per persone
 
         $titolo="suspiria";
-
-        $films = array();
+        print("ciao");
+        /*$films = array();
         if ($tipo == "Film") {
             $films = FPersistentManager::load("EFilm", null, null, null,
                 null, null, $titolo, null, null, false);
@@ -36,9 +36,10 @@ class CInterazioneFilm {
         }
         /*dovro' adesso dare questi film alla view che si occupa della visualizzazione dei risultati
         della ricerca
-         */
-        $view->avviaPaginaRicerca($films);
+
+        $view->avviaPaginaRicerca($films);*/
     }
+
 
     /*questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
     sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
