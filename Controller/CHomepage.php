@@ -4,7 +4,7 @@ class CHomepage
 {
 
     /* sara' il metodo sempre chiamato all'inizio(?), url del tipo localhost/homepage in get */
-    public static function ImpostaHomePage(): void{
+    public static function impostaHomePage(): void{
         $numero_estrazioni = 5;
         $view = new VHomePage();
 
