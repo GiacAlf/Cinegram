@@ -79,7 +79,7 @@ class CInterazioneMember {
     l'utente in sessione potra' seguire il member, sara' una richiesta in post
     al seguente url localhost/member/username=.../-1, lo username da seguire lo dara' il bottone
     cliccato. */
-    public static function seguiMember(): void{
+    public static function seguiMember(string $username): void{
 
         //verificare che l'utente sia registrato
         //if(SessionHelper::isLogged()){
@@ -105,7 +105,7 @@ class CInterazioneMember {
     al seguente url localhost/member/username=..../-2, lo username da unfolloware lo dara' il bottone
     cliccato. */
 
-    public static function nonSeguiMember(): void{
+    public static function unfollowMember(string $username): void{
 
         //verificare che l'utente sia registrato
         //if(SessionHelper::isLogged()){

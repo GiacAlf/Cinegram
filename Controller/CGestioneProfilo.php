@@ -3,7 +3,7 @@
 class CGestioneProfilo {
 
     /* metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
-    bottone da premere), inviera' una url localhost/profilo/username=....
+    bottone da premere), inviera' una url localhost/profilo
     */
     public static function caricaProfilo(): void{
         //if(SessionHelper::isLogged()){
@@ -90,7 +90,7 @@ class CGestioneProfilo {
     /*l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
     localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password */
 
-    public static function AggiornaPasswordMember(): void{
+    public static function aggiornaPasswordMember(): void{
         /*recupero della nuova password dalla form, ma questa funzione puo' essere
         chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
         //if(SessionHelper::isLogged()){
