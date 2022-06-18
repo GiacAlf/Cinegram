@@ -728,11 +728,15 @@ class FFilm {
 
             if($queryResultFilm) {
                 // se $grande è settato a true si caricherà la locandina grande
+                // il resize gestisce anche il null come input ;)
                 if($grande)
-                    $locandina = $queryResultFilm[self::$nomeAttributoLocandina];
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
                 else
-                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]);
-                
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], false);
+
+                /* occhio che $locandina sarà di tipoGdImage!!!!
+                si è considerato che la query potrebbe restituire una locandina null, in quel caso faremo un
+                display di una locandina neutra, una pellicola in bianco e nero  */
                 return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
                     $queryResultFilm[self::$nomeAttributoSizeLocandina]);
             }
@@ -773,10 +777,22 @@ class FFilm {
             print("Il file caricato è troppo grande!");
             return;
         }
+
+        // inizio piccola modifica, da testare
+        if($nuovoTipoLocandina == "image/jpeg")
+            $locandina = imagecreatefromjpeg($nuovaLocandina);
+        elseif($nuovoTipoLocandina == "image/png")
+            $locandina = imagecreatefrompng($nuovaLocandina);
+        else {
+            print("Formato non valido!");
+            return;
+        }
+        // fine piccola modifica
+
         // prendo il contenuto grezzo dell'immagine
-        $locandina = file_get_contents($nuovaLocandina);
+        $locandinaContenuto = file_get_contents($locandina);
         // eseguo l'escape
-        $locandina = addslashes($locandina);
+        $locandinaDaSalvare = addslashes($locandinaContenuto);
 
         if((FFilm::existById($film))) {
             $pdo = FConnectionDB::connect();
@@ -784,7 +800,7 @@ class FFilm {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoLocandina . " = '" . $locandina . "', " .
+                    " SET " . self::$nomeAttributoLocandina . " = '" . $locandinaDaSalvare . "', " .
                     self::$nomeAttributoTipoLocandina . " = '" . $nuovoTipoLocandina . "', " .
                     self::$nomeAttributoSizeLocandina . " = '" . $nuovaSizeLocandina . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";

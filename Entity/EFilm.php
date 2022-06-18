@@ -12,6 +12,11 @@ class EFilm {
     private ?array $listaRegisti;
     private ?array $listaAttori;
     private ?array $listaRecensioni;
+    /* i prossimi due parametri servono per il ridimensionamento della locandina in formato piccolo, in caso di futuri
+    cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
+    funzione di resize per scegliere la dimensione che si desidererà */
+    private static int $larghezzaDesiderata = 150;  // in pixel
+    private static int $altezzaDesiderata = 200;    // in pixel
 
     public function __construct(?int $id, string $titolo, DateTime $data, int $durata, string $sinossi, ?int $numeroViews,
                                 ?float $votoMedio, ?array $listaRegisti, ?array $listaAttori, ?array $listaRecensioni) {
@@ -217,9 +222,45 @@ class EFilm {
     }
 
 
-    // metodo che restituisce una locandina più piccola dell'originale passata per parametro
-    // TODO: implementare con del codice che abbia senso, volendo mettere un parametro % di resize passato per parametro
-    public static function resizeLocandina(string $locandina): string {
-        return $locandina;
+    /* metodo che restituisce una locandina più piccola dell'originale (che verrà passata per parametro e
+    caricata dal DB) se si setta il parametro $grande a false oppure non si setta affatto.
+    (ciò che deve essere passato al metodo è quindi del tipo $array[0], dove $array è il ritornato da
+    FFilm::loadLocandina).
+    Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
+    statici di questa classe */
+    public static function resizeLocandina(?string $locandinaDaQuery, bool $grande): ?object {
+
+        /* il film potrebbe non avere la locandina, in questo modo se la query trova il suo valore a null
+        restituirà sempre null */
+        if(is_null($locandinaDaQuery))
+            return null;
+
+        // crea la GdImage $locandina dalla stringa presa dal db come blob e prende larghezza e lunghezza
+        $locandina = imagecreatefromstring($locandinaDaQuery);
+
+        // questa riga è necessaria così anche la locandina che non ha subito il resize sarà di tipo GdImage
+        if($grande) return $locandina;
+
+        $larghezzaImmagine = imagesx($locandina);
+        $lunghezzaImmagine = imagesy($locandina);
+
+        // preparazione nuova locandina
+        $locandinaRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
+
+        // setta $locandinaRidimensionata con tutti i parametri
+        imagecopyresampled($locandinaRidimensionata, $locandina, 0, 0, 0, 0,
+            self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+
+        // si svuota la variabile (fanno tutti così!)
+        imagedestroy($locandina);
+
+        // questa è per provare che il resize funzioni, salva su file system
+        // imagejpeg($locandinaRidimensionata, "/Users/giacomoalfani/Downloads/locandinaRidimensionata.jpeg", 100);
+
+        // anche questa è per provare, stampa su browser (o console Phpstorm)
+        // imagejpeg($locandinaRidimensionata, null, 100);
+
+        // la locandina ritornata è una GdImage che quindi dovrà essere poi visualizzata in base al image/type appropriato
+        return $locandinaRidimensionata;
     }
 }

@@ -958,11 +958,17 @@ class FMember {
 
             if($queryResultMember) {
                 // se $grande è settato a true si caricherà l'immagine profilo grande
+                // il resize gestisce anche il null come input ;)
                 if($grande)
-                    $immagineProfilo = $queryResultMember[self::$nomeAttributoImmagineProfilo];
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
+                        true);
                 else
-                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo]);
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
+                        false);
 
+                /* occhio che $immagineProfilo sarà di tipoGdImage!!!!
+                si è considerato che la query potrebbe restituire un immagine profilo null, in quel caso faremo un
+                display di una immagine neutra, il classico omino in bianco e nero */
                 return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo],
                     $queryResultMember[self::$nomeAttributoSizeImmagineProfilo]);
             }
@@ -1003,10 +1009,22 @@ class FMember {
             print("Il file caricato è troppo grande!");
             return;
         }
+
+        // inizio piccola modifica, da testare
+        if($nuovoTipoImmagine == "image/jpeg")
+            $immagine = imagecreatefromjpeg($nuovaImmagine);
+        elseif($nuovoTipoImmagine == "image/png")
+            $immagine = imagecreatefrompng($nuovaImmagine);
+        else {
+            print("Formato non valido!");
+            return;
+        }
+        // fine piccola modifica
+
         // prendo il contenuto grezzo dell'immagine
-        $immagine = file_get_contents($nuovaImmagine);
+        $immagineContenuto = file_get_contents($immagine);
         // eseguo l'escape
-        $immagine = addslashes($immagine);
+        $immagineDaSalvare = addslashes($immagineContenuto);
 
         if((FUser::exist($member->getUsername()))) {
             $pdo = FConnectionDB::connect();
@@ -1014,7 +1032,7 @@ class FMember {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $immagine . "', " .
+                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $immagineDaSalvare . "', " .
                     self::$nomeAttributoTipoImmagineProfilo . " = '" . $nuovoTipoImmagine . "', " .
                     self::$nomeAttributoSizeImmagineProfilo . " = '" . $nuovaSizeImmagine . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
