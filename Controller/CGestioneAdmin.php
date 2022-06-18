@@ -40,7 +40,7 @@ class CGestioneAdmin{
 
     /*
     L'admin vuole modificare un attributo di un film,
-    url localhost/admin/modificafilm/id
+    url localhost/admin/id/modificafilm
     */
     public static function modificaFilm(int $id): void{
         //verifica che sei l'admin
