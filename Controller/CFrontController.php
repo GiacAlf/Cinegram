@@ -1,10 +1,5 @@
 <?php
-require_once "CInterazioneFilm.php";
-require_once "CHomepage.php";
-require_once "CInterazioneMember.php";
-require_once "CLogin.php";
-require_once "CGestioneProfilo.php";
-require_once "CGestioneAdmin.php";
+require_once "Utility/autoload.php";
 
 class CFrontController {
 
@@ -16,7 +11,7 @@ class CFrontController {
         switch ($arraypath[0]) {
 
             case("film"):
-                $controllore = "CInterazione".$arraypath[0];
+                $controllore = "CInterazioneFilm";
                 array_shift($arraypath);
                 if($arraypath[0][0] == "?" && count($arraypath) == 1) {
                     $metodo = "cercaFilm";
