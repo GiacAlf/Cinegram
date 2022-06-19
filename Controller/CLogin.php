@@ -1,8 +1,10 @@
 <?php
 
 class CLogin {
-    /* metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
-    propongo una url localhost/login/accesso(-1) */
+    /*
+    metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
+    propongo una url localhost/login/accesso
+     */
     public static function verificaLogin(): void{
         /* recupero i dati dalla view in $POST[username] e $POST[password]
         */
@@ -64,8 +66,10 @@ class CLogin {
     }
 
 
-    //TODO: metodo che chiama unicamente la pagina del Login(VLogin)
-    //piccola bozza, poi matte' miglioralo tu, l'url può essere localhost/login
+    /*
+     metodo che serve solo a caricare soltanto la pagina di login
+    url: localhost/login
+     */
     public static function paginaLogin(): void{
         $view = new VLogin();
         $view->avviaPaginaLogin();

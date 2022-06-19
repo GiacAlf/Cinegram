@@ -35,10 +35,6 @@ class CInterazioneMember {
         $view = new VMembers();
         //caricare di tutti i members le locandine small
 
-        /*print_r($ultimeAttivita);
-        print_r($ultimeAttivita);
-        print_r($utentiPiuPopolari);
-        */
         //ridai un booleano identificato. TRUE se è member registrato, FALSE se non lo è
         //carica le foto per ogni utente (avatar piccolo)
         //al metodo della view vengono passati comunque due array, un booleano e le foto poi
@@ -76,9 +72,8 @@ class CInterazioneMember {
     }
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
-    l'utente in sessione potra' seguire il member, sara' una richiesta in post
-    al seguente url localhost/member/username=.../-1, lo username da seguire lo dara' il bottone
-    cliccato. */
+    l'utente in sessione potra' seguire il member, sara' una richiesta in get
+    al seguente url localhost/member/username/follow */
     public static function seguiMember(string $username): void{
 
         //verificare che l'utente sia registrato
@@ -101,9 +96,8 @@ class CInterazioneMember {
 
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
-    l'utente in sessione potra' unfolloware il member, sara' una richiesta in post
-    al seguente url localhost/member/username=..../-2, lo username da unfolloware lo dara' il bottone
-    cliccato. */
+    l'utente in sessione potra' unfolloware il member, sara' una richiesta in get
+    al seguente url localhost/member/username/unfollow. */
 
     public static function unfollowMember(string $username): void{
 
@@ -127,8 +121,10 @@ class CInterazioneMember {
 
     }
 
-    //TODO: metodo per registrarsi
-    //url boh, qualcosa del tipo localhost/member/registrazione vedi tu matte' ahaha
+    /*
+    metodo che serve per far registrare l'utente, ci sara' una form ed una richiesta fatta in post
+    alla seguente url : localhost/member/registrazione
+    */
     public static function registrazione(): void{
         $view = new VLogin();
         $array_credenziali = $view->RegistrazioneCredenziali();
@@ -152,9 +148,10 @@ class CInterazioneMember {
     }
 
 
-    //TODO:metodo cercaMember -> si guardi il metodo cercaFilm in CInterazioneFilm
-    //url sarà tipo localhost/member/?username=.... poi vedi tu matte' sia se il metodo è corretto
-    //sia se l'url è ok
+    /*
+     richiesta in get con url  localhost/member/username, viene chiamato quando nella barra di ricerca
+    si vuole cercare un member passando il suo username
+    */
     public static function cercaMember(): void{
         /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
         //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come

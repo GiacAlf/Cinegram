@@ -3,19 +3,20 @@
 class CInterazioneFilm {
 
     /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
-    del tipo localhost/film?titolo=titanic
+    del tipo localhost/film?titolo=titanic fatta in get
+
     io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
-    tipo localhost/member/.... chiamo il cercaMember -> da fare per ora*/
+    tipo localhost/member/.... chiamo il cercaMember
+    */
     public static function cercaFilm(): void{
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
-        //$view = new VRicerca();
-        //$titolo = $view->eseguiRicerca();
-        //$tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
+        $view = new VRicerca();
+        $titolo = $view->eseguiRicerca();
+        $tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
         //per film o per persone
 
         $titolo="suspiria";
-        print("ciao");
-        /*$films = array();
+        $films = array();
         if ($tipo == "Film") {
             $films = FPersistentManager::load("EFilm", null, null, null,
                 null, null, $titolo, null, null, false);
@@ -41,7 +42,8 @@ class CInterazioneFilm {
     }
 
 
-    /*questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
+    /*
+     * questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
     sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
@@ -50,8 +52,7 @@ class CInterazioneFilm {
         $view = new VFilmSingolo();
         $film = FPersistentManager::load("EFilm",$id,null,null,
         null,null,null,null,true);
-        //$locandina=FPersistentManager::loadLocandina($film,true);
-        //print_r($film);
+        //$locandina=FPersistentManager::loadLocandina($film,true)
         /*qui dovro' passare alla view che fara' il display della pagina
         del film singolo
          */
@@ -65,9 +66,11 @@ class CInterazioneFilm {
         }
     }
 
-    /*questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione
+    /*
+     questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
-    localhost/recensione   */
+    localhost/recensione/idFilm
+    */
     public static function ScriviRecensione(int $idFilm): void{
 
         //verificare se lo username è loggato, dopo vedro' come fare.
@@ -99,7 +102,8 @@ class CInterazioneFilm {
     }
 
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
-    localhost/risposta/?usernameAutoreRecensione=...&id=.. i dati come nella recensione vengono passati con una form */
+    localhost/risposta/?usernameAutoreRecensione=...&id=..
+    i dati come nella recensione vengono passati con una form */
 
     public static function ScriviRisposta(): void{
         //anche qui dobbiamo verificare se l'utente è loggato
@@ -129,11 +133,8 @@ class CInterazioneFilm {
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
     }
 
-    /*metodo che verra' chiamato quando si vuole eliminare una recensione, adesso pero' dobbiamo fare
-    delle considerazioni per quanto riguarda la URL da associare. Htlm prevede solo i metodi get e post quindi
-    possiamo fare richieste solo con questi due, propongo di associargli localhost/recensione/id=.../-1 (sappiamo grazie
-    a -1 che chiameremo questo metodo), ovviamente in post -> qua la URL ha una sola chiave di recensione, ma poi dovrà avere
-    anche l'altra chiave della recensione e cioè lo username autore per farla eliminare dall'admin */
+    /*metodo che verra' chiamato quando si vuole eliminare una recensione,
+    url localhost/recensione/idFilm/elimina */
 
     public static function EliminaRecensione(): void{
 
@@ -155,10 +156,10 @@ class CInterazioneFilm {
     }
 
 
-    /*metodo che verra' chiamato quando si vuole eliminare una risposta
-    , propongo di associare ,localhost/risposta/data/elimina, come fatto sopra. (sappiamo grazie
-   a -1 che chiameremo questo metodo), ovviamente in post-> qua la URL ha una sola chiave di risposta, ma poi dovrà avere
-    anche l'altra chiave della risposta e cioè lo username autore per farla eliminare dall'admin */
+    /*
+      metodo che verra' chiamato quando si vuole eliminare una risposta
+    , propongo di associare ,localhost/risposta/data/elimina, come fatto sopra.
+     */
 
     public static function EliminaRisposta(DateTime $data): void{
 
@@ -180,8 +181,10 @@ class CInterazioneFilm {
     }
 
 
-    /* supponendo ci sia un pulsante per caricare le risposte della recensione (Vedi risposte)
-    allora associamo una url localhost/risposte/id=...&username=.... in post */
+    /*
+    supponendo ci sia un pulsante per caricare le risposte della recensione
+    allora associamo una url localhost/risposte/?id=...&username=....
+     */
     public static function caricaRisposte(): void{
 
         //leggere dalla view corrispondente i dati inviati, saranno la chiave che identifica la recensione
@@ -198,9 +201,10 @@ class CInterazioneFilm {
         Sì, dovrebbe essere il js a fare sta roba, si spera*/
     }
 
-    /*metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/id=.../-1 , non possiamo scrivere /localhost/film/id si confonde
-    con caricafilm , metodo post*/
+    /*
+     * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
+    propongo anche qui una url particolare: localhost/film/id/vedi
+    */
     public static function vediFilm(): void{
         //controllo se utente è loggato
         //if(SessionHelper::isLogged()){
@@ -217,9 +221,10 @@ class CInterazioneFilm {
     }
 
 
-    /*metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/id=.../-2 , non possiamo scrivere /localhost/film/id si confonde
-    con caricafilm ,metodo post */
+    /*
+     metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
+    propongo anche qui una url particolare: localhost/film/id/toglivisto
+    */
     public static function rimuoviFilmVisto(): void{
         //controllo se utente è loggato
         //if(SessionHelper::isLogged()){
