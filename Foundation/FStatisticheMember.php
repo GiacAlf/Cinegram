@@ -244,7 +244,7 @@ class FStatisticheMember {
             $arrayPopolari[] = $arrayFollower[$i];
             $arrayPopolari[] = $arrayRisposteRecenti[$i];
         }
-        $arrayPopolari = array_unique($arrayPopolari);
+        $arrayPopolari = array_unique($arrayPopolari, SORT_REGULAR);
         // si prendono i primi $numeroDiEstrazioni elementi
         $arrayPopolari = array_slice($arrayPopolari, 0, $numeroDiEstrazioni, false);
         shuffle($arrayPopolari);
