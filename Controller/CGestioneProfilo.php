@@ -2,8 +2,9 @@
 
 class CGestioneProfilo {
 
-    /* metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
-    bottone da premere), inviera' una url localhost/profilo
+    /*
+    metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
+    bottone da premere), inviera' una url localhost/profilo in get
     */
     public static function caricaProfilo(): void{
         //if(SessionHelper::isLogged()){
@@ -22,9 +23,11 @@ class CGestioneProfilo {
         $view->avviaPaginaUtente($member, $filmVisti, $following, $follower);
     }
 
-    /*l'utente vuole aggiornare la sua immagine di profilo(ne mettiamo una di default,il classico avatar grigio di tutti i profili)
+    /*
+    l'utente vuole aggiornare la sua immagine di profilo(ne mettiamo una di default,il classico avatar grigio di tutti i profili)
     dopo imposteremo questa cosa, ovvero se nel db non ne troviamo caricata nessuna, mettiamo quella di default. L'utente carichera'
-    la foto con la form per i file vista a lezione. Url localhost/profilo/1  */
+    la foto con la form per i file vista a lezione. Url localhost/profilo/aggiornaimmagine
+    */
 
     public static function aggiornaImmagineProfilo(): void{
 
@@ -58,9 +61,10 @@ class CGestioneProfilo {
         header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
     }
 
-    /* L'utente vuole modificare la sua bio, di default all'iscrizione ne faremo mettere una oppure
+    /*
+     *  L'utente vuole modificare la sua bio, di default all'iscrizione ne faremo mettere una oppure
     mettiamo stringa vuota e le deve modificare lui la prima volta tramite questo metodo(?), da vedere.
-    Associamo una richiesta http fatta in post con url localhost/profilo/2
+    Associamo una richiesta http fatta in get con url localhost/profilo/aggiornabio
 
     */
     public static function aggiornaBioProfilo(): void{
@@ -87,8 +91,10 @@ class CGestioneProfilo {
 
     }
 
-    /*l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
-    localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password */
+    /*
+    l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
+    localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password
+    */
 
     public static function aggiornaPasswordMember(): void{
         /*recupero della nuova password dalla form, ma questa funzione puo' essere

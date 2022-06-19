@@ -3,14 +3,14 @@
 class CGestioneAdmin{
 
     /*
-     *  una volta che l'admin è loggato per andare alla sua pagina,
-     * url localhost/admin
+       una volta che l'admin è loggato per andare alla sua pagina,
+       url localhost/admin
      */
     public static function caricaPaginaAdmin(): void{
         //controllare se sei l'admin
         $view = new VAdmin();
         // $admin dalla sessione
-        $view->avviaPaginaAdmin($admin);
+        //$view->avviaPaginaAdmin($admin);
     }
 
     /*
@@ -79,8 +79,7 @@ class CGestioneAdmin{
 
     /*
      metodo che serve all'admin quando vuole eliminare una recensione di un member.
-    Url localhost/admin/rimuoviRecensione...... anche qui username e id film vengono inviati nella url(?)
-    quindi nel template dobbiamo mettere anche una url per l'admin(?)(vedere bene, non ho troppo le idee chiare)
+    Url localhost/admin/rimuoviRecensione fatta in post i dati vengono inviati nel body della richiesta
     */
     public static function rimuoviRecensione(): void{
 
@@ -94,7 +93,7 @@ class CGestioneAdmin{
 
     }
 
-     //idem come sopra()
+     //idem come sopra() url localhost/admin/risposta
     public static function rimuoviRisposta(): void{
 
         //qualcuno mi procurera' i dati
