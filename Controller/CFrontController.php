@@ -18,7 +18,7 @@ class CFrontController {
             case("film"):
                 $controllore = "CInterazione".$arraypath[0];
                 array_shift($arraypath);
-                if ($arraypath[0][0] == "?" && count($arraypath) == 1){
+                if($arraypath[0][0] == "?" && count($arraypath) == 1) {
                     $metodo = "cercaFilm";
                     $controllore::$metodo();
                     return;
@@ -28,71 +28,71 @@ class CFrontController {
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
-                elseif($arraypath[1] == "vedi" && count($arraypath) == 2){
-                    $metodo="vediFilm";
+                elseif($arraypath[1] == "vedi" && count($arraypath) == 2) {
+                    $metodo = "vediFilm";
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
-                elseif ($arraypath[1] == "toglivisto" && count($arraypath) == 2){
-                    $metodo="rimuoviFilmVisto";
+                elseif($arraypath[1] == "toglivisto" && count($arraypath) == 2) {
+                    $metodo = "rimuoviFilmVisto";
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
                 else{
-                    print ("errore 405");
+                    print("errore 405");
                     return;
                 }
 
             case("films"):
-                if(count($arraypath) > 1){
-                    print ("errore 405");
+                if(count($arraypath) > 1) {
+                    print("errore 405");
                     return;
                 }
-                $controllore="CInterazionefilm";
-                $metodo="caricaFilms";
+                $controllore = "CInterazionefilm";
+                $metodo = "caricaFilms";
                 $controllore::$metodo();
                 break;
 
             case("recensione"):
                 $controllore="CInterazionefilm";
                 array_shift($arraypath);
-                if(count($arraypath) == 1){
+                if(count($arraypath) == 1) {
                     $metodo = "ScriviRecensione";
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
-                elseif ($arraypath[1] == "elimina" && count($arraypath) == 2){
+                elseif ($arraypath[1] == "elimina" && count($arraypath) == 2) {
                     $metodo="EliminaRecensione";
                     $controllore::$metodo($arraypath[0]);
                     return;
                 }
                 else{
-                    print ("errore 405");
+                    print("errore 405");
                     return;
                 }
 
             case("risposta"):
                 $controllore = "CInterazionefilm";
                 array_shift($arraypath);
-                if ($arraypath[0][0] == "?" && count($arraypath) == 1){
+                if($arraypath[0][0] == "?" && count($arraypath) == 1) {
                     $metodo = "ScriviRisposta";
                     $controllore::$metodo();
                     return;
                 }
                 elseif($arraypath[1] == "elimina" && count($arraypath) == 2) {
                     $metodo = "EliminaRisposta";
-                    $data=ERisposta::ConvertiFormatoUrlInData($arraypath[0]);
+                    $data = ERisposta::ConvertiFormatoUrlInData($arraypath[0]);
                     $controllore::$metodo($data);
                     return;
                 }
                 else {
-                    print ("errore 405");
+                    print("errore 405");
                     return;
                 }
 
             case("risposte"):
                 array_shift($arraypath);
-                if($arraypath[0][0] == "?" && count($arraypath) == 1){
+                if($arraypath[0][0] == "?" && count($arraypath) == 1) {
                 $controllore = "CInterazionefilm";
                 $metodo = "caricaRisposte";
                 $controllore::$metodo();
@@ -101,11 +101,10 @@ class CFrontController {
                 else {
                     print("errore 405");
                     return;
-
                 }
 
             case("homepage"):
-                if(count($arraypath) > 1){
+                if(count($arraypath) > 1) {
                     print("errore 405");
                     return;
                 }
@@ -118,23 +117,23 @@ class CFrontController {
             case("member"):
                 $controllore = "CInterazioneMember";
                 array_shift($arraypath);
-                    if ($arraypath[1] == "follow" && count($arraypath) == 2){
+                    if($arraypath[1] == "follow" && count($arraypath) == 2) {
                         $metodo = "seguiMember";
                         $controllore::$metodo($arraypath[0]);
                         return;
                     }
-                    elseif ($arraypath[1] == "unfollow" && count($arraypath) == 2){
-                        $metodo="unfollowMember";
+                    elseif($arraypath[1] == "unfollow" && count($arraypath) == 2) {
+                        $metodo = "unfollowMember";
                         $controllore::$metodo($arraypath[0]);
                         return;
                     }
                     elseif($arraypath[0] == "registrazione" && count($arraypath) == 1) {
-                        $metodo="registrazione";
+                        $metodo = "registrazione";
                         $controllore::$metodo();
                         return;
                     }
                     elseif(count($arraypath) == 1) {
-                        $metodo="caricaMember";
+                        $metodo = "caricaMember";
                         $controllore::$metodo($arraypath[0]);
                         return;
                     }
@@ -146,22 +145,22 @@ class CFrontController {
 
             case("members"):
                 $controllore="CInterazioneMember";
-                if(count($arraypath) > 1){
+                if(count($arraypath) > 1) {
                     print("errore 405");
                     return;
                 }
-                $metodo="caricaMembers";
+                $metodo = "caricaMembers";
                 $controllore::$metodo();
                 break;
 
             case("login"):
                 $controllore = "CLogin";
-                if (count($arraypath) == 2 && $arraypath[1] == "accesso"){
+                if(count($arraypath) == 2 && $arraypath[1] == "accesso") {
                     $metodo = "verificaLogin";
                     $controllore::$metodo();
                     return;
                 }
-                elseif(count($arraypath) == 1){
+                elseif(count($arraypath) == 1) {
                     $metodo = "paginaLogin";
                     $controllore::$metodo();
                     return;
@@ -172,58 +171,59 @@ class CFrontController {
                 }
 
             case("logout"):
-                if(count($arraypath) > 1){
+                if(count($arraypath) > 1) {
                     print("errore 405");
                     return;
                 }
                 $controllore = "CLogin";
                 $metodo = "logoutMember";
                 $controllore::$metodo();
+                break;
 
             case("admin"):
                 $controllore = "CGestioneAdmin";
-                if (count($arraypath) == 1){
+                if(count($arraypath) == 1) {
                     $metodo="caricaPaginaAdmin";
                     $controllore::$metodo();
                     return;
                 }
-                elseif (count($arraypath) == 2 && $arraypath[1] == "caricafilm"){
+                elseif(count($arraypath) == 2 && $arraypath[1] == "caricafilm") {
                     $metodo = "caricaFilm";
                     $controllore::$metodo();
                     return;
 
                 }
-                elseif (count($arraypath) == 2 && $arraypath[1] == "recensione"){
+                elseif(count($arraypath) == 2 && $arraypath[1] == "recensione") {
                     $metodo = "rimuoviRecensione";
                     $controllore::$metodo();
                     return;
 
                 }
-                elseif (count($arraypath) == 2 && $arraypath[1] == "risposta"){
+                elseif(count($arraypath) == 2 && $arraypath[1] == "risposta") {
                     $metodo = "rimuoviRisposta";
                     $controllore::$metodo();
                     return;
 
                 }
-                elseif (count($arraypath) == 3 && $arraypath[2] == "ammonisci"){
+                elseif(count($arraypath) == 3 && $arraypath[2] == "ammonisci") {
                     $metodo="ammonisciUser";
                     $controllore::$metodo($arraypath[1]);
                     return;
 
                 }
-                elseif (count($arraypath) == 3 && $arraypath[2] == "sbanna"){
+                elseif(count($arraypath) == 3 && $arraypath[2] == "sbanna") {
                     $metodo = "sbannaUser";
                     $controllore::$metodo($arraypath[1]);
                     return;
 
                 }
-                elseif (count($arraypath) == 3 && $arraypath[2] == "togliammonizione"){
+                elseif(count($arraypath) == 3 && $arraypath[2] == "togliammonizione") {
                     $metodo = "togliAmmonizione";
                     $controllore::$metodo($arraypath[1]);
                     return;
 
                 }
-                else{
+                else {
                     print("errore 405");
                     return;
                 }
@@ -231,7 +231,7 @@ class CFrontController {
 
             case("profilo"):
                 $controllore = "CGestioneProfilo";
-                if(count($arraypath) == 1){
+                if(count($arraypath) == 1) {
                     $metodo = "caricaProfilo";
                     $controllore::$metodo();
                     return;
@@ -241,73 +241,21 @@ class CFrontController {
                     $controllore::$metodo();
                     return;
                 }
-                elseif ($arraypath[1] == "aggiornabio" && count($arraypath) == 2){
+                elseif($arraypath[1] == "aggiornabio" && count($arraypath) == 2) {
                     $metodo = "aggiornaBioProfilo";
                     $controllore::$metodo();
                     return;
                 }
-                elseif($arraypath[1] == "aggiornapw" && count($arraypath) == 2){
+                elseif($arraypath[1] == "aggiornapw" && count($arraypath) == 2) {
                     $metodo="aggiornaPasswordMember";
                     $controllore::$metodo();
                     return;
                 }
-                else{
+                else {
                     print("errore 405");
                     return;
                 }
-                break;
         }
         print("errore 404");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
