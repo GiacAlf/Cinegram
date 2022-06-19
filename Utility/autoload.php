@@ -14,11 +14,11 @@ function autoload($className) {
             break;
 
         case 'V':
-            $fileName = ('/View/' . $className . '.php');
+            $fileName = ('View/' . $className . '.php');
             break;
 
         case 'C':
-            $fileName = ('/Controller/' . $className . '.php');
+            $fileName = ('Controller/' . $className . '.php');
             break;
     }
 
