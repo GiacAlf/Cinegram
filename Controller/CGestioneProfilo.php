@@ -120,4 +120,10 @@ class CGestioneProfilo {
         //notifica che sto a salva le robe
         header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
     }
+
+    //TODO: modificare metodo
+    public static function modificaProfilo(){
+        //prendo l'utente dalla sessione
+        //faccio vedere il template
+    }
 }

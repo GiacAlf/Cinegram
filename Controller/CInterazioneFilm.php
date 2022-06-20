@@ -263,4 +263,33 @@ class CInterazioneFilm {
         //far fare il display della pagina alla view
         $view->avviaPaginaFilms($filmPiuVisti, $filmPiuRecensiti, $filmVotoMedioPiuAlto, $filmPiuRecenti);
     }
+
+    //TODO: tornare su questi metodi
+    public static function mostraRecensione(int $idFilm, string $usernameAutore){
+        //fa vedere il template associato
+    }
+
+    public static function modificaRecensione(int $idFilm, string $usernameAutore){
+        //fa vedere il template associato
+    }
+
+    public static function modificaRisposta(string $usernameAutore, string $data){
+        //fa vedere il template associato
+    }
+
+    //chiamato quando si chiama il bottone
+    public static function salvaRecensione(int $idFilm, string $usernameAutore){
+        //roba gliela passa la view
+        //fa l'update
+    }
+
+    //chiamato quando si chiama il bottone
+    public static function salvaRisposta(string $usernameAutore, string $data){
+        //roba gliela passa la view
+        //fa l'update
+    }
+
+
+
+
 }
