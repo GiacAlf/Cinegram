@@ -12,8 +12,8 @@ class EMember extends EUser {
     /* i prossimi due parametri servono per il ridimensionamento dell'immagine profilo in formato piccolo, in caso di futuri
     cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
     funzione di resize per scegliere la dimensione che si desidererà */
-    private static int $larghezzaDesiderata = 100;  // in pixel
-    private static int $altezzaDesiderata = 100;    // in pixel
+    private static int $larghezzaDesiderata = 80;  // in pixel
+    private static int $altezzaDesiderata = 80;    // in pixel
 
 
     // quando si crea ex novo i warning saranno sempre zero
