@@ -24,7 +24,7 @@ class VHomePage
         $this->smarty->assign('film_recensiti', $film_recensiti);
         $this->smarty->assign('ultime_recensioni', $ultime_recensioni);
         $this->smarty->assign('utenti_popolari', $utenti_popolari);
-        $this->smarty->display('home_page.tpl');
+        $this->smarty->display('page.tpl');
         //passo gli interi array a smarty, che poi si preoccuperà di prendere le robe che gli interessano
     }
 
