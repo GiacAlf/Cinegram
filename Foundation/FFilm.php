@@ -788,7 +788,7 @@ class FFilm {
             print("Formato non valido!");
             return;
         }
-        fine piccola modifica */
+        */ //fine piccola modifica
 
         // prendo il contenuto grezzo dell'immagine
         //$locandinaContenuto = file_get_contents($locandina);
