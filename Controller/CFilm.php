@@ -1,6 +1,6 @@
 <?php
 
-class CInterazioneFilm {
+class CFilm {
 
     /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
     del tipo localhost/film?titolo=titanic fatta in get
@@ -8,7 +8,7 @@ class CInterazioneFilm {
     io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
     tipo localhost/member/.... chiamo il cercaMember
     */
-    public static function cercaFilm(): void{
+    public static function cercaFilm(string $titolo): void{
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
         $view = new VRicerca();
         $titolo = $view->eseguiRicerca();
@@ -47,7 +47,7 @@ class CInterazioneFilm {
     sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
-    public static function CaricaFilm(int $id): void{
+    public static function caricaFilm(int $id): void{
         //restituzione del film completo
         $view = new VFilmSingolo();
         $film = FPersistentManager::load("EFilm",$id,null,null,
@@ -71,7 +71,7 @@ class CInterazioneFilm {
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
     localhost/recensione/idFilm
     */
-    public static function ScriviRecensione(int $idFilm): void{
+    public static function scriviRecensione(int $idFilm): void{
 
         //verificare se lo username è loggato, dopo vedro' come fare.
         //if(SessionHelper::isLogged()){
@@ -105,7 +105,7 @@ class CInterazioneFilm {
     localhost/risposta/?usernameAutoreRecensione=...&id=..
     i dati come nella recensione vengono passati con una form */
 
-    public static function ScriviRisposta(): void{
+    public static function scriviRisposta(string $usernameAutoreRecensione, string $data): void{
         //anche qui dobbiamo verificare se l'utente è loggato
 
         //chiamo la view che mi restituisce i dati per la creazione della risposta(presi dalla form)
@@ -136,7 +136,7 @@ class CInterazioneFilm {
     /*metodo che verra' chiamato quando si vuole eliminare una recensione,
     url localhost/recensione/idFilm/elimina */
 
-    public static function EliminaRecensione(): void{
+    public static function eliminaRecensione(int $id): void{
 
         //verificare se utente è loggato
         //if(SessionHelper::isLogged()){
@@ -161,7 +161,7 @@ class CInterazioneFilm {
     , propongo di associare ,localhost/risposta/data/elimina, come fatto sopra.
      */
 
-    public static function EliminaRisposta(DateTime $data): void{
+    public static function eliminaRisposta(string $data): void{
 
         //verificare utente loggato
         //if(SessionHelper::isLogged()){
@@ -185,7 +185,7 @@ class CInterazioneFilm {
     supponendo ci sia un pulsante per caricare le risposte della recensione
     allora associamo una url localhost/risposte/?id=...&username=....
      */
-    public static function caricaRisposte(): void{
+    public static function caricaRisposte(string $usernameAutoreRecensione, int $id): void{
 
         //leggere dalla view corrispondente i dati inviati, saranno la chiave che identifica la recensione
         //quindi usernameAutore e idfilm
@@ -205,7 +205,7 @@ class CInterazioneFilm {
      * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
     propongo anche qui una url particolare: localhost/film/id/vedi
     */
-    public static function vediFilm(): void{
+    public static function vediFilm(int $id): void{
         //controllo se utente è loggato
         //if(SessionHelper::isLogged()){
         //  $username = SessionHelper::getUtente()->getUsername();
@@ -225,7 +225,7 @@ class CInterazioneFilm {
      metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
     propongo anche qui una url particolare: localhost/film/id/toglivisto
     */
-    public static function rimuoviFilmVisto(): void{
+    public static function rimuoviFilm(int $id): void{
         //controllo se utente è loggato
         //if(SessionHelper::isLogged()){
         //  $username = SessionHelper::getUtente()->getUsername();

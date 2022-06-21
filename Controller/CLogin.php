@@ -16,7 +16,7 @@ class CLogin {
             $view_errore = new VErrore();
             $view_errore->error(1);
         }
-        else { //[Damiano] forse ho sbagliato questo if else, è giusto???? -> il dubbio mi viene dal metodo Registrazione in CInterazioneMember
+        else { //[Damiano] forse ho sbagliato questo if else, è giusto???? -> il dubbio mi viene dal metodo Registrazione in CMember
             $username = "martin"; // = $array_credenziali[0]
             $password = "scorsese"; // = $array_credenziali[1]
         }

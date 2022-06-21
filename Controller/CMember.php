@@ -1,6 +1,6 @@
 <?php
 
-class CInterazioneMember {
+class CMember {
 
     /*
      L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
@@ -74,7 +74,7 @@ class CInterazioneMember {
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in get
     al seguente url localhost/member/username/follow */
-    public static function seguiMember(string $username): void{
+    public static function followMember(string $username): void{
 
         //verificare che l'utente sia registrato
         //if(SessionHelper::isLogged()){
@@ -125,7 +125,7 @@ class CInterazioneMember {
     metodo che serve per far registrare l'utente, ci sara' una form ed una richiesta fatta in post
     alla seguente url : localhost/member/registrazione
     */
-    public static function registrazione(): void{
+    public static function registrazioneMember(): void{
         $view = new VLogin();
         $array_credenziali = $view->RegistrazioneCredenziali();
         if($array_credenziali[0] == null || $array_credenziali[1] == null){
@@ -152,7 +152,7 @@ class CInterazioneMember {
      richiesta in get con url  localhost/member/username, viene chiamato quando nella barra di ricerca
     si vuole cercare un member passando il suo username
     */
-    public static function cercaMember(): void{
+    public static function cercaMember(string $username): void{
         /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
         //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come
         //avevamo discusso l'url nella riunione del 14/6
