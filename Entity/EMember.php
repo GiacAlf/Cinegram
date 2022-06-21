@@ -166,7 +166,50 @@ class EMember extends EUser {
     FMember::loadImmagineProfilo).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeImmagineProfilo(?string $immagineDaQuery, bool $grande): ?object {
+    public static function resizeImmagineProfilo(?string $immagineDaQuery, bool $grande): ?string {
+
+        /* il member potrebbe non aver caricato l'immagine, in questo modo se la query trova il suo valore a null
+        restituirà sempre null */
+        if(is_null($immagineDaQuery))
+            return null;
+
+        // questa riga è necessaria così anche l'immagine che non ha subito il resize sarà di tipo GdImage
+        if($grande) return base64_encode($immagineDaQuery);
+
+        $immagine = imagecreatefromstring($immagineDaQuery);
+        $larghezzaImmagine = imagesx($immagine);
+        $lunghezzaImmagine = imagesy($immagine);
+
+        // preparazione nuova immagine
+        $immagineRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
+
+        // setta $immagineRidimensionata con tutti i parametri
+        imagecopyresampled($immagineRidimensionata, $immagine, 0, 0, 0, 0,
+            self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+
+        // si svuota la variabile (fanno tutti così!)
+        imagedestroy($immagine);
+
+        // questa è per provare che il resize funzioni, salva su file system
+        // imagejpeg($immagineRidimensionata, "/Users/giacomoalfani/Downloads/immagineRidimensionata.jpeg", 100);
+
+        // anche questa è per provare, stampa su browser (o console Phpstorm)
+        // imagejpeg($immagineRidimensionata, null, 100);
+
+        //$immagineRidimensionata = imagecrop()
+
+        // l'immagine ritornata è una GdImage che quindi dovrà essere poi visualizzata in base al image/type appropriato
+        return $immagineRidimensionata;
+    }
+
+
+    /* metodo che restituisce un immagine profilo più piccola dell'originale (che verrà passata per parametro e
+    caricata dal DB) se si setta il parametro $grande a false oppure non si setta affatto.
+    (ciò che deve essere passato al metodo è quindi del tipo $array[0], dove $array è il ritornato da
+    FMember::loadImmagineProfilo).
+    Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
+    statici di questa classe */
+    public static function resizeImmagineProfiloVecchia(?string $immagineDaQuery, bool $grande): ?object {
 
         /* il member potrebbe non aver caricato l'immagine, in questo modo se la query trova il suo valore a null
         restituirà sempre null */

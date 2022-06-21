@@ -149,6 +149,5 @@
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>
-
 </body>
 </html>
