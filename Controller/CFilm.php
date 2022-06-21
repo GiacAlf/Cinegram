@@ -101,6 +101,58 @@ class CFilm {
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
     }
 
+    //localhost/film/mostra-recensione/id/usernameAutore
+    public static function mostraRecensione(int $idFilm, string $usernameAutore){
+        //fa vedere il template associato
+    }
+
+    //localhost/film/modifica-recensione/id/usernameAutore
+    public static function modificaRecensione(int $idFilm, string $usernameAutore){
+        //fa vedere il template associato
+    }
+
+
+    //localhost/film/salva-recensione/id/usernameAutore
+    public static function salvaRecensione(int $idFilm, string $usernameAutore){
+        //se ricevo il valore di testo allora salvo quello
+        $updatedText="prova aggiornamento";
+        $recensione = FPersistentManager::load("ERecensione",$idFilm ,$usernameAutore, null
+        ,null,null,null,null,false);
+        FPersistentManager::update($recensione , "testo",$updatedText,null,null,
+       null,null,null);
+
+
+       //se ricevo il voto aggiorno quello
+        $updatedVote=3;
+        FPersistentManager::update($recensione , "voto",$updatedVote,null,null,
+            null,null,null);
+
+    }
+
+
+    /*metodo che verra' chiamato quando si vuole eliminare una recensione,
+    url localhost/recensione/idFilm/elimina */
+
+    public static function eliminaRecensione(int $id): void{
+
+        //verificare se utente è loggato
+        //if(SessionHelper::isLogged()){
+        //  $username = SessionHelper::getUtente()->getUsername();
+        //}
+
+        /*avendo inviato in post la richiesta dovremmo sempre leggere
+        dalla view
+        ci facciamo inviare l'id del film ,che insieme allo usernameAutore(letto dalla sessione)
+        formano la chiave primaria che identifica la recensione */
+
+        $idFilm = 2; //recupero da Url
+        $usernameAutore = "pippo"; //recupero dalla sessione
+        FPersistentManager::delete("ERecensione", $usernameAutore,null,null, $idFilm,null);
+        //notifica che sto a salva le robe
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+    }
+
+
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
     localhost/risposta/?usernameAutoreRecensione=...&id=..
     i dati come nella recensione vengono passati con una form */
@@ -133,29 +185,6 @@ class CFilm {
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
     }
 
-    /*metodo che verra' chiamato quando si vuole eliminare una recensione,
-    url localhost/recensione/idFilm/elimina */
-
-    public static function eliminaRecensione(int $id): void{
-
-        //verificare se utente è loggato
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-        //}
-
-        /*avendo inviato in post la richiesta dovremmo sempre leggere
-        dalla view
-        ci facciamo inviare l'id del film ,che insieme allo usernameAutore(letto dalla sessione)
-        formano la chiave primaria che identifica la recensione */
-
-        $idFilm = 2; //recupero da Url
-        $usernameAutore = "pippo"; //recupero dalla sessione
-        FPersistentManager::delete("ERecensione", $usernameAutore,null,null, $idFilm,null);
-        //notifica che sto a salva le robe
-        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
-    }
-
-
     /*
       metodo che verra' chiamato quando si vuole eliminare una risposta
     , propongo di associare ,localhost/risposta/data/elimina, come fatto sopra.
@@ -178,6 +207,28 @@ class CFilm {
         //notifica che sto a salva le robe
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
 
+    }
+
+    //url localhost/film/modifica-risposta/usernameAutoreRecensione/data
+
+    public static function modificaRisposta(string $usernameAutore, string $data){
+        //fa vedere il template associato chiamando il metodo della view
+    }
+
+
+
+    /*
+    metodo che serve effettivamente a salvare la risposta modificata dal member
+    url localhost/film/salva-risposta/usernameAutoreRecensione/data
+    */
+    public static function salvaRisposta(string $usernameAutore, string $data){
+         //la view mi restituisce il testo, l'unica cosa da modificare nella risposta
+        $updatedText = "prova aggiornamento";
+        $data = ERisposta::ConvertiFormatoUrlInData($data);
+        $risposta = FPersistentManager::load("ERisposta",null,$usernameAutore,null,null,
+        null,null,$data,false);
+        FPersistentManager::update($risposta, null, $updatedText,null,
+        null,null,null,null);
     }
 
 
@@ -263,33 +314,6 @@ class CFilm {
         //far fare il display della pagina alla view
         $view->avviaPaginaFilms($filmPiuVisti, $filmPiuRecensiti, $filmVotoMedioPiuAlto, $filmPiuRecenti);
     }
-
-    //TODO: tornare su questi metodi
-    public static function mostraRecensione(int $idFilm, string $usernameAutore){
-        //fa vedere il template associato
-    }
-
-    public static function modificaRecensione(int $idFilm, string $usernameAutore){
-        //fa vedere il template associato
-    }
-
-    public static function modificaRisposta(string $usernameAutore, string $data){
-        //fa vedere il template associato
-    }
-
-    //chiamato quando si chiama il bottone
-    public static function salvaRecensione(int $idFilm, string $usernameAutore){
-        //roba gliela passa la view
-        //fa l'update
-    }
-
-    //chiamato quando si chiama il bottone
-    public static function salvaRisposta(string $usernameAutore, string $data){
-        //roba gliela passa la view
-        //fa l'update
-    }
-
-
 
 
 }

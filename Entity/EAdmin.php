@@ -16,49 +16,15 @@ class EAdmin extends EUser {
     }
 
 
-    public function ammonisciUser(string $usernameMemberDaAmmonire): void {
-
-        // si carica l'EMember
-        $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMemberDaAmmonire,null,
-        null, null ,null, null, false);
-        // calcolo dei warning attuali
-        $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
-        if($warningMemberDaAmmonire < self::$warningMassimi) {
-            $memberDaAmmonire->incrementaWarning();
-            if($memberDaAmmonire->getWarning() == self::$warningMassimi) {
-                $this->bannaUser($memberDaAmmonire);
-            }
-        }
-        else echo "\nL'utente è già bannato!";
+    public function ammonisciUser(string $usernameMemberDaAmmonire): void{
     }
+
 
 
     public function TogliAmmonizione(string $usernameMemberDaAmmonire): void { //potrebbe essere utile, magari vogliamo mettere
-        $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMemberDaAmmonire,null,
-            null, null ,null, null, false);
-        // calcolo dei warning attuali
-        $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
-        if ($warningMemberDaAmmonire>0)
-           $memberDaAmmonire->decrementaWarning();
-        else
-            print ("Errore");
-
-
-
 
     }
 
-
-    //metodo che dovrà evolversi con Foundation
-    private function bannaUser(EMember $member): void {
-        FPersistentManager::bannaUser($member->getUsername());
-
-            /* Quando l'admin banna l'utente dovra' vedere una schermata con scritto
-            sei stato bannato ed essere cacciato da Cinegram altrimenti lui se non slogga rimane all'infinito dentro
-            come nulla fosse successo -> quì si verrà reindirizzati alla pagine di login iniziale
-            */
-        echo "Utente bannato!";
-    }
 
 
     //qui invece id autogenerato??

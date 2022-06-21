@@ -116,9 +116,18 @@ class CAdmin{
         //recupero lo username dell'admin dalla sessione
         $username = "admin";
         $usernameMember = "matteo";
-        $admin = new EAdmin($username);
-        if(!FPersistentManager::userBannato($username))
-            $admin->ammonisciUser($usernameMember);
+        if(!FPersistentManager::userBannato($usernameMember)){
+            $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMember,null,
+                null, null ,null, null, false);
+            $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
+            if($warningMemberDaAmmonire < 3) {
+                FPersistentManager::incrementaWarning($usernameMember);
+                if($memberDaAmmonire->getWarning() == 3) {
+                    FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
+                }
+            }
+
+        }
         else
             print("Utente bannato");
     }
@@ -143,7 +152,7 @@ class CAdmin{
             else
             {
                 FPersistentManager::sbannaUser($username);
-                $admin->ammonisciUser($username);
+                FPersistentManager::decrementaWarning($username);
             }
         }
         else
@@ -157,14 +166,16 @@ class CAdmin{
     public static function togliAmmonizione($username): void{
         //verifica che sei l'admin
 
-        $username = "giangiacomo";
 
         $usernameAdmin = "alberto";
-        $admin = new EAdmin($usernameAdmin);
+        $memberDaAmmonire = FPersistentManager::load("EMember",null,$username,null,
+            null, null ,null, null, false);
+        // calcolo dei warning attuali
+        $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
 
-        if (!FPersistentManager::userBannato($username)){
+        if (!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire>0){
             if(FPersistentManager::tipoUserRegistrato($username)=="Member")
-                $admin->ammonisciUser($username);
+                FPersistentManager::decrementaWarning($username);
         }
         else
             print ("l'utente è bannato");
