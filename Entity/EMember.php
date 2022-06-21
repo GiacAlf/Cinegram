@@ -92,14 +92,12 @@ class EMember extends EUser {
 
     public function incrementaWarning(): void {
         $this->warning = $this->warning + 1;
-        FPersistentManager::incrementaWarning($this->username);
 
     }
 
 
     public function decrementaWarning(): void {
         $this->warning = $this->warning - 1;
-        FPersistentManager::decrementaWarning($this->username);
     }
 
 
