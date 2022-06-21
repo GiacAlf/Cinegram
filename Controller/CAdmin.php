@@ -115,10 +115,11 @@ class CAdmin {
         if(!FPersistentManager::userBannato($usernameMember)) {
             $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMember,null,
                 null, null ,null, null, false);
+
             $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
-            if($warningMemberDaAmmonire < 3) {
+            if($warningMemberDaAmmonire < EAdmin::$warningMassimi) {
                 FPersistentManager::incrementaWarning($usernameMember);
-                if($memberDaAmmonire->getWarning() == 3) {
+                if($memberDaAmmonire->getWarning() == EAdmin::$warningMassimi) {
                     FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                 }
             }
