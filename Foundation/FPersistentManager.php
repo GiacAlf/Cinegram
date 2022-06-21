@@ -155,6 +155,12 @@ class FPersistentManager {
     }
 
 
+    // ritorna true se lo $username ha visto il film dell'$idFilm fornito
+    public static function loHaiVisto(string $username, int $idFilm): ?bool {
+        return FMember::loHaiVisto( $username, $idFilm);
+    }
+
+
     public static function loadListaFollower(string $username): ?array {
         return FMember::loadListaFollower($username);
     }

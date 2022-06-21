@@ -131,9 +131,11 @@ class FMember {
             $filmResult = array();
             if($queryResult) {
                 foreach($queryResult as $row) {
+                    $numeroViews = FFilm::loadNumeroViews($row[self::$chiaveTabellaFilm]);
+                    $votoMedio = FFilm::loadVotoMedio($row[self::$chiaveTabellaFilm]);
                     $filmResult[] = new EFilm($row[self::$chiaveTabellaFilm], $row[self::$nomeAttributoFilmTitolo],
                         new DateTime($row[self::$nomeAttributoFilmAnno]), $row[self::$nomeAttributoFilmDurata],
-                        $row[self::$nomeAttributoFilmSinossi], null, null, null,
+                        $row[self::$nomeAttributoFilmSinossi], $numeroViews, $votoMedio, null,
                         null, null);
                 }
             }
@@ -144,6 +146,17 @@ class FMember {
             echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
         }
         return null;
+    }
+
+
+    // ritorna true se lo $username ha visto il film dell'$idFilm fornito
+    public static function loHaiVisto(string $username, int $idFilm): ?bool {
+
+        $filmVisti = FMember::loadListaFilmVisti($username);
+        $film = FFilm::loadById($idFilm, false, false, false);
+        if(in_array($film, $filmVisti))
+            return true;
+        return false;
     }
 
 
