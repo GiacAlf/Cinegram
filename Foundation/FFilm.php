@@ -778,7 +778,8 @@ class FFilm {
             return;
         }
 
-        // inizio piccola modifica, da testare
+        // TODO
+        /* inizio piccola modifica, da testare
         if($nuovoTipoLocandina == "image/jpeg")
             $locandina = imagecreatefromjpeg($nuovaLocandina);
         elseif($nuovoTipoLocandina == "image/png")
@@ -787,12 +788,13 @@ class FFilm {
             print("Formato non valido!");
             return;
         }
-        // fine piccola modifica
+        fine piccola modifica */
 
         // prendo il contenuto grezzo dell'immagine
-        $locandinaContenuto = file_get_contents($locandina);
+        //$locandinaContenuto = file_get_contents($locandina);
         // eseguo l'escape
-        $locandinaDaSalvare = addslashes($locandinaContenuto);
+        //$locandinaDaSalvare = addslashes($locandinaContenuto);
+        $locandinaDaSalvare = $nuovaLocandina;
 
         if((FFilm::existById($film))) {
             $pdo = FConnectionDB::connect();
