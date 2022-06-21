@@ -11,7 +11,7 @@ class CFrontController {
         switch ($arraypath[0]) {
 
             case("film"):
-                $controllore = "CInterazioneFilm";
+                $controllore = "CFilm";
                 array_shift($arraypath);
                 if($arraypath[0][0] == "?" && count($arraypath) == 1) {
                     $metodo = "cercaFilm";
@@ -110,7 +110,7 @@ class CFrontController {
 
 
             case("member"):
-                $controllore = "CInterazioneMember";
+                $controllore = "CMember";
                 array_shift($arraypath);
                     if($arraypath[1] == "follow" && count($arraypath) == 2) {
                         $metodo = "seguiMember";
@@ -139,7 +139,7 @@ class CFrontController {
 
 
             case("members"):
-                $controllore="CInterazioneMember";
+                $controllore="CMember";
                 if(count($arraypath) > 1) {
                     print("errore 405");
                     return;
@@ -176,7 +176,7 @@ class CFrontController {
                 break;
 
             case("admin"):
-                $controllore = "CGestioneAdmin";
+                $controllore = "CAdmin";
                 if(count($arraypath) == 1) {
                     $metodo="caricaPaginaAdmin";
                     $controllore::$metodo();
@@ -225,7 +225,7 @@ class CFrontController {
 
 
             case("profilo"):
-                $controllore = "CGestioneProfilo";
+                $controllore = "CProfilo";
                 if(count($arraypath) == 1) {
                     $metodo = "caricaProfilo";
                     $controllore::$metodo();

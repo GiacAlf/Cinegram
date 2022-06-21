@@ -3,25 +3,25 @@ require_once "AllClasses.php";
 //CHomepage::ImpostaHomePage();   problema con array_unique
 
 
-//CInterazioneFilm::cercaFilm("suspiria");
-//CInterazioneFilm::CaricaFilm(2);
-//CInterazioneFilm::ScriviRecensione();
-//CInterazioneFilm::ScriviRisposta();
+//CFilm::cercaFilm("suspiria");
+//CFilm::CaricaFilm(2);
+//CFilm::ScriviRecensione();
+//CFilm::ScriviRisposta();
 
 //non funzionano da rivedere, non mettono i risultati nelle rispettive tabelle
-//CInterazioneFilm::caricaRisposte();
-//CInterazioneFilm::vediFilm();
+//CFilm::caricaRisposte();
+//CFilm::vediFilm();
 
-//CInterazioneFilm::caricaFilms();
+//CFilm::caricaFilms();
 
 //(solito problema con array_unique di utenti piu popolari)
-//CInterazioneMember::caricaMembers();
+//CMember::caricaMembers();
 
 
-//CInterazioneMember::caricaMember("matteo");
-//CInterazioneMember::seguiMember();
-//CInterazioneMember::togliMember();
-//CInterazioneMember::loginMember();
-//CInterazioneMember::AggiornaPasswordMember();
+//CMember::caricaMember("matteo");
+//CMember::seguiMember();
+//CMember::togliMember();
+//CMember::loginMember();
+//CMember::AggiornaPasswordMember();
 
-//CGestioneProfilo::aggiornaBioProfilo();
+//CProfilo::aggiornaBioProfilo();

@@ -1,6 +1,6 @@
 <?php
 
-class CGestioneProfilo {
+class CProfilo {
 
     /*
     metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
@@ -29,7 +29,7 @@ class CGestioneProfilo {
     la foto con la form per i file vista a lezione. Url localhost/profilo/aggiornaimmagine
     */
 
-    public static function aggiornaImmagineProfilo(): void{
+    public static function aggiornaImmagine(): void{
 
         //verifica che l'utente sia registrato
         //if(SessionHelper::isLogged()){
@@ -67,7 +67,7 @@ class CGestioneProfilo {
     Associamo una richiesta http fatta in get con url localhost/profilo/aggiornabio
 
     */
-    public static function aggiornaBioProfilo(): void{
+    public static function aggiornaBio(): void{
 
         //verificare che l'utente è registrato e caricare il suo username dalla sessione
         //if(SessionHelper::isLogged()){
@@ -96,7 +96,7 @@ class CGestioneProfilo {
     localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password
     */
 
-    public static function aggiornaPasswordMember(): void{
+    public static function aggiornaPassword(): void{
         /*recupero della nuova password dalla form, ma questa funzione puo' essere
         chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
         //if(SessionHelper::isLogged()){

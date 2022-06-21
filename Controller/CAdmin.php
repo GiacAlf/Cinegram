@@ -1,12 +1,12 @@
 <?php
 
-class CGestioneAdmin{
+class CAdmin{
 
     /*
        una volta che l'admin è loggato per andare alla sua pagina,
        url localhost/admin
      */
-    public static function caricaPaginaAdmin(): void{
+    public static function caricaAmministrazione(): void{
         //controllare se sei l'admin
         $view = new VAdmin();
         // $admin dalla sessione
