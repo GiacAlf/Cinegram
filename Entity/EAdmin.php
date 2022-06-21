@@ -4,7 +4,6 @@ class EAdmin extends EUser {
 
     public static int $warningMassimi = 3;
 
-
     public function __construct(string $username) {
         $this->username = $username;
         $this->ioSono = "Admin";
@@ -20,11 +19,9 @@ class EAdmin extends EUser {
     }
 
 
-
-    public function TogliAmmonizione(string $usernameMemberDaAmmonire): void { //potrebbe essere utile, magari vogliamo mettere
+    public function TogliAmmonizione(string $usernameMemberDaAmmonire): void {
 
     }
-
 
 
     //qui invece id autogenerato??

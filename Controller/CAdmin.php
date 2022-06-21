@@ -1,12 +1,12 @@
 <?php
 
-class CAdmin{
+class CAdmin {
 
     /*
        una volta che l'admin è loggato per andare alla sua pagina,
        url localhost/admin
      */
-    public static function caricaAmministrazione(): void{
+    public static function caricaAmministrazione(): void {
         //controllare se sei l'admin
         $view = new VAdmin();
         // $admin dalla sessione
@@ -17,7 +17,7 @@ class CAdmin{
       metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
     localhost/admin/caricafilm
     */
-    public static function caricaFilm(): void{
+    public static function caricaFilm(): void {
         //prendere dalla view le informazioni del film
         //verifica che sei l'admin
         $titolo = "prova";
@@ -42,7 +42,7 @@ class CAdmin{
     L'admin vuole modificare un attributo di un film,
     url localhost/admin/id/modificafilm
     */
-    public static function modificaFilm(int $id): void{
+    public static function modificaFilm(int $id): void {
         //verifica che sei l'admin
 
         /*possiamo fare una checkbox dove l'admin seleziona l'attributo da eliminare*/
@@ -54,23 +54,23 @@ class CAdmin{
         $nuovoValore = array();
         $nomeAttributo = "sinossi";
 
-        if($nomeAttibuto == "data") {
+        if($nomeAttributo == "data") {
             FPersistentManager::update($film, null, null, null, null,
                 $nuovoValore, null, null);
             return;
         }
 
-        if($nomeAttributo="attori")
+        if($nomeAttributo == "attori") {
             FPersistentManager::update($film, null, null, null,
                 null, null, $nuovoValore, null);
+            return;
+        }
 
-        if($nomeAttributo="registi")
-
+        if($nomeAttributo == "registi")
             FPersistentManager::update($film, null, null, null,
-                    null, null, null , $nuovoValore);
+                null, null, null, $nuovoValore);
 
-        else // è bruttissimo
-        {
+        else {
             FPersistentManager::update($film , $nomeAttributo , $nuovoValore , null ,
             null , null , null , null);
         }
@@ -81,27 +81,24 @@ class CAdmin{
      metodo che serve all'admin quando vuole eliminare una recensione di un member.
     Url localhost/admin/rimuoviRecensione fatta in post i dati vengono inviati nel body della richiesta
     */
-    public static function rimuoviRecensione(): void{
+    public static function rimuoviRecensione(): void {
 
         //verifica che sei l'admin
-
         //dati che qualcuno mi dara'
         $idFilm = 2;
         $usernameAutore = "pippo";
-        FPersistentManager::delete("ERecensione",$usernameAutore,null,null,$idFilm,null);
+        FPersistentManager::delete("ERecensione", $usernameAutore,null,null, $idFilm,null);
         //notifica che sto eliminando la recensione.
-
     }
 
      //idem come sopra() url localhost/admin/risposta
-    public static function rimuoviRisposta(): void{
+    public static function rimuoviRisposta(): void {
 
         //qualcuno mi procurera' i dati
         $idFilm = 1;
         $data = new DateTime();
         $usernameAutore = "matteo";
         FPersistentManager::delete("ERisposta", $usernameAutore,null,null,null, $data);
-
         //notifica che ho eliminato la risposta
     }
 
@@ -109,14 +106,13 @@ class CAdmin{
     metodo che permette all'admin di ammonire il member,
     url localhost/admin/username/ammonisci
     */
-    public static function ammonisciUser(String $username): void{
+    public static function ammonisciUser(String $username): void {
 
         //verifica che sei l'admin
-
         //recupero lo username dell'admin dalla sessione
         $username = "admin";
         $usernameMember = "matteo";
-        if(!FPersistentManager::userBannato($usernameMember)){
+        if(!FPersistentManager::userBannato($usernameMember)) {
             $memberDaAmmonire = FPersistentManager::load("EMember",null,$usernameMember,null,
                 null, null ,null, null, false);
             $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
@@ -126,7 +122,6 @@ class CAdmin{
                     FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                 }
             }
-
         }
         else
             print("Utente bannato");
@@ -138,19 +133,16 @@ class CAdmin{
     url localhost/admin/username/sbanna
      */
 
-    public static function sbannaUser(String $username): void{
+    public static function sbannaUser(String $username): void {
         //verifica che sei l'admin
 
         $username = "giangiacomo";
-
         $usernameAdmin = "alberto";
-        $admin = new EAdmin($usernameAdmin);
 
-        if (FPersistentManager::userBannato($username)){
+        if(FPersistentManager::userBannato($username)) {
             if(FPersistentManager::tipoUserRegistrato($username)=="Admin")
                 FPersistentManager::sbannaUser($username);
-            else
-            {
+            else {
                 FPersistentManager::sbannaUser($username);
                 FPersistentManager::decrementaWarning($username);
             }
@@ -163,17 +155,16 @@ class CAdmin{
      metodo che permette di decrementare un warning al member
     url localhost/admin/username/togliammonizione
     */
-    public static function togliAmmonizione($username): void{
+    public static function togliAmmonizione($username): void {
+
         //verifica che sei l'admin
-
-
         $usernameAdmin = "alberto";
         $memberDaAmmonire = FPersistentManager::load("EMember",null,$username,null,
             null, null ,null, null, false);
         // calcolo dei warning attuali
         $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
 
-        if (!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire>0){
+        if(!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire>0) {
             if(FPersistentManager::tipoUserRegistrato($username)=="Member")
                 FPersistentManager::decrementaWarning($username);
         }
