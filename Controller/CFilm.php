@@ -2,6 +2,8 @@
 
 class CFilm {
 
+    //TODO: OGNI VOLTA CHE SI STAMPA LA VFILMSINGOLO BISOGNA VEDERE SE L'UTENTE DELLA SESSIONE HA VISTO IL FILM O MENO: VAR BOOL
+
     /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
     del tipo localhost/film?titolo=titanic fatta in get
 
