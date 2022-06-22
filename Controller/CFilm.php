@@ -64,7 +64,12 @@ class CFilm {
         }
         else {
             //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
-            $view->avviaPaginaFilm($film);
+            $visto = false;
+            if(SessionHelper::isLogged()){
+                $username = SessionHelper::getUtente()->getUsername();
+                $visto = FPersistentManager::loHaiVisto($username, $id);
+            }
+            $view->avviaPaginaFilm($film, $visto);
         }
     }
 
@@ -96,6 +101,8 @@ class CFilm {
         $testo = "prova"; //$testo = $array_post[0]
         $voto = 3; //$voto = $array_post[1]
         $data = new DateTime();
+        //nel caso dovesse servire, tanto è gratis
+        $visto = FPersistentManager::loHaiVisto($username, $idFilm);
         $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data,null);
         FPersistentManager::store($recensione,null,null,null,null,null,
             null,null);
@@ -149,6 +156,8 @@ class CFilm {
 
         $idFilm = 2; //recupero da Url
         $usernameAutore = "pippo"; //recupero dalla sessione
+        //nel caso dovesse servire, tanto è gratis
+        $visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
         FPersistentManager::delete("ERecensione", $usernameAutore,null,null, $idFilm,null);
         //notifica che sto a salva le robe
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
@@ -180,6 +189,8 @@ class CFilm {
         $idFilm = 2; //presa dall'url
         $usernameAutoreRecensione = "matteo"; //dall'url (?)
 
+        //nel caso dovesse servire, tanto è gratis
+        $visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
         $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
         FPersistentManager::store($risposta,null,null,null,null,null,
             null,null);
@@ -205,6 +216,8 @@ class CFilm {
         $idFilm = 1; //non serve questo qui, giusto?
         $data = new DateTime(); //recupero da url
         $usernameAutore = "matteo"; //recupero da sessione
+        //nel caso dovesse servire, tanto è gratis
+        $visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
         FPersistentManager::delete("ERisposta", $usernameAutore,null,null,null, $data);
         //notifica che sto a salva le robe
         header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione

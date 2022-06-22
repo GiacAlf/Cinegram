@@ -25,8 +25,8 @@ class VRicerca {
     //metodo che restituisce al controller il prompt scritto dall'utente
     public function eseguiRicerca(): ?string{
         $ricerca = null;
-        if (isset($_GET['ricerca'])) {
-            $ricerca = $_GET['ricerca'];
+        if (isset($_POST['ricerca'])) {
+            $ricerca = $_POST['ricerca'];
         }
         return $ricerca;
     }
@@ -35,8 +35,8 @@ class VRicerca {
     //con la checkbox dell'HTML
     public function tipoRicerca(): ?string{
         $tipo_ricerca = null;
-        if(isset($_GET['tipo'])){
-            $tipo_ricerca = $_GET['tipo'];
+        if(isset($_POST['tipo'])){
+            $tipo_ricerca = $_POST['tipo'];
         }
         return $tipo_ricerca;
     }

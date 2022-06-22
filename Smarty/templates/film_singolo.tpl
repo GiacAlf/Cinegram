@@ -68,8 +68,14 @@
         <img src="{$src}" {$params} style="float: left; margin: 15px;">
         <br><br>
         <h1 align="left">{$titolo}</h1> <br>
-        <span align="left">{$anno}</span> &nbsp <span>Diretto da {foreach $registi as $regista} $regista {/foreach} </span> &nbsp <span>Durata {$durata} minuti</span>
-        <br><br>
+        <span align="left">{$anno}</span> &nbsp <span>Diretto da </span>
+            {foreach $registi as $regista}
+                <span> {$regista->getNome()} {$regista->getCognome()} </span>
+            {/foreach}
+        &nbsp <span>Durata {$durata} minuti</span>
+        <br>
+        <span align="left">{$sinossi}</span>
+        <br>
         {if $visto == false}
             <form action="https://{$root_dir}/film/id={$id}/vedi">
                 <button type="button">Vedi Film</button>
@@ -103,7 +109,7 @@
             <br>
             <h3>Lista attori</h3>
             {foreach $attori as $attore}
-                <p> $attore </p>
+                <p> {$attore->getNome()} {$attore->getCognome()} </p>
             {/foreach}
         </div>
 
@@ -134,10 +140,10 @@
                 <hr>
                 <div>
                     <h5 style="display:inline;">Voto: {$recensione->getVoto()}</h5> &nbsp &nbsp &nbsp &nbsp
-                    <h5 style="display:inline;">Autore: </h5><a href="https://{$root_dir}/member/username={$recensione->getAutore()}">{$recensione->getAutore()}</a>
+                    <h5 style="display:inline;">Autore: </h5><a href="https://{$root_dir}/member/username={$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                     <p>{$recensione->getTesto()}</p>
-                    <a href="https://{$root_dir}/recensione/username={$recensione->getAutore()}&id={$recensione->getIdFilmRecensito()}">Rispondi</a>
-                    {if $utente_sessione == {$recensione->getAutore()}} &nbsp &nbsp &nbsp &nbsp <a href="link per modificare"><button>Modifica</button></a>
+                    <a href="https://{$root_dir}/recensione/username={$recensione->getUsernameAutore()}&id={$recensione->getIdFilmRecensito()}">Rispondi</a>
+                    {if $utente_sessione == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp <a href="link per modificare"><button>Modifica</button></a>
                         <a href="link per cancellare"><button>Cancella</button></a> {/if}
                 </div>
             {/foreach}
