@@ -4,7 +4,8 @@ class CProfilo {
 
     /*
     metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
-    bottone da premere), inviera' una url localhost/profilo in get
+    bottone da premere), inviera' una url in get
+    localhost/profilo/carica-profilo
     */
     public static function caricaProfilo(): void{
         //if(SessionHelper::isLogged()){
@@ -26,7 +27,7 @@ class CProfilo {
     /*
     l'utente vuole aggiornare la sua immagine di profilo(ne mettiamo una di default,il classico avatar grigio di tutti i profili)
     dopo imposteremo questa cosa, ovvero se nel db non ne troviamo caricata nessuna, mettiamo quella di default. L'utente carichera'
-    la foto con la form per i file vista a lezione. Url localhost/profilo/aggiornaimmagine
+    la foto con la form per i file vista a lezione. Url localhost/profilo/aggiorna-immagine
     */
 
     public static function aggiornaImmagine(): void{
@@ -64,7 +65,7 @@ class CProfilo {
     /*
      *  L'utente vuole modificare la sua bio, di default all'iscrizione ne faremo mettere una oppure
     mettiamo stringa vuota e le deve modificare lui la prima volta tramite questo metodo(?), da vedere.
-    Associamo una richiesta http fatta in get con url localhost/profilo/aggiornabio
+    Associamo una richiesta http fatta in get con url localhost/profilo/aggiorna-bio
 
     */
     public static function aggiornaBio(): void{
@@ -93,7 +94,7 @@ class CProfilo {
 
     /*
     l'utente puo' aggiornare la sua password tramite questo bottone che avra' associato una url
-    localhost/profilo/aggiornapw, metodo post dove inviera' la nuova password
+    localhost/profilo/aggiorna-password, metodo post dove inviera' la nuova password
     */
 
     public static function aggiornaPassword(): void{
@@ -122,6 +123,7 @@ class CProfilo {
     }
 
     //TODO: modificare metodo
+    //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
         //prendo l'utente dalla sessione
         //faccio vedere il template

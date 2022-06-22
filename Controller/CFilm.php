@@ -5,7 +5,7 @@ class CFilm {
     //TODO: OGNI VOLTA CHE SI STAMPA LA VFILMSINGOLO BISOGNA VEDERE SE L'UTENTE DELLA SESSIONE HA VISTO IL FILM O MENO: VAR BOOL
 
     /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
-    del tipo localhost/film?titolo=titanic fatta in get
+    del tipo localhost/film/cerca-film/titolo
 
     io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
     tipo localhost/member/.... chiamo il cercaMember
@@ -46,7 +46,7 @@ class CFilm {
 
     /*
      * questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
-    sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/id
+    sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/carica-film/id
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
     public static function caricaFilm(int $id): void{
@@ -76,7 +76,7 @@ class CFilm {
     /*
      questo metodo verra' chiamato quando un utente registrato vorra' scrivere una recensione
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
-    localhost/recensione/idFilm
+    localhost/film/scrivi-recensione/id
     */
     public static function scriviRecensione(int $idFilm): void{
 
@@ -140,7 +140,8 @@ class CFilm {
 
 
     /*metodo che verra' chiamato quando si vuole eliminare una recensione,
-    url localhost/recensione/idFilm/elimina */
+    url localhost/film/elimina-recensione/id
+     */
 
     public static function eliminaRecensione(int $id): void{
 
@@ -165,7 +166,7 @@ class CFilm {
 
 
     /* metodo che verra' chiamato quando un utente registrato vuole rispondere ad una recensione, sara' chiamato da una url
-    localhost/risposta/?usernameAutoreRecensione=...&id=..
+    localhost/film/scrivi-risposta/usernameAutoreRecensione/data
     i dati come nella recensione vengono passati con una form */
 
     public static function scriviRisposta(string $usernameAutoreRecensione, string $data): void{
@@ -200,7 +201,7 @@ class CFilm {
 
     /*
       metodo che verra' chiamato quando si vuole eliminare una risposta
-    , propongo di associare ,localhost/risposta/data/elimina, come fatto sopra.
+    , propongo di associare ,localhost/film/elimina-risposta/data, come fatto sopra.
      */
 
     public static function eliminaRisposta(string $data): void{
@@ -249,7 +250,7 @@ class CFilm {
 
     /*
     supponendo ci sia un pulsante per caricare le risposte della recensione
-    allora associamo una url localhost/risposte/?id=...&username=....
+    allora associamo una url localhost/film/carica-risposte/usernameAutoreRecensione/idFilm
      */
     public static function caricaRisposte(string $usernameAutoreRecensione, int $id): void{
 
@@ -269,7 +270,7 @@ class CFilm {
 
     /*
      * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/id/vedi
+    propongo anche qui una url particolare: localhost/film/vedi-film/id
     */
     public static function vediFilm(int $id): void{
         //controllo se utente è loggato
@@ -289,7 +290,7 @@ class CFilm {
 
     /*
      metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
-    propongo anche qui una url particolare: localhost/film/id/toglivisto
+    propongo anche qui una url particolare: localhost/rimuovi-film/id
     */
     public static function rimuoviFilm(int $id): void{
         //controllo se utente è loggato
@@ -308,7 +309,8 @@ class CFilm {
 
 
     /* metodo associato al bottone per caricare la pagina dove ci sono tutti i film
-    sara' una semplice get con url localhost/films */
+    sara' una semplice get con url localhost/film/carica-films
+    */
     public static function caricaFilms(): void{
         $numero_estrazioni = 5;
         $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti($numero_estrazioni);

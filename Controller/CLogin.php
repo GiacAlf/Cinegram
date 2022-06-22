@@ -3,7 +3,7 @@
 class CLogin {
     /*
     metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
-    propongo una url localhost/login/accesso
+    propongo una url localhost/login/verifica-login
      */
     public static function verificaLogin(): void{
         /* recupero i dati dalla view in $POST[username] e $POST[password]
@@ -68,7 +68,7 @@ class CLogin {
 
     /*
      metodo che serve solo a caricare soltanto la pagina di login
-    url: localhost/login
+    url: localhost/login/pagina-login
      */
     public static function paginaLogin(): void{
         $view = new VLogin();
@@ -76,7 +76,7 @@ class CLogin {
     }
 
     /*L'utente clicca su questo pulsante e semplicemente verra' effettuato il classico logout
-    associo una url localhost/logout
+    associo una url localhost/login/logout-member
     */
     public static function logoutMember(): void{
         /*

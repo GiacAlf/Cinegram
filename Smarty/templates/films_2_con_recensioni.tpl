@@ -96,75 +96,90 @@
         </div>
 
         <div class="col-sm-8 text-center">
-            <h3>Utenti Popolari</h3><br>
+            <h3>Film Recenti</h3><br>
             <div class="container-fluid bg-3 text-left">
                 <div class="row">
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 1">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 1">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 2">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 3">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 3">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 4">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 4">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 5">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 5">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 6">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 6">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 7">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 7">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                     <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-responsive" style="width:100%" alt="Member 8">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
+                        <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 8">
+                        <h5> <a href="#">titolo</a></h5>
+                        <h9>views:</h9><br>
+                        <h9>recensioni:</h9><br><br>
                     </div>
                 </div>
             </div>
 
-            <div class="container-fluid bg-3 text-left"><br><br>
-                <!-- qui ci metteremo il link ai profili dei member più popolari a scorrere-->
+            <p><span class="badge"></span> <h3>Ultime Recensioni:</h3></p><br>
 
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 1</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 2</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 3</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 4</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 5</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-
-
+            <div class="row">
+                <div class="col-sm-2 text-center">
+                    <img src="https://www.cinemadelsilenzio.it/images/film/poster/141.jpg" class="img-rectangle" height="105" width="70" alt="Locandina">
+                </div>
+                <div class="col-sm-10">
+                    <h4>Anja <small>Sep 29, 2015, 9:12 PM</small></h4>
+                    <p>Keep up the GREAT work! I am cheering for you!! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <br>
+                </div>
+                <div class="col-sm-2 text-center">
+                    <img src="https://www.cinemadelsilenzio.it/images/film/poster/141.jpg" cclass="img-rectangle" height="105" width="70" alt="Locandina">
+                </div>
+                <div class="col-sm-10">
+                    <h4>John Row <small>Sep 25, 2015, 8:25 PM</small></h4>
+                    <p>I am so happy for you man! Finally. I am looking forward to read about your trendy life. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <br>
+                    <p><span class="badge">1</span> Comment:</p><br>
+                    <div class="row">
+                        <div class="col-sm-2 text-center">
+                            <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+                        </div>
+                        <div class="col-xs-10">
+                            <h4>Nested Bro <small>Sep 25, 2015, 8:28 PM</small></h4>
+                            <p>Me too! WOW!</p>
+                            <br>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

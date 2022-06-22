@@ -6,7 +6,8 @@ class CMember {
      L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
     schermata con diversi dati, le diverse schermate le potrebbe gestire Smarty, noi gli passiamo
     un parametro registrato o non registrato e lei capisce, oppure fare due schermate diverse che
-    richiamiamo noi dentro questo metodo. Sara' associata una url del tipo localhost/members
+    richiamiamo noi dentro questo metodo. Sara' associata una url del tipo
+    localhost/member/carica-members
     */
 
     public static function caricaMembers(): void{
@@ -48,7 +49,7 @@ class CMember {
 
 
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
-    url localhost/member/username con metodo get-> infatti lo username viene passato dall'url */
+    url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
     public static function caricaMember($username): void{
 
         $view = new VUtenteSingolo();
@@ -73,7 +74,7 @@ class CMember {
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in get
-    al seguente url localhost/member/username/follow */
+    al seguente url localhost/member/follow-member/username */
     public static function followMember(string $username): void{
 
         //verificare che l'utente sia registrato
@@ -97,7 +98,7 @@ class CMember {
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' unfolloware il member, sara' una richiesta in get
-    al seguente url localhost/member/username/unfollow. */
+    al seguente url localhost/member/unfollow-member/username. */
 
     public static function unfollowMember(string $username): void{
 
@@ -123,7 +124,7 @@ class CMember {
 
     /*
     metodo che serve per far registrare l'utente, ci sara' una form ed una richiesta fatta in post
-    alla seguente url : localhost/member/registrazione
+    alla seguente url : localhost/member/registrazione-member
     */
     public static function registrazioneMember(): void{
         $view = new VLogin();
@@ -149,7 +150,7 @@ class CMember {
 
 
     /*
-     richiesta in get con url  localhost/member/username, viene chiamato quando nella barra di ricerca
+     richiesta in get con url  localhost/member/cerca-member/username, viene chiamato quando nella barra di ricerca
     si vuole cercare un member passando il suo username
     */
     public static function cercaMember(string $username): void{
