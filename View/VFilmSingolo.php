@@ -14,7 +14,8 @@ class VFilmSingolo
     //come parametro il film che ha selezionato l'utente
     public function avviaPaginaFilm(EFilm $film_selezionato, bool $visto){
         //$this->smarty->assign('locandina', $film_selezionato->getLocandina());
-        // //mi passerà anche la locandina -> dovrò avere $src e $size (l'array con width e height compresi)
+        // //mi passerà anche la locandina -> dovrò avere $src e $size (l'array con width e height compresi) -> in smarty l'ho chiamata
+        //params
         $this->smarty->assign( 'id', $film_selezionato->getId());
         $this->smarty->assign( 'titolo', $film_selezionato->getTitolo());
         $this->smarty->assign('durata', $film_selezionato->getDurata());

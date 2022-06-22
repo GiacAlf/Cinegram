@@ -15,9 +15,9 @@ class VRicerca {
     //poi se ho effettivamente dei risultati li assegno a smarty. In ogni caso faccio display del template
     public function avviaPaginaRicerca(array $risultato_ricerca): void{
         //servirà qualcosa per gli array
-        $this->smarty->assign('andamento', 'La ricerca ha prodotto'. count($risultato_ricerca) .' risultati');
+        $this->smarty->assign('andamento', 'La ricerca ha prodotto'. count($risultato_ricerca) .' risultati'); //da togliere
         if (count($risultato_ricerca) >= 1){
-            $this->smarty->assign('risultati', $risultato_ricerca);
+            $this->smarty->assign('risultato_ricerca', $risultato_ricerca);
         }
         $this->smarty->display('ricerca.tpl');
     }

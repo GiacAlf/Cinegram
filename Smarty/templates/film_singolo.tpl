@@ -139,7 +139,8 @@
             {foreach $recensioni as $recensione}
                 <hr>
                 <div>
-                    <h5 style="display:inline;">Voto: {$recensione->getVoto()}</h5> &nbsp &nbsp &nbsp &nbsp
+                    <h5 style="display:inline;">Voto: {$recensione->getVoto()} </h5> &nbsp &nbsp &nbsp &nbsp
+                        <h5 style="display:inline;"> Data: {$recensione->getDataScrittura()->format('d-m-Y H:i')}</h5> &nbsp &nbsp &nbsp &nbsp
                     <h5 style="display:inline;">Autore: </h5><a href="https://{$root_dir}/member/username={$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                     <p>{$recensione->getTesto()}</p>
                     <a href="https://{$root_dir}/recensione/username={$recensione->getUsernameAutore()}&id={$recensione->getIdFilmRecensito()}">Rispondi</a>
