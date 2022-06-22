@@ -3,7 +3,7 @@
 <head> <!-- questo può essere il buon template per fare la view della recensione
                 bisognerà fare il display di: username autore, film recensito (basta il titolo penso),
                 data scrittura, voto, testo, risposte + form per lasciare risposte -->
-    <title>Reptile - Post di {$autore}</title>
+    <title>Cinegram - Post di {$autore}</title>
     <link rel='stylesheet' href='https://{$root_dir}/templates/css/basic_styles.css'>
     <script type='text/javascript' src='https://{$root_dir}/templates/js/home.js'></script>
 </head>
@@ -20,53 +20,48 @@
     <div style='clear:both;'></div>
 </div>
 <!-- fino a qua tipo -->
-<div class='main-post-container' style='margin-top:10%;text-align:left;'>
-    <div style='float:left;text-align:left;height:6%;' >
-        <span style='text-align:center;font-size:130%'><a href='https://{$root_dir}/profilo/usr/{$autore}'><b>{$autore}</b></a></span>
-        <br><i>Creato il {$data_creazione}</i>
-        <!-- questo if a noi non serve in teoria -->
-        {if $data_creazione != $data_ultima_modifica}
-            - <i>Ultima modifica il {$data_ultima_modifica}</i>
+
+
+<!-- per ora passiamo a smarty tutti gli attributi, se è gli passiamo la recensione in toto-->
+<div>
+    <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
+    <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
+    <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/username={$autore_rece}">{$autore_rece}</a></span><hr>
+    <div style='text-align:center;font-size:200%'>
+        <p>{$testo}</p>
+    </div>
+    <hr>
+    <div>
+        {if $utente_sessione == $autore_rece}
+            <a href="https://{$root_dir}/film/modifica-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Modifica</button></a>
+            <a href="https://{$root_dir}/film/elimina-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Cancella</button></a>
         {/if}
     </div>
-    <div style='float:right;'>
-        {$buttons}
+    <br>
+    <div style="padding-left:45px;">
+        <h3>Scrivi una risposta:</h3>
+        <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/usernameAutoreRecensione={$autore_rece}" method="POST">
+            <textarea name="risposta" form_id="scrivirisposta" rows="4" cols="30"></textarea>
+            <button type="submit">Salva</button>
+        </form>
     </div>
-    <div style='clear:both;'></div>
-    <hr>
-    <!-- qua inseriremo le url e gli attributi corretti -->
-    {if $proprieta_commenti[{$i}] == $autori_commenti[{$i}]}
-        <div style='float:right'>
-            <a href='https://{$root_dir}/post/{$id_post}/commento/{$id_commenti[{$i}]}/modifica'><button class='btn'>Modifica</button></a> &nbsp <a href='https://{$root_dir}/post/{$id_post}/commento/{$id_commenti[{$i}]}/cancella'><button class='btn'>Cancella</button></a>
-        </div>
-    {/if}
-    <br><br>
-    <span style='font-size:150%;'>
-				{$contenuto} <!-- testo + voto -->
-			</span>
-</div><br><br>
-<div style='width:100%;text-align:center;'><span style='font-size:130%;font-family:Arial black;text-align:center;'>RISPOSTE</span></div>
-<div class='main-post-container' style='margin-bottom:10%;'>
-    <form action='https://{$root_dir}/post/{$id_post}/commento' method='POST'>
-        <input type='text' name='commento' class='text-input' style='width:80%' placeholder='Scrivi una risposta...'> &nbsp <input type='submit' class='btn' value='Invia' name='submit'>
-    </form>
-    <hr>
-    {for $i = 0 to {$testi_commenti|@count}-1}
-        <!-- anche qui l'if della data modifica a noi non serve in teoria -->
-        <div style='float:left;font-size:130%;'><span><a href='https://{$root_dir}/profilo/usr/{$autori_commenti[$i]}'><b>{$autori_commenti[{$i}]}</b></a><i> il {$data_creazione_commento[$i]} {if $data_modifica_commento[$i] != ""} - Modificato il {$data_modifica_commento[$i]} {/if}</i></span></div>
-        <!-- qua invece facciamo: se lo username autore della recensione (dunque lo mettiamo anche sopra) o della risposta è uguale allo username della sessione (che metteremo nella navbar) si può modificare o cancellare -->
-        {if $proprieta_commenti[{$i}] == $autori_commenti[{$i}]}
-            <div style='float:right'>
-                <a href='https://{$root_dir}/post/{$id_post}/commento/{$id_commenti[{$i}]}/modifica'><button class='btn'>Modifica</button></a> &nbsp <a href='https://{$root_dir}/post/{$id_post}/commento/{$id_commenti[{$i}]}/cancella'><button class='btn'>Cancella</button></a>
-            </div>
-        {/if}
-        <div style='clear:both;'></div>
-        <div style='font-size:130%;text-align:left;'>
-            <p>{$testi_commenti[{$i}]}</p>
-        </div>
+    <br>
+    <h2 style="padding-left:45px;">Risposte della recensione:</h2>
+    {foreach $risposte as $risposta}
         <hr>
-    {/for}
+        <div style="padding-left:45px;">
+            <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/username={$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
+            &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
+            <p style="font-size:120%">{$risposta->getTesto()}</p>
+            {if $utente_sessione == {$risposta->getUsernameAutore()}}  <!-- in che formato la data? -->
+                <a href="https://{$root_dir}/film/modifica-risposta/data={$risposta->getDataScrittura()}/usernameAutoreRecensione={$autore_rece}"><button>Modifica</button></a>
+                <a href="https://{$root_dir}/film/elimina-risposta/data={$risposta->getDataScrittura()}/usernameAutoreRecensione={$autore_rece}"> <button>Cancella</button></a>
+            {/if}
+        </div>
+    {/foreach}
+
 </div>
+<br><br>
 <footer class='footer-home'>
     <a href='https://{$root_dir}/about'>Informazioni su Reptile</a> &nbsp &nbsp <a href='https://{$root_dir}/credits'>Crediti</a> &nbsp &nbsp (C) 2021 Reptile
 </footer>

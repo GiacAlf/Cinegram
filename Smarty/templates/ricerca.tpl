@@ -28,7 +28,8 @@ senza stare a usare smarty per vedere se sono film, member e così via -->
             <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td>
-                        <img src="{$src}" {$params}>
+                        <img src="{$src}" {$params}> <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
+                         ci fosse tipo un attributo per il suo src e i suoi params-->
                     </td>
                     <td>
                         <a href="https://{$root_dir}/film/carica-film/id={$risultato->getId()}">
