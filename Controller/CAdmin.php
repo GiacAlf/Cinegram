@@ -4,7 +4,7 @@ class CAdmin {
 
     /*
        una volta che l'admin è loggato per andare alla sua pagina,
-       url localhost/admin
+       url localhost/admin/carica-amministrazione
      */
     public static function caricaAmministrazione(): void {
         //controllare se sei l'admin
@@ -15,7 +15,7 @@ class CAdmin {
 
     /*
       metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
-    localhost/admin/caricafilm
+    localhost/admin/carica-film
     */
     public static function caricaFilm(): void {
         //prendere dalla view le informazioni del film
@@ -40,7 +40,7 @@ class CAdmin {
 
     /*
     L'admin vuole modificare un attributo di un film,
-    url localhost/admin/id/modificafilm
+    url localhost/admin/modifica-film/id
     */
     public static function modificaFilm(int $id): void {
         //verifica che sei l'admin
@@ -79,7 +79,7 @@ class CAdmin {
 
     /*
      metodo che serve all'admin quando vuole eliminare una recensione di un member.
-    Url localhost/admin/rimuoviRecensione fatta in post i dati vengono inviati nel body della richiesta
+    Url localhost/admin/rimuovi-recensione fatta in post i dati vengono inviati nel body della richiesta
     */
     public static function rimuoviRecensione(): void {
 
@@ -91,7 +91,7 @@ class CAdmin {
         //notifica che sto eliminando la recensione.
     }
 
-     //idem come sopra() url localhost/admin/risposta
+     //idem come sopra() url localhost/admin/rimuovi-risposta
     public static function rimuoviRisposta(): void {
 
         //qualcuno mi procurera' i dati
@@ -104,7 +104,7 @@ class CAdmin {
 
     /*
     metodo che permette all'admin di ammonire il member,
-    url localhost/admin/username/ammonisci
+    url localhost/admin/ammonisci-user/username
     */
     public static function ammonisciUser(String $username): void {
 
@@ -131,7 +131,7 @@ class CAdmin {
 
     /*
       metodo che permette all'admin di sbannare il member o l'admin
-    url localhost/admin/username/sbanna
+    url localhost/admin/sbanna-user/username
      */
 
     public static function sbannaUser(String $username): void {
@@ -154,7 +154,7 @@ class CAdmin {
 
     /*
      metodo che permette di decrementare un warning al member
-    url localhost/admin/username/togliammonizione
+    url localhost/admin/togli-ammonizione/username
     */
     public static function togliAmmonizione($username): void {
 
