@@ -29,6 +29,13 @@ class VUtenteSingolo {
         $this->smarty->display('utente_singolo.tpl');
     }
 
+    public function avviaPaginaModificaUtente(EMember $utente): void{
+        $this->smarty->assign('username', $utente->getUsername());
+        $this->smarty->assign('bio', $utente->getBio());
+        //ci sarà pure l'avatar
+        $this->smarty->display('modifica_profilo.tpl');
+    }
+
     //metodo che restituisce l'array contenente tutte le info
     //della nuova foto profilo
     //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
@@ -62,20 +69,36 @@ class VUtenteSingolo {
 
     //metodo che aggiorna la bio
     public function aggiornaBio(): ?string{
-        $bio = null;
-        if(isset($_POST['bio'])){
-            $bio = $_POST['bio'];
+        $nuova_bio = null;
+        if(isset($_POST['nuova_bio'])){
+            $nuova_bio = $_POST['nuova_bio'];
         }
-        return $bio;
+        return $nuova_bio;
     }
 
     //metodo che aggiorna la password
     public function aggiornaPassword(): ?string{
-        $password = null;
-        if(isset($_POST['password'])){
-            $password = $_POST['password'];
+        $nuova_password = null;
+        if(isset($_POST['nuova_password'])){
+            $nuova_password = $_POST['nuova_password'];
         }
-        return $password;
+        return $nuova_password;
+    }
+
+    public function recuperaVecchiaPassword(): ?string{
+        $vecchia_password = null;
+        if(isset($_POST['vecchia_password'])){
+            $vecchia_password = $_POST['vecchia_password'];
+        }
+        return $vecchia_password;
+    }
+
+    public function verificaConfermaPassword(): ?string{
+        $conferma_password = null;
+        if(isset($_POST['conferma_nuova_password'])){
+            $conferma_password = $_POST['conferma_nuova_password'];
+        }
+        return $conferma_password;
     }
 
 

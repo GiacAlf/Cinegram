@@ -48,14 +48,6 @@ class VFilmSingolo
         return $array_recensione;
     }
 
-    //metodo che restituisce al controllore il testo della risposta
-    public function scriviRisposta(): ?string{
-        $testo_risposta = null;
-        if(isset($_POST['risposta'])){
-            $testo_risposta = $_POST['risposta'];
-        }
-        return $testo_risposta;
-    }
 
     //metodo per vedere le risposte della recensione, saranno utili? Boh
     public function ShowRisposte(ERecensione $recensione): void{

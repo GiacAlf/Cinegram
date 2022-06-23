@@ -91,9 +91,10 @@ class ERisposta {
     }
 
 
-    public static function ConvertiDatainFormatoUrl(DateTime $date):string {
+    public function ConvertiDatainFormatoUrl():string {
+        $date = $this->getDataScrittura();
         $YMD = $date->format("Y-m-d");
-        $HIS = $date->format("h:i:s");
+        $HIS = $date->format("H:i:s");
         return($YMD . "." . $HIS);
     }
 
