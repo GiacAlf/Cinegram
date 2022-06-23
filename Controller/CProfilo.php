@@ -105,8 +105,14 @@ class CProfilo {
         //}
         $view = new VUtenteSingolo();
         $nuovaPassword = "paperino";
+        $vecchiaPassword = $view->recuperaVecchiaPassword();
         $nuovaPassword = $view->aggiornaPassword();
+        $confermaNuovaPassword = $view->verificaConfermaPassword();
 
+        //QUANDO è CHE FACCIO VEDERE LA SCHERMATA DI ERRORE:
+        //1) se la nuova pw è null
+        //2) se la vecchia password non coincide con quella attuale -> una roba tipo getPassword()
+        //3) se le nuova pw e la conferma pw sono due stringhe diverse
         //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
         //regolare? O lo si fa nella view?
         if ($nuovaPassword == null){
@@ -126,6 +132,13 @@ class CProfilo {
     //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
         //prendo l'utente dalla sessione
+        if(SessionHelper::isLogged()){ //SE NON LOGGATO MANDO UN ERRORE
+          $username = SessionHelper::getUtente()->getUsername();
+        }
+        $member = FPersistentManager::load("EMember",null, $username,null,null,
+            null,null,null,false);
+        $view = new VUtenteSingolo();
+        $view->avviaPaginaModificaUtente($member);
         //faccio vedere il template
     }
 }

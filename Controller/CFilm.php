@@ -113,29 +113,49 @@ class CFilm {
     //localhost/film/mostra-recensione/id/usernameAutore
     public static function mostraRecensione(int $idFilm, string $usernameAutore){
         //fa vedere il template associato
+        $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
+            null, null, null, null, null, true);
+        $view = new VRecensione();
+        $view->avviaPaginaRecensione($recensione);
     }
 
     //localhost/film/modifica-recensione/id/usernameAutore
     public static function modificaRecensione(int $idFilm, string $usernameAutore){
         //fa vedere il template associato
+        $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
+            null, null, null, null, null, false);
+        $view = new VRecensione();
+        $view->avviaPaginaModificaRecensione($recensione);
     }
 
 
     //localhost/film/salva-recensione/id/usernameAutore
     public static function salvaRecensione(int $idFilm, string $usernameAutore){
         //se ricevo il valore di testo allora salvo quello
-        $updatedText="prova aggiornamento";
+        $view = new VRecensione();
+        $array_modifica = $view->modificaRecensione();
         $recensione = FPersistentManager::load("ERecensione",$idFilm ,$usernameAutore, null
         ,null,null,null,null,false);
-        FPersistentManager::update($recensione , "testo",$updatedText,null,null,
-       null,null,null);
-
-
-       //se ricevo il voto aggiorno quello
-        $updatedVote=3;
-        FPersistentManager::update($recensione , "voto",$updatedVote,null,null,
-            null,null,null);
-
+        if($array_modifica[1] == null) { //se il voto è null modifico solo il testo
+            $updatedText = "prova aggiornamento"; // = $array_modifica[0];
+            FPersistentManager::update($recensione, "testo", $updatedText, null, null,
+                null, null, null);
+        }
+        elseif ($array_modifica[0] == null) { //se il testo nuovo è null modifico solo il voto
+            //se ricevo il voto aggiorno quello
+            $updatedVote = 3; // = $array_modifica[0];
+            FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
+                null, null, null);
+        }
+        else{ //se tutti e due sono pieni, modifico tutte e due
+            $updatedText = "prova aggiornamento"; // = $array_modifica[0];
+            $updatedVote = 3; // = $array_modifica[0];
+            FPersistentManager::update($recensione, "testo", $updatedText, null, null,
+                null, null, null);
+            FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
+                null, null, null);
+        }
+        //poi rifacciamo vedere la pagina della recensione?
     }
 
 
@@ -182,7 +202,7 @@ class CFilm {
         //}
 
         //prova
-        $view = new VFilmSingolo();
+        $view = new VRecensione();
         $date = new DateTime();
         $usernameAutore = "damiano"; //dalle sessioni
         $testo = $view->scriviRisposta();
@@ -196,7 +216,7 @@ class CFilm {
         FPersistentManager::store($risposta,null,null,null,null,null,
             null,null);
         //notifica che sto a salva le robe
-        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina della recensione di cui ho scritto la recensione
     }
 
     /*
@@ -228,7 +248,12 @@ class CFilm {
     //url localhost/film/modifica-risposta/usernameAutoreRecensione/data
 
     public static function modificaRisposta(string $usernameAutore, string $data){
-        //fa vedere il template associato chiamando il metodo della view
+        //fa vedere il template associato
+        $data = ERisposta::ConvertiFormatoUrlInData($data);
+        $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore,
+            null, null, null, null, $data, false);
+        $view = new VRecensione();
+        $view->avviaPaginaModificaRisposta($risposta);
     }
 
 
@@ -239,6 +264,8 @@ class CFilm {
     */
     public static function salvaRisposta(string $usernameAutore, string $data){
          //la view mi restituisce il testo, l'unica cosa da modificare nella risposta
+        $view = new VRecensione();
+        $updatedText = $view->modificaRisposta(); //in teoria lo passo sempre pieno: ho messo required nell'html
         $updatedText = "prova aggiornamento";
         $data = ERisposta::ConvertiFormatoUrlInData($data);
         $risposta = FPersistentManager::load("ERisposta",null,$usernameAutore,null,null,

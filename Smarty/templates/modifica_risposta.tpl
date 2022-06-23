@@ -23,7 +23,7 @@
     </div>
     <br>
     <form action='https://{$root_dir}/salva-risposta/usernameAutoreRecensione={$autore_rece}/data={$data}' method='POST' id='modifica_risposta'>
-        <textarea name='nuovo_testo' form='modifica_risposta' placeholder="Modifica il testo della risposta..." rows="4" cols="50"></textarea>
+        <textarea name='nuova_risposta' form='modifica_risposta' placeholder="Modifica il testo della risposta..." rows="4" cols="50" required></textarea>
         <br><br><input type='submit' class='btn' value='Salva modifica' name='post_modifica'>
     </form>
 </div>
