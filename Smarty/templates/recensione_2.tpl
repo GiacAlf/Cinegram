@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Risultato Ricerca</title>
+    <title>Cinegram - Recensione di {$autore}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -79,53 +80,62 @@
 <div class="container-fluid text-center">
     <div class="row content">
 
+        <!-- side nav vuota e bianca-->
         <div class="col-sm-2 sidenav_white">
             <p></p>
         </div>
 
+
         <div class="col-sm-8 text-left">
-            <br><h1>Risultato della ricerca:</h1> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
-            <hr> <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
-            {foreach $risultato_ricerca as $risultato}
-                {if {get_class($risultato)} == "EFilm"}
-                    <div>
-                        <table border="0" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <td>
-                                    <img src="{$src}" {$params}> <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
-                         ci fosse tipo un attributo per il suo src e i suoi params-->
-                                </td>
-                                <td>
-                                    <a href="https://{$root_dir}/film/carica-film/id={$risultato->getId()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getTitolo()}</h3></a> &nbsp <span>{$recensione->getDataScrittura()->format('Y')}</span>
-                                </td>
-                            </tr>
-                        </table>
+
+
+
+
+            <div><br>
+                <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
+                <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/username={$autore_rece}">{$autore_rece}</a></span><hr>
+                <div style='text-align:center;font-size:200%'>
+                    <p>{$testo}</p>
+                </div>
+                <hr>
+                <div>
+                    {if $utente_sessione == $autore_rece}
+                        <a href="https://{$root_dir}/film/modifica-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Modifica</button></a>
+                        <a href="https://{$root_dir}/film/elimina-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Cancella</button></a>
+                    {/if}
+                </div>
+                <br>
+                <div style="padding-left:0px; text-align:center">
+                    <h3>Scrivi una risposta:</h3>
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/usernameAutoreRecensione={$autore_rece}" method="POST">
+                        <textarea name="risposta" form_id="scrivirisposta" rows="5" cols="100"></textarea><br>
+                        <button type="submit">Salva</button>
+                    </form>
+                </div>
+                <br>
+                <h3 style="padding-left:45px;">Risposte della recensione:</h3>
+                {foreach $risposte as $risposta}
+                    <hr>
+                    <div style="padding-left:45px;">
+                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/username={$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
+                        &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
+                        <p style="font-size:120%">{$risposta->getTesto()}</p>
+                        {if $utente_sessione == {$risposta->getUsernameAutore()}} <!--  in che formato la data? -->
+                            <a href="https://{$root_dir}/film/modifica-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"> <button>Cancella</button></a>
+                        {/if}
                     </div>
-                    <br>
-                {else}
-                    <div>
-                        <table border="0" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <td>
-                                    <img src="{$src}" {$params}>
-                                </td>
-                                <td>
-                                    <a href="https://{$root_dir}/member/carica-member/username={$risultato->getUsername()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getUsername()}</h3></a> &nbsp
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                {/if}
-                {foreachelse}
-                <h3> La ricerca non ha prodotto risultati! </h3>
-            {/foreach}
+                {/foreach}
+
+            </div>
             <br><br>
         </div>
-
-        <div class="col-sm-2 sidenav.white"></div>
     </div>
+
+    <!-- side nav vuota e bianca-->
+    <div class="col-sm-2 sidenav.white"></div>
+</div>
 </div>
 
 
