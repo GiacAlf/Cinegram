@@ -22,7 +22,7 @@
         <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
     </div>
     <br>
-    <form action='https://{$root_dir}/salva-risposta/usernameAutoreRecensione={$autore_rece}/data={}' method='POST' id='modifica_risposta'>
+    <form action='https://{$root_dir}/salva-risposta/usernameAutoreRecensione={$autore_rece}/data={$data}' method='POST' id='modifica_risposta'>
         <textarea name='nuovo_testo' form='modifica_risposta' placeholder="Modifica il testo della risposta..." rows="4" cols="50"></textarea>
         <br><br><input type='submit' class='btn' value='Salva modifica' name='post_modifica'>
     </form>
