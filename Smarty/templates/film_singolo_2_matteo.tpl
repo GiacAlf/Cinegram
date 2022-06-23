@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -82,7 +81,7 @@
 
         <!-- sidenav vuota ma riutilizzabile -->
         <div class="col-sm-3 sidenav">
-            <p><h3> Titolo $titolo  </h3></p>
+            <p><h2> Titolo $titolo  </h2></p>
             <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="336" width="235" alt="Locandina"><br>
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
@@ -173,16 +172,12 @@
 
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="300" width="200" alt="Locandina"></a></p><br>
-            <p><a href="#">Film 2</a></p><br>
-            <p><a href="#">Film 3</a></p><br>
-            <p><a href="#">Film 4</a></p><br>
-            <p><a href="#">Film 5</a></p><br>
-            <p><a href="#">Film 6</a></p><br>
-            <p><a href="#">Film 7</a></p><br>
-            <p><a href="#">Film 8</a></p><br>
-            <p><a href="#">Film 9</a></p><br>
-            <p><a href="#">Film 10</a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
+            <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
 
         </div>
     </div>
