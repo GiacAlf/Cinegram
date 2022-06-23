@@ -105,7 +105,6 @@
                     <p align="center">Attenzione! Username e/o password errati! </p>
                 </div>
             {/if}
-            </form>
         </div>
         <div class="col-sm-8 text-center">
             <p align="center">Non hai un account? <br/>
@@ -116,8 +115,6 @@
 
         </div>
     </div>
-</div>
-</div>
 </div>
 <br>
 <footer class="container-fluid text-center">
