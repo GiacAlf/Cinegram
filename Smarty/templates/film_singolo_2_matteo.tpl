@@ -40,6 +40,26 @@
             .row.content {height:auto;}
         }
     </style>
+    <script>
+        function myfunction(){
+            button=document.getElementById("filmvisto")
+            if(button.value=="filmvisto"){
+                document.getElementById("filmvisti").innerHTML="Film Non Visto"
+                button.value="film non visto"
+                button.className = "glyphicon glyphicon-eye-close";
+            }
+            else
+            {
+                document.getElementById("filmvisti").innerHTML="Film Visto"
+                button.value="filmvisto"
+                button.className = "glyphicon glyphicon-eye-open";
+            }
+
+        }
+
+
+    </script>
+
 </head>
 <body>
 
@@ -87,7 +107,7 @@
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
                     <form action="https://{$root_dir}/film/id={$id}/vedi">
-                        <button type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
+                        <button id="filmvisto" onclick="myfunction()" type="button" class="glyphicon glyphicon-eye-open" value="filmvisto"><span id="filmvisti"> Film Visto</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -96,7 +116,7 @@
                     </form>
                 {else}
                     <form action="https://{$root_dir}/film/id={$id}/toglivisto">
-                        <button type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
+                        <button id="filmnonvisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -191,6 +211,7 @@
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>
+
 
 </body>
 </html>
