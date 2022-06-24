@@ -94,23 +94,24 @@
             <div><br>
                 <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
                 <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/username={$autore_rece}">{$autore_rece}</a></span><hr>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><hr>
                 <div style='text-align:center;font-size:200%'>
                     <p>{$testo}</p>
                 </div>
                 <hr>
                 <div>
-                    {if $utente_sessione == $autore_rece}
-                        <a href="https://{$root_dir}/film/modifica-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Modifica</button></a>
-                        <a href="https://{$root_dir}/film/elimina-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Cancella</button></a>
+                    {if $user == $autore_rece}
+                        <a href="https://{$root_dir}/film/modifica-recensione/{$id}/{$autore_rece}"><button>Modifica</button></a>
+                        <a href="https://{$root_dir}/film/elimina-recensione/{$id}/{$autore_rece}"><button>Cancella</button></a>
                     {/if}
                 </div>
                 <br>
                 <div style="padding-left:0px; text-align:center">
                     <h3>Scrivi una risposta:</h3>
-                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/usernameAutoreRecensione={$autore_rece}" method="POST">
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$autore_rece}" method="POST">
+                        <!-- in teoria la data viene creata al momento in PHP-->
                         <textarea name="risposta" form_id="scrivirisposta" rows="5" cols="100"></textarea><br>
-                        <button type="submit">Salva</button>
+                        <button type="submit" form="scrivirisposta">Salva</button>
                     </form>
                 </div>
                 <br>
@@ -118,12 +119,12 @@
                 {foreach $risposte as $risposta}
                     <hr>
                     <div style="padding-left:45px;">
-                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/username={$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
+                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/{$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
                         &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
                         <p style="font-size:120%">{$risposta->getTesto()}</p>
-                        {if $utente_sessione == {$risposta->getUsernameAutore()}} <!--  in che formato la data? -->
-                            <a href="https://{$root_dir}/film/modifica-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/film/elimina-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"> <button>Cancella</button></a>
+                        {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
+                            <a href="https://{$root_dir}/film/modifica-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
                         {/if}
                     </div>
                 {/foreach}

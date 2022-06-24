@@ -70,17 +70,20 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
-                                               lo user non registrato può registrarsi -->
+                                               lo user non registrato può registrarsi, con il link -->
                     <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {/if}
             </ul>
-            <form class="navbar-form navbar-right" role="search">
+            <form action="" method="post" class="navbar-form navbar-right" role="search">
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search..">
+                    <input type="text" name="ricerca" class="form-control" placeholder="Cerca un film o un utente..">
                     <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <input type="submit" class="btn btn-default" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
-            </button>
+          </span>
+                    <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
           </span>
                 </div>
             </form>

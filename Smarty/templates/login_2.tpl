@@ -85,22 +85,23 @@
 
         <div class="col-sm-8 text-left">
             <h2>Login</h2>
-            <form>
+            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Inserisci l'email">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
                 </div>
                 <div class="form-group">
                     <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Inserisci la password">
+                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
                 </div>
-                <button type="submit" class="btn btn-default">Entra</button>
+                <button type="submit" form="login" class="btn btn-default">Entra</button>
             </form>
         </div>
 
         <div class="col-sm-8 text-center">
 
-            {if $error!='ok'}
+            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
+            					o se è troppo sbatti direttamente la view dell'errore-->
                 <div style="color: red;">
                     <p align="center">Attenzione! Username e/o password errati! </p>
                 </div>
@@ -108,7 +109,7 @@
         </div>
         <div class="col-sm-8 text-center">
             <p align="center">Non hai un account? <br/>
-                <a href="/FillSpaceWEB/Utente/registrazioneCliente" >Registrati</a> <br/>
+                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
 
 
             <div class="col-sm-2 sidenav_white"></div>

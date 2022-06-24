@@ -90,7 +90,7 @@
     <div class="col-sm-8 text-left">
 
 
-
+        <!-- tutto ok qui, tanto smarty solo questo fa-->
         <div class='main-container-visitor-log'>
             <br>
             <h1 align="center">ERRORE!</h1>
