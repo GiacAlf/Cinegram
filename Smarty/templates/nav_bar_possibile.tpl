@@ -1,92 +1,94 @@
 <!DOCTYPE html>
-{assign var='userlogged' value=$userlogged|default:'nouser'} <!-- questa è la nav bar da mettere in ogni template -->
-<html>
+<html lang="en">
+{assign var='user' value=$user|default:'non_loggato'}
 <head>
+    <title>Cinegram - Film Singolo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            position: fixed;
-
-            width: 100%;
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
         }
 
-        li {
-            float: left;
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {height: 450px}
+
+            /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
             color: white;
+            padding: 15px;
         }
 
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        li a:hover {
-            background-color: #111;
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {height:auto;}
         }
     </style>
 </head>
 <body>
 
-<!-- da mettere nel tag body-->
-
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bluecolor">
-
-
-    <!--
-    NON HO ASSOLUTAMENTE IDEA DI CHE COSA SIA QUESTA ROBA SOTTO
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>-->
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <!-- <a class="navbar-brand" href="/FillSpaceWEB/"><img src="/FillSpaceWEB/Smarty/immagini/logo_app2_w.png" width="40" height="30" class="d-inline-block align-top" alt="">
-             FillSpace
-         </a>-->
-
-
-        <!-- in questo modo gli elementi vengono stampati nell'ordine corretto, chiaramente sono da correggere tutti i link e cose varie però l'idea è questa -->
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <img src="/FillSpaceWEB/Smarty/immagini/logo_app2_w.png" width="40" height="30" class="d-inline-block align-top" alt="">
-                Cinegram
-            </li>
-            <li class="nav-item text-light" style="float:right">
-                <div class='top-bar-right'>
-                    &nbsp <form action='https://{$root_dir}/ricerca' method='POST'><input type='text' class='text-input' name='ricerca' placeholder='Cerca un film o un utente...'> &nbsp <input type='submit' name='cerca' value='Cerca' class='btn'></form>
-                </div> <!-- con l'input type submit, in teoria, siamo sicuri che l'input viene trasferito correttamente => manca la check box poi vediamo -->
-            </li>
-            {if $userlogged!='nouser'}
-                <li class="nav-item text-light" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/logout">Disconnetti</a>
-                </li>
-                <li class="nav-item text-light" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/profile">Profilo</a> <!-- se l'utente qui è un admin mettiamo il link per la pagina da admin -->
-                </li>
-            {else}
-                <li class="nav-item" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/login">Accedi</a>
-                </li>
-            {/if}
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="/FillSpaceWEB/Utente/login">Films</a>
-            </li>
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="/FillSpaceWEB/Utente/login">Members</a>
-            </li>
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="#" hidden >Home<span class="sr-only"></span></a>
-            </li>
-        </ul>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Cinegram</a> <!-- se lo lasciamo cliccabile dove porta se già
+            abbiamo il tag dell'homepage?-->
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/member/carica-member/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
+            </ul>
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" placeholder="Search..">
+                    <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+                </div>
+            </form>
+        </div>
     </div>
 </nav>
+
+
+
 </body>
 </html>
