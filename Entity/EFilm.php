@@ -269,4 +269,14 @@ class EFilm {
     public static function base64Encode(?string $locandinaStringa): ?string {
         return base64_encode($locandinaStringa);
     }
+
+
+    // prende come parametro l'array risultante da EFilm::loadLocandina
+    public static function getSrc(?array $locandina): ?string {
+
+        $encodeBase64 = $locandina[0];
+        $type = $locandina[1];
+
+        return "data: " . $type . ";base64," . $encodeBase64;
+    }
 }
