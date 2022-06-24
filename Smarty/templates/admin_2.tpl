@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Login</title>
+    <title>Cinegram - Amministrazione</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -64,7 +65,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input type="text" class="form-control" placeholder="Search..">
                     <span class="input-group-btn">
             <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
@@ -82,41 +83,65 @@
         <div class="col-sm-2 sidenav_white"></div>
 
 
-        <div class="col-sm-8 text-left">
-            <h2>Login</h2>
-            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
-                </div>
-                <button type="submit" form="login" class="btn btn-default">Entra</button>
-            </form>
-        </div>
 
-        <div class="col-sm-8 text-center">
+        <div class="container-fluid text-left">
+            <br>
+            <h2>Pagina di Amministrazione</h2><br>
+            <h3>Inserisci Nuovo Film:</h3><br>
+            <div class="col-sm-8 text-left">
 
-            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
-            					o se è troppo sbatti direttamente la view dell'errore-->
-                <div style="color: red;">
-                    <p align="center">Attenzione! Username e/o password errati! </p>
-                </div>
-            {/if}
-        </div>
-        <div class="col-sm-8 text-center">
-            <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
+                <!-- da cambiare la url-->
+                <form action="https://{$root_dir}/admin/amministrazione" method="post" id="login">
+                    <div class="form-group">
+                        <label for="username">Titolo:</label>
+                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci il titolo">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="pwd">Anno:</label>
+                        <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la data di uscita">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Durata:</label>
+                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci la durata">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Sinossi:</label>
+                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci la sinossi">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Lista Registi:</label>
+                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci i registi">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Lista Attori:</label>
+                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci gli attori">
+                    </div>
+
+
+                    <button type="submit" form="login" class="btn btn-default">Salva</button>
+                </form>
+                <br><br>
+                <h3>Oppure:</h3>
+                <a href="https://{$root_dir}/film/modifica"> <h3>Modifica Film</h3> </a>
+                <a href="https://{$root_dir}/member/modifica"><h3>Modifica Member</h3></a><br/>
+
+            </div>
+            <br><br>
 
 
             <div class="col-sm-2 sidenav_white"></div>
-
         </div>
     </div>
 </div>
 <br>
+
+
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>
