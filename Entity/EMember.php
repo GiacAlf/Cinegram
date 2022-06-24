@@ -164,16 +164,14 @@ class EMember extends EUser {
     FMember::loadImmagineProfilo).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeImmagineProfilo(?string $immagineDaQuery, bool $grande): ?string {
+    public static function resizeImmagineProfilo(?string $immagineDaQuery): ?string {
 
         /* il member potrebbe non aver caricato l'immagine, in questo modo se la query trova il suo valore a null
         restituirà sempre null */
         if(is_null($immagineDaQuery))
             return null;
 
-        // questa riga è necessaria così anche l'immagine che non ha subito il resize sarà di tipo GdImage
-        if($grande) return base64_encode($immagineDaQuery);
-
+        // crea la GdImage $immagine dalla stringa presa dal db come blob e prende larghezza e lunghezza
         $immagine = imagecreatefromstring($immagineDaQuery);
         $larghezzaImmagine = imagesx($immagine);
         $lunghezzaImmagine = imagesy($immagine);
@@ -181,23 +179,31 @@ class EMember extends EUser {
         // preparazione nuova immagine
         $immagineRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
 
-        // setta $immagineRidimensionata con tutti i parametri
+        // setta $immagineRidimensionata con tutti i parametri, è una GdImage
         imagecopyresampled($immagineRidimensionata, $immagine, 0, 0, 0, 0,
             self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
 
+        // devo fare così per poter prendere il contenuto di un immagine
+        ob_start();
+        imagejpeg($immagineRidimensionata);
+        $immagineRidimensionataString = ob_get_clean();
+
         // si svuota la variabile (fanno tutti così!)
-        imagedestroy($immagine);
+        // imagedestroy($immagine);
 
         // questa è per provare che il resize funzioni, salva su file system
         // imagejpeg($immagineRidimensionata, "/Users/giacomoalfani/Downloads/immagineRidimensionata.jpeg", 100);
-
         // anche questa è per provare, stampa su browser (o console Phpstorm)
         // imagejpeg($immagineRidimensionata, null, 100);
 
-        //$immagineRidimensionata = imagecrop()
+        // l'immagine ritornata è una stringa
+        return $immagineRidimensionataString;
+    }
 
-        // l'immagine ritornata è una GdImage che quindi dovrà essere poi visualizzata in base al image/type appropriato
-        return $immagineRidimensionata;
+
+    // metodo che si occupa della codifica in base64 richiesta per il display
+    public static function base64Encode(?string $immagineStringa): ?string {
+        return base64_encode($immagineStringa);
     }
 
 

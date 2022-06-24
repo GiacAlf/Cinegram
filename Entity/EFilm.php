@@ -228,7 +228,7 @@ class EFilm {
     FFilm::loadLocandina).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeLocandina(?string $locandinaDaQuery, bool $grande): ?object {
+    public static function resizeLocandina(?string $locandinaDaQuery): ?string {
 
         /* il film potrebbe non avere la locandina, in questo modo se la query trova il suo valore a null
         restituirà sempre null */
@@ -237,30 +237,36 @@ class EFilm {
 
         // crea la GdImage $locandina dalla stringa presa dal db come blob e prende larghezza e lunghezza
         $locandina = imagecreatefromstring($locandinaDaQuery);
-
-        // questa riga è necessaria così anche la locandina che non ha subito il resize sarà di tipo GdImage
-        if($grande) return $locandina;
-
         $larghezzaImmagine = imagesx($locandina);
         $lunghezzaImmagine = imagesy($locandina);
 
         // preparazione nuova locandina
         $locandinaRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
 
-        // setta $locandinaRidimensionata con tutti i parametri
+        // setta $locandinaRidimensionata con tutti i parametri, è una GdImage
         imagecopyresampled($locandinaRidimensionata, $locandina, 0, 0, 0, 0,
             self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
 
+        // devo fare così per poter prendere il contenuto di un immagine
+        ob_start();
+        imagejpeg($locandinaRidimensionata);
+        $locandinaRidimensionataString = ob_get_clean();
+
         // si svuota la variabile (fanno tutti così!)
-        imagedestroy($locandina);
+        // imagedestroy($locandina);
 
         // questa è per provare che il resize funzioni, salva su file system
         // imagejpeg($locandinaRidimensionata, "/Users/giacomoalfani/Downloads/locandinaRidimensionata.jpeg", 100);
-
         // anche questa è per provare, stampa su browser (o console Phpstorm)
         // imagejpeg($locandinaRidimensionata, null, 100);
 
-        // la locandina ritornata è una GdImage che quindi dovrà essere poi visualizzata in base al image/type appropriato
-        return $locandinaRidimensionata;
+        // la locandina ritornata è una stringa
+        return $locandinaRidimensionataString;
+    }
+
+
+    // metodo che si occupa della codifica in base64 richiesta per il display
+    public static function base64Encode(?string $locandinaStringa): ?string {
+        return base64_encode($locandinaStringa);
     }
 }
