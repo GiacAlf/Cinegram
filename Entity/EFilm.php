@@ -15,8 +15,10 @@ class EFilm {
     /* i prossimi due parametri servono per il ridimensionamento della locandina in formato piccolo, in caso di futuri
     cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
     funzione di resize per scegliere la dimensione che si desidererà */
-    private static int $larghezzaDesiderata = 70;  // in pixel
-    private static int $altezzaDesiderata = 105;    // in pixel
+    private static int $larghezzaGrande = 210;  // in pixel
+    private static int $altezzaGrande = 315;    // in pixel
+    private static int $larghezzaPiccola = 70;  // in pixel
+    private static int $altezzaPiccola = 105;    // in pixel
 
     public function __construct(?int $id, string $titolo, DateTime $data, int $durata, string $sinossi, ?int $numeroViews,
                                 ?float $votoMedio, ?array $listaRegisti, ?array $listaAttori, ?array $listaRecensioni) {
@@ -228,7 +230,7 @@ class EFilm {
     FFilm::loadLocandina).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeLocandina(?string $locandinaDaQuery): ?string {
+    public static function resizeLocandina(?string $locandinaDaQuery, bool $grande): ?string {
 
         /* il film potrebbe non avere la locandina, in questo modo se la query trova il suo valore a null
         restituirà sempre null */
@@ -240,12 +242,21 @@ class EFilm {
         $larghezzaImmagine = imagesx($locandina);
         $lunghezzaImmagine = imagesy($locandina);
 
+        if($grande) {
+            $larghezzaDesiderata = self::$larghezzaGrande;
+            $altezzaDesiderata = self::$altezzaGrande;
+        }
+        else {
+            $larghezzaDesiderata = self::$larghezzaPiccola;
+            $altezzaDesiderata = self::$altezzaPiccola;
+        }
+
         // preparazione nuova locandina
-        $locandinaRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
+        $locandinaRidimensionata = imagecreatetruecolor($larghezzaDesiderata, $altezzaDesiderata);
 
         // setta $locandinaRidimensionata con tutti i parametri, è una GdImage
         imagecopyresampled($locandinaRidimensionata, $locandina, 0, 0, 0, 0,
-            self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+            $larghezzaDesiderata, $altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
 
         // devo fare così per poter prendere il contenuto di un immagine
         ob_start();

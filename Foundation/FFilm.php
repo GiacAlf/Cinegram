@@ -731,9 +731,9 @@ class FFilm {
                 // se $grande è settato a true si caricherà la locandina grande
                 // il resize gestisce anche il null come input ;)
                 if($grande)
-                    $locandina = $queryResultFilm[self::$nomeAttributoLocandina];
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
                 else
-                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina]);
+                    $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], false);
 
                 // si procede all'encode come richiesto per il display della locandina
                 $immagineProfilo = EFilm::base64Encode($locandina);

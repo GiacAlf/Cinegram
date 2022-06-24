@@ -975,9 +975,11 @@ class FMember {
                 // il resize gestisce anche il null come input ;)
                 // $immagineProfilo sarà una stringa prasa dal db come blob
                 if($grande)
-                    $immagineProfilo = $queryResultMember[self::$nomeAttributoImmagineProfilo];
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
+                    true);
                 else
-                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo]);
+                    $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
+                        false);
 
                 // si procede all'encode come richiesto per il display dell'immagine
                 $immagineProfilo = EMember::base64Encode($immagineProfilo);

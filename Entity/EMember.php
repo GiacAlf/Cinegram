@@ -12,8 +12,10 @@ class EMember extends EUser {
     /* i prossimi due parametri servono per il ridimensionamento dell'immagine profilo in formato piccolo, in caso di futuri
     cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
     funzione di resize per scegliere la dimensione che si desidererà */
-    private static int $larghezzaDesiderata = 80;  // in pixel
-    private static int $altezzaDesiderata = 80;    // in pixel
+    private static int $larghezzaGrande = 210;  // in pixel
+    private static int $altezzaGrande = 210;    // in pixel
+    private static int $larghezzaPiccola = 80;  // in pixel
+    private static int $altezzaPiccola = 80;    // in pixel
 
 
     // quando si crea ex novo i warning saranno sempre zero
@@ -164,7 +166,7 @@ class EMember extends EUser {
     FMember::loadImmagineProfilo).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeImmagineProfilo(?string $immagineDaQuery): ?string {
+    public static function resizeImmagineProfilo(?string $immagineDaQuery, bool $grande): ?string {
 
         /* il member potrebbe non aver caricato l'immagine, in questo modo se la query trova il suo valore a null
         restituirà sempre null */
@@ -176,12 +178,21 @@ class EMember extends EUser {
         $larghezzaImmagine = imagesx($immagine);
         $lunghezzaImmagine = imagesy($immagine);
 
+        if($grande) {
+            $larghezzaDesiderata = self::$larghezzaGrande;
+            $altezzaDesiderata = self::$altezzaGrande;
+        }
+        else {
+            $larghezzaDesiderata = self::$larghezzaPiccola;
+            $altezzaDesiderata = self::$altezzaPiccola;
+        }
+
         // preparazione nuova immagine
-        $immagineRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
+        $immagineRidimensionata = imagecreatetruecolor($larghezzaDesiderata, $altezzaDesiderata);
 
         // setta $immagineRidimensionata con tutti i parametri, è una GdImage
         imagecopyresampled($immagineRidimensionata, $immagine, 0, 0, 0, 0,
-            self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+            $larghezzaDesiderata, $altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
 
         // devo fare così per poter prendere il contenuto di un immagine
         ob_start();
