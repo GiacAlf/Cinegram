@@ -730,18 +730,21 @@ class FFilm {
             if($queryResultFilm) {
                 // se $grande è settato a true si caricherà la locandina grande
                 // il resize gestisce anche il null come input ;)
-                if($grande)
+                if($grande) {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
-                else
+                    $size = "widht='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";
+                }
+                else {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], false);
+                    $size = "widht='" . EFilm::$larghezzaPiccola . "' " . "height='" . EFilm::$altezzaPiccola . "'";
+                }
 
                 // si procede all'encode come richiesto per il display della locandina
-                $immagineProfilo = EFilm::base64Encode($locandina);
+                $locandina = EFilm::base64Encode($locandina);
 
                 /* si è considerato che la query potrebbe restituire una locandina null, in quel caso faremo un
                 display di una locandina neutra, una pellicola in bianco e nero  */
-                return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
-                    $queryResultFilm[self::$nomeAttributoSizeLocandina]);
+                return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina], $size);
             }
         }
         catch(PDOException $e) {
