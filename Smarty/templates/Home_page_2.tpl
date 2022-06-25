@@ -50,7 +50,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a>
+            <span class="navbar-brand">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
@@ -80,7 +80,7 @@
     <div class="row content">
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            <p><a href="#">Film 1</a></p><br>
+            <p><a href="#">Film 1</a></p><!--<img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" width="70" height="105" class="img-responsive"  alt="Locandina 1"><br> -->
             <p><a href="#">Film 2</a></p><br>
             <p><a href="#">Film 3</a></p><br>
             <p><a href="#">Film 4</a></p><br>
@@ -94,21 +94,23 @@
             <div class="container-fluid bg-3 text-center">
                 <h3>Film Recenti</h3><br>
                 <div class="row">
-                    <div class="col-sm-3">
+                    {for $i=0 to 7}
+                        <div class="col-sm-3">
+                            <p>{$film_recenti[i]->getTitolo()}</p>
+                            <img src="{$film_recenti[i]->getSrc($locandine_film_recenti[i])}" {$locandine_film_recenti[i][2]} class="img-responsive"  alt="Locandina 1">
+                        </div>
+                    {/for}
+                    <!--<div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 1">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 2">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 2">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 3">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 3">
-                    </div>
-                    <div class="col-sm-3">
-                        <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 4">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 4">
                     </div>
                     <br>
                     <div class="col-sm-3">
@@ -126,7 +128,7 @@
                     <div class="col-sm-3">
                         <p></p>
                         <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 8">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
