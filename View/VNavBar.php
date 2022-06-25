@@ -15,7 +15,7 @@ class VNavBar
     }
 
 
-
+    //non_loggato, admin, username -> con le diverse opzioni la nav bar presenta i corretti bottoni
     public function navbar(): string {
         if (SessionHelper::isLogged()) {
             $utente = unserialize($_SESSION['utente']);

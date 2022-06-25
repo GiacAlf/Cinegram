@@ -91,45 +91,45 @@
             <div class="col-sm-8 text-left">
 
                 <!-- da cambiare la url-->
-                <form action="https://{$root_dir}/admin/amministrazione" method="post" id="login">
+                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film">
                     <div class="form-group">
-                        <label for="username">Titolo:</label>
-                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci il titolo">
+                        <label for="titolo">Titolo:</label>
+                        <input type="text" name="titolo" class="form-control" id="titolo" placeholder="Inserisci il titolo">
                     </div>
 
 
                     <div class="form-group">
-                        <label for="pwd">Anno:</label>
-                        <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la data di uscita">
+                        <label for="data_uscita">Anno:</label>
+                        <input type="date" name="data" class="form-control" id="data_uscita" placeholder="Inserisci la data di uscita">
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Durata:</label>
-                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci la durata">
+                        <label for="durata">Durata:</label>
+                        <input type="number" name="durata" class="form-control" id="titolo" placeholder="Inserisci la durata">
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Sinossi:</label>
-                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci la sinossi">
+                        <label for="sinossi">Sinossi:</label>
+                        <input type="text" name="sinossi" class="form-control" id="sinossi" placeholder="Inserisci la sinossi">
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Lista Registi:</label>
-                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci i registi">
+                        <label for="registi">Lista Registi:</label>
+                        <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Lista Attori:</label>
-                        <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci gli attori">
+                        <label for="attori">Lista Attori:</label>
+                        <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
                     </div>
 
 
-                    <button type="submit" form="login" class="btn btn-default">Salva</button>
+                    <button type="submit" form="inserisci_film" class="btn btn-default">Salva Film</button>
                 </form>
                 <br><br>
                 <h3>Oppure:</h3>
-                <a href="https://{$root_dir}/film/modifica"> <h3>Modifica Film</h3> </a>
-                <a href="https://{$root_dir}/member/modifica"><h3>Modifica Member</h3></a><br/>
+                <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
+                <a href="https://{$root_dir}/admin/modifica"><h3>Modera Member</h3></a><br/>
 
             </div>
             <br><br>
