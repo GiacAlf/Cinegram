@@ -14,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav {
@@ -36,7 +38,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
@@ -94,10 +98,14 @@
             <div class="container-fluid bg-3 text-center">
                 <h3>Film Recenti</h3><br>
                 <div class="row">
+
+                    <!-- passare al posto di 7 la variabile numero di estrazioni-1 -->
                     {for $i=0 to 7}
                         <div class="col-sm-3">
-                            <p>{$film_recenti[i]->getTitolo()}</p>
-                            <img src="{$film_recenti[i]->getSrc($locandine_film_recenti[i])}" {$locandine_film_recenti[i][2]} class="img-responsive"  alt="Locandina 1">
+                            <p>{$film_recenti[$i]->getTitolo()}</p>
+                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
+                            <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
+                                    {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"  alt="Locandina 1">
                         </div>
                     {/for}
                     <!--<div class="col-sm-3">
