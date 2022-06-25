@@ -15,10 +15,10 @@ class EFilm {
     /* i prossimi due parametri servono per il ridimensionamento della locandina in formato piccolo, in caso di futuri
     cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
     funzione di resize per scegliere la dimensione che si desidererà */
-    private static int $larghezzaGrande = 210;  // in pixel
-    private static int $altezzaGrande = 315;    // in pixel
-    private static int $larghezzaPiccola = 70;  // in pixel
-    private static int $altezzaPiccola = 105;    // in pixel
+    public static int $larghezzaGrande = 210;  // in pixel
+    public static int $altezzaGrande = 315;    // in pixel
+    public static int $larghezzaPiccola = 70;  // in pixel
+    public static int $altezzaPiccola = 105;    // in pixel
 
     public function __construct(?int $id, string $titolo, DateTime $data, int $durata, string $sinossi, ?int $numeroViews,
                                 ?float $votoMedio, ?array $listaRegisti, ?array $listaAttori, ?array $listaRecensioni) {

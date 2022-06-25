@@ -1,21 +1,27 @@
 <?php
 
-class CHomepage
-{
+class CHomepage {
 
     /*
     sara' il metodo sempre chiamato all'inizio(?), url del tipo localhost/homepage/imposta-homepage in get */
-    public static function impostaHomepage(): void{
+    public static function impostaHomepage(): void {
         $numero_estrazioni = 5;
-        //$view = new VHomePage();
+        $view = new VHomePage();
 
         $filmRecenti = FPersistentManager::caricaFilmRecenti($numero_estrazioni);
-        $utentiPopolari = FPersistentManager::caricaUtentiPiuPopolari($numero_estrazioni);
-        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte($numero_estrazioni);
-        $filmPiuRecensiti = FPersistentManager::caricaFilmPiuRecensiti($numero_estrazioni);
-        //ma qua tipo non bisogna richiamare pure il Persistant Manager per prendermi le locandine piccole?
+        $locandineFilmRecenti = FPersistentManager::loadLocandineFilms($filmRecenti, false);
 
-        //testando mi da un problema su $utentiPopolari riguardo array_slice(), controllare!!
+        $utentiPopolari = FPersistentManager::caricaUtentiPiuPopolari($numero_estrazioni);
+        $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
+
+        // per ora no agli avatar vicino alle recensioni (e risposte) ci mettiamo solo gli username
+        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte($numero_estrazioni);
+
+        $filmPiuRecensiti = FPersistentManager::caricaFilmPiuRecensiti($numero_estrazioni);
+        $locandineFilmPiuRecensiti = FPersistentManager::loadLocandineFilms($filmPiuRecensiti, false);
+
+        //ma qua tipo non bisogna richiamare pure il Persistant Manager per prendermi le locandine piccole? certo, fatto
+        // io!!
 
         print_r($filmRecenti);
         print_r($utentiPopolari);
@@ -24,13 +30,7 @@ class CHomepage
 
         /* Qui dovro' chiamare la view corretta e passare al suo metodo gli array
         tanto questa pagina è uguale per tutti*/
-        //$view->avviaHomePage($filmRecenti, $filmPiuRecensiti, $ultimeRecensioniScritte, $utentiPopolari);
+        $view->avviaHomePage($filmRecenti, $locandineFilmRecenti, $filmPiuRecensiti, $locandineFilmPiuRecensiti,
+            $ultimeRecensioniScritte, $utentiPopolari, $immaginiUtentiPopolari);
     }
-
-
-
-
-
-
-
 }
