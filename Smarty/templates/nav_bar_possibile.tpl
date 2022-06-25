@@ -55,7 +55,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a> <!-- se lo lasciamo cliccabile dove porta se già
+            <span class="navbar-brand">Cinegram</span> <!-- se lo lasciamo cliccabile dove porta se già
             abbiamo il tag dell'homepage?-->
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">

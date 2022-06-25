@@ -40,4 +40,21 @@ class SessionHelper {
     public static function getUtente(): EUser {
         return unserialize($_SESSION['utente']);
     }
+
+    //non_loggato, admin, username -> con le diverse opzioni la nav bar presenta i corretti bottoni
+    public static function UserNavBar(): string {
+        if (SessionHelper::isLogged()) {
+            $utente = unserialize($_SESSION['utente']);
+            if ($utente->chiSei() == "Admin"){
+                $user = "admin";
+            }
+            else {
+                $user = $utente->getUsername();
+            }
+        }
+        else {
+            $user = "non_loggato";
+        }
+        return $user;
+    }
 }
