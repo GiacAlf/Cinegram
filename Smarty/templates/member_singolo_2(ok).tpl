@@ -122,8 +122,7 @@
 
         <div class="col-sm-7 text-center">
 
-
-            <p><span class="badge"></span> <h3>Ultime Recensioni:</h3></p><br>
+            <p><span class="badge"></span> <br><h3>Ultime Recensioni:</h3></p><br>
             {foreach $recensioni as $recensione}
             <div class="row">
                 <div class="col-sm-2 text-center">
@@ -140,8 +139,6 @@
                 </div>
                 {/foreach}
             </div>
-
-
 
         </div>
     </div>

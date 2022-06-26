@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Login</title>
+    <title>Cinegram - Recensione di {$autore}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -32,7 +32,7 @@
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 767px) {
-            .sidenav {
+            .sidenav.white {
                 height: auto;
                 padding: 15px;
             }
@@ -79,44 +79,60 @@
 <div class="container-fluid text-center">
     <div class="row content">
 
-        <div class="col-sm-2 sidenav_white"></div>
-
+        <!-- side nav vuota e bianca-->
+        <div class="col-sm-2 sidenav_white">
+            <p></p>
+        </div>
 
         <div class="col-sm-8 text-left">
-            <h2>Login</h2>
-            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
+
+            <div><br><br>
+                <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
+                <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><br><br><br>
+                <div style='text-align:center;font-size:200%'>
+                    <p>{$testo}</p>
                 </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
+                <br><br>
+                <div>
+                    {if $user == $autore_rece}
+                        <a href="https://{$root_dir}/film/modifica-recensione/{$id}/{$autore_rece}"><button>Modifica</button></a>
+                        <a href="https://{$root_dir}/film/elimina-recensione/{$id}/{$autore_rece}"><button>Cancella</button></a>
+                    {/if}
                 </div>
-                <button type="submit" form="login" class="btn btn-default">Entra</button>
-            </form>
-        </div>
-
-        <div class="col-sm-8 text-center">
-
-            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
-            					o se è troppo sbatti direttamente la view dell'errore-->
-                <div style="color: red;">
-                    <p align="center">Attenzione! Username e/o password errati! </p>
+                <br><br>
+                <div style="padding-left:0px; text-align:center">
+                    <h3>Scrivi una risposta:</h3>
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$autore_rece}" method="POST">
+                        <!-- in teoria la data viene creata al momento in PHP-->
+                        <textarea name="risposta" form_id="scrivirisposta" rows="5" cols="100"></textarea><br>
+                        <button type="submit" form="scrivirisposta">Salva</button>
+                    </form>
                 </div>
-            {/if}
-        </div>
-        <div class="col-sm-8 text-center">
-            <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
+                <br><br>
+                <h3 style="padding-left:45px;">Risposte della recensione:</h3><br>
+                {foreach $risposte as $risposta}
+                    <br>
+                    <div style="padding-left:45px;">
+                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/{$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
+                        &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
+                        <p style="font-size:120%">{$risposta->getTesto()}</p>
+                        {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
+                            <a href="https://{$root_dir}/film/modifica-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
+                        {/if}
+                    </div>
+                {/foreach}
 
-
-            <div class="col-sm-2 sidenav_white"></div>
-
+            </div>
+            <br><br>
         </div>
     </div>
+
+    <!-- side nav vuota e bianca-->
+    <div class="col-sm-2 sidenav.white"></div>
 </div>
-<br>
+
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>

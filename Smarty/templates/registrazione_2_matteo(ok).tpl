@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Modifica Profilo</title>
+    <title>Cinegram - Registrazione</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -38,6 +38,14 @@
             }
             .row.content {height:auto;}
         }
+        #div {
+            margin: 0 auto;
+            position: relative;
+            left:10%;
+            width: 50%;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -64,7 +72,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input type="text" class="form-control" placeholder="Search..">
                     <span class="input-group-btn">
             <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
@@ -76,52 +84,42 @@
     </div>
 </nav>
 
-
 <div class="container-fluid text-center">
     <div class="row content">
 
         <div class="col-sm-2 sidenav_white"></div>
 
-
-        <div class="container-fluid text-left"><br>
-            <h1>Modifica profilo di {$username}</h1><br>
-            <div class="container-fluid text-left">
-                <h3 style="display:inline;">Bio attuale: </h3><span>{$bio}</span><br><br>
-                <form  style="display:inline;" action='https://{$root_dir}/profilo/aggiorna-bio' method='POST' id='modifica_bio'>
-                    <textarea name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>
-                    <input type='submit' value='Salva bio' name='post_bio'>
-                </form>
-                <br><br>
-                <h3 style="display:inline;">Immagine profilo attuale: </h3><br><br>
-                <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina288.jpg" height="100" width="100"> <br><br>
-                <form id='nuova_immagine_profilo' action='https://{$root_dir}/profilo/modifica-profilo' method='POST' enctype="multipart/form-data">
-                    <span> Seleziona la nuova immagine profilo: </span><input name='nuova_immagine_profilo' type='file'>
-                </form><br>
-                <button type='submit' form='nuova_immagine_profilo' class='btn'><span>Salva immagine profilo </span></button>
-
-                <br><br>
-                <div class="container-fluid text-left">
-                    <h3 >Modifica password:</h3>
-                    <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
-                        <input name='vecchia_password' type='password' placeholder='Inserisci la vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
-                        <input name='nuova_password' type='password' placeholder='Modifica password'> <br>
-                        <input name='conferma_nuova_password' type='password' placeholder='Conferma la nuova password' ><br>
-                        <input type='submit' value='Modifica la password' name='post_password'>
-                    </form>
-                    <div>
-                    </div>
-                    <br><br>
-
-
-                    <div class="col-sm-2 sidenav_white"></div>
+        <div class='col-sm-8 text-center'>
+            <h3 class='title'>Riempi i seguenti campi. <br>I campi contrassegnati da * sono obbligatori.</h3><br>
+            <form id='registrazione-form' action="https://{$root_dir}/member/registrazione-member" method='POST' enctype="multipart/form-data">
+                <input name='username_registrazione' type='text' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
+                <input name='password_registrazione' type='password' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
+                <input name='conferma_password' type='password' class='text-input' placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
+                <p>Inserisci una bio:</p>
+                <textarea rows="4" cols="50" name="bio" form='registrazione-form' class='text-input'>
+      		  </textarea><br><br> <!-- anche questo l'ho fatto io, si spera che, come dice w3schools, effettivamente mettendo l'attributo form sia tutto allineato-->
+                <p id="p">Inserisci immagine profilo:</p>
+                <div id="div">
+                    <input  name='immagine_profilo' type='file' class='text-input' cols="20" rows="5"><br><br>
                 </div>
+                <!-- la roba dell'immagine profilo l'ho fatta io, speriamo che mandi correttamente l'input in $_FILES, non avrò idea di come testare questa cosa in futuro ahaha-->
+
+                <!-- il nome, il cognome e la data di nascita di fatto non lo prevediamo
+                <input name='nome' type='text' class='half-text-input' placeholder='Nome'> <input name='cognome' type='text' class='half-text-input' placeholder='Cognome'><br><br>
+                <input name='dob' type='date' class='text-input'><br> Data di nascita<br><br>
+                <input name='num_telefono' type='tel' class='text-input' placeholder='Numero di telefono'><br><br> -->
+            </form>
+            <div id="mydiv2"class='col-sm-12 text-center'>
+                <button type='submit' form='registrazione-form' class='btn'><span>Registrati </span></button>
+                &nbsp oppure &nbsp <a href="https://{$root_dir}/login/verifica-login">Login</a>
             </div>
         </div>
     </div>
 </div>
+
+<div class="col-sm-2 sidenav_white"></div>
+
 <br>
-
-
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>

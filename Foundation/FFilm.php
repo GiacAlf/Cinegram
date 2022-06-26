@@ -730,6 +730,7 @@ class FFilm {
             if($queryResultFilm) {
                 // se $grande è settato a true si caricherà la locandina grande
                 // il resize gestisce anche il null come input ;)
+                // $locandina sarà una stringa, presa dal db come blob
                 if($grande) {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
                     $size = "width='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";

@@ -28,7 +28,7 @@ class VHomePage
         $this->smarty->assign('ultime_recensioni', $ultime_recensioni);
         $this->smarty->assign('utenti_popolari', $utenti_popolari);
         $this->smarty->assign('immagini_utenti_popolari', $immagini_utenti_popolari);
-        $this->smarty->display('Home_page_2.tpl');
+        $this->smarty->display('Home_page_2(ok).tpl');
         //passo gli interi array a smarty, che poi si preoccuperà di prendere le robe che gli interessano
     }
 

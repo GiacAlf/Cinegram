@@ -94,7 +94,6 @@
 
             <div class="col-sm-2 sidenav_white"></div>
 
-
             <div class="container-fluid text-left"><br>
                 <h1>Modifica Recensione:</h1><br>
                 <div>
@@ -129,7 +128,6 @@
     <div class="col-sm-2 sidenav_white"></div>
     <br>
 </div>
-
 
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>

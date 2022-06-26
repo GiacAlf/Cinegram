@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -88,11 +87,11 @@
 
         <div class="col-sm-2 sidenav_white"></div>
 
-
-
         <div class="container-fluid text-left">
             <br>
-            <h2>Pagina di Amministrazione</h2><br>
+            <div id="div">
+                <h2>Pagina di Amministrazione</h2><br>
+            </div>
             <h3>Inserisci Nuovo Film:</h3><br>
             <div class="col-sm-8 text-left">
 
@@ -102,7 +101,6 @@
                         <label for="titolo">Titolo:</label>
                         <input type="text" name="titolo" class="form-control" id="titolo" placeholder="Inserisci il titolo">
                     </div>
-
 
                     <div class="form-group">
                         <label for="data_uscita">Anno:</label>
@@ -120,12 +118,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="registi">Lista Registi:</label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
                     </div>
 
                     <div class="form-group">
-                        <label for="attori">Lista Attori:</label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
                     </div>
 
@@ -141,13 +139,11 @@
             </div>
             <br><br>
 
-
             <div class="col-sm-2 sidenav_white"></div>
         </div>
     </div>
 </div>
 <br>
-
 
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>

@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Post di {$autore}</title>
+    <title>Cinegram - Modifica Risposta</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
             margin-bottom: 0;
             border-radius: 0;
+        }
+        .mydiv{
+            margin: 0 auto;
+            position: relative;
+            width: 50%;
+            text-align: center;
+        }
+
+        #mytext {
+            width: 450px;
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
@@ -34,7 +42,7 @@
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 767px) {
-            .sidenav.white {
+            .sidenav {
                 height: auto;
                 padding: 15px;
             }
@@ -66,7 +74,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search..">
+                    <input type="text" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
             <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
@@ -78,32 +86,34 @@
     </div>
 </nav>
 
-<div class="container-fluid text-center">
-<div class="row content">
+<div class="mydiv">
+    <div class="container-fluid text-center">
+        <div class="row content">
 
-    <!-- side nav vuota e bianca-->
-    <div class="col-sm-2 sidenav_white">
-        <p></p>
-    </div>
+            <div class="col-sm-2 sidenav_white"></div>
 
+            <div class="container-fluid text-left"><br>
+                <h1>Modifica Risposta:</h1><br>
+                <div>
+                    <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
+                </div>
+                <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/id={$id_film}/usernameAutore={$username}" method="POST">
+                    <div class="form-group">
 
-    <div class="col-sm-8 text-left">
-
-
-        <!-- tutto ok qui, tanto smarty solo questo fa-->
-        <div class='main-container-visitor-log'>
-            <br>
-            <h1 align="center">ERRORE!</h1>
-            <br><br><br>
-            <h2 align="center">{$titolo}</h2>
-            <h3 align="center">{$testo}</h3>
-            <br><br><br>
+                        <br>
+                        <textarea id="mytext" name="nuovo_testo" form_id="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della risposta..."></textarea>
+                    </div>
+                    <div class="mydiv">
+                        <button type="submit" class="btn btn-default">Salva modifiche</button>
+                    </div>
+                </form>
+            </div>
+            <br><br>
         </div>
-
-
-        <!-- side nav vuota e bianca-->
-        <div class="col-sm-2 sidenav.white"></div>
     </div>
+
+    <div class="col-sm-2 sidenav_white"></div>
+    <br>
 </div>
 
 <footer class="container-fluid text-center">

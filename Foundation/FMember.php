@@ -973,7 +973,7 @@ class FMember {
             if($queryResultMember) {
                 // se $grande è settato a true si caricherà l'immagine profilo grande
                 // il resize gestisce anche il null come input ;)
-                // $immagineProfilo sarà una stringa prasa dal db come blob
+                // $immagineProfilo sarà una stringa, presa dal db come blob
                 if($grande) {
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
                         true);

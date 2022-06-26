@@ -142,7 +142,7 @@
                     <div class="form-group">
                         <textarea form="scrivirecensione" class="form-control" rows="3" required></textarea>
                     </div>
-                    <button type="submit" form="scrivirecensione" class="btn btn-success">Salva</button>
+                    <button type="submit" form="scrivirecensione" class="btn btn-default">Salva</button>
                 </form>
                 <br><br>
 
@@ -165,9 +165,6 @@
                         </div>
                     </div>
                 {/foreach}
-
-
-
 
             </div>
         </div>

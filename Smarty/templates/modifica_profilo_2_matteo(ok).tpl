@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Modifica Risposta</title>
+    <title>Cinegram - Modifica Profilo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -94,7 +94,6 @@
 
             <div class="col-sm-2 sidenav_white"></div>
 
-
             <div class="container-fluid text-left"><br>
                 <h1>Modifica profilo di {$username}</h1><br>
                 <div class="container-fluid text-left">
@@ -115,23 +114,23 @@
                                 <input name='nuova_immagine_profilo' type='file'>
                             </div>
                         </form><br>
-                        <button type='submit' form='nuova_immagine_profilo' class='btn'><span>Salva immagine profilo </span></button>
+                        <button type='submit' form='nuova_immagine_profilo' class='btn'>
+                            <span>Salva immagine profilo </span></button>
 
                         <br><br>
-                        <div class="container-fluid text-left">
+                        <div class="container-fluid text-center">
                             <h3 >Modifica password:</h3>
                             <div id="divpass">
                                 <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
-                                    <input name='vecchia_password' type='password' placeholder='Inserisci la vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
-                                    <input name='nuova_password' type='password' placeholder='Modifica password'> <br>
-                                    <input name='conferma_nuova_password' type='password' placeholder='Conferma la nuova password' ><br>
+                                    <input name='vecchia_password' type='password' placeholder='Vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
+                                    <input name='nuova_password' type='password' placeholder='Nuova password'> <br>
+                                    <input name='conferma_nuova_password' type='password' placeholder='Conferma password' ><br><br>
                                     <input type='submit' value='Modifica la password' name='post_password'>
                             </div>
                             </form>
                             <div>
                             </div>
                             <br><br>
-
 
                             <div class="col-sm-2 sidenav_white"></div>
                         </div>
@@ -142,9 +141,6 @@
         <br>
     </div>
 </div>
-
-
-
 
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>

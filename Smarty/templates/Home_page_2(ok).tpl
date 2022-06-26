@@ -18,7 +18,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav {
             padding-top: 20px;
             background-color: #f1f1f1;
@@ -84,7 +84,7 @@
     <div class="row content">
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            <p><a href="#">Film 1</a></p><!--<img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" width="70" height="105" class="img-responsive"  alt="Locandina 1"><br> -->
+            <p><a href="#">Film 1</a></p><br><!--<img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" width="70" height="105" class="img-responsive"  alt="Locandina 1"><br> -->
             <p><a href="#">Film 2</a></p><br>
             <p><a href="#">Film 3</a></p><br>
             <p><a href="#">Film 4</a></p><br>

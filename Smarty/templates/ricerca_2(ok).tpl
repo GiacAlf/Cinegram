@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Recensione di {$autore}</title>
+    <title>Cinegram - Risultato Ricerca</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -37,6 +37,12 @@
                 padding: 15px;
             }
             .row.content {height:auto;}
+        }
+        #div {
+            margin: 0 auto;
+            position: relative;
+            width: 50%;
+            text-align: center;
         }
     </style>
 </head>
@@ -79,65 +85,62 @@
 <div class="container-fluid text-center">
     <div class="row content">
 
-        <!-- side nav vuota e bianca-->
         <div class="col-sm-2 sidenav_white">
             <p></p>
         </div>
 
-
         <div class="col-sm-8 text-left">
-
-
-
-
-            <div><br>
-                <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
-                <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><hr>
-                <div style='text-align:center;font-size:200%'>
-                    <p>{$testo}</p>
-                </div>
-                <hr>
-                <div>
-                    {if $user == $autore_rece}
-                        <a href="https://{$root_dir}/film/modifica-recensione/{$id}/{$autore_rece}"><button>Modifica</button></a>
-                        <a href="https://{$root_dir}/film/elimina-recensione/{$id}/{$autore_rece}"><button>Cancella</button></a>
-                    {/if}
-                </div>
-                <br>
-                <div style="padding-left:0px; text-align:center">
-                    <h3>Scrivi una risposta:</h3>
-                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$autore_rece}" method="POST">
-                        <!-- in teoria la data viene creata al momento in PHP-->
-                        <textarea name="risposta" form_id="scrivirisposta" rows="5" cols="100"></textarea><br>
-                        <button type="submit" form="scrivirisposta">Salva</button>
-                    </form>
-                </div>
-                <br>
-                <h3 style="padding-left:45px;">Risposte della recensione:</h3>
-                {foreach $risposte as $risposta}
-                    <hr>
-                    <div style="padding-left:45px;">
-                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/{$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
-                        &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
-                        <p style="font-size:120%">{$risposta->getTesto()}</p>
-                        {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
-                            <a href="https://{$root_dir}/film/modifica-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
-                        {/if}
+            <div id="div">
+                <br><h1>Risultato della ricerca:</h1></div><br><br> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
+            <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
+            {for $i=0 to {$risultato_ricerca|count - 1}}
+                {if {get_class($risultato_ricerca[$i])} == "EFilm"}
+                    <div>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} > <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
+                         ci fosse tipo un attributo per il suo src e i suoi params-->
+                                </td>
+                                <td>
+                                    <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getTitolo()}</h3></a> &nbsp
+                                    <span>{$risultato_ricerca[$i]->getAnno()->format('Y')}</span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                {/foreach}
-
-            </div>
+                    <br>
+                {else}
+                    <div>
+                        <table border="0" cellpadding="0" cellspacing="0"> <!-- provando a toglierli su w3schools non cambia nulla
+                         poi boh-->
+                            <tr>
+                                <td>
+                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]}>
+                                </td>
+                                <td>
+                                    <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getUsername()}</h3></a> &nbsp
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                {/if}
+            {forelse}
+                <div id="div">
+                    <h3> La ricerca non ha prodotto risultati! </h3>
+                </div>
+            {/for}
             <br><br>
         </div>
     </div>
 
-    <!-- side nav vuota e bianca-->
     <div class="col-sm-2 sidenav.white"></div>
 </div>
-</div>
-
 
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
