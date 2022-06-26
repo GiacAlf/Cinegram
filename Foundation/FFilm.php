@@ -732,11 +732,11 @@ class FFilm {
                 // il resize gestisce anche il null come input ;)
                 if($grande) {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
-                    $size = "widht='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";
+                    $size = "width='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";
                 }
                 else {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], false);
-                    $size = "widht='" . EFilm::$larghezzaPiccola . "' " . "height='" . EFilm::$altezzaPiccola . "'";
+                    $size = "width='" . EFilm::$larghezzaPiccola . "' " . "height='" . EFilm::$altezzaPiccola . "'";
                 }
 
                 // si procede all'encode come richiesto per il display della locandina

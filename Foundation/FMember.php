@@ -974,20 +974,22 @@ class FMember {
                 // se $grande è settato a true si caricherà l'immagine profilo grande
                 // il resize gestisce anche il null come input ;)
                 // $immagineProfilo sarà una stringa prasa dal db come blob
-                if($grande)
+                if($grande) {
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
-                    true);
-                else
+                        true);
+                    $size = "width='" . EMember::$larghezzaGrande . "' " . "height='" . EMember::$altezzaGrande . "'";
+                }
+                else {
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
                         false);
-
+                    $size = "width='" . EMember::$larghezzaPiccola . "' " . "height='" . EMember::$altezzaPiccola . "'";
+                }
                 // si procede all'encode come richiesto per il display dell'immagine
                 $immagineProfilo = EMember::base64Encode($immagineProfilo);
 
                 /* si è considerato che la query potrebbe restituire un immagine profilo null, in quel caso faremo un
                 display di una immagine neutra, il classico omino in bianco e nero */
-                return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo],
-                    $queryResultMember[self::$nomeAttributoSizeImmagineProfilo]);
+                return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo], $size);
             }
         }
         catch(PDOException $e) {

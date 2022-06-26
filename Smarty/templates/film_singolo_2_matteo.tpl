@@ -81,8 +81,9 @@
 
         <!-- sidenav vuota ma riutilizzabile -->
         <div class="col-sm-3 sidenav">
-            <p><h2>  {$titolo}  </h2></p>
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="336" width="235" alt="Locandina"><br>
+            <p><h2>  {$titolo}  </h2></p> <!-- invece di passare l'istanza di EFilm, costruiamo la stringa(?) -->
+            <!-- src="data: {$locandina_film[1]};base64,{$locandina_film[0]}" --> <!-- height e  width {$locandina_film[2]} -->
+            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="315" width="210" alt="Locandina"><br>
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
                     <form action="https://{$root_dir}/film/vedi-film/{$id}">
@@ -173,6 +174,12 @@
 
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
+            {for $i=0 to {$film_visti|count - 1}}
+                <p><a href="#"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
+                                     height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
+                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
+                             height="105" width="75" alt="Locandina"></a></p><br>
+            {/for}
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>

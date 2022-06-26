@@ -86,18 +86,20 @@
         <div class="col-sm-8 text-left">
             <br><h1>Risultato della ricerca:</h1> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
             <hr> <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
-            {foreach $risultato_ricerca as $risultato}
-                {if {get_class($risultato)} == "EFilm"}
+            {for $i=0 to {$risultato_ricerca|count - 1}}
+                {if {get_class($risultato_ricerca[$i])} == "EFilm"}
                     <div>
                         <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td>
-                                    <img src="{$src}" {$params}> <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
+                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} > <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
                          ci fosse tipo un attributo per il suo src e i suoi params-->
                                 </td>
                                 <td>
-                                    <a href="https://{$root_dir}/film/carica-film/id={$risultato->getId()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getTitolo()}</h3></a> &nbsp <span>{$recensione->getDataScrittura()->format('Y')}</span>
+                                    <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getTitolo()}</h3></a> &nbsp
+                                    <span>{$risultato_ricerca[$i]->getAnno()->format('Y')}</span>
                                 </td>
                             </tr>
                         </table>
@@ -105,22 +107,25 @@
                     <br>
                 {else}
                     <div>
-                        <table border="0" cellpadding="0" cellspacing="0">
+                        <table border="0" cellpadding="0" cellspacing="0"> <!-- provando a toglierli su w3schools non cambia nulla
+                         poi boh-->
                             <tr>
                                 <td>
-                                    <img src="{$src}" {$params}>
+                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]}>
                                 </td>
                                 <td>
-                                    <a href="https://{$root_dir}/member/carica-member/username={$risultato->getUsername()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getUsername()}</h3></a> &nbsp
+                                    <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getUsername()}</h3></a> &nbsp
                                 </td>
                             </tr>
                         </table>
                     </div>
+                    <br>
                 {/if}
-                {foreachelse}
+            {forelse}
                 <h3> La ricerca non ha prodotto risultati! </h3>
-            {/foreach}
+            {/for}
             <br><br>
         </div>
 

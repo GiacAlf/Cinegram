@@ -100,7 +100,7 @@
                 <div class="row">
 
                     <!-- passare al posto di 7 la variabile numero di estrazioni-1 -->
-                    {for $i=0 to 7}
+                    {for $i=0 to {$film_recenti|count - 1}}
                         <div class="col-sm-3">
                             <p>{$film_recenti[$i]->getTitolo()}</p>
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->

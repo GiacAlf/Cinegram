@@ -54,6 +54,7 @@ class CFilm {
         $view = new VFilmSingolo();
         $film = FPersistentManager::load("EFilm",$id,null,null,
         null,null,null,null,true);
+        $locandina = FPersistentManager::loadLocandina($film, true);
         //$locandina=FPersistentManager::loadLocandina($film,true)
         /*qui dovro' passare alla view che fara' il display della pagina
         del film singolo
@@ -69,7 +70,7 @@ class CFilm {
                 $username = SessionHelper::getUtente()->getUsername();
                 $visto = FPersistentManager::loHaiVisto($username, $id);
             }
-            $view->avviaPaginaFilm($film, $visto);
+            $view->avviaPaginaFilm($film, $visto, $locandina);
         }
     }
 
