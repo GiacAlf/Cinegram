@@ -710,9 +710,10 @@ class FFilm {
     }
 
 
-    // metodo che carica la locandina di un dato film, restituisce un array con i dati della locandina, il tipo e
-    // la sua size
+    // metodo che carica la locandina di un dato film, restituisce un array con i dati della locandina in base64,
+    // il tipo e la sua size.
     // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    // quì quindi sono previste solo queste due dimensioni
     public static function loadLocandina(EFilm $film, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -729,16 +730,21 @@ class FFilm {
             if($queryResultFilm) {
                 // se $grande è settato a true si caricherà la locandina grande
                 // il resize gestisce anche il null come input ;)
-                if($grande)
+                if($grande) {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
-                else
+                    $size = "widht='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";
+                }
+                else {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], false);
+                    $size = "widht='" . EFilm::$larghezzaPiccola . "' " . "height='" . EFilm::$altezzaPiccola . "'";
+                }
 
-                /* occhio che $locandina sarà di tipoGdImage!!!!
-                si è considerato che la query potrebbe restituire una locandina null, in quel caso faremo un
+                // si procede all'encode come richiesto per il display della locandina
+                $locandina = EFilm::base64Encode($locandina);
+
+                /* si è considerato che la query potrebbe restituire una locandina null, in quel caso faremo un
                 display di una locandina neutra, una pellicola in bianco e nero  */
-                return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina],
-                    $queryResultFilm[self::$nomeAttributoSizeLocandina]);
+                return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina], $size);
             }
         }
         catch(PDOException $e) {

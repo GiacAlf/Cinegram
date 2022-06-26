@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Login</title>
+    <title>Cinegram - Modifica Risposta</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -76,47 +77,36 @@
     </div>
 </nav>
 
+
 <div class="container-fluid text-center">
     <div class="row content">
 
         <div class="col-sm-2 sidenav_white"></div>
 
 
-        <div class="col-sm-8 text-left">
-            <h2>Login</h2>
-            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
+        <div class="container-fluid text-left"><br>
+            <h1>Modifica Risposta:</h1><br>
+            <div>
+                <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
+            </div>
+            <br>
+            <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/id={$id_film}/usernameAutore={$username}" method="POST">
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
+
+                    <br>
+                    <textarea name="nuovo_testo" form_id="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della risposta..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
-                </div>
-                <button type="submit" form="login" class="btn btn-default">Entra</button>
+                <button type="submit" class="btn btn-default">Salva modifiche</button>
             </form>
         </div>
-
-        <div class="col-sm-8 text-center">
-
-            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
-            					o se è troppo sbatti direttamente la view dell'errore-->
-                <div style="color: red;">
-                    <p align="center">Attenzione! Username e/o password errati! </p>
-                </div>
-            {/if}
-        </div>
-        <div class="col-sm-8 text-center">
-            <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
-
-
-            <div class="col-sm-2 sidenav_white"></div>
-
-        </div>
+        <br><br>
     </div>
 </div>
+
+<div class="col-sm-2 sidenav_white"></div>
 <br>
+
+
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>

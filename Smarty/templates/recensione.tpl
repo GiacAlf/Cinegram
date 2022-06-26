@@ -32,7 +32,7 @@
     </div>
     <hr>
     <div>
-        {if $utente_sessione == $autore_rece}
+        {if $user == $autore_rece}
             <a href="https://{$root_dir}/film/modifica-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Modifica</button></a>
             <a href="https://{$root_dir}/film/elimina-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Cancella</button></a>
         {/if}
@@ -53,7 +53,7 @@
             <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/username={$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
             &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
             <p style="font-size:120%">{$risposta->getTesto()}</p>
-            {if $utente_sessione == {$risposta->getUsernameAutore()}} <!--  in che formato la data? -->
+            {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? -->
                 <a href="https://{$root_dir}/film/modifica-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"><button>Modifica</button></a>
                 <a href="https://{$root_dir}/film/elimina-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"> <button>Cancella</button></a>
             {/if}

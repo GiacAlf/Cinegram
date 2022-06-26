@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram</title>
+    <title>Cinegram - Homepage</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -15,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav {
@@ -37,7 +38,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
@@ -51,7 +54,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a>
+            <span class="navbar-brand">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
@@ -65,7 +68,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search..">
+                    <input type="text" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
             <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
@@ -81,7 +84,7 @@
     <div class="row content">
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            <p><a href="#">Film 1</a></p><br>
+            <p><a href="#">Film 1</a></p><!--<img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" width="70" height="105" class="img-responsive"  alt="Locandina 1"><br> -->
             <p><a href="#">Film 2</a></p><br>
             <p><a href="#">Film 3</a></p><br>
             <p><a href="#">Film 4</a></p><br>
@@ -95,21 +98,27 @@
             <div class="container-fluid bg-3 text-center">
                 <h3>Film Recenti</h3><br>
                 <div class="row">
-                    <div class="col-sm-3">
+
+                    <!-- passare al posto di 7 la variabile numero di estrazioni-1 -->
+                    {for $i=0 to 7}
+                        <div class="col-sm-3">
+                            <p>{$film_recenti[$i]->getTitolo()}</p>
+                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
+                            <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
+                                    {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"  alt="Locandina 1">
+                        </div>
+                    {/for}
+                    <!--<div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 1">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 2">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 2">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 3">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 3">
-                    </div>
-                    <div class="col-sm-3">
-                        <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 4">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 4">
                     </div>
                     <br>
                     <div class="col-sm-3">
@@ -127,7 +136,7 @@
                     <div class="col-sm-3">
                         <p></p>
                         <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 8">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

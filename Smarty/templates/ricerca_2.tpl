@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Login</title>
+    <title>Cinegram - Risultato Ricerca</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -32,7 +32,7 @@
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 767px) {
-            .sidenav {
+            .sidenav.white {
                 height: auto;
                 padding: 15px;
             }
@@ -79,44 +79,56 @@
 <div class="container-fluid text-center">
     <div class="row content">
 
-        <div class="col-sm-2 sidenav_white"></div>
-
+        <div class="col-sm-2 sidenav_white">
+            <p></p>
+        </div>
 
         <div class="col-sm-8 text-left">
-            <h2>Login</h2>
-            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
-                </div>
-                <button type="submit" form="login" class="btn btn-default">Entra</button>
-            </form>
+            <br><h1>Risultato della ricerca:</h1> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
+            <hr> <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
+            {foreach $risultato_ricerca as $risultato}
+                {if {get_class($risultato)} == "EFilm"}
+                    <div>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <img src="{$src}" {$params}> <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
+                         ci fosse tipo un attributo per il suo src e i suoi params-->
+                                </td>
+                                <td>
+                                    <a href="https://{$root_dir}/film/carica-film/id={$risultato->getId()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getTitolo()}</h3></a> &nbsp <span>{$recensione->getDataScrittura()->format('Y')}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                {else}
+                    <div>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <img src="{$src}" {$params}>
+                                </td>
+                                <td>
+                                    <a href="https://{$root_dir}/member/carica-member/username={$risultato->getUsername()}">
+                                        <h3 style="display:inline; padding-left:10px;">{$risultato->getUsername()}</h3></a> &nbsp
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                {/if}
+                {foreachelse}
+                <h3> La ricerca non ha prodotto risultati! </h3>
+            {/foreach}
+            <br><br>
         </div>
 
-        <div class="col-sm-8 text-center">
-
-            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
-            					o se è troppo sbatti direttamente la view dell'errore-->
-                <div style="color: red;">
-                    <p align="center">Attenzione! Username e/o password errati! </p>
-                </div>
-            {/if}
-        </div>
-        <div class="col-sm-8 text-center">
-            <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
-
-
-            <div class="col-sm-2 sidenav_white"></div>
-
-        </div>
+        <div class="col-sm-2 sidenav.white"></div>
     </div>
 </div>
-<br>
+
+
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>

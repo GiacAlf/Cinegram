@@ -15,8 +15,10 @@ class EFilm {
     /* i prossimi due parametri servono per il ridimensionamento della locandina in formato piccolo, in caso di futuri
     cambiamenti si possono aggiungere altre dimensioni e scegliere con un parametro numerico in ingresso alla
     funzione di resize per scegliere la dimensione che si desidererà */
-    private static int $larghezzaDesiderata = 70;  // in pixel
-    private static int $altezzaDesiderata = 105;    // in pixel
+    public static int $larghezzaGrande = 210;  // in pixel
+    public static int $altezzaGrande = 315;    // in pixel
+    public static int $larghezzaPiccola = 70;  // in pixel
+    public static int $altezzaPiccola = 105;    // in pixel
 
     public function __construct(?int $id, string $titolo, DateTime $data, int $durata, string $sinossi, ?int $numeroViews,
                                 ?float $votoMedio, ?array $listaRegisti, ?array $listaAttori, ?array $listaRecensioni) {
@@ -228,7 +230,7 @@ class EFilm {
     FFilm::loadLocandina).
     Il resize non è percentuale ma fornisce una larghezza e altezza fissata dagli attributi
     statici di questa classe */
-    public static function resizeLocandina(?string $locandinaDaQuery, bool $grande): ?object {
+    public static function resizeLocandina(?string $locandinaDaQuery, bool $grande): ?string {
 
         /* il film potrebbe non avere la locandina, in questo modo se la query trova il suo valore a null
         restituirà sempre null */
@@ -237,30 +239,55 @@ class EFilm {
 
         // crea la GdImage $locandina dalla stringa presa dal db come blob e prende larghezza e lunghezza
         $locandina = imagecreatefromstring($locandinaDaQuery);
-
-        // questa riga è necessaria così anche la locandina che non ha subito il resize sarà di tipo GdImage
-        if($grande) return $locandina;
-
         $larghezzaImmagine = imagesx($locandina);
         $lunghezzaImmagine = imagesy($locandina);
 
-        // preparazione nuova locandina
-        $locandinaRidimensionata = imagecreatetruecolor(self::$larghezzaDesiderata, self::$altezzaDesiderata);
+        if($grande) {
+            $larghezzaDesiderata = self::$larghezzaGrande;
+            $altezzaDesiderata = self::$altezzaGrande;
+        }
+        else {
+            $larghezzaDesiderata = self::$larghezzaPiccola;
+            $altezzaDesiderata = self::$altezzaPiccola;
+        }
 
-        // setta $locandinaRidimensionata con tutti i parametri
+        // preparazione nuova locandina
+        $locandinaRidimensionata = imagecreatetruecolor($larghezzaDesiderata, $altezzaDesiderata);
+
+        // setta $locandinaRidimensionata con tutti i parametri, è una GdImage
         imagecopyresampled($locandinaRidimensionata, $locandina, 0, 0, 0, 0,
-            self::$larghezzaDesiderata, self::$altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+            $larghezzaDesiderata, $altezzaDesiderata, $larghezzaImmagine, $lunghezzaImmagine);
+
+        // devo fare così per poter prendere il contenuto di un immagine
+        ob_start();
+        imagejpeg($locandinaRidimensionata);
+        $locandinaRidimensionataString = ob_get_clean();
 
         // si svuota la variabile (fanno tutti così!)
-        imagedestroy($locandina);
+        // imagedestroy($locandina);
 
         // questa è per provare che il resize funzioni, salva su file system
         // imagejpeg($locandinaRidimensionata, "/Users/giacomoalfani/Downloads/locandinaRidimensionata.jpeg", 100);
-
         // anche questa è per provare, stampa su browser (o console Phpstorm)
         // imagejpeg($locandinaRidimensionata, null, 100);
 
-        // la locandina ritornata è una GdImage che quindi dovrà essere poi visualizzata in base al image/type appropriato
-        return $locandinaRidimensionata;
+        // la locandina ritornata è una stringa
+        return $locandinaRidimensionataString;
+    }
+
+
+    // metodo che si occupa della codifica in base64 richiesta per il display
+    public static function base64Encode(?string $locandinaStringa): ?string {
+        return base64_encode($locandinaStringa);
+    }
+
+
+    // prende come parametro l'array risultante da EFilm::loadLocandina
+    public static function getSrc(?array $locandina): ?string {
+
+        $encodeBase64 = $locandina[0];
+        $type = $locandina[1];
+
+        return "data: " . $type . ";base64," . $encodeBase64;
     }
 }

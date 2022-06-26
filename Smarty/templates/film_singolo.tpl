@@ -144,8 +144,10 @@
                     <h5 style="display:inline;">Autore: </h5><a href="https://{$root_dir}/member/username={$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                     <p>{$recensione->getTesto()}</p>
                     <a href="https://{$root_dir}/recensione/username={$recensione->getUsernameAutore()}&id={$recensione->getIdFilmRecensito()}">Rispondi</a>
-                    {if $utente_sessione == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp <a href="link per modificare"><button>Modifica</button></a>
-                        <a href="link per cancellare"><button>Cancella</button></a> {/if}
+                    {if $utente_sessione == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
+                        <a href="link per modificare"><button>Modifica</button></a>
+                        <a href="link per cancellare"><button>Cancella</button></a>
+                    {/if}
                 </div>
             {/foreach}
 

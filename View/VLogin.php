@@ -34,7 +34,7 @@ class VLogin
         return array($username, $password);
     }
 
-    //metodo per registrarsi, devo discriminare dai campi login
+    //TODO: metodo per registrarsi, devo discriminare dai campi login -> MANCA IL CONFERMA PASSWORD
     public function RegistrazioneCredenziali(): array{
         $username = null;
         $password = null;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Login</title>
+    <title>Cinegram - Modifica Risposta</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -76,47 +76,52 @@
     </div>
 </nav>
 
+
 <div class="container-fluid text-center">
     <div class="row content">
 
         <div class="col-sm-2 sidenav_white"></div>
 
 
-        <div class="col-sm-8 text-left">
-            <h2>Login</h2>
-            <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
+        <div class="container-fluid text-left"><br>
+            <h1>Modifica profilo di {$username}</h1><br>
+            <div class="container-fluid text-left">
+                <h3 style="display:inline;">Bio attuale: </h3><span>{$bio}</span><br><br>
+                <form  style="display:inline;" action='https://{$root_dir}/profilo/aggiorna-bio' method='POST' id='modifica_bio'>
+                    <textarea name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>
+                    <input type='submit' value='Salva bio' name='post_bio'>
+                </form>
+                <br><br>
+                <h3 style="display:inline;">Immagine profilo attuale: </h3><br><br>
+                <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina288.jpg" height="100" width="100"> <br><br>
+                <form id='nuova_immagine_profilo' action='https://{$root_dir}/profilo/modifica-profilo' method='POST' enctype="multipart/form-data">
+                    <span> Seleziona la nuova immagine profilo: </span><input name='nuova_immagine_profilo' type='file'>
+                </form><br>
+                <button type='submit' form='nuova_immagine_profilo' class='btn'><span>Salva immagine profilo </span></button>
+
+                <br><br>
+                <div class="container-fluid text-left">
+                    <h3 >Modifica password:</h3>
+                    <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
+                        <input name='vecchia_password' type='password' placeholder='Inserisci la vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
+                        <input name='nuova_password' type='password' placeholder='Modifica password'> <br>
+                        <input name='conferma_nuova_password' type='password' placeholder='Conferma la nuova password' ><br>
+                        <input type='submit' value='Modifica la password' name='post_password'>
+                    </form>
+                    <div>
+                    </div>
+                    <br><br>
+
+
+                    <div class="col-sm-2 sidenav_white"></div>
                 </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
-                </div>
-                <button type="submit" form="login" class="btn btn-default">Entra</button>
-            </form>
-        </div>
-
-        <div class="col-sm-8 text-center">
-
-            {if $error!='ok'} <!-- attenzione qui, forse ci possiamo collegare un qualcosa di javascript
-            					o se è troppo sbatti direttamente la view dell'errore-->
-                <div style="color: red;">
-                    <p align="center">Attenzione! Username e/o password errati! </p>
-                </div>
-            {/if}
-        </div>
-        <div class="col-sm-8 text-center">
-            <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
-
-
-            <div class="col-sm-2 sidenav_white"></div>
-
+            </div>
         </div>
     </div>
 </div>
 <br>
+
+
 <footer class="container-fluid text-center">
     <p>Cinegram 2022</p>
 </footer>

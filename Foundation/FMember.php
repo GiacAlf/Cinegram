@@ -953,9 +953,10 @@ class FMember {
     }
 
 
-    // metodo che carica l'immagine profilo di un dato member, restituisce un array con i dati dell'immagine, il tipo e
-    // la sua size
+    // metodo che carica l'immagine profilo di un dato member, restituisce un array con i dati dell'immagine in base64,
+    // il tipo e la sua size.
     // se si setta il bool $grande a true si carica la corrispettiva immagine in formato grande, piccola se false
+    // quì quindi sono previste solo queste due dimensioni
     public static function loadImmagineProfilo(EMember $member, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -972,15 +973,18 @@ class FMember {
             if($queryResultMember) {
                 // se $grande è settato a true si caricherà l'immagine profilo grande
                 // il resize gestisce anche il null come input ;)
+                // $immagineProfilo sarà una stringa prasa dal db come blob
                 if($grande)
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
-                        true);
+                    true);
                 else
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
                         false);
 
-                /* occhio che $immagineProfilo sarà di tipoGdImage!!!!
-                si è considerato che la query potrebbe restituire un immagine profilo null, in quel caso faremo un
+                // si procede all'encode come richiesto per il display dell'immagine
+                $immagineProfilo = EMember::base64Encode($immagineProfilo);
+
+                /* si è considerato che la query potrebbe restituire un immagine profilo null, in quel caso faremo un
                 display di una immagine neutra, il classico omino in bianco e nero */
                 return array($immagineProfilo, $queryResultMember[self::$nomeAttributoTipoImmagineProfilo],
                     $queryResultMember[self::$nomeAttributoSizeImmagineProfilo]);

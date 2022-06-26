@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram</title>
+    <title>Cinegram - Registrazione</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -92,12 +92,12 @@
 
         <div class='col-sm-8 text-center'>
             <h3 class='title'>Riempi i seguenti campi. <br>I campi contrassegnati da * sono obbligatori.</h3><br>
-            <form id='login-form' action='https://{$root_dir}/registrazione' method='POST' enctype="multipart/form-data">
-                <input name='username' type='text' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
-                <input name='password' type='password' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
+            <form id='registrazione-form' action="https://{$root_dir}/member/registrazione-member" method='POST' enctype="multipart/form-data">
+                <input name='username_registrazione' type='text' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
+                <input name='password_registrazione' type='password' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
                 <input name='conferma_password' type='password' class='text-input' placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
                 <p>Inserisci una bio:</p>
-                <textarea rows="4" cols="50" name="bio" form='login-form' class='text-input'>
+                <textarea rows="4" cols="50" name="bio" form='registrazione-form' class='text-input'>
       		  </textarea><br><br> <!-- anche questo l'ho fatto io, si spera che, come dice w3schools, effettivamente mettendo l'attributo form sia tutto allineato-->
                 <p id="p">Inserisci immagine profilo:</p>
                 <div id="div">
@@ -112,7 +112,8 @@
                 <input name='num_telefono' type='tel' class='text-input' placeholder='Numero di telefono'><br><br> -->
             </form>
             <div id="mydiv2"class='col-sm-12 text-center'>
-                <button type='submit' form='login-form' class='btn'><span>Registrati </span></button> &nbsp oppure &nbsp <a href='./login'>Login</a>
+                <button type='submit' form='registrazione-form' class='btn'><span>Registrati </span></button>
+                &nbsp oppure &nbsp <a href="https://{$root_dir}/login/verifica-login">Login</a>
             </div>
         </div>
     </div>

@@ -9,7 +9,10 @@ class VRecensione
         $this->smarty = StartSmarty::configuration();
     }
 
+    //sembra che così funzioni, mentre se chiamo showNavBar [$navbar->showNavBar()] no, la variabile user non la prende
     public function avviaPaginaRecensione(ERecensione $recensione): void{
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign( 'user', $user);
         $this->smarty->assign( 'id', $recensione->getIdFilmRecensito());
         $this->smarty->assign( 'autore_rece', $recensione->getUsernameAutore());
         $this->smarty->assign( 'voto', $recensione->getVoto());
