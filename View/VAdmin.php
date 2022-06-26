@@ -101,13 +101,12 @@ class VAdmin {
     //metodo che controlla che sia tutto ok
     public function checkFoto(): bool{
         $check = false;
-        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
-            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+        if(isset($_FILES['locandina'])){  //forse questo controllo ulteriore è inutile, però boh
+            if($_FILES['locandina']['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
-                $_FILES['file']['type'] != 'image/png'){
+            elseif($_FILES['locandina']['type'] != 'image/jpeg' || $_FILES['locandina']['type'] != 'image/png'){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
@@ -124,8 +123,8 @@ class VAdmin {
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function getLocandina(): ?array{
         $locandina = null;
-        if(isset($_FILES['file']) && $this->checkFoto()){
-            $locandina = $_FILES['file'];
+        if(isset($_FILES['locandina']) && $this->checkFoto()){
+            $locandina = $_FILES['locandina'];
         }
         return $locandina;
     }

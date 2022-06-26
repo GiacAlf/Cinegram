@@ -39,34 +39,36 @@ class VLogin
         $username = null;
         $password = null;
         $bio = null;
-        if(isset($_POST['username_registrazione']) && isset($_POST['password_registrazione'])){
+        $conferma_password = null;
+        if(isset($_POST['username_registrazione']) && isset($_POST['password_registrazione'])
+            && isset($_POST['conferma_password'])){
             $username = $_POST['username_registrazione'];
             $password = $_POST['password_registrazione'];
+            $conferma_password = $_POST['conferma_password'];
         }
         if(isset($_POST['bio'])){
             $bio = $_POST['bio'];
         }
-        return array($username, $password, $bio);
+        return array($username, $password, $bio, $conferma_password);
     }
 
     //metto a parte la roba per le foto, non ho idea per ora di come gestirlo $_Files
     public function RegistrazioneImmagineProfilo(): array{
         $array_foto = null;
-        if(isset($_FILES['file']) && $this->checkFoto()){
-            $array_foto = $_FILES['file'];
+        if(isset($_FILES['immagine_profilo']) && $this->checkFoto()){
+            $array_foto = $_FILES['immagine_profilo'];
         }
         return $array_foto;
     }
 
     public function checkFoto(): bool{
         $check = false;
-        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
-            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+        if(isset($_FILES['immagine_profilo'])){  //forse questo controllo ulteriore è inutile, però boh
+            if($_FILES['immagine_profilo']['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/gif' ||
-                $_FILES['file']['type'] != 'image/png'){
+            elseif($_FILES['immagine_profilo']['type'] != 'image/jpeg' || $_FILES['immagine_profilo']['type'] != 'image/png'){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }

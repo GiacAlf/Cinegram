@@ -111,7 +111,7 @@
             </form>
             <div id="mydiv2"class='col-sm-12 text-center'>
                 <button type='submit' form='registrazione-form' class='btn'><span>Registrati </span></button>
-                &nbsp oppure &nbsp <a href="https://{$root_dir}/login/verifica-login">Login</a>
+                &nbsp oppure &nbsp <a href="https://{$root_dir}/login/pagina-login">Login</a>
             </div>
         </div>
     </div>

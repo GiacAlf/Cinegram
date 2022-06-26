@@ -115,7 +115,7 @@
         </div>
         <div class="col-sm-8 text-center">
             <p align="center">Non hai un account? <br/>
-                <a href="https://{$root_dir}/member/registrazione-member" >Registrati</a> <br/>
+                <a href="https://{$root_dir}/member/pagina-registrazione" >Registrati</a> <br/>
 
             <div class="col-sm-2 sidenav_white"></div>
 

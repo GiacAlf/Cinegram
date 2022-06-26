@@ -148,6 +148,10 @@ class CMember {
         }
     }
 
+    public static function paginaRegistrazione():void{
+        //TODO: ha l'unico compito di fare il display del template di registrazione
+    }
+
 
     /*
      richiesta in get con url  localhost/member/cerca-member/username, viene chiamato quando nella barra di ricerca

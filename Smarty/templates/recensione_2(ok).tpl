@@ -89,7 +89,9 @@
             <div><br><br>
                 <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
                 <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><br><br><br>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span>
+                <!-- qua accanto è il caso di scrivere il titolo del film => getTitoloperId($id) -->
+                <br><br><br>
                 <div style='text-align:center;font-size:200%'>
                     <p>{$testo}</p>
                 </div>
@@ -98,6 +100,10 @@
                     {if $user == $autore_rece}
                         <a href="https://{$root_dir}/film/modifica-recensione/{$id}/{$autore_rece}"><button>Modifica</button></a>
                         <a href="https://{$root_dir}/film/elimina-recensione/{$id}/{$autore_rece}"><button>Cancella</button></a>
+                    {/if}
+
+                    {if $user == "admin"}
+                        <a href="https://{$root_dir}/admin/rimuovi-recensione/{$id}/{$autore_rece}"><button>Elimina</button></a>
                     {/if}
                 </div>
                 <br><br>
@@ -120,6 +126,10 @@
                         {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
                             <a href="https://{$root_dir}/film/modifica-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
                             <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
+                        {/if}
+
+                        {if $user == "admin"}
+                            <a href="https://{$root_dir}/admin/rimuovi-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Elimina</button></a>
                         {/if}
                     </div>
                 {/foreach}

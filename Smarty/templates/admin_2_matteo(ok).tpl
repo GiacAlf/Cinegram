@@ -127,12 +127,18 @@
                         <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
                     </div>
 
+                    <div class="form-group">
+                        <label for="locandina">Inserisci la locandina del film:</label>
+                        <input type="file" name="locandina" class="form-control" id="locandina">
+                    </div>
+
                     <div id="div">
                         <button type="submit" form="inserisci_film" class="btn btn-default">Salva Film</button>
                     </div>
                 </form>
                 <br><br>
-                <h3>Oppure:</h3>
+                <h3>Oppure:</h3> <!-- per accedere alla modifica film o al modera utente
+                 servono informazioni: questi due link da togliere poi -->
                 <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
                 <a href="https://{$root_dir}/admin/modifica"><h3>Modera Member</h3></a><br/>
 
