@@ -93,6 +93,14 @@ class EFilm {
     }
 
 
+    public function getTitoloById(int $idFilm): string {
+        $film = FPersistentManager::load("EFilm", $idFilm, null, null, null, null,
+            null, null, false);
+
+        return $film->getTitolo;
+    }
+
+
     /**
      * @param string $titolo
      */
