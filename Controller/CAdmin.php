@@ -13,6 +13,25 @@ class CAdmin {
         //$view->avviaPaginaAdmin($admin);
     }
 
+    //TODO: ricontrolla le url
+    //deve solo mostrare il template -> la url sarà localhost/mostra-film/id (?)
+    public static function mostraFilm(int $idfilm): void{
+        //carico le info del film
+        $film = FPersistentManager::load("EFilm",$idfilm,null,null,
+            null,null,null,null,false);
+        $view = new VAdmin();
+        $view->avviaPaginaModificaFilm($film);
+    }
+
+    //deve solo mostrare il template -> la url sarà localhost/mostra-member/username (?)
+    public static function mostraMember(string $username): void{
+        //carico le info del member
+        $member = FPersistentManager::load("EMember",null,$username,null,null,
+            null,null,null,false);
+        $view = new VAdmin();
+        $view->avviaPaginaModeraUtente($member);
+    }
+
     /*
       metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
     localhost/admin/carica-film

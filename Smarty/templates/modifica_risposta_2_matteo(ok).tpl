@@ -97,14 +97,14 @@
                 <div>
                     <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
                 </div>
-                <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/id={$id_film}/usernameAutore={$username}" method="POST">
+                <form id="modifica_risposta" action="https://{$root_dir}/film/salva-risposta/{$autore_rece}/{$data}" method="POST">
                     <div class="form-group">
 
                         <br>
-                        <textarea id="mytext" name="nuovo_testo" form_id="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della risposta..."></textarea>
+                        <textarea id="mytext" name="nuova_risposta" form="modifica_risposta" rows="4" cols="100" placeholder="Modifica il testo della risposta..."></textarea>
                     </div>
                     <div class="mydiv">
-                        <button type="submit" class="btn btn-default">Salva modifiche</button>
+                        <button type="submit" form="modifica_risposta" class="btn btn-default">Salva modifiche</button>
                     </div>
                 </form>
             </div>

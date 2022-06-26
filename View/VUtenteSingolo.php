@@ -29,10 +29,10 @@ class VUtenteSingolo {
         $this->smarty->display('utente_singolo.tpl');
     }
 
-    public function avviaPaginaModificaUtente(EMember $utente): void{
+    public function avviaPaginaModificaUtente(EMember $utente, array $immagine_profilo): void{
         $this->smarty->assign('username', $utente->getUsername());
         $this->smarty->assign('bio', $utente->getBio());
-        //ci sarà pure l'avatar
+        $this->smarty->assign('immagine_vecchia', $immagine_profilo);
         $this->smarty->display('modifica_profilo.tpl');
     }
 
@@ -42,8 +42,8 @@ class VUtenteSingolo {
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function aggiornaFoto(): ?array{
         $foto = null;
-        if(isset($_FILES['file']) && $this->checkFoto()){
-            $foto = $_FILES['file'];
+        if(isset($_FILES['nuova_img_profilo']) && $this->checkFoto()){
+            $foto = $_FILES['nuova_img_profilo'];
         }
         return $foto;
     }
@@ -51,12 +51,12 @@ class VUtenteSingolo {
     //metodo che controlla che sia tutto ok
     public function checkFoto(): bool{
         $check = false;
-        if(isset($_FILES['file'])){  //forse questo controllo ulteriore è inutile, però boh
-            if($_FILES['file']['size'] > self::$maxSizeImmagineProfilo){
+        if(isset($_FILES['nuova_img_profilo'])){  //forse questo controllo ulteriore è inutile, però boh
+            if($_FILES['nuova_img_profilo']['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
         }
-        elseif($_FILES['file']['type'] != 'image/jpeg' || $_FILES['file']['type'] != 'image/png'){
+        elseif($_FILES['nuova_img_profilo']['type'] != 'image/jpeg' || $_FILES['nuova_img_profilo']['type'] != 'image/png'){
             $view_errore = new VErrore();
             $view_errore->error(4);
         }

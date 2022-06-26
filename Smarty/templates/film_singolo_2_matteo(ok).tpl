@@ -104,7 +104,13 @@
                         il button type=submit invece fa partire un'altra pagina-->
                     </form>
                 {/if}
-            </button><br><br>
+            </button>
+            {if $user == "admin"}
+            	<form action="https://{$root_dir}/admin/mostra-film/{$id}"> <!-- qua bisogna solo far vedere il template -->
+                	<button type="button" class="btn btn-default btn-sm"> Modifica Film </button>
+                </form>
+            {/if}
+            <br><br>
             <span align="left">{$anno}</span>
             <div>Durata: {$durata} minuti</div>
             <div>Diretto da </div>
@@ -140,7 +146,7 @@
                     </div>
 
                     <div class="form-group">
-                        <textarea form="scrivirecensione" class="form-control" rows="3" required></textarea>
+                        <textarea form="scrivirecensione" name="testo" class="form-control" rows="3" required></textarea>
                     </div>
                     <button type="submit" form="scrivirecensione" class="btn btn-default">Salva</button>
                 </form>
@@ -162,6 +168,10 @@
                                 <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
                                 <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
                             {/if}
+
+                            {if $user == "admin"}
+                       			<a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
+                    		{/if}
                         </div>
                     </div>
                 {/foreach}
@@ -172,7 +182,7 @@
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {for $i=0 to {$film_visti|count - 1}}
-                <p><a href="#"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
+                <p><a href="https://{$root_dir}//film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
                                      height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
                         <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
                              height="105" width="75" alt="Locandina"></a></p><br>

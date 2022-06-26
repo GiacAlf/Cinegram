@@ -99,9 +99,10 @@
                 <div>
                     <h3 style="display:inline;">Voto attuale: </h3><span>{$voto}</span> <br><br>
                     <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
+                    <!-- poco sopra conviene metterci il titolo del film = manca ancora il metodo  -->
                 </div>
                 <br>
-                <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/id={$id_film}/usernameAutore={$username}" method="POST">
+                <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/{$id_film}/{$username}" method="POST">
                     <div class="form-group">
                         <label for="voti">Scegli un nuovo voto:</label>
 
@@ -114,10 +115,10 @@
                             <option value="5">5</option>
                         </select>
                         <br>
-                        <textarea id="mytext" name="nuovo_testo" form_id="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della recensione..."></textarea>
+                        <textarea id="mytext" name="nuovo_testo" form="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della recensione..."></textarea>
                     </div>
                     <div class="mydiv">
-                        <button type="submit" class="btn btn-default">Salva modifiche</button>
+                        <button type="submit" form="modifica_recensione" class="btn btn-default">Salva modifiche</button>
                     </div>
                 </form>
             </div>

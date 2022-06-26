@@ -96,12 +96,11 @@
             {for $i=0 to {$risultato_ricerca|count - 1}}
                 {if {get_class($risultato_ricerca[$i])} == "EFilm"}
                     <div>
-                        <table border="0" cellpadding="0" cellspacing="0">
+                        <table border="0" cellpadding="0" cellspacing="0"> <!-- se dovessero dar problemi questi attributi si prova a toglierli-->
                             <tr>
                                 <td>
                                     <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
-                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} > <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
-                         ci fosse tipo un attributo per il suo src e i suoi params-->
+                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} >
                                 </td>
                                 <td>
                                     <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">

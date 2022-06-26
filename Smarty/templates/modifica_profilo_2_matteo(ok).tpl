@@ -99,19 +99,20 @@
                 <div class="container-fluid text-left">
                     <h3 style="display:inline;">Bio attuale: </h3><span>{$bio}</span><br><br>
                     <form  style="display:inline;" action='https://{$root_dir}/profilo/aggiorna-bio' method='POST' id='modifica_bio'>
-                        <textarea id ="mytext" name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>                <div class="mydiv">
+                        <textarea id ="mytext" name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>
+                        <div class="mydiv">
                             <input type='submit' value='Salva bio' name='post_bio'>
                         </div>
                     </form>
                     <div class="mydiv">
-                        <br><br>
+                        <br><br> <!-- src="https://pad.mymovies.it/filmclub/2002/08/056/locandina288.jpg" height="100" width="100" -->
                         <h3 style="display:inline;">Immagine profilo attuale: </h3><br><br>
-                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina288.jpg" height="100" width="100"> <br><br>
-                        <form id='nuova_immagine_profilo' action='https://{$root_dir}/profilo/modifica-profilo' method='POST' enctype="multipart/form-data">
+                        <img src="data: {$immagine_vecchia[1]};base64,{$immagine_vecchia[0]}" {$immagine_vecchia[2]}> <br><br>
+                        <form id='nuova_immagine_profilo' action='https://{$root_dir}/profilo/aggiorna-immagine' method='POST' enctype="multipart/form-data">
                             <span> Seleziona la nuova immagine profilo: </span>
                             <br>
                             <div class="mydiv">
-                                <input name='nuova_immagine_profilo' type='file'>
+                                <input name='nuova_img_profilo' type='file'>
                             </div>
                         </form><br>
                         <button type='submit' form='nuova_immagine_profilo' class='btn'>
