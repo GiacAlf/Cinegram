@@ -82,7 +82,7 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div class="col-sm-3 sidenav">
             <p><h2> {$username} </h2></p> <!-- src="data: {$immagine_profilo[1]};base64,{$immagine_profilo[0]}" --> <!-- height e  width {$immagine_profilo[2]} -->
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="210" width="210" alt="Avatar"><br>
+            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle" height="210" width="210" alt="Avatar"><br>
             {if $user == $username}
                 <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
@@ -102,7 +102,7 @@
                 {else}
 
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/film/id={$id}/toglivisto">
+                    <form action="https://{$root_dir}/member/unfollow-member/{$username}">
                         <button type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -140,8 +140,8 @@
                         <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                     </div>
                     <div class="col-sm-10">
-                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
-                        <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                        <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a>
+                            <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                         <h4>Voto: {$recensione->getVoto()}</h4>
                         <p>{$recensione->getTesto()}</p>
                         <br>
@@ -164,10 +164,11 @@
     <div class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
         {for $i=0 to {$utenti_popolari|count - 1}}
+            <p>{$utenti_popolari[$i]->getUsername()}</p>
             <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
                                      height e width ={$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]}   -->
-                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
-                         height="105" width="75" alt="Locandina"></a></p><br>
+                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle"
+                         height="80" width="80" alt="Locandina"></a></p><br>
         {/for}
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>

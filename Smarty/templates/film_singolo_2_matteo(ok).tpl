@@ -148,8 +148,8 @@
                 {/if}
             </button>
             {if $user == "admin"}
-            	<form action="https://{$root_dir}/admin/mostra-film/{$id}"> <!-- qua bisogna solo far vedere il template -->
-                	<button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
+                <form action="https://{$root_dir}/admin/mostra-film/{$id}"> <!-- qua bisogna solo far vedere il template -->
+                    <button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
                 </form>
             {/if}
             <br><br>
@@ -187,8 +187,8 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <textarea form="scrivirecensione" name="testo" class="form-control" rows="3" required></textarea>
+                    <div class="form-group"> <!-- la textarea non deve essere required, le recensioni possono essere senza testo ma con voto-->
+                        <textarea form="scrivirecensione" name="testo" class="form-control" rows="3"></textarea>
                     </div>
                     <button type="submit" form="scrivirecensione" class="btn btn-default">Salva</button>
                 </form>
@@ -198,10 +198,11 @@
                 {foreach $recensioni as $recensione}
                     <div class="row">
                         <div class="col-sm-2 text-center">
-                            <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar"> <!-- una roba tipo getSrc dello username autore-->
+                            <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                         </div>
                         <div class="col-sm-10">
-                            <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}"><h3>{$recensione->getUsernameAutore()}</a> <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                            <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}"><h3>{$recensione->getUsernameAutore()}</a>
+                            <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                             <h4>Voto: {$recensione->getVoto()}</h4>
                             <p>{$recensione->getTesto()}</p>
                             <br>
@@ -212,8 +213,9 @@
                             {/if}
 
                             {if $user == "admin"}
-                       			<a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
-                    		{/if}
+                                <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">
+                                    <button>Elimina</button></a>
+                            {/if}
                         </div>
                     </div>
                 {/foreach}
@@ -224,6 +226,7 @@
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {for $i=0 to {$film_visti|count - 1}}
+                <p>{$film_visti[$i]->getTitolo()}</p>
                 <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
                                      height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
                         <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"

@@ -95,6 +95,7 @@
         <div id="mydiv" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {for $i=0 to {$film_visti|count - 1}}
+                <p>{$film_visti[$i]->getTitolo()}</p>
                 <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
                                      height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
                         <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
@@ -114,7 +115,6 @@
             <div class="container-fluid bg-3 text-center">
                 <h3>Film Recenti</h3><br>
                 <div class="row">
-
                     <!-- passare al posto di 7 la variabile numero di estrazioni-1 -->
                     {for $i=0 to {$film_recenti|count - 1}}
                         <div class="col-sm-3">
@@ -159,7 +159,7 @@
             {foreach $recensioni as $recensione}
                 <div class="row">
                     <div class="col-sm-10">
-                        <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}">{$recensione->getTitoloById()}</a>
+                        <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a>
                             <small>scritta da: </small><a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                             <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                         <h4>Voto: {$recensione->getVoto()}</h4>
@@ -182,10 +182,11 @@
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Membri più popolari</h4><br><br>
             {for $i=0 to {$utenti_popolari|count - 1}}
+                <p>{$utenti_popolari[$i]->getUsername()}</p>
                 <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
                                      height e width ={$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]}   -->
-                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
-                             height="80" width="80" alt="Locandina"></a></p><br> <!-- MATTEO: qua puoi mettere le immagini profilo circle -->
+                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle"
+                             height="80" width="80" alt="Locandina"></a></p><br>
             {/for}
             <p><a href="#">Member 1</a></p><br>
             <p><a href="#">Member 2</a></p><br>
