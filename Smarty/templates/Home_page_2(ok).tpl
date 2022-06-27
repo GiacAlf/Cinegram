@@ -41,7 +41,17 @@
             .row.content {
                 height:auto;
             }
+
         }
+        #mydiv{
+            position:relative;
+            height:240vh;
+
+        }
+        #mydiv2{
+            position:relative;
+            height:240vh;
+
     </style>
 </head>
 <body>
@@ -82,7 +92,7 @@
 
 <div class="container-fluid text-center">
     <div class="row content">
-        <div class="col-sm-2 sidenav">
+        <div id="mydiv" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {for $i=0 to {$film_visti|count - 1}}
                 <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
@@ -169,7 +179,7 @@
             {/foreach}
         </div>
 
-        <div class="col-sm-2 sidenav">
+        <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Membri più popolari</h4><br><br>
             {for $i=0 to {$utenti_popolari|count - 1}}
                 <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
