@@ -6,6 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        function functionSeguito(){
+
+            button=document.getElementById("buttonSeguito")
+            if(button.innerHTML=="Segui"){
+                button.innerHTML="Smetti di Seguire"
+                button.className="glyphicon glyphicon-minus"
+            }
+            else
+            {
+                button.innerHTML="Segui"
+                button.className="glyphicon glyphicon-plus"
+            }
+        }
+
+        function functionNonSeguito(){
+
+            button=document.getElementById("buttonNonSeguito")
+            if(button.innerHTML=="Segui"){
+                button.innerHTML="Smetti di Seguire"
+                button.className="glyphicon glyphicon-minus"
+            }
+            else
+            {
+                button.innerHTML="Segui"
+                button.className="glyphicon glyphicon-plus"
+            }
+
+        }
+    </script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
@@ -37,6 +67,16 @@
                 padding: 15px;
             }
             .row.content {height:auto;}
+        }
+        #mydiv{
+            position:relative;
+            height:150vh;
+            right:1.9%;
+        }
+        #mydiv2{
+            position:relative;
+            height:150vh;
+            left:1.3%;
         }
     </style>
 </head>
@@ -80,9 +120,9 @@
     <div>
 
         <!-- sidenav vuota ma riutilizzabile -->
-        <div class="col-sm-3 sidenav">
+        <div  id ="mydiv" class="col-sm-3 sidenav">
             <p><h2> {$username} </h2></p> <!-- src="data: {$immagine_profilo[1]};base64,{$immagine_profilo[0]}" --> <!-- height e  width {$immagine_profilo[2]} -->
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle" height="210" width="210" alt="Avatar"><br>
+            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="210" width="210" alt="Avatar"><br>
             {if $user == $username}
                 <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
@@ -92,7 +132,7 @@
                 {if $seguito == false}
                     <!-- cambiare la url-->
                     <form action="https://{$root_dir}/member/follow-member/{$username}">
-                        <button type="button" class="glyphicon glyphicon-plus"> Segui</button>
+                        <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -102,8 +142,8 @@
                 {else}
 
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/unfollow-member/{$username}">
-                        <button type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
+                    <form action="https://{$root_dir}/film/id={$id}/toglivisto">
+                        <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -134,14 +174,14 @@
         <div class="col-sm-7 text-center">
 
             <p><span class="badge"></span> <br><h3>Recensioni dell'utente:</h3></p><br>
-            <div class="row">
             {foreach $recensioni as $recensione}
+                <div class="row">
                     <div class="col-sm-2 text-center">
                         <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                     </div>
                     <div class="col-sm-10">
-                        <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a>
-                            <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
+                        <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                         <h4>Voto: {$recensione->getVoto()}</h4>
                         <p>{$recensione->getTesto()}</p>
                         <br>
@@ -155,19 +195,19 @@
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
+                </div>
             {/foreach}
-            </div>
+
         </div>
     </div>
 
-    <div class="col-sm-2 sidenav">
+    <div   id ="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
         {for $i=0 to {$utenti_popolari|count - 1}}
-            <p>{$utenti_popolari[$i]->getUsername()}</p>
             <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
                                      height e width ={$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]}   -->
-                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle"
-                         height="80" width="80" alt="Locandina"></a></p><br>
+                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
+                         height="105" width="75" alt="Locandina"></a></p><br>
         {/for}
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
