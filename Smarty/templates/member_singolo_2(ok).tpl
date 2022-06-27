@@ -134,8 +134,8 @@
         <div class="col-sm-7 text-center">
 
             <p><span class="badge"></span> <br><h3>Recensioni dell'utente:</h3></p><br>
+            <div class="row">
             {foreach $recensioni as $recensione}
-                <div class="row">
                     <div class="col-sm-2 text-center">
                         <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                     </div>
@@ -155,9 +155,8 @@
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
-                </div>
             {/foreach}
-
+            </div>
         </div>
     </div>
 

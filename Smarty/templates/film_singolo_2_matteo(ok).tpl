@@ -195,8 +195,8 @@
                 <br><br>
 
                 <p><span class="badge"></span> <h3>Recensioni degli Utenti:</h3></p><br>
+                <div class="row">
                 {foreach $recensioni as $recensione}
-                    <div class="row">
                         <div class="col-sm-2 text-center">
                             <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                         </div>
@@ -217,9 +217,8 @@
                                     <button>Elimina</button></a>
                             {/if}
                         </div>
-                    </div>
                 {/foreach}
-
+                </div>
             </div>
         </div>
 

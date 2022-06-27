@@ -156,8 +156,8 @@
             </div>
             <br><hr>
             <h3 align="center">Ultime Recensioni:</h3><br>
+            <div class="row">
             {foreach $recensioni as $recensione}
-                <div class="row">
                     <div class="col-sm-10">
                         <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a>
                             <small>scritta da: </small><a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
@@ -175,8 +175,8 @@
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
-                </div>
             {/foreach}
+            </div>
         </div>
 
         <div id="mydiv2" class="col-sm-2 sidenav">
