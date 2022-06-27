@@ -38,6 +38,19 @@
             }
             .row.content {height:auto;}
         }
+        #mydiv{
+            position:relative;
+            height:260vh;
+            left:2%;
+
+        }
+        #mydiv2{
+            position:relative;
+            height:260vh;
+            right:2%;
+
+
+        }
     </style>
 </head>
 <body>
@@ -80,7 +93,7 @@
     <div>
 
         <!-- sidenav vuota ma riutilizzabile -->
-        <div class="col-sm-2 sidenav">
+        <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             <p><a href="#">Film 1</a></p><br>
             <p><a href="#">Film 2</a></p><br>
@@ -96,7 +109,7 @@
 
         <div class="col-sm-8 text-center">
             <h3>Film Recenti</h3><br>
-            <div class="container-fluid bg-3 text-left">
+            <div class="container-fluid bg-3 text-center">
                 <div class="row">
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 1">
@@ -149,7 +162,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid bg-3 text-left"><br><br>
+            <div class="container-fluid bg-3 text-center"><br><br>
                 <!-- qui ci metteremo il link ai profili dei member più popolari a scorrere-->
 
                 <p><img src="https://via.placeholder.com/70x105" class="img-rectangle" height="105" width="70" style="width:10%" alt="Film">
@@ -168,7 +181,7 @@
         </div>
     </div>
 
-    <div class="col-sm-2 sidenav">
+    <div id="mydiv" class="col-sm-2 sidenav">
         <h4>Membri più seguiti</h4><br><br>
         <!-- qui ci metteremo il link ai profili dei member-->
         <p><a href="#">Member 1</a></p><br>

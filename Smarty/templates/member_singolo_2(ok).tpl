@@ -6,6 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function functionSeguito(){
+
+            button=document.getElementById("buttonSeguito")
+            if(button.innerHTML=="Segui"){
+                button.innerHTML="Smetti di Seguire"
+                button.className="glyphicon glyphicon-minus"
+            }
+            else
+            {
+                button.innerHTML="Segui"
+                button.className="glyphicon glyphicon-plus"
+            }
+        }
+
+        function functionNonSeguito(){
+
+            button=document.getElementById("buttonNonSeguito")
+            if(button.innerHTML=="Segui"){
+                button.innerHTML="Smetti di Seguire"
+                button.className="glyphicon glyphicon-minus"
+            }
+            else
+            {
+                button.innerHTML="Segui"
+                button.className="glyphicon glyphicon-plus"
+            }
+
+        }
+
+
+
+
+
+
+    </script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
@@ -37,6 +74,16 @@
                 padding: 15px;
             }
             .row.content {height:auto;}
+        }
+        #mydiv{
+            position:relative;
+            height:150vh;
+            right:1.9%;
+        }
+        #mydiv2{
+            position:relative;
+            height:150vh;
+            left:1.3%;
         }
     </style>
 </head>
@@ -80,7 +127,7 @@
     <div>
 
         <!-- sidenav vuota ma riutilizzabile -->
-        <div class="col-sm-3 sidenav">
+        <div id ="mydiv" class="col-sm-3 sidenav">
             <p><h2>  $username  </h2></p>
             <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="235" width="235" alt="Avatar"><br>
             <button type="button" class="btn btn-default btn-sm">
@@ -88,7 +135,7 @@
 
                     <!-- cambiare la url-->
                     <form action="https://{$root_dir}/film/id={$id}/vedi">
-                        <button type="button" class="glyphicon glyphicon-plus"> Segui</button>
+                        <button id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -99,7 +146,7 @@
 
                     <!-- cambiare la url-->
                     <form action="https://{$root_dir}/film/id={$id}/toglivisto">
-                        <button type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
+                        <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -143,7 +190,7 @@
         </div>
     </div>
 
-    <div class="col-sm-2 sidenav">
+    <div id="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
@@ -161,3 +208,4 @@
 
 </body>
 </html>
+

@@ -52,6 +52,35 @@
 
         }
     </style>
+    <script>
+        function functionVisto(){
+
+            button=document.getElementById("buttonVisto")
+            if(button.innerHTML=="Vedi Film"){
+                button.innerHTML="Togli Visto Film"
+                button.className="glyphicon glyphicon-eye-close"
+            }
+            else
+            {
+                button.innerHTML="Vedi Film"
+                button.className="glyphicon glyphicon-eye-open"
+            }
+        }
+
+        function functionNonVisto(){
+
+            button=document.getElementById("buttonNonVisto")
+            if(button.innerHTML=="Vedi Film"){
+                button.innerHTML="Togli Visto Film"
+                button.className="glyphicon glyphicon-eye-close"
+            }
+            else
+            {
+                button.innerHTML="Vedi Film"
+                button.className="glyphicon glyphicon-eye-open"
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -100,7 +129,7 @@
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
                     <form action="https://{$root_dir}/film/vedi-film/{$id}">
-                        <button type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
+                        <button onclick="functionVisto()" id="buttonVisto"  type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -109,7 +138,7 @@
                     </form>
                 {else}
                     <form action="https://{$root_dir}/film/rimuovi-visto/{$id}">
-                        <button type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
+                        <button  onclick="functionNonVisto()" id="buttonNonVisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
