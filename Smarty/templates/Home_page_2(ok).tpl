@@ -84,6 +84,12 @@
     <div class="row content">
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
+            {for $i=0 to {$film_visti|count - 1}}
+                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
+                                     height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
+                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
+                             height="105" width="70" alt="Locandina"></a></p><br>
+            {/for}
             <p><a href="#">Film 1</a></p><br><!--<img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" width="70" height="105" class="img-responsive"  alt="Locandina 1"><br> -->
             <p><a href="#">Film 2</a></p><br>
             <p><a href="#">Film 3</a></p><br>
@@ -104,51 +110,48 @@
                         <div class="col-sm-3">
                             <p>{$film_recenti[$i]->getTitolo()}</p>
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
-                                    {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"  alt="Locandina 1">
+                            <a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"><img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}" {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"  alt="Locandina 1"></a>
                         </div>
                     {/for}
-                    <!--<div class="col-sm-3">
+                    <div class="col-sm-3">
                         <p></p>
-                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 2">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 2">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 3">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 3">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" style="width:100%" alt="Locandina 4">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 4">
                     </div>
                     <br>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 5">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 5">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 6">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 6">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 7">
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 7">
                     </div>
                     <div class="col-sm-3">
                         <p></p>
-                        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Locandina 8">
-                    </div> -->
+                        <img src="https://pad.mymovies.it/filmclub/2002/08/056/locandina.jpg" class="img-responsive" height="315" width="210" alt="Locandina 8">
+                    </div>
                 </div>
             </div>
-
-            <h3>Ultime Recensioni:</h3><br>
+            <br><hr>
+            <h3 align="center">Ultime Recensioni:</h3><br>
             {foreach $recensioni as $recensione}
                 <div class="row">
-                    <div class="col-sm-2 text-center">
-                        <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
-                    </div>
                     <div class="col-sm-10">
-                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
-                        <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                        <h3>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}">{$recensione->getTitoloById()}</a>
+                            <small>scritta da: </small><a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
+                            <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                         <h4>Voto: {$recensione->getVoto()}</h4>
                         <p>{$recensione->getTesto()}</p>
                         <br>
@@ -168,7 +171,12 @@
 
         <div class="col-sm-2 sidenav">
             <h4>Membri più popolari</h4><br><br>
-            <!-- qui ci metteremo il link ai profili dei member-->
+            {for $i=0 to {$utenti_popolari|count - 1}}
+                <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
+                                     height e width ={$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]}   -->
+                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
+                             height="80" width="80" alt="Locandina"></a></p><br> <!-- MATTEO: qua puoi mettere le immagini profilo circle -->
+            {/for}
             <p><a href="#">Member 1</a></p><br>
             <p><a href="#">Member 2</a></p><br>
             <p><a href="#">Member 3</a></p><br>
