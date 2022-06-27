@@ -140,6 +140,30 @@
                 </div>
             </div>
 
+            <h3>Ultime Recensioni:</h3><br>
+            {foreach $recensioni as $recensione}
+                <div class="row">
+                    <div class="col-sm-2 text-center">
+                        <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+                    </div>
+                    <div class="col-sm-10">
+                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
+                        <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                        <h4>Voto: {$recensione->getVoto()}</h4>
+                        <p>{$recensione->getTesto()}</p>
+                        <br>
+                        <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
+                        {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
+                            <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
+                        {/if}
+
+                        {if $user == "admin"}
+                            <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
+                        {/if}
+                    </div>
+                </div>
+            {/foreach}
         </div>
 
         <div class="col-sm-2 sidenav">
