@@ -161,6 +161,12 @@ class FPersistentManager {
     }
 
 
+    // ritorna true se lo $username segue lo $usernameFollowing
+    public static function loSegui(string $username, string $usernameFollowing): ?bool {
+        return FMember::loSegui($username, $usernameFollowing);
+    }
+
+
     public static function loadListaFollower(string $username): ?array {
         return FMember::loadListaFollower($username);
     }

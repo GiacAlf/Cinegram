@@ -160,6 +160,16 @@ class FMember {
     }
 
 
+    // ritorna true se lo $username segue lo $usernameFollowing
+    public static function loSegui(string $username, string $usernameFollowing): ?bool {
+
+        $listaFollowing = FMember::loadListaFollowing($username);
+        if(in_array($usernameFollowing, $listaFollowing))
+            return true;
+        return false;
+    }
+
+
     // restituisce un array di member follower dello username inserito per parametro
     public static function loadListaFollower($username): ?array {
 
