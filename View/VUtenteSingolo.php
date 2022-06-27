@@ -14,10 +14,12 @@ class VUtenteSingolo {
     //metodo che ci fa vedere la pagina dell'utente singolo, prendendo
     //come parametro l'utente selezionato
     public function avviaPaginaUtente(EMember $utente_selezionato, int $numero_film_visti, int $numero_following,
-    int $numero_follower){
+    int $numero_follower, array $immagine_profilo, bool $seguito){
         //$this->smarty->assign('immagine', $utente_selezionato->getImmagineProfilo()); //me lo dovrà dare con calma il controllore
         $this->smarty->assign('username', $utente_selezionato->getUsername());
-        $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione());
+        $this->smarty->assign('immagine_profilo', $immagine_profilo);
+        $this->smarty->assign('seguito', $seguito);
+        $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione()->format('d-m-Y'));
         $this->smarty->assign('bio', $utente_selezionato->getBio());
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
         $this->smarty->assign('lista_follower', $utente_selezionato->getListaFollower()); //bisognerebbe recuperare il numero dei follower e following

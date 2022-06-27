@@ -107,7 +107,7 @@
             </button>
             {if $user == "admin"}
             	<form action="https://{$root_dir}/admin/mostra-film/{$id}"> <!-- qua bisogna solo far vedere il template -->
-                	<button type="button" class="btn btn-default btn-sm"> Modifica Film </button>
+                	<button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
                 </form>
             {/if}
             <br><br>
@@ -159,7 +159,7 @@
                             <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar"> <!-- una roba tipo getSrc dello username autore-->
                         </div>
                         <div class="col-sm-10">
-                            <a href="https://{$root_dir}/member/{$recensione->getUsernameAutore()}"><h3>{$recensione->getUsernameAutore()}</a> <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
+                            <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}"><h3>{$recensione->getUsernameAutore()}</a> <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                             <h4>Voto: {$recensione->getVoto()}</h4>
                             <p>{$recensione->getTesto()}</p>
                             <br>
@@ -182,7 +182,7 @@
         <div class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {for $i=0 to {$film_visti|count - 1}}
-                <p><a href="https://{$root_dir}//film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
+                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
                                      height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
                         <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
                              height="105" width="75" alt="Locandina"></a></p><br>

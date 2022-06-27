@@ -65,6 +65,13 @@ class ERecensione {
         $this->idFilmRecensito = $idFilmRecensito;
     }
 
+    public function getTitoloById(): string {
+        $idFilm = $this->getIdFilmRecensito();
+        $film = FPersistentManager::load("EFilm", $idFilm, null, null, null, null,
+            null, null, false);
+        return $film->getTitolo();
+    }
+
     /**
      * @return string
      */
