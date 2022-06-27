@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+
     <title>Cinegram - Members</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +20,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav {
             padding-top: 20px;
             background-color: #f1f1f1;
@@ -42,6 +44,21 @@
                 height:auto;
             }
         }
+
+        #mydiv{
+
+            height: 190vh;
+
+        }
+
+        #mydiv2{
+
+            height:190vh;
+
+
+        }
+
+
     </style>
 </head>
 <body>
@@ -82,18 +99,20 @@
 
 <div class="container-fluid text-center">
     <div class="row content">
-        <div class="col-sm-2 sidenav">
-            <h4>Film più visti</h4><br><br>
-            <p><a href="#">Film 1</a></p><br>
-            <p><a href="#">Film 2</a></p><br>
-            <p><a href="#">Film 3</a></p><br>
-            <p><a href="#">Film 4</a></p><br>
-            <p><a href="#">Film 5</a></p><br>
-            <p><a href="#">Film 6</a></p><br>
-            <p><a href="#">Film 7</a></p><br>
-            <p><a href="#">Film 8</a></p><br>
-            <p><a href="#">Film 9</a></p><br>
-            <p><a href="#">Film 10</a></p><br>
+        <div >
+            <div id="mydiv" class="col-sm-2 sidenav">
+                <h4>Film più visti</h4><br><br>
+                <p><a href="#">Film 1</a></p><br>
+                <p><a href="#">Film 2</a></p><br>
+                <p><a href="#">Film 3</a></p><br>
+                <p><a href="#">Film 4</a></p><br>
+                <p><a href="#">Film 5</a></p><br>
+                <p><a href="#">Film 6</a></p><br>
+                <p><a href="#">Film 7</a></p><br>
+                <p><a href="#">Film 8</a></p><br>
+                <p><a href="#">Film 9</a></p><br>
+                <p><a href="#">Film 10</a></p><br>
+            </div>
         </div>
 
         <div class="col-sm-8 text-center">
@@ -149,42 +168,43 @@
                         <h9>risposte:</h9><br><br>
                     </div>
 
-                     <div class="container-fluid bg-3 text-left"><br><br>
-                <!-- qui ci metteremo il link ai profili dei member più popolari a scorrere-->
+                    <div class="container-fluid bg-3 text-center"><br><br>
+                        <!-- qui ci metteremo il link ai profili dei member più popolari a scorrere-->
 
-                      <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                       <a href="#"> Member 1</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                          <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 2</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 3</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 4</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
-                    <a href="#"> Member 5</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
-                     </div>
+                        <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
+                            <a href="#"> Member 1</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
+                        <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
+                            <a href="#"> Member 2</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
+                        <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
+                            <a href="#"> Member 3</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
+                        <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
+                            <a href="#"> Member 4</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
+                        <p><img src="https://via.placeholder.com/55" class="img-circle" height="55" width="55" style="width:7%" alt="Member">
+                            <a href="#"> Member 5</a> <h9>follower: xxxx </h9><h9> risposte: yyyy</h9></p>
+                    </div>
 
+
+                </div>
+            </div>
+        </div>
+        <div id="main2">
+            <div id="mydiv2"  class="col-sm-2 sidenav">
+                <h4>Membri più seguiti</h4><br><br>
+                <!-- qui ci metteremo il link ai profili dei member-->
+                <p><a href="#">Member 1</a></p><br>
+                <p><a href="#">Member 2</a></p><br>
+                <p><a href="#">Member 3</a></p><br>
+                <p><a href="#">Member 4</a></p><br>
+                <p><a href="#">Member 5</a></p><br>
+                <p><a href="#">Member 6</a></p><br>
+                <p><a href="#">Member 7</a></p><br>
+                <p><a href="#">Member 8</a></p><br>
+                <p><a href="#">Member 9</a></p><br>
+                <p><a href="#">Member 10</a></p><br>
 
             </div>
         </div>
     </div>
-
-    <div class="col-sm-2 sidenav">
-        <h4>Membri più seguiti</h4><br><br>
-        <!-- qui ci metteremo il link ai profili dei member-->
-        <p><a href="#">Member 1</a></p><br>
-        <p><a href="#">Member 2</a></p><br>
-        <p><a href="#">Member 3</a></p><br>
-        <p><a href="#">Member 4</a></p><br>
-        <p><a href="#">Member 5</a></p><br>
-        <p><a href="#">Member 6</a></p><br>
-        <p><a href="#">Member 7</a></p><br>
-        <p><a href="#">Member 8</a></p><br>
-        <p><a href="#">Member 9</a></p><br>
-        <p><a href="#">Member 10</a></p><br>
-
-    </div>
-  </div>
 </div>
 
 <footer class="container-fluid text-center">
