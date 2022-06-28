@@ -223,6 +223,11 @@ class EFilm {
         return $this->listaRecensioni;
     }
 
+    public function getNumeroRecensioni(): ?int{
+        $numero_recensioni = FPersistentManager::calcolaNumeroRecensioniFilm($this->idFilm);
+        return $numero_recensioni;
+    }
+
 
     /**
      * @param array|null $listaRecensioni

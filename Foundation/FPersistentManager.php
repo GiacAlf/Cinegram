@@ -328,6 +328,9 @@ class FPersistentManager {
         return FFilm::loadListaRecensioniFilm($id);
     }
 
+    public static function calcolaNumeroRecensioniFilm(int $id): ?int {
+        return FFilm::calcolaNumeroRecensioniFilm($id);
+    }
 
     public static function existLocandina(EFilm $film): ?bool {
         return FFilm::existLocandina($film);

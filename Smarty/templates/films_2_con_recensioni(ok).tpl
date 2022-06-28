@@ -125,7 +125,7 @@
                             <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}" {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive" style="width:80%" alt="Locandina 1">
                             <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$film_recenti[$i]->getTitolo()}</h5>
                             <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
-                            <h9>recensioni:</h9><br><br> <!-- o questo o il voto medio-->
+                            <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
                         </div>
                     {/for}
                     <div class="col-sm-3">

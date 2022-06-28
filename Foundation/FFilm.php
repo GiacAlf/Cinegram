@@ -417,6 +417,31 @@ class FFilm {
         return null;
     }
 
+    public static function calcolaNumeroRecensioniFilm(int $id): ?int {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+            $query =
+                "SELECT COUNT(*) AS NumeroRecensioni
+                 FROM " . self::$nomeTabellaRecensione .
+                " JOIN " . self::$nomeTabella .
+                " ON " . self::$chiave1TabellaRecensione . " = " . self::$chiaveTabella .
+                " WHERE " . self::$chiaveTabella . " = '" . $id . "'" . " ;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            return $queryResult["NumeroRecensioni"];
+        }
+        catch(PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+        }
+        return null;
+    }
+
 
     // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina per il
     // momento inserire null nei 3 parametri relativi a essa

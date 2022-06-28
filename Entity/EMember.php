@@ -159,6 +159,11 @@ class EMember extends EUser {
         return $this->recensioniScritte;
     }
 
+    public function getNumeroRisposte(): ?int{
+        $numero_risposte = FPersistentManager::calcolaNumeroRisposte($this);
+        return $numero_risposte;
+    }
+
 
     /* metodo che restituisce un immagine profilo più piccola dell'originale (che verrà passata per parametro e
     caricata dal DB) se si setta il parametro $grande a false oppure non si setta affatto.
