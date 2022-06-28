@@ -44,11 +44,18 @@
                 height:auto;
             }
         }
+
         #mydiv{
-            margin: 0 auto;
-            position: relative;
-            width: 70%;
-            text-align: center;
+
+            height: 190vh;
+
+        }
+
+        #mydiv2{
+
+            height:190vh;
+
+
         }
 
 
@@ -90,13 +97,13 @@
     </div>
 </nav>
 
-<div  class="container-fluid text-center">
-    <div >
+<div class="container-fluid text-center">
+    <div class="row content">
 
-        <div >
+        <div class="col-sm-8 text-center">
             <h3>Follower</h3><br>
-            <div id="mydiv" >
-                <div  class="row">
+            <div class="container-fluid bg-3 text-center">
+                <div class="row">
                     {for $i=0 to {$follower|count - 1}}
                         <div class="col-sm-3">
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
@@ -148,23 +155,15 @@
                         <h9>follower:</h9><br>
                         <h9>risposte:</h9><br><br>
                     </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-
-
 
                 </div>
             </div>
         </div>
 
-        <div>
+        <div class="col-sm-8 text-center">
             <h3>Following</h3><br>
-            <div id="mydiv">
-                <div  class="row">
+            <div class="container-fluid bg-3 text-center">
+                <div class="row">
                     {for $i=0 to {$following|count - 1}}
                         <div class="col-sm-3">
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
@@ -174,12 +173,6 @@
                             <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>
                     {/for}
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
                         <h5> <a href="#">username</a></h5>
