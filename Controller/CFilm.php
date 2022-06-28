@@ -10,20 +10,27 @@ class CFilm {
     io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
     tipo localhost/member/.... chiamo il cercaMember
     */
-    public static function cercaFilm(string $titolo): void{
+    public static function cercaFilm(): void{
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
         $view = new VRicerca();
         $titolo = $view->eseguiRicerca();
-        $tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
+        //$tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
         //per film o per persone
 
-        $titolo="suspiria";
+        //$titolo="suspiria";
         $films = array();
-        if ($tipo == "Film") {
+        if($titolo == null){ //qua o si mette in foundation che l'argomento username può essere null
+            //oppure si fa così, oppure ancora si usa il required nell'html
             $films = FPersistentManager::load("EFilm", null, null, null,
-                null, null, $titolo, null, null, false);
-            //caricare le locandine dell'array di film ricevute
+                null, "", 1, null, false);
         }
+        else {
+            $films = FPersistentManager::load("EFilm", null, null, null,
+                null, $titolo, null, null, false);
+        }
+        $locandine = FPersistentManager::loadLocandineFilms($films, false);
+        // CI ERAVAMO DETTI POI DI TOGLIE STA ROBA CHE è UNA PALLA IMMENSA COME CODICE
+        /*
         else{
             //qua dato che ci stanno nome e cognome devo stare attento, specie se uno, tipo Francis Ford Coppola, ha più nomi
             $array = explode(" ", $titolo); // TODO mettere carattere spazio query e gestione casi strani J.J.Abrams
@@ -36,11 +43,8 @@ class CFilm {
                 $cognome = $array[1];
             }
             $films = FPersistentManager::loadFilmByNomeECognome($nome, $cognome);
-        }
-        /*dovro' adesso dare questi film alla view che si occupa della visualizzazione dei risultati
-        della ricerca
-
-        $view->avviaPaginaRicerca($films);*/
+        }*/
+        $view->avviaPaginaRicerca($films, $locandine);
     }
 
 
@@ -59,6 +63,17 @@ class CFilm {
         /*qui dovro' passare alla view che fara' il display della pagina
         del film singolo
          */
+        $visto = false;
+        if(SessionHelper::isLogged()){
+            $username = SessionHelper::getUtente()->getUsername();
+            $visto = FPersistentManager::loHaiVisto($username, $id);
+        }
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
+        $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
+
+        /* CHIUNQUE SIA L'UTENTE SUL SITO COMPARE LA PAGINA DEL FILM, POI L'ADMIN CLICCA SU
+        "MODIFICA FILM" PER MODIFICARE E TUTTO IL RESTO
+
         if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
             $view_admin = new VAdmin();
             $view_admin->avviaPaginaModificaFilm($film);
@@ -71,7 +86,8 @@ class CFilm {
                 $visto = FPersistentManager::loHaiVisto($username, $id);
             }
             $view->avviaPaginaFilm($film, $visto, $locandina);
-        }
+        } */
+        $view->avviaPaginaFilm($film, $visto, $locandina, $filmPiuVisti, $locandineFilmPiuVisti);
     }
 
     /*
@@ -80,35 +96,31 @@ class CFilm {
     localhost/film/scrivi-recensione/id
     */
     public static function scriviRecensione(int $idFilm): void{
-
+        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //verificare se lo username è loggato, dopo vedro' come fare.
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-        //}
-
-        //chiamo la view che mi restituisce i dati per la creazione della recensione(presi dalla form)
-        /* idfilm verra' restituito cosi' come il voto ed il testo
-           la data viene creato in questo metodo al momento
-           lo username è preso dalla sessione(?)
-           $username=$SESSION["username"]
-        */
-        //prova
-         //prova
-        $view = new VFilmSingolo();
-        $idFilm = 2; //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
-        //solo nella pagina del film singolo
-        $username = "damiano"; //lo si prende dalla sessione
-        $array_post = $view->scriviRecensione();
-        $testo = "prova"; //$testo = $array_post[0]
-        $voto = 3; //$voto = $array_post[1]
-        $data = new DateTime();
-        //nel caso dovesse servire, tanto è gratis
-        $visto = FPersistentManager::loHaiVisto($username, $idFilm);
-        $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data,null);
-        FPersistentManager::store($recensione,null,null,null,null,null,
-            null,null);
-        //notifica che sto a salva le robe
-        header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+        if(SessionHelper::isLogged()) {
+            $username = SessionHelper::getUtente()->getUsername(); //sarà lo username autore
+            $view = new VFilmSingolo();
+            //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
+            //solo nella pagina del film singolo
+            $array_post = $view->scriviRecensione();
+            $testo = "prova"; //$testo = $array_post[0]
+            $voto = 3; //$voto = $array_post[1]
+            //FORSE QUA SE VOTO è NULL DEVE PARTIRE L'ERRORE
+            $data = new DateTime();
+            //nel caso dovesse servire, tanto è gratis
+            //$visto = FPersistentManager::loHaiVisto($username, $idFilm);
+            $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data, null);
+            FPersistentManager::store($recensione, null, null, null, null, null,
+                null, null);
+            //notifica che sto a salva le robe
+            header("Location: localhost/film/carica-film/" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+        }
+        else{
+            //forse un po' drastico far apparire una schermata di errore però per ora ok
+            $view = new VErrore();
+            $view->error(8);
+        }
     }
 
     //localhost/film/mostra-recensione/id/usernameAutore
@@ -122,41 +134,52 @@ class CFilm {
 
     //localhost/film/modifica-recensione/id/usernameAutore
     public static function modificaRecensione(int $idFilm, string $usernameAutore){
-        //fa vedere il template associato
-        $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
-            null, null, null, null, null, false);
-        $view = new VRecensione();
-        $view->avviaPaginaModificaRecensione($recensione);
+        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
+        //se l'utente è loggato ed è l'autore -> roba che c'è anche in smarty
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
+            $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
+                null, null, null, null, null, false);
+            $view = new VRecensione();
+            $view->avviaPaginaModificaRecensione($recensione);
+        }
+        else{
+            //forse un po' drastico far apparire una schermata di errore però per ora ok
+            $view = new VErrore();
+            $view->error(8);
+        }
+
     }
 
 
     //localhost/film/salva-recensione/id/usernameAutore
     public static function salvaRecensione(int $idFilm, string $usernameAutore){
+        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //se ricevo il valore di testo allora salvo quello
-        $view = new VRecensione();
-        $array_modifica = $view->modificaRecensione();
-        $recensione = FPersistentManager::load("ERecensione",$idFilm ,$usernameAutore, null
-        ,null,null,null,null,false);
-        if($array_modifica[1] == null) { //se il voto è null modifico solo il testo
-            $updatedText = "prova aggiornamento"; // = $array_modifica[0];
-            FPersistentManager::update($recensione, "testo", $updatedText, null, null,
-                null, null, null);
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
+            $view = new VRecensione();
+            $array_modifica = $view->modificaRecensione();
+            $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null
+                , null, null, null, null, false);
+            if ($array_modifica[1] == null) { //se il voto è null modifico solo il testo
+                $updatedText = "prova aggiornamento"; // = $array_modifica[0];
+                FPersistentManager::update($recensione, "testo", $updatedText, null, null,
+                    null, null, null);
+            } elseif ($array_modifica[0] == null) { //se il testo nuovo è null modifico solo il voto
+                //se ricevo il voto aggiorno quello
+                $updatedVote = 3; // = $array_modifica[0];
+                FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
+                    null, null, null);
+            } else { //se tutti e due sono pieni, modifico tutte e due
+                $updatedText = "prova aggiornamento"; // = $array_modifica[0];
+                $updatedVote = 3; // = $array_modifica[0];
+                FPersistentManager::update($recensione, "testo", $updatedText, null, null,
+                    null, null, null);
+                FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
+                    null, null, null);
+            }
+            //poi rifacciamo vedere la pagina della recensione?
+            header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
         }
-        elseif ($array_modifica[0] == null) { //se il testo nuovo è null modifico solo il voto
-            //se ricevo il voto aggiorno quello
-            $updatedVote = 3; // = $array_modifica[0];
-            FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
-                null, null, null);
-        }
-        else{ //se tutti e due sono pieni, modifico tutte e due
-            $updatedText = "prova aggiornamento"; // = $array_modifica[0];
-            $updatedVote = 3; // = $array_modifica[0];
-            FPersistentManager::update($recensione, "testo", $updatedText, null, null,
-                null, null, null);
-            FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
-                null, null, null);
-        }
-        //poi rifacciamo vedere la pagina della recensione?
     }
 
 

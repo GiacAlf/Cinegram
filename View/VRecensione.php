@@ -23,6 +23,8 @@ class VRecensione
     }
 
     public function avviaPaginaModificaRecensione(ERecensione $recensione): void{
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign( 'user', $user);
         $this->smarty->assign( 'id_film', $recensione->getIdFilmRecensito());
         $this->smarty->assign( 'username', $recensione->getUsernameAutore());
         $this->smarty->assign( 'voto', $recensione->getVoto());

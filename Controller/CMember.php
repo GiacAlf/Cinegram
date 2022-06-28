@@ -215,7 +215,7 @@ class CMember {
         $view = new VRicerca();
         $username = $view->eseguiRicerca();
         if($username == null){ //qua o si mette in foundation che l'argomento username può essere null
-            //oppure si fa così
+            //oppure si fa così, oppure ancora si usa il required nell'html
             $member = FPersistentManager::load("EMember",null,"",null,null,
                 null,null,null,false);
         }
