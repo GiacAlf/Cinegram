@@ -130,9 +130,9 @@
                         <div class="col-sm-3">
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
                             <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}" {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$utenti_popolari[$i]->getUsername()}</h5>
+                            <h5><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"></a>{$utenti_popolari[$i]->getUsername()}</h5>
                             <h9>follower: {$utenti_popolari[$i]->getNumeroFollower()}</h9><br>
-                            <h9>risposte:</h9><br><br> <!-- serve il metodo-->
+                            <h9>risposte: {$utenti_popolari[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>
                     {/for}
                     <div class="col-sm-3">
