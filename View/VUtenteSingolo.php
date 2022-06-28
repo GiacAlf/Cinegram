@@ -25,7 +25,7 @@ class VUtenteSingolo {
         $this->smarty->assign('bio', $utente_selezionato->getBio());
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
-        //$this->smarty->assign('numero_film_visti', $numero_film_visti);
+        $this->smarty->assign('numero_film_visti', $numero_film_visti);
         $this->smarty->assign('numero_following', $numero_following);
         $this->smarty->assign('numero_follower', $numero_follower);
         $this->smarty->assign('utenti_popolari', $utenti_popolari);
@@ -40,10 +40,11 @@ class VUtenteSingolo {
         $this->smarty->display('modifica_profilo.tpl');
     }
 
-    public function avviaPaginaFollow(array $lista_follower, array $immagini_follower,
+    public function avviaPaginaFollow(string $username, array $lista_follower, array $immagini_follower,
                                       array $lista_following, array $immagini_following): void{
         $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('username', $username);
         $this->smarty->assign('follower', $lista_follower);
         $this->smarty->assign('immagini_follower', $immagini_follower);
         $this->smarty->assign('following', $lista_following);

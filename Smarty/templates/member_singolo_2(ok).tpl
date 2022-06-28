@@ -122,7 +122,7 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div  id ="mydiv" class="col-sm-3 sidenav">
             <p><h2> {$username} </h2></p> <!-- src="data: {$immagine_profilo[1]};base64,{$immagine_profilo[0]}" --> <!-- height e  width {$immagine_profilo[2]} -->
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="210" width="210" alt="Avatar"><br>
+            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle" height="210" width="210" alt="Avatar"><br>
             {if $user == $username}
                 <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
@@ -163,6 +163,7 @@
             <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Following: {$numero_following}</span></a><br>
             <span align="center">Bio: {$bio}</span><br>
 
+            <span align="center">Numero film visti: {$numero_film_visti}</span>
             <h4>Film visti: </h4>
             <div>
                 {foreach $film_visti as $film}

@@ -14,12 +14,24 @@ class VLogin
     //il metodo di avvio della pagina non fa altro che presentare la form di login
     //e basta, non devo assegnare niente
     public function avviaPaginaLogin(): void{
+        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A LOGIN $user = "non_loggato"
+        //QUINDI O FACCIO COSì
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign('user', $user);
+        //OPPURE DIRETTAMENTE COSì
+        $this->smarty->assign('user', "non_loggato");
         $this->smarty->display('login.tpl');
     }
 
     //due template diversi per il login e la registrazione? Sennò
     //penso vada bene uno solo comunque
     public function avviaPaginaRegistrazione(): void{
+        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A REGISTRAZIONE $user = "non_loggato"
+        //QUINDI O FACCIO COSì
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign('user', $user);
+        //OPPURE DIRETTAMENTE COSì
+        $this->smarty->assign('user', "non_loggato");
         $this->smarty->display('registrazione.tpl');
     }
 
@@ -49,11 +61,11 @@ class VLogin
         if(isset($_POST['bio'])){
             $bio = $_POST['bio'];
         }
-        return array($username, $password, $bio, $conferma_password);
+        return array($username, $password, $conferma_password, $bio);
     }
 
     //metto a parte la roba per le foto, non ho idea per ora di come gestirlo $_Files
-    public function RegistrazioneImmagineProfilo(): array{
+    public function RegistrazioneImmagineProfilo(): ?array{
         $array_foto = null;
         if(isset($_FILES['immagine_profilo']) && $this->checkFoto()){
             $array_foto = $_FILES['immagine_profilo'];

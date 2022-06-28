@@ -18,6 +18,8 @@ class CMember {
 
         //}
         //se l'utente è loggato e se è un member
+        //QUA NON CONVIENE CHIEDERE ALL'UTENTE DELLA SESSIONE IL SUO RUOLO? METODO chiSei
+        //SessionHelper::getUtente()->chiSei() == "Member"
         if(SessionHelper::isLogged()
             && FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"){
             $identificato = true;
@@ -97,31 +99,34 @@ class CMember {
         $immagini_follower = FPersistentManager::loadImmaginiProfiloMembers($lista_follower, true);
         $lista_following = FPersistentManager::loadListaFollower($username);
         $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
-        $view->avviaPaginaFollow($lista_follower, $immagini_follower, $lista_following, $immagini_following);
+        $view->avviaPaginaFollow($username, $lista_follower, $immagini_follower, $lista_following, $immagini_following);
     }
 
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in get
     al seguente url localhost/member/follow-member/username */
-    public static function followMember(string $username): void{
+    public static function followMember(string $username_da_seguire): void {
+        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
+        if(SessionHelper::isLogged()){
+            $username = SessionHelper::getUtente()->getUsername();
 
-        //verificare che l'utente sia registrato
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
+            $following = "giangiacomo"; //lo si recupera dall'url = $username_da_seguire
 
-        //}
-
-        $following="giangiacomo"; //lo si recupera dall'url
-
-        //recupero dalla sessione il mio username => $follower = $username
-        $follower = "matteo";
-        $following = FPersistentManager::load("EMember",null,$following,null,null,
-        null,null,null,false);
-        $follower = FPersistentManager::load("EMember",null,$follower,null,null,
-            null,null,null,false);
-
-        FPersistentManager::follow($follower, $following);
+            //recupero dalla sessione il mio username => $follower = $username
+            $follower = "matteo";
+            //CONTROLLO COME IN UNFOLLOW MEMBER?
+            $following = FPersistentManager::load("EMember", null, $following, null, null,
+                null, null, null, false);
+            $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+             null, null, null, false);
+             FPersistentManager::follow($follower, $following);
+        }
+        else{
+            //forse un po' drastico far apparire una schermata di errore però per ora ok
+            $view = new VErrore();
+            $view->error(8);
+        }
     }
 
 
@@ -129,25 +134,33 @@ class CMember {
     l'utente in sessione potra' unfolloware il member, sara' una richiesta in get
     al seguente url localhost/member/unfollow-member/username. */
 
-    public static function unfollowMember(string $username): void{
-
+    public static function unfollowMember(string $username_da_non_seguire): void{
+        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //verificare che l'utente sia registrato
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
+        if(SessionHelper::isLogged()) {
+            $username = SessionHelper::getUtente()->getUsername();
+            $following = "giangiacomo"; //lo si recupera dall'url  = $username_da_non_seguire
+            //recupero dalla sessione il mio username => $follower = $username
+            $follower = "matteo"; //=> $follower = $username
+            //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
+            $segue = FPersistentManager::loSegui($follower, $following);
+            if($segue) {
+                $following = FPersistentManager::load("EMember", null, $following, null, null,
+                    null, null, null, false);
+                $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                    null, null, null, false);
 
-        //}
-
-        $following = "giangiacomo"; //lo si recupera dall'url
-
-        //recupero dalla sessione il mio username => $follower = $username
-        $follower = "matteo";
-
-        $following = FPersistentManager::load("EMember",null,$following,null,null,
-            null,null,null,false);
-        $follower = FPersistentManager::load("EMember",null,$follower,null,null,
-            null,null,null,false);
-
-        FPersistentManager::unfollow($follower,$following);
+                FPersistentManager::unfollow($follower, $following);
+            }
+            else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                $view = new VErrore();
+                $view->error(5);
+            }
+        }
+        else{
+            $view = new VErrore();
+            $view->error(8);
+        }
 
     }
 
@@ -158,27 +171,37 @@ class CMember {
     public static function registrazioneMember(): void{
         $view = new VLogin();
         $array_credenziali = $view->RegistrazioneCredenziali();
-        if($array_credenziali[0] == null || $array_credenziali[1] == null){
+        //se o lo username o la password sono vuote [forse inutili dato che c'è required in html]
+        //oppure se la password e la conferma password sono diverse parte l'errore
+        if($array_credenziali[0] == null || $array_credenziali[1] == null ||
+                $array_credenziali[1] != $array_credenziali[2]){
             $view_errore = new VErrore();
             $view_errore->error(6);
         }
         else{
             $username = $array_credenziali[0];
             $password = $array_credenziali[1];
-            $bio = $array_credenziali[2];
+            $bio = $array_credenziali[3];
             $data = new DateTime(); //il format giusto poi lo fa Foundation
             $foto_profilo = $view->RegistrazioneImmagineProfilo();
             //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
             //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
             //qua se l'img è null pazienza
             $member = new EMember($username, $data, $bio, 0, null, null, null, null);
-            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['img'],
+            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
                 $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
+            //dovrà partire la sessione
+            SessionHelper::login($member);
+            //scritto brutto per dire che conviene redirectare all'homepage
+            header("Location: https://localhost/homepage/imposta-homepage");
         }
     }
 
+
+    //qua basta che facevo vedere il template
     public static function paginaRegistrazione():void{
-        //TODO: ha l'unico compito di fare il display del template di registrazione
+        $view = new VLogin();
+        $view->avviaPaginaRegistrazione();
     }
 
 
@@ -186,15 +209,22 @@ class CMember {
      richiesta in get con url  localhost/member/cerca-member/username, viene chiamato quando nella barra di ricerca
     si vuole cercare un member passando il suo username
     */
-    public static function cercaMember(string $username): void{
-        /*lo username lo recuperiamo dalla view dato che arrivera nell'array $get */
-        //in teoria qua siamo sicuri che la checkbox abbia Member come valore, per come
-        //avevamo discusso l'url nella riunione del 14/6
+    public static function cercaMember(): void{
+        //qua l'utente avrà cliccato il bottone cercaMember con la form, il cui contenuto viene recuperato
+        //dalla view
         $view = new VRicerca();
         $username = $view->eseguiRicerca();
-        $member = FPersistentManager::load("EMember",null,$username,null,null,
-            null,null,null,false);
+        if($username == null){ //qua o si mette in foundation che l'argomento username può essere null
+            //oppure si fa così
+            $member = FPersistentManager::load("EMember",null,"",null,null,
+                null,null,null,false);
+        }
+        else {
+            $member = FPersistentManager::load("EMember", null, $username, null, null,
+                null, null, null, false);
+        }
         $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
-        $view->avviaPaginaRicerca($array_risultati);
+        $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
+        $view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
     }
 }

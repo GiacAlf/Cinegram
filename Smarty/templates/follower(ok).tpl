@@ -94,7 +94,7 @@
     <div >
 
         <div >
-            <h3>Follower</h3><br>
+            <h3>Follower di {$username}</h3><br>
             <div id="mydiv" >
                 <div  class="row">
                     {for $i=0 to {$follower|count - 1}}
@@ -105,6 +105,8 @@
                             <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
                             <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>
+                        {forelse}
+                        <p> L'utente {$username} non ha alcun follower </p>
                     {/for}
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
@@ -162,7 +164,7 @@
         </div>
 
         <div>
-            <h3>Following</h3><br>
+            <h3>Following di {$username}</h3><br>
             <div id="mydiv">
                 <div  class="row">
                     {for $i=0 to {$following|count - 1}}
@@ -173,6 +175,8 @@
                             <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
                             <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>
+                    {forelse}
+                        <p> L'utente {$username} non ha alcun following </p>
                     {/for}
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
