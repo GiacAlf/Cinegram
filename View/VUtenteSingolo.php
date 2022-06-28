@@ -13,21 +13,23 @@ class VUtenteSingolo {
 
     //metodo che ci fa vedere la pagina dell'utente singolo, prendendo
     //come parametro l'utente selezionato
-    public function avviaPaginaUtente(EMember $utente_selezionato, int $numero_film_visti, int $numero_following,
-    int $numero_follower, array $immagine_profilo, bool $seguito){
-        //$this->smarty->assign('immagine', $utente_selezionato->getImmagineProfilo()); //me lo dovrà dare con calma il controllore
+    public function avviaPaginaUtente(EMember $utente_selezionato, array $immagine_profilo,
+                                      int $numero_film_visti, int $numero_following,
+                                      int $numero_follower, bool $seguito, array $utenti_popolari, array $immagini_utenti){
+        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $this->smarty->assign('user', $user);
         $this->smarty->assign('username', $utente_selezionato->getUsername());
         $this->smarty->assign('immagine_profilo', $immagine_profilo);
         $this->smarty->assign('seguito', $seguito);
         $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione()->format('d-m-Y'));
         $this->smarty->assign('bio', $utente_selezionato->getBio());
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
-        $this->smarty->assign('lista_follower', $utente_selezionato->getListaFollower()); //bisognerebbe recuperare il numero dei follower e following
-        $this->smarty->assign('lista_following', $utente_selezionato->getListaFollowing());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
-        $this->smarty->assign('numero_film_visti', $numero_film_visti);
+        //$this->smarty->assign('numero_film_visti', $numero_film_visti);
         $this->smarty->assign('numero_following', $numero_following);
         $this->smarty->assign('numero_follower', $numero_follower);
+        $this->smarty->assign('utenti_popolari', $utenti_popolari);
+        $this->smarty->assign('immagini_utenti_popolari', $immagini_utenti);
         $this->smarty->display('utente_singolo.tpl');
     }
 
@@ -36,6 +38,17 @@ class VUtenteSingolo {
         $this->smarty->assign('bio', $utente->getBio());
         $this->smarty->assign('immagine_vecchia', $immagine_profilo);
         $this->smarty->display('modifica_profilo.tpl');
+    }
+
+    public function avviaPaginaFollow(array $lista_follower, array $immagini_follower,
+                                      array $lista_following, array $immagini_following): void{
+        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('follower', $lista_follower);
+        $this->smarty->assign('immagini_follower', $immagini_follower);
+        $this->smarty->assign('following', $lista_following);
+        $this->smarty->assign('immagini_following', $immagini_following);
+        $this->smarty->display('follower.tpl');
     }
 
     //metodo che restituisce l'array contenente tutte le info

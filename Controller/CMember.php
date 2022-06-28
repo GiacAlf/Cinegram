@@ -11,55 +11,70 @@ class CMember {
     */
 
     public static function caricaMembers(): void{
-        $ultimeAttivita = array();
-        $identificato = false;
+        $ultimeRecensioni = array();
         //controlli per quanto riguarda l'utente loggato o meno
         //if(SessionHelper::isLogged()){
         //  $username = SessionHelper::getUtente()->getUsername();
 
         //}
-
-        //lo username come sempre lo prendo dalla sessione
-        //prima controllo se l'utente è loggato ed è un member (metodo Foundation apposito)
-        //e poi discrimino
-        if($identificato){
-            $username = "Matteo";
+        //se l'utente è loggato e se è un member
+        if(SessionHelper::isLogged()
+            && FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"){
+            $identificato = true;
+            $username = "Matteo"; //SessionHelper::getUtente()->getUsername()
             $member = FPersistentManager::load("EMember",null,$username,null,
                 null,null,null,null,false);
-            $ultimeAttivita=FPersistentManager::caricaUltimeAttivitaUtentiSeguiti($member,6);
+            $ultimeRecensioni=FPersistentManager::caricaUltimeRecensioniScritteUtentiSeguiti($member,6);
         }
         else{
-            $ultimeAttivita=FPersistentManager::caricaUltimeAttivita(5);
+            $identificato = false;
+            $ultimeRecensioni=FPersistentManager::caricaUltimeRecensioniScritte(5);
         }
-        $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(3);
+        $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(5);
+        $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, true);
+
+        $utentiPiuSeguiti=FPersistentManager::caricaUtentiConPiuFollower(5);
+        $immaginiUtentiSeguiti = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuSeguiti, false);
+
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
+        $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
 
         $view = new VMembers();
-        //caricare di tutti i members le locandine small
-
-        //ridai un booleano identificato. TRUE se è member registrato, FALSE se non lo è
-        //carica le foto per ogni utente (avatar piccolo)
-        //al metodo della view vengono passati comunque due array, un booleano e le foto poi
 
          /* passo questi dati ad un unico metodo di una view insieme ad un parametro
          per discriminare l'utente registrato da quello non registrato oppure ci saranno
          due metodi della view separati, uno per la grafica di ogni tipologia di utente(la
          prima è sicuramente migliore)*/
-        $view->avviaPaginaMembers($ultimeAttivita, $utentiPiuPopolari, $identificato);
+        $view->avviaPaginaMembers($ultimeRecensioni, $utentiPiuPopolari, $immaginiUtentiPopolari,
+            $filmPiuVisti, $locandineFilmPiuVisti, $utentiPiuSeguiti, $immaginiUtentiSeguiti, $identificato);
     }
 
 
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
     public static function caricaMember($username): void{
-
         $view = new VUtenteSingolo();
         $member = FPersistentManager::load("EMember",null,$username,null,null,
             null,null,null,true);
         $filmvisti = FPersistentManager::calcolaNumeroFilmVisti($member);
         $following = FPersistentManager::calcolaNumeroFollowing($member);
         $follower = FPersistentManager::calcolaNumeroFollower($member);
-        //caricare l'immagine del profilo di tutti i member in size small
-        //FPersistentManager::loadImmagineProfilo($member,true);
+        $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
+        $seguito = false;
+        if(SessionHelper::isLogged()){
+            //se dovesse essere un admin pazienza, non lo trova il metodo loSegui
+            $username_sessione = SessionHelper::getUtente()->getUsername();
+            $seguito = FPersistentManager::loSegui($username_sessione, $username);
+        }
+        $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(5);
+        $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
+        $view->avviaPaginaUtente($member, $immagine_profilo,
+            $filmvisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
+
+
+        /* CHIUNQUE SIA L'UTENTE SUL SITO COMPARE LA PAGINA DEL MEMBER, POI L'ADMIN CLICCA SU
+        "MODERA UTENTE" PER AMMONIRLO E TUTTO IL RESTO
+
 
         // TODO se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
         if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
@@ -69,8 +84,22 @@ class CMember {
         else {
             //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
             $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
-        }
+        }*/
     }
+
+
+    public static function mostraFollow(string $username): void{
+        //QUA HO PENSATO DI PRENDERE SOLO LE LISTE, TANTO SOLO QUELLE MI SERVONO
+        //$member = FPersistentManager::load("EMember",null,$username,null,null,
+          //  null,null,null,true);
+        $view = new VUtenteSingolo();
+        $lista_follower = FPersistentManager::loadListaFollower($username);
+        $immagini_follower = FPersistentManager::loadImmaginiProfiloMembers($lista_follower, true);
+        $lista_following = FPersistentManager::loadListaFollower($username);
+        $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
+        $view->avviaPaginaFollow($lista_follower, $immagini_follower, $lista_following, $immagini_following);
+    }
+
 
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in get

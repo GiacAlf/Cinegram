@@ -18,8 +18,10 @@ class CHomepage {
         // per ora no agli avatar vicino alle recensioni (e risposte) ci mettiamo solo gli username
         $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte($numero_estrazioni);
 
-        $filmPiuRecensiti = FPersistentManager::caricaFilmPiuRecensiti($numero_estrazioni);
-        $locandineFilmPiuRecensiti = FPersistentManager::loadLocandineFilms($filmPiuRecensiti, false);
+        //nel template ci sono i film più visti, prima qua c'erano i più recensiti
+        //sceglieremo poi
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti($numero_estrazioni);
+        $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
 
         // ma qua tipo non bisogna richiamare pure il Persistent Manager per prendermi le locandine piccole? certo, fatto
         // io!!
@@ -27,12 +29,10 @@ class CHomepage {
         print_r($filmRecenti);
         print_r($utentiPopolari);
         print_r($ultimeRecensioniScritte);
-        print_r($filmPiuRecensiti);
+        print_r($filmPiuVisti);
 
-        /* Qui dovro' chiamare la view corretta e passare al suo metodo gli array
-        tanto questa pagina è uguale per tutti*/
 
-        $view->avviaHomePage($filmRecenti, $locandineFilmRecenti, null, null,
-            null, null, null);
+        $view->avviaHomePage($filmRecenti, $locandineFilmRecenti, $filmPiuVisti, $locandineFilmPiuVisti, $ultimeRecensioniScritte,
+            $utentiPopolari, $immaginiUtentiPopolari);
     }
 }

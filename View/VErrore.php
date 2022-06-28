@@ -39,7 +39,10 @@ class VErrore {
                 $testo = 'il member che ha effettuato il login è bannato';
                 $titolo = 'Errore login';
                 break;
-
+            case '8' :
+                $testo = 'Questa opzione o questa pagina è riservata solo agli utenti registrati o agli admin!';
+                $titolo = 'Autenticazione necessaria!';
+                break;
 
         }
         $this->smarty->assign('testo', $testo);

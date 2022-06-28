@@ -159,11 +159,11 @@
             {/if}
             <br><br>
             <span align="center">Iscritto dal: {$data_iscrizione}</span><br>
-            <span align="center">Follower: {$numero_follower}</span><br> <!-- forse serve un template ulteriore per vederli sti member seguiti? -->
-            <span align="center">Following: {$numero_following}</span><br>
+            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Follower: {$numero_follower}</span></a><br> <!-- forse serve un template ulteriore per vederli sti member seguiti? -->
+            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Following: {$numero_following}</span></a><br>
             <span align="center">Bio: {$bio}</span><br>
 
-            <h4>Ultimi film visti: </h4>
+            <h4>Film visti: </h4>
             <div>
                 {foreach $film_visti as $film}
                     <p><a href="https://{$root_dir}/film/carica-film/{$film->getId()}">{$film->getTitolo()}</a></p>

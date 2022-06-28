@@ -16,16 +16,16 @@ class VHomePage
 
     //metodo per farmi comparire l'home page riempita con tutti i dati necessari -> dato che il display è un print
     //è ok il ritorno void, credo
-    public function avviaHomePage(array $film_recenti, array $locandine_film_recenti, array $film_recensiti,
-                                  array $locandine_film_recensiti, array $ultime_recensioni,
+    public function avviaHomePage(array $film_recenti, array $locandine_film_recenti, array $film_visti,
+                                  array $locandine_film_visti, array $ultime_recensioni,
                                   array $utenti_popolari, array $immagini_utenti_popolari): void{
-        //se l'utente è loggato $this->smarty->assign('login', $logged->getUsername()); -> come si recupera? boh
-        //serviranno altri assign per le varie locandine
+        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $this->smarty->assign('user', $user);
         $this->smarty->assign('film_recenti', $film_recenti);
         $this->smarty->assign('locandine_film_recenti', $locandine_film_recenti);
-        $this->smarty->assign('film_recensiti', $film_recensiti);
-        $this->smarty->assign('locandine_film_recensiti', $locandine_film_recensiti);
-        $this->smarty->assign('ultime_recensioni', $ultime_recensioni);
+        $this->smarty->assign('film_visti', $film_visti);
+        $this->smarty->assign('locandine_film_visti', $locandine_film_visti);
+        $this->smarty->assign('recensioni', $ultime_recensioni);
         $this->smarty->assign('utenti_popolari', $utenti_popolari);
         $this->smarty->assign('immagini_utenti_popolari', $immagini_utenti_popolari);
         $this->smarty->display('Home_page_2(ok).tpl');
