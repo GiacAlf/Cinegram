@@ -65,7 +65,7 @@ class CMember {
         $seguito = false;
         if(SessionHelper::isLogged()){
             //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
-            //se gli username sono uguali nel metodo lo segui,
+            //se gli username sono uguali nel metodo lo segui, ti dà false
             $username_sessione = SessionHelper::getUtente()->getUsername();
             $seguito = FPersistentManager::loSegui($username_sessione, $username);
         }
@@ -109,7 +109,9 @@ class CMember {
     al seguente url localhost/member/follow-member/username */
     public static function followMember(string $username_da_seguire): void {
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        if(SessionHelper::isLogged()){
+        //se sei loggato e se sei un member e se l'utente della sessione è diverso dell'utente da andare a seguire puoi fare
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
+            SessionHelper::getUtente()->getUsername() != $username_da_seguire){
             $username = SessionHelper::getUtente()->getUsername();
 
             $following = "giangiacomo"; //lo si recupera dall'url = $username_da_seguire
@@ -117,11 +119,18 @@ class CMember {
             //recupero dalla sessione il mio username => $follower = $username
             $follower = "matteo";
             //CONTROLLO COME IN UNFOLLOW MEMBER?
-            $following = FPersistentManager::load("EMember", null, $following, null, null,
-                null, null, null, false);
-            $follower = FPersistentManager::load("EMember", null, $follower, null, null,
-             null, null, null, false);
-             FPersistentManager::follow($follower, $following);
+            $segui = FPersistentManager::loSegui($follower, $following);
+            if(!$segui) {
+                $following = FPersistentManager::load("EMember", null, $following, null, null,
+                    null, null, null, false);
+                $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                    null, null, null, false);
+                FPersistentManager::follow($follower, $following);
+            }
+            else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                $view = new VErrore();
+                $view->error(5);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -138,7 +147,8 @@ class CMember {
     public static function unfollowMember(string $username_da_non_seguire): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //verificare che l'utente sia registrato
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
+            SessionHelper::getUtente()->getUsername() != $username_da_non_seguire) {
             $username = SessionHelper::getUtente()->getUsername();
             $following = "giangiacomo"; //lo si recupera dall'url  = $username_da_non_seguire
             //recupero dalla sessione il mio username => $follower = $username
@@ -195,6 +205,7 @@ class CMember {
             SessionHelper::login($member);
             //scritto brutto per dire che conviene redirectare all'homepage
             header("Location: https://localhost/homepage/imposta-homepage");
+            //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
         }
     }
 

@@ -65,6 +65,7 @@ class CFilm {
          */
         $visto = false;
         if(SessionHelper::isLogged()){
+            //se è un admin pazienza, tanto restituisce false
             $username = SessionHelper::getUtente()->getUsername();
             $visto = FPersistentManager::loHaiVisto($username, $id);
         }
@@ -97,8 +98,8 @@ class CFilm {
     */
     public static function scriviRecensione(int $idFilm): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //verificare se lo username è loggato, dopo vedro' come fare.
-        if(SessionHelper::isLogged()) {
+        //se l'utente è loggato ed è un member
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             $username = SessionHelper::getUtente()->getUsername(); //sarà lo username autore
             $view = new VFilmSingolo();
             //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
@@ -140,7 +141,7 @@ class CFilm {
     //localhost/film/modifica-recensione/id/usernameAutore
     public static function modificaRecensione(int $idFilm, string $usernameAutore){
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //se l'utente è loggato ed è l'autore -> roba che c'è anche in smarty
+        //se l'utente è loggato ed è l'autore (di conseguenza escludo gli admin) -> roba che c'è anche in smarty
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
                 null, null, null, null, null, false);
@@ -184,6 +185,7 @@ class CFilm {
                     null, null, null);
             }
             //così se tutti e due i campi sono null faccio rivedere direttamente la pagina della recensione
+            //anche se modifico voglio far rivedere la pagina della recensione
             //poi rifacciamo vedere la pagina della recensione?
             header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
         }
@@ -227,7 +229,7 @@ class CFilm {
 
     public static function scriviRisposta(int $idFilm, string $usernameAutoreRecensione): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             //prova
             $view = new VRecensione();
             $date = new DateTime(); //il format giusto viene fatto in Foundation
@@ -243,7 +245,8 @@ class CFilm {
                 FPersistentManager::store($risposta, null, null, null, null, null,
                     null, null);
                 //notifica che sto a salva le robe
-                header("Location  localhost/film/?id=" . $idFilm); //qui reinderizzo alla pagina della recensione di cui ho scritto la recensione
+                header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
+                //qui reinderizzo alla pagina della recensione di cui ho scritto la recensione
             }
             else{
                 $view = new VErrore();
@@ -264,7 +267,7 @@ class CFilm {
 
     public static function eliminaRisposta(string $data): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //in teoria qua sarebbe meglio passare anche lo username dell'autore per fare un controlloo
+        //in teoria qua sarebbe meglio passare anche lo username dell'autore per fare un controllo
         if(SessionHelper::isLogged()) {
             $usernameAutore = SessionHelper::getUtente()->getUsername();
 
@@ -288,7 +291,7 @@ class CFilm {
     //url localhost/film/modifica-risposta/usernameAutoreRecensione/data
 
     public static function modificaRisposta(string $usernameAutore, string $data){
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             $data = ERisposta::ConvertiFormatoUrlInData($data);
             $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore,
                 null, null, null, null, $data, false);
@@ -361,7 +364,7 @@ class CFilm {
     */
     public static function vediFilm(int $id): void{
         //controllo se utente è loggato
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
 
             //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
             $id = 3; //dall'url
@@ -394,7 +397,7 @@ class CFilm {
     */
     public static function rimuoviFilm(int $id): void{
         //controllo se utente è loggato
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
             $id = 1; //dall'url
             $username = "matteo"; //SessionHelper::getUtente()->getUsername();
