@@ -18,7 +18,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav_white {
             padding-top: 20px;
             background-color: #ffffff;
@@ -94,29 +94,35 @@
         <div class="container-fluid text-left">
             <br>
             <div id="div">
-                <h2>Pagina di Amministrazione</h2><br>
+                <h2>Pagina di Moderazione utenti</h2><br>
+                <h3>Moderazione dell'utente {$username}</h3><br>
             </div>
-            <h3>{if} $ruolo == "member" Modera l'utente {$member}
-                {else} Modera l'amministratore {$admin}
-                {/if}</h3><br><br>
+            <!--<h3> se $ruolo == "member" Modera l'utente {$member}
+                altrimenti Modera l'amministratore {$admin}
+                </h3><br><br>-->
+
             <div class="col-sm-8 text-center">
 
-                <!-- da cambiare le url-->
-                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_utente">
 
-                    <!-- se il $ruolo è == a member dovranno comparire solo ammonisci, togli ammonizione e sbanna, se è un admin solo sbanna e banna-->
-                    <form action='https://{$root_dir}/admin/ban' method='POST'>Ammonizioni attuale: {$ammonizioni} <br><br><!-- qui mettere se $bananto == true si stampa: "l'utente è bannato!" e di conseguenza comparirà il pulsante SBANNA -->
-                        <input type='submit' class='btn' name='ammonizione' value='Ammonisci'> &nbsp
-                        <input type='submit' class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
-                        <input type='submit' class='btn' name='banna' value='Banna'><!-- questo compare solo se {$bannato == true} -->&nbsp
-                        <input type='submit' class='btn' name='sbanna' value='Sbanna'>
+                <!-- se il $ruolo è == a member dovranno comparire solo ammonisci, togli ammonizione e sbanna, se è un admin solo sbanna e banna-->
+                <form action="">Ammonizioni attuale: {$warning} <br><br><!-- qui mettere se $bananto == true
+                    si stampa: "l'utente è bannato!" e di conseguenza comparirà il pulsante SBANNA -->	<!-- abbiamo tolto sta cosa della moderazione degli admin-->
+                    {if $bannato == true}
+                        <p>L'utente è bannato! </p>
+                        <input type='submit' formaction="https://{$root_dir}/admin/sbanna-user/{$username}" class='btn' name='sbanna' value='Sbanna'>
+                    {else}
+                        <input type='submit' formaction="https://{$root_dir}/admin/ammonisci-user/{$username}" class='btn' name='ammonizione' value='Ammonisci'> &nbsp
+                        <input type='submit' formaction="https://{$root_dir}/admin/togli-ammonizione/{$username}" class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
+                        <input type='submit' formaction="https://{$root_dir}/admin/banna-user/{$username}" class='btn' name='banna' value='Banna'>&nbsp
+                        <!-- questo metodo qua sopra ancora non c'è, dato che per ora non si può bannare per direttissima-->
+                    {/if}
 
-                        <br><br>
-                        <div id="div">
-                            <button type="submit" form="inserisci_film" class="btn btn-default">Salva modifiche</button>
-                        </div>
-                    </form>
                     <br><br>
+                    <!-- <div id="div">
+                         <button type="submit" form="inserisci_film" class="btn btn-default">Salva modifiche</button>
+                     </div>-->
+                </form>
+                <br><br>
 
             </div>
             <br><br>

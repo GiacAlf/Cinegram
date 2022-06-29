@@ -18,7 +18,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav_white {
             padding-top: 20px;
             background-color: #ffffff;
@@ -95,12 +95,13 @@
             <br>
             <div id="div">
                 <h2>Pagina di Amministrazione</h2><br>
+                <h2>Benvenuto {$admin}</h2><br>
             </div>
             <h3>Inserisci Nuovo Film:</h3><br>
             <div class="col-sm-8 text-left">
 
                 <!-- da cambiare la url-->
-                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film">
+                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>
                         <input type="text" name="titolo" class="form-control" id="titolo" placeholder="Inserisci il titolo">

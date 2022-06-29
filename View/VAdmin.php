@@ -129,6 +129,32 @@ class VAdmin {
         return $locandina;
     }
 
+    public function getElementidaModificare(): ?array{
+        $array_modifiche = array();
+        if(isset($_POST['modifica_titolo'])){
+            $array_modifiche['titolo'] = $_POST['modifica_titolo'];
+        }
+        if(isset($_POST['modifica_data'])){
+            $array_modifiche['data'] = $_POST['modifica_data'];
+        }
+        if(isset($_POST['modifica_durata'])){
+            $array_modifiche['durata'] = $_POST['modifica_durata'];
+        }
+        if(isset($_POST['modifica_sinossi'])){
+            $array_modifiche['sinossi'] = $_POST['modifica_sinossi'];
+        }
+        if(isset($_POST['modifica_registi'])){
+            $array_modifiche['registi'] = $_POST['modifica_registi'];
+        }
+        if(isset($_POST['modifica_attori'])){
+            $array_modifiche['attori'] = $_POST['modifica_attori'];
+        }
+        if(isset($_FILES['modifica_locandina'])){
+            $array_modifiche['locandina'] = $_POST['modifica_titolo'];
+        }
+        return $array_modifiche;
+    }
+
 
 
 
