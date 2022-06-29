@@ -162,11 +162,17 @@ class FMember {
 
     // ritorna true se lo $username segue lo $usernameFollowing
     public static function loSegui(string $username, string $usernameFollowing): ?bool {
-
+        $trovato = false;
         $listaFollowing = FMember::loadListaFollowing($username);
-        if(in_array($usernameFollowing, $listaFollowing))
-            return true;
-        return false;
+        foreach ($listaFollowing as $following){
+            if($usernameFollowing == $following->getUsername()){
+                $trovato = "true";
+            }
+        }
+        return $trovato;
+        //if(in_array($usernameFollowing, $listaFollowing))
+          //  return true;
+        //return false;
     }
 
 

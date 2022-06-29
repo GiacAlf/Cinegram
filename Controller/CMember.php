@@ -19,9 +19,9 @@ class CMember {
         //}
         //se l'utente è loggato e se è un member
         //QUA NON CONVIENE CHIEDERE ALL'UTENTE DELLA SESSIONE IL SUO RUOLO? METODO chiSei
-        //SessionHelper::getUtente()->chiSei() == "Member"
+        //alternativa: FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"
         if(SessionHelper::isLogged()
-            && FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"){
+            && SessionHelper::getUtente()->chiSei() == "Member"){
             $identificato = true;
             $username = "Matteo"; //SessionHelper::getUtente()->getUsername()
             $member = FPersistentManager::load("EMember",null,$username,null,
@@ -54,7 +54,7 @@ class CMember {
 
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
-    public static function caricaMember($username): void{
+    public static function caricaMember(string $username): void{
         $view = new VUtenteSingolo();
         $member = FPersistentManager::load("EMember",null,$username,null,null,
             null,null,null,true);
@@ -64,7 +64,8 @@ class CMember {
         $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
         $seguito = false;
         if(SessionHelper::isLogged()){
-            //se dovesse essere un admin pazienza, non lo trova il metodo loSegui
+            //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
+            //se gli username sono uguali nel metodo lo segui,
             $username_sessione = SessionHelper::getUtente()->getUsername();
             $seguito = FPersistentManager::loSegui($username_sessione, $username);
         }
