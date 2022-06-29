@@ -96,55 +96,27 @@
             <div id="div">
                 <h2>Pagina di Amministrazione</h2><br>
             </div>
-            <h3>Inserisci Nuovo Film:</h3><br>
-            <div class="col-sm-8 text-left">
+            <h3>{if} $ruolo == "member" Modera l'utente {$member}
+                {else} Modera l'amministratore {$admin}
+                {/if}</h3><br><br>
+            <div class="col-sm-8 text-center">
 
-                <!-- da cambiare la url-->
-                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film">
-                    <div class="form-group">
-                        <label for="titolo">Titolo:</label>
-                        <input type="text" name="titolo" class="form-control" id="titolo" placeholder="Inserisci il titolo">
-                    </div>
+                <!-- da cambiare le url-->
+                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_utente">
 
-                    <div class="form-group">
-                        <label for="data_uscita">Anno:</label>
-                        <input type="date" name="data" class="form-control" id="data_uscita" placeholder="Inserisci la data di uscita">
-                    </div>
+                    <!-- se il $ruolo è == a member dovranno comparire solo ammonisci, togli ammonizione e sbanna, se è un admin solo sbanna e banna-->
+                    <form action='https://{$root_dir}/admin/ban' method='POST'>Ammonizioni attuale: {$ammonizioni} <br><br><!-- qui mettere se $bananto == true si stampa: "l'utente è bannato!" e di conseguenza comparirà il pulsante SBANNA -->
+                        <input type='submit' class='btn' name='ammonizione' value='Ammonisci'> &nbsp
+                        <input type='submit' class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
+                        <input type='submit' class='btn' name='banna' value='Banna'><!-- questo compare solo se {$bannato == true} -->&nbsp
+                        <input type='submit' class='btn' name='sbanna' value='Sbanna'>
 
-                    <div class="form-group">
-                        <label for="durata">Durata:</label>
-                        <input type="number" name="durata" class="form-control" id="titolo" placeholder="Inserisci la durata">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sinossi">Sinossi:</label>
-                        <input type="text" name="sinossi" class="form-control" id="sinossi" placeholder="Inserisci la sinossi">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
-                        <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
-                        <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="locandina">Inserisci la locandina del film:</label>
-                        <input type="file" name="locandina" class="form-control" id="locandina">
-                    </div>
-
-                    <div id="div">
-                        <button type="submit" form="inserisci_film" class="btn btn-default">Salva Film</button>
-                    </div>
-                </form>
-                <br><br>
-                <h3>Oppure:</h3> <!-- per accedere alla modifica film o al modera utente
-                 servono informazioni: questi due link da togliere poi -->
-                <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
-                <a href="https://{$root_dir}/admin/modifica"><h3>Modera Utente</h3></a><br/>
+                        <br><br>
+                        <div id="div">
+                            <button type="submit" form="inserisci_film" class="btn btn-default">Salva modifiche</button>
+                        </div>
+                    </form>
+                    <br><br>
 
             </div>
             <br><br>
