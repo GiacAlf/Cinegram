@@ -153,9 +153,10 @@ class FMember {
     public static function loHaiVisto(string $username, int $idFilm): ?bool {
 
         $filmVisti = FMember::loadListaFilmVisti($username);
-        $film = FFilm::loadById($idFilm, false, false, false);
-        if(in_array($film, $filmVisti))
-            return true;
+        foreach ($filmVisti as $film) {
+            if($idFilm == $film->getId())
+                return true;
+        }
         return false;
     }
 
@@ -164,15 +165,11 @@ class FMember {
     public static function loSegui(string $username, string $usernameFollowing): ?bool {
 
         $listaFollowing = FMember::loadListaFollowing($username);
-        foreach ($listaFollowing as $following){
-            if($usernameFollowing == $following->getUsername()){
+        foreach ($listaFollowing as $following) {
+            if($usernameFollowing == $following->getUsername())
                 return true;
-            }
         }
         return false;
-        //if(in_array($usernameFollowing, $listaFollowing))
-          //  return true;
-        //return false;
     }
 
 
