@@ -129,6 +129,7 @@
                 </form>
             {/if}
             <button type="button" class="btn btn-default btn-sm">
+              {if $user != $username}
                 {if $seguito == false}
                     <!-- cambiare la url-->
                     <form action="https://{$root_dir}/member/follow-member/{$username}">
@@ -142,7 +143,7 @@
                 {else}
 
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/film/id={$id}/toglivisto">
+                    <form action="https://{$root_dir}/member/unfollow-member/{$username}">
                         <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -151,6 +152,7 @@
                         il button type=submit invece fa partire un'altra pagina-->
                     </form>
                 {/if}
+              {/if}
             </button>
             {if $user == "admin"}
                 <form action="https://{$root_dir}/admin/mostra-member/{$username}"> <!-- qua bisogna solo far vedere il template -->

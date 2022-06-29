@@ -43,6 +43,10 @@ class VErrore {
                 $testo = 'Questa opzione o questa pagina è riservata solo agli utenti registrati o agli admin!';
                 $titolo = 'Autenticazione necessaria!';
                 break;
+            case '9' :
+                $testo = 'Questa operazione non può essere eseguita con un input vuoto!';
+                $titolo = 'Errore di input!';
+                break;
 
         }
         $this->smarty->assign('testo', $testo);

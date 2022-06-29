@@ -87,9 +87,10 @@
         <div class="col-sm-8 text-left">
 
             <div><br><br>
+                <span style='text-align:center;font-size:150%'>Film: <a href="https://{$root_dir}/film/carica-film/{$id}">{$titolo}</a></span>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><br><br>
                 <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
                 <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span>
                 <!-- qua accanto è il caso di scrivere il titolo del film => getTitoloperId($id) -->
                 <br><br><br>
                 <div style='text-align:center;font-size:200%'>
@@ -111,7 +112,7 @@
                     <h3>Scrivi una risposta:</h3>
                     <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$autore_rece}" method="POST">
                         <!-- in teoria la data viene creata al momento in PHP-->
-                        <textarea name="risposta" form_id="scrivirisposta" rows="5" cols="100"></textarea><br>
+                        <textarea name="risposta" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
                         <button type="submit" form="scrivirisposta">Salva</button>
                     </form>
                 </div>

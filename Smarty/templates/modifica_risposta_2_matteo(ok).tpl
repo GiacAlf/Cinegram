@@ -101,7 +101,7 @@
                     <div class="form-group">
 
                         <br>
-                        <textarea id="mytext" name="nuova_risposta" form="modifica_risposta" rows="4" cols="100" placeholder="Modifica il testo della risposta..."></textarea>
+                        <textarea id="mytext" name="nuova_risposta" form="modifica_risposta" rows="4" cols="100" placeholder="Modifica il testo della risposta..." required></textarea>
                     </div>
                     <div class="mydiv">
                         <button type="submit" form="modifica_risposta" class="btn btn-default">Salva modifiche</button>

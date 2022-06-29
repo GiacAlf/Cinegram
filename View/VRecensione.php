@@ -14,6 +14,7 @@ class VRecensione
         $user = SessionHelper::UserNavBar();
         $this->smarty->assign( 'user', $user);
         $this->smarty->assign( 'id', $recensione->getIdFilmRecensito());
+        $this->smarty->assign( 'titolo', $recensione->getTitoloById());
         $this->smarty->assign( 'autore_rece', $recensione->getUsernameAutore());
         $this->smarty->assign( 'voto', $recensione->getVoto());
         $this->smarty->assign( 'testo', $recensione->getTesto());
@@ -33,6 +34,8 @@ class VRecensione
     }
 
     public function avviaPaginaModificaRisposta(ERisposta $risposta): void{
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign( 'user', $user);
         $this->smarty->assign( 'autore_rece', $risposta->getUsernameAutoreRecensione());
         $this->smarty->assign( 'testo', $risposta->getTesto());
         $this->smarty->assign( 'data', $risposta->ConvertiDatainFormatoUrl());
