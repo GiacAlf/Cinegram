@@ -21,7 +21,7 @@ class SessionHelper {
         //header('Location: /Museo/Utente/login'); //TODO: bisogna mettere la nostra pagina di login o homepage
     }
 
-
+    //TODO: è giusto questo metodo?
     public static function isLogged(): bool {
 
         $identificato = false;
@@ -35,8 +35,7 @@ class SessionHelper {
     }
 
 
-    // TODO verificare che ritorni effettivamente un EMember...come lo costruisce? serve aggiungerci altro?
-    //pare che effettivamente restituisca un EMember
+    //pare che effettivamente restituisca un EUser
     public static function getUtente(): EUser {
         return unserialize($_SESSION['utente']);
     }

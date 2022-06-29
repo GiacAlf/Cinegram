@@ -8,20 +8,25 @@ class CProfilo {
     localhost/profilo/carica-profilo
     */
     public static function caricaProfilo(): void{
-        //if(SessionHelper::isLogged()){
-          //  $username = SessionHelper::getUtente()->getUsername();
-        //}
+        if(!SessionHelper::isLogged()){
+            $view = new VErrore();
+            $view->error(8);
+        }
 
-        $username = "pippo";
+        $numeroEstrazioni=5;
+
+        $username = SessionHelper::getUtente()->getUsername();
         $view = new VUtenteSingolo();
         $member = FPersistentManager::load("EMember",null,$username,null,null,
         null,null,null,true);
-        //FPersistentManager::loadImmagineProfilo($member,true):
-        //carica immagina di profilo
+        $immagineProfilo = FPersistentManager::loadImmagineProfilo($member, true);
         $filmVisti = FPersistentManager::calcolaNumeroFilmVisti($member);
         $following = FPersistentManager::calcolaNumeroFollowing($member);
         $follower = FPersistentManager::calcolaNumeroFollower($member);
-        $view->avviaPaginaUtente($member, $filmVisti, $following, $follower);
+        $utentiPopolari= FPersistentManager::caricaUtentiPiuPopolari($numeroEstrazioni);
+        $immaginiMembers = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari , false);
+        $view->avviaPaginaUtente($member , $immagineProfilo, $filmVisti, $following,$follower,
+        false, $utentiPopolari, $immaginiMembers);
     }
 
     /*
@@ -29,15 +34,16 @@ class CProfilo {
     dopo imposteremo questa cosa, ovvero se nel db non ne troviamo caricata nessuna, mettiamo quella di default. L'utente carichera'
     la foto con la form per i file vista a lezione. Url localhost/profilo/aggiorna-immagine
     */
+    //TODO: avevamo stabilito che la view si recuperasse dalla sessione lo username, il controllore fa solo il controllo sul login
 
     public static function aggiornaImmagine(): void{
 
         //verifica che l'utente sia registrato
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-        //}
-
-        $username = "proz";
+        if(!SessionHelper::isLogged()){
+            $view = new VErrore();
+            $view->error(8);
+        }
+        $username = SessionHelper::getUtente()->getUsername();
         $view = new VUtenteSingolo();
         //recuperare dalla view giusta i dati dell'immagine
         $nuova_foto = $view->aggiornaFoto();
@@ -48,18 +54,19 @@ class CProfilo {
             $view_errore->error(4);
         }
 
-        /*tramite un metodo che dopo faremo controllare che l'immagina caricata
-        rispetti i requisiti da noi imposti, sul content-type, sulla size etc*/
-        //TODO: io passerò sempre l'array $_FILES per intero, dopo aver fatto tutti i check dovuti
-        //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
-        //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
 
-        /*se l'immagina supera i controlli allora chiamare
-        FPersistentManager:store*/
+        /*
+         la view passerà sempre l'array $_FILES per intero, dopo aver fatto tutti i check dovuti
+         le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (il path nel server della nuova immagine),
+        $_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
+        */
+
+       FPersistentManager::updateImmagineProfilo($username , $nuova_foto['tmp_name'], $nuova_foto['size'],
+       $nuova_foto['type']);
 
         //ricaricare la pagina del member col l'immagine cambiata tramite il metodo sopra.
-        //notifica che sto a salva le robe
-        header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
+        header("Location: localhost/member/carica-member/" . $username);
+        //qui reinderizzo alla pagina dell'utente
     }
 
     /*
@@ -71,24 +78,25 @@ class CProfilo {
     public static function aggiornaBio(): void{
 
         //verificare che l'utente è registrato e caricare il suo username dalla sessione
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-        //}
+        if(!SessionHelper::isLogged()){
+            $view = new VErrore();
+            $view->error(8);
+        }
+
+        $username = SessionHelper::getUtente()->getUsername();
 
         $view = new VUtenteSingolo();
         //recupero dalla view la nuova bio
-        $updatedBio = "ciao questa è la bio di prova inviata tramite richiesta http col metodo post";
         $updatedBio = $view->aggiornaBio();
-        // TODO prendere member dalla SESSION
-        $username = "matteo";
         $member = FPersistentManager::load("EMember",null,$username,null,
             null,null,null,null,false);
 
         FPersistentManager::updateBio($member, $updatedBio);
 
         //ricaricare la pagina con la bio aggiornata tramite il metodo sopra
-        //notifica che sto a salva le robe
-        header("Location localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
+
+        header("Location: localhost/member/carica-member/" . $username);
+        //qui reinderizzo alla pagina dell'utente
 
     }
 
@@ -100,45 +108,61 @@ class CProfilo {
     public static function aggiornaPassword(): void{
         /*recupero della nuova password dalla form, ma questa funzione puo' essere
         chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-        //}
+        if(!SessionHelper::isLogged()){
+            $view = new VErrore();
+            $view->error(8);
+        }
+
+        $username = SessionHelper::getUtente()->getUsername();
         $view = new VUtenteSingolo();
-        $nuovaPassword = "paperino";
         $vecchiaPassword = $view->recuperaVecchiaPassword();
         $nuovaPassword = $view->aggiornaPassword();
         $confermaNuovaPassword = $view->verificaConfermaPassword();
 
+        //TODO:fare un metodo in foundation che prende uno username mi dice la sua password attuale
+        $vecchiaPasswordDalDb="ciao";
+
         //QUANDO è CHE FACCIO VEDERE LA SCHERMATA DI ERRORE:
         //1) se la nuova pw è null
-        //2) se la vecchia password non coincide con quella attuale -> una roba tipo getPassword()
+        //2) se la vecchia password non coincide con quella attuale -> una roba tipo getPassword()(il TODO SOPRA9
         //3) se le nuova pw e la conferma pw sono due stringhe diverse
         //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
         //regolare? O lo si fa nella view?
+
+        //TODO: costruire nella VErrore i casi sopra citati
         if ($nuovaPassword == null){
             $view_errore = new VErrore();
             $view_errore->error(5);
         }
-
-        $username = "damiano";
+        elseif ($vecchiaPassword != $vecchiaPasswordDalDb){
+            $view_errore = new VErrore();
+            $view_errore->error(5);
+        }
+        elseif ($nuovaPassword != $confermaNuovaPassword){
+            $view_errore = new VErrore();
+            $view_errore->error(5);
+        }
         $member = FPersistentManager::load("EMember",null,$username,null,null,null,
             null,null,false);
         FPersistentManager::updatePassword($member,$nuovaPassword);
         //notifica che sto a salva le robe
-        header("Location  localhost/profilo/?username=" . $username); //qui reinderizzo alla pagina dell'utente
+        header("Location: localhost/member/carica-member/" . $username);
+        //qui reinderizzo alla pagina dell'utente
     }
 
-    //TODO: modificare metodo
     //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
         //prendo l'utente dalla sessione
-        if(SessionHelper::isLogged()){ //SE NON LOGGATO MANDO UN ERRORE
-          $username = SessionHelper::getUtente()->getUsername();
+        if(!SessionHelper::isLogged()){
+            $view = new VErrore();
+            $view->error(8);
         }
+        $username = SessionHelper::getUtente()->getUsername();
         $member = FPersistentManager::load("EMember",null, $username,null,null,
             null,null,null,false);
         $view = new VUtenteSingolo();
-        $view->avviaPaginaModificaUtente($member);
+        $immagineProfilo=FPersistentManager::loadImmagineProfilo($member , true);
+        $view->avviaPaginaModificaUtente($member, $immagineProfilo);
         //faccio vedere il template
     }
 }
