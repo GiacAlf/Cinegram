@@ -1034,7 +1034,7 @@ class FMember {
     // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
     // questo $_FILES['file']['tmp_name'], cioè la $nuovaImmagine appena caricata, con $_FILES['file']['type'] il
     // $nuovoTipoImmagine dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeImmagine
-    public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
+    public static function updateImmagineProfilo(string $username, string $nuovaImmagine, string $nuovoTipoImmagine,
                                            string $nuovaSizeImmagine): void {
 
         if($nuovaSizeImmagine > self::$maxSizeImmagineProfilo) {
@@ -1058,7 +1058,7 @@ class FMember {
         // eseguo l'escape
         $immagineDaSalvare = addslashes($immagineContenuto);
 
-        if((FUser::exist($member->getUsername()))) {
+        if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -1067,7 +1067,7 @@ class FMember {
                     " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $immagineDaSalvare . "', " .
                     self::$nomeAttributoTipoImmagineProfilo . " = '" . $nuovoTipoImmagine . "', " .
                     self::$nomeAttributoSizeImmagineProfilo . " = '" . $nuovaSizeImmagine . "'" .
-                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                    " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();
@@ -1082,9 +1082,9 @@ class FMember {
 
 
     // metodo che cancella un'immagine profilo facendo "update a null"
-    public static function deleteImmagineProfilo(EMember $member): void {
+    public static function deleteImmagineProfilo(string $username): void {
 
-        if((FUser::exist($member->getUsername()))) {
+        if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -1093,7 +1093,7 @@ class FMember {
                     " SET " . self::$nomeAttributoImmagineProfilo . " = null, " .
                     self::$nomeAttributoTipoImmagineProfilo . " = null, "  .
                     self::$nomeAttributoSizeImmagineProfilo . " = null " .
-                    " WHERE " . self::$chiaveTabella . " = '" . $member->getUsername() . "';";
+                    " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();

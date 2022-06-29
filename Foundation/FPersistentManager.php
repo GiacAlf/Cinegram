@@ -290,14 +290,14 @@ class FPersistentManager {
     }
 
 
-    public static function updateImmagineProfilo(EMember $member, string $nuovaImmagine, string $nuovoTipoImmagine,
+    public static function updateImmagineProfilo(string $username, string $nuovaImmagine, string $nuovoTipoImmagine,
                                                  string $nuovaSizeImmagine): void {
-        FMember::updateImmagineProfilo($member, $nuovaImmagine, $nuovoTipoImmagine, $nuovaSizeImmagine);
+        FMember::updateImmagineProfilo($username, $nuovaImmagine, $nuovoTipoImmagine, $nuovaSizeImmagine);
     }
 
 
-    public static function deleteImmagineProfilo(EMember $member): void {
-        FMember::deleteImmagineProfilo($member);
+    public static function deleteImmagineProfilo(string $username): void {
+        FMember::deleteImmagineProfilo($username);
     }
 
 
