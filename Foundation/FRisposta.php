@@ -142,4 +142,28 @@ class FRisposta {
             echo "\nCancellazione annullata!";
         }
     }
+
+
+    // cancella tutte le risposte di una recensione dalla tabella risposta passando la $nomeFK1Tabella e $nomeFK2Tabella
+    // metodo inserito per ovviare al fatto che non c'è la FK a fare lo stesso lavoro
+    public static function deleteRisposteDellaRecensione(string $usernameAutoreRecensione, int $idFilmRecensito): void {
+
+        $pdo = FConnectionDB::connect();
+        $pdo->beginTransaction();
+        try {
+                $query =
+                    "DELETE FROM " . self::$nomeTabella .
+                    " WHERE " . self::$nomeFK2Tabella . " = '" . $usernameAutoreRecensione . "'" .
+                    " AND " . self::$nomeFK1Tabella . " = '" . $idFilmRecensito . "';";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
+                $pdo->commit();
+            }
+
+        catch (PDOException $e) {
+            $pdo->rollback();
+            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nCancellazione annullata!";
+        }
+    }
 }

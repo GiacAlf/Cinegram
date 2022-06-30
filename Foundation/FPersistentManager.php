@@ -387,6 +387,17 @@ class FPersistentManager {
     }
 
 
+            /* ----- metodi di FRisposta ----- */
+
+
+    // cancella tutte le risposte di una recensione dalla tabella risposta passando lo username dell'autore della
+    // recensione e l'id del film recensito
+    // metodo inserito per ovviare al fatto che non c'è la FK a fare lo stesso lavoro
+    public static function deleteRisposteDellaRecensione(string $usernameAutoreRecensione, int $idFilmRecensito): void {
+        FRisposta::deleteRisposteDellaRecensione($usernameAutoreRecensione, $idFilmRecensito);
+    }
+
+
             /* ----- metodi di FUser ----- */
 
 

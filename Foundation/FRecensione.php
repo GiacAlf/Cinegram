@@ -179,7 +179,7 @@ class FRecensione {
 
 
     // cancella una recensione dal DB passando la $chiaveTabella1 e $chiaveTabella2
-    public static function delete(int $idFilmRecensito, string $usernameAutore): void {
+    public static function delete(string $usernameAutore, int $idFilmRecensito): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -187,12 +187,15 @@ class FRecensione {
             if(FRecensione::exist($idFilmRecensito, $usernameAutore)) {
                 $query =
                     "DELETE FROM " . self::$nomeTabella .
-                    " WHERE " . self::$chiave1Tabella . " = '" . $idFilmRecensito . "'" .
-                    " AND " . self::$chiave2Tabella . " = '" . $usernameAutore . "';";
+                    " WHERE " . self::$chiave2Tabella . " = '" . $usernameAutore . "'" .
+                    " AND " . self::$chiave1Tabella . " = '" . $idFilmRecensito . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $pdo->commit();
             }
+
+            // si occupa di cancellare tutte le risposte della recensione cancellata
+            FRisposta::deleteRisposteDellaRecensione($usernameAutore, $idFilmRecensito);
         }
         catch (PDOException $e) {
             $pdo->rollback();
