@@ -9,6 +9,8 @@ class VErrore {
     }
 
     public function error(int $id_errore): void{
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign('user', $user);
         $this->smarty->assign('i', $id_errore);
         switch ($id_errore) {
             case '1' :
@@ -46,6 +48,10 @@ class VErrore {
             case '9' :
                 $testo = 'Questa operazione non può essere eseguita con un input vuoto!';
                 $titolo = 'Errore di input!';
+                break;
+            case '10' :
+                $testo = 'La vecchia password non corrisponde!';
+                $titolo = 'Errore password!';
                 break;
 
         }

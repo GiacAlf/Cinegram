@@ -12,33 +12,49 @@ class VAdmin {
 
     //per ora immagino che il template dell'admin sia pieno di form in cui caricare tutte le informazioni
     //su un film e qualche altra form tipo per scrivere gli username dei tipi da ammonire e bannare
-    public function avviaPaginaAdmin(string $admin): void{
-        $this->smarty->assign('username_admin', $admin);
+    public function avviaPaginaAdmin(string $username_admin): void{
+        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
+        //QUINDI O FACCIO COSì
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign('user', $user);
+        //OPPURE DIRETTAMENTE COSì
+        $this->smarty->assign('user', "admin");
+        $this->smarty->assign('admin', $username_admin);
         $this->smarty->display('admin.tpl');
     }
 
 
     //funzione che fa il display della pagina di modifica film: ci sono tutti gli attributi modificabili e, accanto,
     //ci saranno tutte le varie form
-    public function avviaPaginaModificaFilm(EFilm $film_da_modificare): void{
-        //$this->smarty->assign('username_admin', $admin); -> boh forse dovrò mettere lo username dell'admin boh
-        //toccherà passare anche la locandina chissà
+    public function avviaPaginaModificaFilm(EFilm $film_da_modificare, array $locandina,
+                                            string $username_admin): void{
+        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
+        //QUINDI O FACCIO COSì
+        $user = SessionHelper::UserNavBar();
+        $this->smarty->assign('user', $user);
+        //OPPURE DIRETTAMENTE COSì
+        $this->smarty->assign('user', "admin");
+        $this->smarty->assign('admin', $username_admin);
+        $this->smarty->assign( 'id', $film_da_modificare->getId());
         $this->smarty->assign( 'titolo', $film_da_modificare->getTitolo());
         $this->smarty->assign('durata', $film_da_modificare->getDurata());
-        $this->smarty->assign('anno', $film_da_modificare->getAnno());
+        $this->smarty->assign('data', $film_da_modificare->getAnno()->format('d-m-Y'));
         $this->smarty->assign('sinossi', $film_da_modificare->getSinossi());
         $this->smarty->assign('attori', $film_da_modificare->getListaAttori());
         $this->smarty->assign('registi', $film_da_modificare->getListaRegisti());
+        $this->smarty->assign('locandina', $locandina);
         $this->smarty->display('film_admin.tpl');
     }
 
     //funzione che fa il display della pagina di moderazione utente: ci sono l'username e i warning, accanto i bottoni
     //ban, ammonisci... e gli altri che non ricordo lol
-    public function avviaPaginaModeraUtente(EMember $utente_da_moderare): void{
+    public function avviaPaginaModeraUtente(EMember $utente_da_moderare, bool $bannato, string $username_admin): void{
         //$this->smarty->assign('username_admin', $admin); -> boh forse dovrò mettere lo username dell'admin boh
         //toccherà passare anche la locandina chissà
+        $this->smarty->assign('admin', $username_admin);
         $this->smarty->assign( 'username', $utente_da_moderare->getUsername());
         $this->smarty->assign( 'warning', $utente_da_moderare->getWarning());
+        $this->smarty->assign('bannato', $bannato);
         $this->smarty->display('modera_member.tpl');
     }
 
@@ -60,7 +76,7 @@ class VAdmin {
         return $durata;
     }
 
-    public function getSinossi(): ?string{
+    public function getSinossi(): string{
         $sinossi = null;
         if(isset($_POST['sinossi'])){
             $sinossi = $_POST['sinossi'];
@@ -70,10 +86,11 @@ class VAdmin {
 
     //non ricordo minimamente come viene restituita la data da quel calendarino
     //delle form, per ora come scheletro ci sta
-    public function getData(): ?string{
+    public function getData(): DateTime{
         $data = null;
         if(isset($_POST['data'])){
-            $data = $_POST['data'];
+            //se restituisce la stringa del tipo d-m-Y
+            $data = new DateTime($_POST['data']);
         }
         return $data;
     }
@@ -82,31 +99,31 @@ class VAdmin {
     //array, il che in teoria è fattibile ma in pratica vallo a sapere,
     //allora questi metodi hanno senso, in caso contrario tocca farsi il segno
     //della croce
-    public function getRegisti(): ?array{
-        $registi = null;
+    public function getRegisti(): array{
+        $registi = array();
         if(isset($_POST['registi'])){
-            $registi = $_POST['registi'];
+            $registi = $this->getListaRegisti($_POST['registi']);
         }
         return $registi;
     }
 
-    public function getAttori(): ?array{
-        $attori = null;
+    public function getAttori(): array{
+        $attori = array();
         if(isset($_POST['attori'])){
-            $attori = $_POST['attori'];
+            $attori = $this->getListaAttori($_POST['attori']);
         }
         return $attori;
     }
 
     //metodo che controlla che sia tutto ok
-    public function checkFoto(): bool{
+    public function checkFoto(array $array_foto): bool{
         $check = false;
-        if(isset($_FILES['locandina'])){  //forse questo controllo ulteriore è inutile, però boh
-            if($_FILES['locandina']['size'] > self::$maxSizeImmagineProfilo){
+        if(isset($array_foto)){  //forse questo controllo ulteriore è inutile, però boh
+            if($array_foto['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($_FILES['locandina']['type'] != 'image/jpeg' || $_FILES['locandina']['type'] != 'image/png'){
+            elseif($array_foto['type'] != 'image/jpeg' || $array_foto['type'] != 'image/png'){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
@@ -123,7 +140,7 @@ class VAdmin {
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function getLocandina(): ?array{
         $locandina = null;
-        if(isset($_FILES['locandina']) && $this->checkFoto()){
+        if(isset($_FILES['locandina']) && $this->checkFoto($_FILES['locandina'])){
             $locandina = $_FILES['locandina'];
         }
         return $locandina;
@@ -135,7 +152,7 @@ class VAdmin {
             $array_modifiche['titolo'] = $_POST['modifica_titolo'];
         }
         if(isset($_POST['modifica_data'])){
-            $array_modifiche['data'] = $_POST['modifica_data'];
+            $array_modifiche['data'] = new DateTime($_POST['modifica_data']);
         }
         if(isset($_POST['modifica_durata'])){
             $array_modifiche['durata'] = $_POST['modifica_durata'];
@@ -144,15 +161,40 @@ class VAdmin {
             $array_modifiche['sinossi'] = $_POST['modifica_sinossi'];
         }
         if(isset($_POST['modifica_registi'])){
-            $array_modifiche['registi'] = $_POST['modifica_registi'];
+            $array_modifiche['registi'] = $this->getListaRegisti($_POST['modifica_registi']);
         }
         if(isset($_POST['modifica_attori'])){
-            $array_modifiche['attori'] = $_POST['modifica_attori'];
+            $array_modifiche['attori'] = $this->getListaAttori($_POST['modifica_attori']);
         }
-        if(isset($_FILES['modifica_locandina'])){
-            $array_modifiche['locandina'] = $_POST['modifica_titolo'];
+        if(isset($_FILES['modifica_locandina']) && $this->checkFoto($_FILES['modifica_locandina'])){
+            $array_modifiche['locandina'] = $_FILES['modifica_locandina'];
         }
+        //si può usare array_filter per togliere gli eventuali campi nulli
         return $array_modifiche;
+    }
+
+    //magari possono servire alcuni controlli perché così se l'admin scrive male
+    //get lista attori restituisca null
+    private function getListaAttori(string $input): ?array{
+        $arrayAttoriStringa = explode(";", $input);
+        $arrayAttoriOggetti = array();
+        foreach ($arrayAttoriStringa as $attore) {
+            $arrayAttore = explode("," , $attore);
+            $attoreOggetto = new EAttore(null, $arrayAttore[0], $arrayAttore[1]);
+            $arrayAttoriOggetti[] = $attoreOggetto;
+        }
+        return $arrayAttoriOggetti;
+    }
+
+    private function getListaRegisti(string $input): ?array{
+        $arrayRegistiStringa = explode(";", $input);
+        $arrayRegistiOggetti = array();
+        foreach ($arrayRegistiStringa as $regista) {
+            $arrayRegista = explode("," , $regista);
+            $registaOggetto = new ERegista(null, $arrayRegista[0], $arrayRegista[1]);
+            $arrayRegistiOggetti[] = $registaOggetto;
+        }
+        return $arrayRegistiOggetti;
     }
 
 

@@ -91,12 +91,13 @@
             <br>
             <div id="div">
                 <h2>Pagina di Amministrazione</h2><br>
+                <h2>Benvenuto {$admin}</h2><br>
             </div>
-            <h3>Modifica i dati del film {$titolo}:</h3><h6>(i campi da modificare dovranno contenere tutti i dati che si desidera il film abbia, quelli non da modificare possono essere lasciati così come sono)</h6><br><br>
+            <h3>Modifica i dati del film {$titolo}:</h3><h6>(i campi da modificare dovranno contenere tutti i dati che si desidera il film abbia, quelli non da modificare possono essere lasciati vuoti)</h6><br><br>
             <div class="col-sm-8 text-left">
 
                 <!-- da cambiare la url-->
-                <form action="https://{$root_dir}/admin/modifica-film" method="post" id="modifica_film" enctype="multipart/form-data">
+                <form action="https://{$root_dir}/admin/modifica-film/{$id}" method="post" id="modifica_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <h4>Titolo attuale: {$titolo} </h4>
                         <label for="titolo">Titolo:</label>
@@ -127,7 +128,7 @@
                         {foreach $registi as $regista}
                             <span>{$regista->getNome()} {$regista->getCognome()}, </span>
                         {/foreach}
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="modifica_registi" class="form-control" id="registi" placeholder="">
                     </div>
 
@@ -136,7 +137,7 @@
                         {foreach $attori as $attore}
                             <span>{$attore->getNome()} {$attore->getCognome()}, </span>
                         {/foreach}
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="modifica_attori" class="form-control" id="attori" placeholder="">
                     </div>
 

@@ -95,6 +95,7 @@
             <br>
             <div id="div">
                 <h2>Pagina di Moderazione utenti</h2><br>
+                <h2>Benvenuto {$admin}</h2><br>
                 <h3>Moderazione dell'utente {$username}</h3><br>
             </div>
             <!--<h3> se $ruolo == "member" Modera l'utente {$member}

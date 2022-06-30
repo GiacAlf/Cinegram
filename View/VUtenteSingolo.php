@@ -34,6 +34,8 @@ class VUtenteSingolo {
     }
 
     public function avviaPaginaModificaUtente(EMember $utente, array $immagine_profilo): void{
+        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $this->smarty->assign('user', $user);
         $this->smarty->assign('username', $utente->getUsername());
         $this->smarty->assign('bio', $utente->getBio());
         $this->smarty->assign('immagine_vecchia', $immagine_profilo);

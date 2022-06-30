@@ -123,12 +123,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
                     </div>
 
                     <div class="form-group">
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
                     </div>
 
@@ -142,11 +142,11 @@
                     </div>
                 </form>
                 <br><br>
-                <h3>Oppure:</h3> <!-- per accedere alla modifica film o al modera utente
-                 servono informazioni: questi due link da togliere poi -->
+                <!--<h3>Oppure:</h3> per accedere alla modifica film o al modera utente
+                 servono informazioni: questi due link da togliere poi
                 <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
                 <a href="https://{$root_dir}/admin/modifica"><h3>Modera Utente</h3></a><br/>
-
+                -->
             </div>
             <br><br>
 
