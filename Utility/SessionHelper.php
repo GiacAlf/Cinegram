@@ -9,11 +9,35 @@ class SessionHelper {
             $temp = serialize($utente);
             $_SESSION['utente'] = $temp;
         }
+
+        //qui in teoria ci entra dopo il session_start di isLogged: perché se si fa
+        //in successione: isLogged, login, isLogged; al secondo isLogged ti dà false
+        //questo perché isLogged è entrato e dato che le sessioni non esistevano, l'ha creata lui
+        //a questo punto login controlla il session_status: questa volta la sessione è stata creata!
+        //dunque non è più NONE(*) e quindi non inserisce in $_SESSION, ed ecco perché poi dà false
+
+        //in teoria (*) entra qui perché la sessione è attiva, creata, solo che dentro non c'è nulla
+        //if(session_status() == PHP_SESSION_ACTIVE){
+        //  $temp = serialize($utente);
+         //   $_SESSION['utente'] = $temp;
+        //}
+
+        //IN CONCLUSIONE: secondo me ha senso che isLogged abbia comunque session_start, perché spesso noi
+        //lo chiamiamo anche quando nel sito navigano utenti non registrati e quindi la sessione te la crea, tuttavia è necessario che login
+        //ogni volta che è chiamato scriva qualcosa su $_SESSION e che non abbia solo il controllo a riga 7: il controllo è comunque utile
+        //dato che se io chiamo SOLO login lui fa session_start, però se è chiamato dopo isLogged è necessario che scriva qualcosa
+        //quindi le righe 9 e 10 vanno fuori dal controllo
+
+        //E se togliessimo session_start() da IsLogged? Si potrebbe e tutto funzionerebbe, il problema è che se poi andiamo
+        //a chiamare login, lui farà session_start() ma tipo alla 50esima istruzione dello script e verrebbe fuori il warning
+        //"Session cannot be started after headers have already been sent": le robe te le fa comunque, ci scrive in $_SESSION
+        //ma ti dà questo errore
+
+        //Per me la soluzione migliore e la più "safe" rimane togliere le righe 9 e 10 fuori dal controllo
     }
 
 
     public static function logout(): void {
-
         session_start(); //serve perché forse deve riprendere le robe da $_SESSION?
         session_unset();
         session_destroy();
