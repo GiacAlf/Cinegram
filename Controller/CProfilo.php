@@ -8,7 +8,7 @@ class CProfilo {
     localhost/profilo/carica-profilo
     */
     public static function caricaProfilo(string $username): void{
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() /* && SessionHelper::getUtente()->getUsername() == $username*/) {
 
             $numeroEstrazioni = 5;
             //oppure viene passato nell'url. è uguale
@@ -153,7 +153,7 @@ class CProfilo {
 
     //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
-        //prendo l'utente dalla sessione
+        //prendo l'utente dalla sessione, oppure lo passo nell'url per far i controlli?
         if(SessionHelper::isLogged()){
             $username = SessionHelper::getUtente()->getUsername();
             $member = FPersistentManager::load("EMember",null, $username,null,null,

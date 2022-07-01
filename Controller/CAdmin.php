@@ -140,6 +140,7 @@ class CAdmin {
                 FPersistentManager::update($film , 'sinossi' , $array_modifiche['sinossi'] , null ,
                     null , null , null , null);
             }
+            //reinderizzo alla pagina dell'admin (?)
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -192,7 +193,7 @@ class CAdmin {
     }
 
      //idem come sopra() url localhost/admin/rimuovi-risposta
-    public static function rimuoviRisposta(int $idFilm, string $data): void {
+    public static function rimuoviRisposta(string $usernameAutore, string $data): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
             //qualcuno mi procurera' i dati
             $idFilm = 1;

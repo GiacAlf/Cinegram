@@ -110,7 +110,7 @@
                 <br><br>
                 <div style="padding-left:0px; text-align:center">
                     <h3>Scrivi una risposta:</h3>
-                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$autore_rece}" method="POST">
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$id}/{$autore_rece}" method="POST">
                         <!-- in teoria la data viene creata al momento in PHP-->
                         <textarea name="risposta" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
                         <button type="submit" form="scrivirisposta">Salva</button>

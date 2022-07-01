@@ -235,6 +235,16 @@ class CMember {
             $member = FPersistentManager::load("EMember", null, $username, null, null,
                 null, null, null, false);
         }
+        //qua forse è più efficace una cosa del tipo:
+        //$array_risultati = array();
+        //$immagini_profilo = array();
+        //if($username != null){
+        //$member = FPersistentManager::load("EMember", null, $username, null, null,
+        //                null, null, null, false);
+        // $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
+        //}
+        //$view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
+
         $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
         $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
         $view->avviaPaginaRicerca($array_risultati, $immagini_profilo);

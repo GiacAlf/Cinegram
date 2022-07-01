@@ -10,7 +10,8 @@ class CFilm {
     io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
     tipo localhost/member/.... chiamo il cercaMember
     */
-    public static function cercaFilm(): void{
+    public static function cercaFilm(): void
+    {
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
         $view = new VRicerca();
         $titolo = $view->eseguiRicerca();
@@ -19,16 +20,30 @@ class CFilm {
 
         //$titolo="suspiria";
         $films = array();
-        if($titolo == null){ //qua o si mette in foundation che l'argomento username può essere null
+        if ($titolo == null) { //qua o si mette in foundation che l'argomento username può essere null
             //oppure si fa così, oppure ancora si usa il required nell'html
             $films = FPersistentManager::load("EFilm", null, null, null,
                 null, "", 1, null, false);
-        }
-        else {
+        } else {
             $films = FPersistentManager::load("EFilm", null, null, null,
                 null, $titolo, null, null, false);
         }
         $locandine = FPersistentManager::loadLocandineFilms($films, false);
+
+        //qua forse è più efficace una cosa del tipo:
+        //$films = array();
+        //$locandine = array();
+        //if($titolo != null){
+        //$films = FPersistentManager::load("EFilm", null, null, null,
+        //                null, $titolo, null, null, false);
+        //$locandine = FPersistentManager::loadLocandineFilms($films, false);
+        //}
+        //$view->avviaPaginaRicerca($films, $locandine);
+
+
+
+
+
         // CI ERAVAMO DETTI POI DI TOGLIE STA ROBA CHE è UNA PALLA IMMENSA COME CODICE
         /*
         else{
@@ -160,7 +175,7 @@ class CFilm {
     //localhost/film/salva-recensione/id/usernameAutore
     public static function salvaRecensione(int $idFilm, string $usernameAutore){
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //se ricevo il valore di testo allora salvo quello
+        //metto required a testo recensione?
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             $view = new VRecensione();
             $array_modifica = $view->modificaRecensione();
@@ -246,7 +261,7 @@ class CFilm {
                     null, null);
                 //notifica che sto a salva le robe
                 header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
-                //qui reinderizzo alla pagina della recensione di cui ho scritto la recensione
+                //qui reinderizzo alla pagina della recensione di cui ho scritto la risposta
             }
             else{
                 $view = new VErrore();
