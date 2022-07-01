@@ -14,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav {
@@ -36,7 +38,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
         #mydiv{
             position:relative;
@@ -201,7 +205,7 @@
                             <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
                         </div>
                         <div class="col-sm-10">
-                            <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}"><h3>{$recensione->getUsernameAutore()}</a>
+                            <h3>Autore: <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                             <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
                             <h4>Voto: {$recensione->getVoto()}</h4>
                             <p>{$recensione->getTesto()}</p>
@@ -209,7 +213,7 @@
                             <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                             {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
                                 <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                                <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
+                                <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}"><button>Cancella</button></a>
                             {/if}
 
                             {if $user == "admin"}

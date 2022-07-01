@@ -100,7 +100,8 @@
             <h3>Inserisci Nuovo Film:</h3><br>
             <div class="col-sm-8 text-left">
 
-                <!-- da cambiare la url-->
+                <!-- dato che non ha senso caricare un film a metà, ma soprattutto perché fare 12mila controlli in Php è una palla,
+                    si mette tutto required qui?-->
                 <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>

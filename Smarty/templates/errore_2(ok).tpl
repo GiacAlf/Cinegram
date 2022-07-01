@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Post di {$autore}</title>
+    <title>Cinegram - Pagina di errore</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -15,7 +15,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav_white {
@@ -37,7 +39,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
