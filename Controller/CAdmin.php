@@ -79,7 +79,8 @@ class CAdmin {
             //un campo manca c'è qualcosa che non va:
             //inoltre, volendo, si può fare il controllo se l'admin idiota sta caricando tipo il padrino un'altra volta
             //possiamo usare l'existByTitoloeAnno?
-            if($titolo != null) {
+            if($titolo != null && !FPersistentManager::exist("EFilm", null, null, null, null, null,
+                $titolo, $data->format('Y'), null)) {
                 $film = new EFilm(null, $titolo, $data, $durata, $sinossi, null, null,
                     $listaRegisti, $listaAttori, null);
 
@@ -142,38 +143,13 @@ class CAdmin {
                 FPersistentManager::update($film , 'sinossi' , $array_modifiche['sinossi'] , null ,
                     null , null , null , null);
             }
-            //reinderizzo alla pagina dell'admin (?)
+            //reinderizzo alla pagina dell'admin (?) -> caricaAmministrazione
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
             $view = new VErrore();
             $view->error(8);
         }
-
-        /*$nuovoValore = array();
-        $nomeAttributo = "sinossi";
-
-        if($nomeAttributo == "data") {
-            FPersistentManager::update($film, null, null, null, null,
-                $nuovoValore, null, null);
-            return;
-        }
-
-        if($nomeAttributo == "attori") {
-            FPersistentManager::update($film, null, null, null,
-                null, null, $nuovoValore, null);
-            return;
-        }
-
-        if($nomeAttributo == "registi")
-            FPersistentManager::update($film, null, null, null,
-                null, null, null, $nuovoValore);
-
-        else {
-            FPersistentManager::update($film , $nomeAttributo , $nuovoValore , null ,
-            null , null , null , null);
-        }*/
-        //da rivedere non mi piace per nulla
     }
 
     /*
@@ -185,7 +161,7 @@ class CAdmin {
             $idFilm = 2;
             $usernameAutore = "pippo";
             FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
-            //notifica che sto eliminando la recensione.
+            //notifica che sto eliminando la recensione. -> alla pagina dell'admin
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -202,7 +178,7 @@ class CAdmin {
             $data_oggetto = ERisposta::ConvertiFormatoUrlInData($data);
             $usernameAutore = "matteo";
             FPersistentManager::delete("ERisposta", $usernameAutore, null, null, null, $data_oggetto);
-            //notifica che ho eliminato la risposta
+            //notifica che ho eliminato la risposta -> alla pagina dell'admin
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -217,7 +193,6 @@ class CAdmin {
     */
     public static function ammonisciUser(string $usernameMember): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $admin = SessionHelper::getUtente()->getUsername();
             $usernameMember = "matteo";
             //in teoria si clicca su ammonisci user quando non è bannato
             if (!FPersistentManager::userBannato($usernameMember)) {
@@ -231,11 +206,14 @@ class CAdmin {
                         FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                     }
                 }
+                //reinderizzo alla pagina del modera-utente
             }
-            else
-                print("Utente bannato");
-                //$view = new VErrore(); -> nel caso servissero
-                //$view->error(7);
+
+            else {
+                //print("Utente bannato");
+                $view = new VErrore();
+                $view->error(13);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -254,22 +232,20 @@ class CAdmin {
     public static function sbannaUser(string $username): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
             $username = "giangiacomo";
-            $admin = SessionHelper::getUtente()->getUsername();
+
 
             //in teoria qua avevamo pensato di togliere la moderazione degli admin
             //e lasciare solo quella dei member, ma per non far casini lascio così per ora
             if (FPersistentManager::userBannato($username)) {
-                if (FPersistentManager::tipoUserRegistrato($username) == "Admin")
-                    FPersistentManager::sbannaUser($username);
-                else {
                     FPersistentManager::sbannaUser($username);
                     FPersistentManager::decrementaWarning($username);
-                }
+                    //reinderizzo alla pagina del modera-utente
             }
-            else
-                print ("l'utente non è bannato");
-                //$view = new VErrore(); -> nel caso servissero, forse con nuovi mex di errore
-                //$view->error(7);
+            else {
+                //print ("l'utente non è bannato");
+                $view = new VErrore();
+                $view->error(14);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -292,13 +268,14 @@ class CAdmin {
             $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
 
             if (!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire > 0) {
-                if (FPersistentManager::tipoUserRegistrato($username) == "Member")
                     FPersistentManager::decrementaWarning($username);
+                //reinderizzo alla pagina del modera-utente
             }
-            else
-                print ("l'utente è bannato");
-                //$view = new VErrore(); -> nel caso servissero, forse con nuovi mex di errore
-                //$view->error(7);
+            else {
+                //print ("l'utente è bannato");
+                $view = new VErrore();
+                $view->error(13);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok

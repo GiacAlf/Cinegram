@@ -46,12 +46,29 @@ class VErrore {
                 $titolo = 'Autenticazione necessaria!';
                 break;
             case '9' :
-                $testo = 'Questa operazione non può essere eseguita con un input vuoto!';
+                $testo = 'Questa operazione non può essere eseguita con un input vuoto!' . "\n" .
+                    "Clicca 'indietro' nel browser per tornare alla pagina precedente";
                 $titolo = 'Errore di input!';
                 break;
             case '10' :
                 $testo = 'La vecchia password non corrisponde!';
                 $titolo = 'Errore password!';
+                break;
+            case '11' :
+                $testo = 'Questa operazione è stata già eseguita in precedenza!';
+                $titolo = 'Errore input!';
+                break;
+            case '12' :
+                $testo = 'Questa opzione o questa pagina è riservata solo agli utenti non registrati';
+                $titolo = 'Autenticazione non necessaria!';
+                break;
+            case '13' :
+                $testo = 'il member moderato è già bannato';
+                $titolo = 'Errore moderazione';
+                break;
+            case '14' :
+                $testo = 'il member moderato è già non bannato';
+                $titolo = 'Errore moderazione';
                 break;
 
         }

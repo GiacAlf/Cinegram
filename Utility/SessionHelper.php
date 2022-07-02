@@ -5,10 +5,11 @@ class SessionHelper {
     public static function login(EUser $utente): void { //Qua bisogna passare il member minimale
 
         if (session_status() == PHP_SESSION_NONE) { //sessione è abilitata ma non esiste
+            //session_set_cookie_params(3600);
             session_start();
-            $temp = serialize($utente);
-            $_SESSION['utente'] = $temp;
         }
+        $temp = serialize($utente);
+        $_SESSION['utente'] = $temp;
 
         //qui in teoria ci entra dopo il session_start di isLogged: perché se si fa
         //in successione: isLogged, login, isLogged; al secondo isLogged ti dà false
@@ -50,6 +51,7 @@ class SessionHelper {
 
         $identificato = false;
         if (session_status() == PHP_SESSION_NONE) {
+            //session_set_cookie_params(3600);
             session_start();
         }
         if (isset($_SESSION['utente'])) {

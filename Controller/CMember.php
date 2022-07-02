@@ -11,7 +11,6 @@ class CMember {
     */
 
     public static function caricaMembers(): void{
-        $ultimeRecensioni = array();
         //controlli per quanto riguarda l'utente loggato o meno
         //if(SessionHelper::isLogged()){
         //  $username = SessionHelper::getUtente()->getUsername();
@@ -63,7 +62,7 @@ class CMember {
         $follower = FPersistentManager::calcolaNumeroFollower($member);
         $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
         $seguito = false;
-        if(SessionHelper::isLogged()){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
             //se gli username sono uguali nel metodo lo segui, ti dà false
             $username_sessione = SessionHelper::getUtente()->getUsername();
@@ -129,7 +128,7 @@ class CMember {
             }
             else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                 $view = new VErrore();
-                $view->error(5);
+                $view->error(11);
             }
         }
         else{
@@ -165,7 +164,7 @@ class CMember {
             }
             else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                 $view = new VErrore();
-                $view->error(5);
+                $view->error(11);
             }
         }
         else{
@@ -180,40 +179,51 @@ class CMember {
     alla seguente url : localhost/member/registrazione-member
     */
     public static function registrazioneMember(): void{
-        $view = new VLogin();
-        $array_credenziali = $view->RegistrazioneCredenziali();
-        //se o lo username o la password sono vuote [forse inutili dato che c'è required in html]
-        //oppure se la password e la conferma password sono diverse parte l'errore
-        if($array_credenziali[0] == null || $array_credenziali[1] == null ||
-                $array_credenziali[1] != $array_credenziali[2]){
-            $view_errore = new VErrore();
-            $view_errore->error(6);
+        if(!SessionHelper::isLogged()) {
+            $view = new VLogin();
+            $array_credenziali = $view->RegistrazioneCredenziali();
+            //se o lo username o la password sono vuote [forse inutili dato che c'è required in html]
+            //oppure se la password e la conferma password sono diverse parte l'errore
+            if ($array_credenziali[0] == null || $array_credenziali[1] == null ||
+                $array_credenziali[1] != $array_credenziali[2]) {
+                $view_errore = new VErrore();
+                $view_errore->error(6);
+            } else {
+                $username = $array_credenziali[0];
+                $password = $array_credenziali[1];
+                $bio = $array_credenziali[3];
+                $data = new DateTime(); //il format giusto poi lo fa Foundation
+                $foto_profilo = $view->RegistrazioneImmagineProfilo();
+                //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
+                //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
+                //qua se l'img è null pazienza
+                $member = new EMember($username, $data, $bio, 0, null, null, null, null);
+                FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
+                    $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
+                //dovrà partire la sessione
+                SessionHelper::login($member);
+                //scritto brutto per dire che conviene redirectare all'homepage
+                header("Location: https://localhost/homepage/imposta-homepage");
+                //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
+            }
         }
         else{
-            $username = $array_credenziali[0];
-            $password = $array_credenziali[1];
-            $bio = $array_credenziali[3];
-            $data = new DateTime(); //il format giusto poi lo fa Foundation
-            $foto_profilo = $view->RegistrazioneImmagineProfilo();
-            //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
-            //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
-            //qua se l'img è null pazienza
-            $member = new EMember($username, $data, $bio, 0, null, null, null, null);
-            FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
-                $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
-            //dovrà partire la sessione
-            SessionHelper::login($member);
-            //scritto brutto per dire che conviene redirectare all'homepage
-            header("Location: https://localhost/homepage/imposta-homepage");
-            //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
+            $view = new VErrore();
+            $view->error(12);
         }
     }
 
 
     //qua basta che facevo vedere il template
     public static function paginaRegistrazione():void{
-        $view = new VLogin();
-        $view->avviaPaginaRegistrazione();
+        if(!SessionHelper::isLogged()) {
+            $view = new VLogin();
+            $view->avviaPaginaRegistrazione();
+        }
+        else{
+            $view = new VErrore();
+            $view->error(12);
+        }
     }
 
 
@@ -225,15 +235,14 @@ class CMember {
         //qua l'utente avrà cliccato il bottone cercaMember con la form, il cui contenuto viene recuperato
         //dalla view
         $view = new VRicerca();
+        $array_risultati = array();
+        $immagini_profilo = array();
         $username = $view->eseguiRicerca();
-        if($username == null){ //qua o si mette in foundation che l'argomento username può essere null
-            //oppure si fa così, oppure ancora si usa il required nell'html
-            $member = FPersistentManager::load("EMember",null,"",null,null,
-                null,null,null,false);
-        }
-        else {
+        if($username != null){
             $member = FPersistentManager::load("EMember", null, $username, null, null,
-                null, null, null, false);
+                        null, null, null, false);
+            $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
+            $array_risultati[] = $member;
         }
         //qua forse è più efficace una cosa del tipo:
         //$array_risultati = array();
@@ -245,8 +254,6 @@ class CMember {
         //}
         //$view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
 
-        $array_risultati = array($member); //faccio così perché la view vuole sempre un array come parametro
-        $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
         $view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
     }
 }
