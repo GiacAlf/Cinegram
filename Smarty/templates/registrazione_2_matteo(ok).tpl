@@ -14,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav_white {
@@ -36,7 +38,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
         #div {
             margin: 0 auto;
@@ -92,15 +96,15 @@
         <div class='col-sm-8 text-center'>
             <h3 class='title'>Riempi i seguenti campi. <br>I campi contrassegnati da * sono obbligatori.</h3><br>
             <form id='registrazione-form' action="https://{$root_dir}/member/registrazione-member" method='POST' enctype="multipart/form-data">
-                <input name='username_registrazione' type='text' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
-                <input name='password_registrazione' type='password' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
-                <input name='conferma_password' type='password' class='text-input' placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
+                <input name='username_registrazione' type='text' form='registrazione-form' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
+                <input name='password_registrazione' type='password' form='registrazione-form' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
+                <input name='conferma_password' type='password' form='registrazione-form' class='text-input' placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
                 <p>Inserisci una bio:</p>
                 <textarea rows="4" cols="50" name="bio" form='registrazione-form' class='text-input'>
       		  </textarea><br><br> <!-- anche questo l'ho fatto io, si spera che, come dice w3schools, effettivamente mettendo l'attributo form sia tutto allineato-->
                 <p id="p">Inserisci immagine profilo:</p>
                 <div id="div">
-                    <input  name='immagine_profilo' type='file' class='text-input' cols="20" rows="5"><br><br>
+                    <input  name='immagine_profilo' type='file' form='registrazione-form' class='text-input' cols="20" rows="5"><br><br>
                 </div>
                 <!-- la roba dell'immagine profilo l'ho fatta io, speriamo che mandi correttamente l'input in $_FILES, non avrò idea di come testare questa cosa in futuro ahaha-->
 

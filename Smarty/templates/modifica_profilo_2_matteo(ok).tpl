@@ -14,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav_white {
@@ -48,7 +50,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
@@ -101,7 +105,7 @@
                     <form  style="display:inline;" action='https://{$root_dir}/profilo/aggiorna-bio' method='POST' id='modifica_bio'>
                         <textarea id ="mytext" name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>
                         <div class="mydiv">
-                            <input type='submit' value='Salva bio' name='post_bio'>
+                            <input type='submit' form="modifica_bio" value='Salva bio' name='post_bio'>
                         </div>
                     </form>
                     <div class="mydiv">
@@ -112,7 +116,7 @@
                             <span> Seleziona la nuova immagine profilo: </span>
                             <br>
                             <div class="mydiv">
-                                <input name='nuova_img_profilo' type='file'>
+                                <input name='nuova_img_profilo' type='file' form="nuova_immagine_profilo">
                             </div>
                         </form><br>
                         <button type='submit' form='nuova_immagine_profilo' class='btn'>
@@ -123,14 +127,12 @@
                             <h3 >Modifica password:</h3>
                             <div id="divpass">
                                 <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
-                                    <input name='vecchia_password' type='password' placeholder='Vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
-                                    <input name='nuova_password' type='password' placeholder='Nuova password'> <br>
-                                    <input name='conferma_nuova_password' type='password' placeholder='Conferma password' ><br><br>
-                                    <input type='submit' value='Modifica la password' name='post_password'>
+                                    <input name='vecchia_password' type='password' form="modifica_password" placeholder='Vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
+                                    <input name='nuova_password' type='password' form="modifica_password" placeholder='Nuova password'> <br>
+                                    <input name='conferma_nuova_password' type='password' form="modifica_password" placeholder='Conferma password' ><br><br>
+                                    <input type='submit' value='Modifica la password' form="modifica_password" name='post_password'>
                             </div>
                             </form>
-                            <div>
-                            </div>
                             <br><br>
 
                             <div class="col-sm-2 sidenav_white"></div>

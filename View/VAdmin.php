@@ -19,8 +19,9 @@ class VAdmin {
         $this->smarty->assign('user', $user);
         //OPPURE DIRETTAMENTE COSì
         $this->smarty->assign('user', "admin");
+        //$this->smarty->assign('root_dir', $_SERVER['HTTP_HOST']); => una cosa del genere
         $this->smarty->assign('admin', $username_admin);
-        $this->smarty->display('admin.tpl');
+        $this->smarty->display('admin_2_matteo(ok).tpl');
     }
 
 

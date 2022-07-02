@@ -81,8 +81,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span id="myspanNavbar">Cinegram</span> <!-- se lo lasciamo cliccabile dove porta se già
-            abbiamo il tag dell'homepage?-->
+            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
@@ -92,7 +91,7 @@
                 {if $user != "non_loggato"}
                     {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
                         <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
-                    {else}
+                    {else} <!-- /profilo/carica-profilo/{$user}-->
                         <li><a href="https://{$root_dir}/member/carica-member/{$user}">Profilo</a></li>
                     {/if}
                     <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
@@ -105,15 +104,15 @@
                 {/if}
             </ul>
             <div id="mydivnavbar" >
-                <form action="" method="post" class="navbar-form navbar-right" role="search">
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
                     <div class="form-group input-group">
-                        <input type="text" name="ricerca" class="form-control" placeholder="Cerca un film o un utente..">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
           </span>
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
           </span>
                     </div>

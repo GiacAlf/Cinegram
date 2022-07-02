@@ -114,8 +114,8 @@
                     {else}
                         <input type='submit' formaction="https://{$root_dir}/admin/ammonisci-user/{$username}" class='btn' name='ammonizione' value='Ammonisci'> &nbsp
                         <input type='submit' formaction="https://{$root_dir}/admin/togli-ammonizione/{$username}" class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
-                        <input type='submit' formaction="https://{$root_dir}/admin/banna-user/{$username}" class='btn' name='banna' value='Banna'>&nbsp
-                        <!-- questo metodo qua sopra ancora non c'è, dato che per ora non si può bannare per direttissima-->
+                        <!--<input type='submit' formaction="https://{$root_dir}/admin/banna-user/{$username}" class='btn' name='banna' value='Banna'>&nbsp
+                        questo metodo qua sopra ancora non c'è, dato che per ora non si può bannare per direttissima-->
                     {/if}
 
                     <br><br>

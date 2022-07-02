@@ -44,7 +44,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav {
@@ -66,7 +68,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
         #mydiv{
             position:relative;
@@ -161,7 +165,7 @@
             {/if}
             <br><br>
             <span align="center">Iscritto dal: {$data_iscrizione}</span><br>
-            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Follower: {$numero_follower}</span></a><br> <!-- forse serve un template ulteriore per vederli sti member seguiti? -->
+            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Follower: {$numero_follower}</span></a><br>
             <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Following: {$numero_following}</span></a><br>
             <span align="center">Bio: {$bio}</span><br>
 
@@ -170,6 +174,8 @@
             <div>
                 {foreach $film_visti as $film}
                     <p><a href="https://{$root_dir}/film/carica-film/{$film->getId()}">{$film->getTitolo()}</a></p>
+                {foreachelse}
+                    <p>L'utente {$username} non ha visto alcun film </p>
                 {/foreach}
             </div>
         </div>
@@ -199,6 +205,8 @@
                         {/if}
                     </div>
                 </div>
+                {foreachelse}
+                     <div class="col-sm-10"> L'utente {$username} non ha scritto alcuna recensione. </div>
             {/foreach}
 
         </div>

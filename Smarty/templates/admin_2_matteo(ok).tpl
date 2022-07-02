@@ -102,6 +102,7 @@
 
                 <!-- dato che non ha senso caricare un film a metà, ma soprattutto perché fare 12mila controlli in Php è una palla,
                     si mette tutto required qui?-->
+                <!-- forse per prendere il dominio esiste $smarty.server.HTTP_HOST-->
                 <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>
@@ -124,12 +125,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
                     </div>
 
                     <div class="form-group">
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
                         <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
                     </div>
 

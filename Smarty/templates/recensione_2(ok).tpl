@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Recensione di {$autore}</title>
+    <title>Cinegram - Recensione di {$autore_rece} del film {$titolo}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -14,7 +14,9 @@
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {
+            height: 450px;
+        }
 
             /* Set gray background color and 100% height */
         .sidenav_white {
@@ -36,7 +38,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
@@ -91,7 +95,6 @@
                 <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><br><br>
                 <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
                 <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-                <!-- qua accanto è il caso di scrivere il titolo del film => getTitoloperId($id) -->
                 <br><br><br>
                 <div style='text-align:center;font-size:200%'>
                     <p>{$testo}</p>
@@ -133,6 +136,9 @@
                             <a href="https://{$root_dir}/admin/rimuovi-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Elimina</button></a>
                         {/if}
                     </div>
+                    {foreachelse}
+                    <br>
+                    <div style="padding-left:45px;"> La recensione non ha risposte </div>
                 {/foreach}
 
             </div>

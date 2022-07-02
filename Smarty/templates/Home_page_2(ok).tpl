@@ -167,8 +167,8 @@
                         <br>
                         <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                         {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
-                            <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
+                            <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}

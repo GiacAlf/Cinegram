@@ -52,8 +52,6 @@
             position:relative;
             height:200vh;
             left:2%;
-
-
         }
     </style>
     <script>
@@ -141,7 +139,7 @@
                         il button type=submit invece fa partire un'altra pagina-->
                     </form>
                 {else}
-                    <form action="https://{$root_dir}/film/rimuovi-visto/{$id}">
+                    <form action="https://{$root_dir}/film/rimuovi-film/{$id}">
                         <button  onclick="functionNonVisto()" id="buttonNonVisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -162,6 +160,8 @@
             <div>Diretto da </div>
             {foreach $registi as $regista}
                 <div> {$regista->getNome()} {$regista->getCognome()} </div>
+            {foreachelse}
+                <div> Il film non ha registi </div>
             {/foreach}
             <span align="left">{$sinossi}</span>
             <br>
@@ -170,7 +170,9 @@
             <h4>Lista attori</h4>
             <div >{foreach $attori as $attore}
                     <p> {$attore->getNome()} {$attore->getCognome()} </p>
-                {/foreach}
+                    {foreachelse}
+                    <p> Il film non ha attori </p>
+                  {/foreach}
             </div>
         </div>
 
@@ -212,8 +214,8 @@
                             <br>
                             <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                             {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
-                                <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                                <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}"><button>Cancella</button></a>
+                                <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                                <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}"><button>Cancella</button></a>
                             {/if}
 
                             {if $user == "admin"}
@@ -221,6 +223,8 @@
                                     <button>Elimina</button></a>
                             {/if}
                         </div>
+                    {foreachelse}
+                    <div class="col-sm-10"> Il film non ha recensioni </div>
                 {/foreach}
                 </div>
             </div>

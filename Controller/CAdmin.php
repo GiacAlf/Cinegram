@@ -77,6 +77,8 @@ class CAdmin {
             $sizeImmagine = "1920x1080"; // = $array_immagini['size'];
             //il ragionamento che si può fare è: se mettiamo tutto required nel template allora se anche SOLO
             //un campo manca c'è qualcosa che non va:
+            //inoltre, volendo, si può fare il controllo se l'admin idiota sta caricando tipo il padrino un'altra volta
+            //possiamo usare l'existByTitoloeAnno?
             if($titolo != null) {
                 $film = new EFilm(null, $titolo, $data, $durata, $sinossi, null, null,
                     $listaRegisti, $listaAttori, null);
