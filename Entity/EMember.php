@@ -159,9 +159,9 @@ class EMember extends EUser {
         return $this->recensioniScritte;
     }
 
+
     public function getNumeroRisposte(): ?int{
-        $numero_risposte = FPersistentManager::calcolaNumeroRisposte($this);
-        return $numero_risposte;
+        return FPersistentManager::calcolaNumeroRisposte($this);
     }
 
 
@@ -225,6 +225,9 @@ class EMember extends EUser {
 
     // prende come parametro l'array risultante da EMember::loadImmagineProfilo
     public static function getSrc(?array $immagineProfilo): ?string {
+
+        if($immagineProfilo[0] === null)
+            return "/Src/Avatar_Nullo.jpeg";
 
         $encodeBase64 = $immagineProfilo[0];
         $type = $immagineProfilo[1];

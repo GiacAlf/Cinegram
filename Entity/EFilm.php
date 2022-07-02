@@ -298,6 +298,9 @@ class EFilm {
     // prende come parametro l'array risultante da EFilm::loadLocandina
     public static function getSrc(?array $locandina): ?string {
 
+        if($locandina[0] === null)
+            return "/Src/Locandina_Nulla.jpeg";
+
         $encodeBase64 = $locandina[0];
         $type = $locandina[1];
 

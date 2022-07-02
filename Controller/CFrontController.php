@@ -34,22 +34,9 @@ class CFrontController {
     }
 
 
-
-
-
     private static function capisciUrl(string $path):string{
         $arrayRisultato = explode("-",$path);
         $arrayRisultato[1] = ucfirst($arrayRisultato[1]);
         return ($arrayRisultato[0].$arrayRisultato[1]);
     }
-
-
-
-
-
-
-
-
-
-
 }
