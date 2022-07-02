@@ -15,7 +15,8 @@ class CFrontController {
                print ("Errore 405");
                 return;
             }
-        } else {
+        }
+        else {
             print("Errore 404");
             return;
         }
