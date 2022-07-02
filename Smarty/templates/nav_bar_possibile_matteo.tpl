@@ -44,7 +44,7 @@
                 height:auto;
             }
         }
-        #myspan{
+        #myspanNavbar{
             font-family: "Sofia", sans-serif;
             font-size: 30px;
             text-shadow: 2.5px 2.5px 2.5px #ababab;
@@ -53,9 +53,18 @@
 
 
         }
-        #mydiv{
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+
+
+        }
+        #mydivnavbar{
             position:relative;
-            left:15%;
+            left:22%;
 
 
         }
@@ -72,7 +81,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span id="myspan">Cinegram</span> <!-- se lo lasciamo cliccabile dove porta se già
+            <span id="myspanNavbar">Cinegram</span> <!-- se lo lasciamo cliccabile dove porta se già
             abbiamo il tag dell'homepage?-->
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
@@ -95,7 +104,7 @@
                     <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {/if}
             </ul>
-            <div id="mydiv" >
+            <div id="mydivnavbar" >
                 <form action="" method="post" class="navbar-form navbar-right" role="search">
                     <div class="form-group input-group">
                         <input type="text" name="ricerca" class="form-control" placeholder="Cerca un film o un utente..">
@@ -113,6 +122,13 @@
         </div>
     </div>
 </nav>
+
+<footer class="container-fluid text-center">
+    <p id="myfooter">Cinegram 2022</p>
+</footer>
+
+
+
 
 
 
