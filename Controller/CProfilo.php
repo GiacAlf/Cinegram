@@ -5,10 +5,10 @@ class CProfilo {
     /*
     metodo chiamato quando l'utente registrato vuole accedere al suo profilo(ci sara' nella homepage un
     bottone da premere), inviera' una url in get
-    localhost/profilo/carica-profilo
+    localhost/profilo/carica-profilo/username
     */
     public static function caricaProfilo(string $username): void{
-        if(SessionHelper::isLogged() /* && SessionHelper::getUtente()->getUsername() == $username*/) {
+        if(SessionHelper::isLogged() && $username==SessionHelper::getUtente()->getUsername()) {
 
             $numeroEstrazioni = 5;
             //oppure viene passato nell'url. è uguale
@@ -37,7 +37,6 @@ class CProfilo {
     dopo imposteremo questa cosa, ovvero se nel db non ne troviamo caricata nessuna, mettiamo quella di default. L'utente carichera'
     la foto con la form per i file vista a lezione. Url localhost/profilo/aggiorna-immagine
     */
-    //TODO: avevamo stabilito che la view si recuperasse dalla sessione lo username, il controllore fa solo il controllo sul login
 
     public static function aggiornaImmagine(): void{
         //verifica che l'utente sia registrato
@@ -57,7 +56,7 @@ class CProfilo {
             }
 
             //ricaricare la pagina del member col l'immagine cambiata tramite il metodo sopra.
-            header("Location: localhost/member/carica-member/" . $username);
+            header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
             //qui reinderizzo alla pagina dell'utente
         }
         else{
@@ -88,7 +87,7 @@ class CProfilo {
                 FPersistentManager::updateBio($member, $updatedBio);
             }
             //ricaricare la pagina con la bio aggiornata tramite il metodo sopra
-            header("Location: localhost/member/carica-member/" . $username);
+            header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
             //qui reinderizzo alla pagina dell'utente
         }
         else{
@@ -113,7 +112,7 @@ class CProfilo {
             $confermaNuovaPassword = $view->verificaConfermaPassword();
 
             //TODO:fare un metodo in foundation che prende uno username mi dice la sua password attuale
-            $vecchiaPasswordDalDb="ciao"; //FPersistentManager::loadPassword($username);
+            $controlloVecchiaPassword = FPersistentManager::userRegistrato($username,$vecchiaPassword);
 
             //QUANDO è CHE FACCIO VEDERE LA SCHERMATA DI ERRORE:
             //1) se la nuova pw è null
@@ -122,12 +121,12 @@ class CProfilo {
             //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
             //regolare? O lo si fa nella view?
 
-            //TODO: costruire nella VErrore i casi sopra citati
             if ($nuovaPassword == null){
                 $view_errore = new VErrore();
                 $view_errore->error(6);
+
             }
-            elseif ($vecchiaPassword != $vecchiaPasswordDalDb){
+            elseif ($controlloVecchiaPassword){
                 $view_errore = new VErrore();
                 $view_errore->error(10);
             }
@@ -140,7 +139,7 @@ class CProfilo {
                     null, null, false);
                 FPersistentManager::updatePassword($member, $nuovaPassword);
                 //notifica che sto a salva le robe
-                header("Location: localhost/member/carica-member/" . $username);
+                header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
                 //qui reinderizzo alla pagina dell'utente
             }
         }
