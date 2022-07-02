@@ -40,7 +40,7 @@ class CProfilo {
 
     public static function aggiornaImmagine(): void{
         //verifica che l'utente sia registrato
-        if(SessionHelper::isLogged()){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             $username = SessionHelper::getUtente()->getUsername();
             $view = new VUtenteSingolo();
             //recuperare dalla view giusta i dati dell'immagine
@@ -51,8 +51,8 @@ class CProfilo {
             if($nuova_foto != null){
                 //$view_errore = new VErrore();
                 //$view_errore->error(4);
-                FPersistentManager::updateImmagineProfilo($username , $nuova_foto['tmp_name'], $nuova_foto['size'],
-                    $nuova_foto['type']);
+                FPersistentManager::updateImmagineProfilo($username , $nuova_foto['tmp_name'], $nuova_foto['type'],
+                    $nuova_foto['size']);
             }
 
             //ricaricare la pagina del member col l'immagine cambiata tramite il metodo sopra.
@@ -74,7 +74,7 @@ class CProfilo {
     */
     public static function aggiornaBio(): void{
         //verificare che l'utente è registrato e caricare il suo username dalla sessione
-        if(SessionHelper::isLogged()){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             $username = SessionHelper::getUtente()->getUsername();
 
             $view = new VUtenteSingolo();
@@ -104,7 +104,7 @@ class CProfilo {
     public static function aggiornaPassword(): void{
         /*recupero della nuova password dalla form, ma questa funzione puo' essere
         chiamata solo dal member registrato oppure anche un member che non se la ricorda nella schermata di login(?)*/
-        if(SessionHelper::isLogged()){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             $username = SessionHelper::getUtente()->getUsername();
             $view = new VUtenteSingolo();
             $vecchiaPassword = $view->recuperaVecchiaPassword();
@@ -112,7 +112,7 @@ class CProfilo {
             $confermaNuovaPassword = $view->verificaConfermaPassword();
 
             //TODO:fare un metodo in foundation che prende uno username mi dice la sua password attuale
-            $controlloVecchiaPassword = FPersistentManager::userRegistrato($username,$vecchiaPassword);
+            $esattezzaVecchiaPassword = FPersistentManager::userRegistrato($username,$vecchiaPassword);
 
             //QUANDO è CHE FACCIO VEDERE LA SCHERMATA DI ERRORE:
             //1) se la nuova pw è null
@@ -126,7 +126,7 @@ class CProfilo {
                 $view_errore->error(6);
 
             }
-            elseif ($controlloVecchiaPassword){
+            elseif (!$esattezzaVecchiaPassword){
                 $view_errore = new VErrore();
                 $view_errore->error(10);
             }
@@ -153,7 +153,7 @@ class CProfilo {
     //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
         //prendo l'utente dalla sessione, oppure lo passo nell'url per far i controlli?
-        if(SessionHelper::isLogged()){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             $username = SessionHelper::getUtente()->getUsername();
             $member = FPersistentManager::load("EMember",null, $username,null,null,
                 null,null,null,false);

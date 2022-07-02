@@ -12,12 +12,13 @@ class VFilmSingolo
 
     //metodo che ci fa vedere la pagina del film singolo, prendendo
     //come parametro il film che ha selezionato l'utente
-    public function avviaPaginaFilm(EFilm $film_selezionato, bool $visto, array $locandina, array $film_visti,
+    public function avviaPaginaFilm(EFilm $film_selezionato, bool $visto, bool $ha_scritto, array $locandina, array $film_visti,
                                     array $locandine_film_visti){
         $user = SessionHelper::UserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign( 'id', $film_selezionato->getId());
         $this->smarty->assign('locandina_film', $locandina);
+        $this->smarty->assign('ha_scritto', $ha_scritto);
         $this->smarty->assign( 'titolo', $film_selezionato->getTitolo());
         $this->smarty->assign('durata', $film_selezionato->getDurata());
         $this->smarty->assign('anno', $film_selezionato->getAnno()->format("Y"));

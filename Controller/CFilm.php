@@ -15,34 +15,16 @@ class CFilm {
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
         $view = new VRicerca();
         $titolo = $view->eseguiRicerca();
-        //$tipo = $view->tipoRicerca(); //non serviva più questo vero, non me lo ricordo ahaha -> in realtà sì per discriminare tra ricerca
-        //per film o per persone
 
         //$titolo="suspiria";
         $films = array();
-        if ($titolo == null) { //qua o si mette in foundation che l'argomento username può essere null
-            //oppure si fa così, oppure ancora si usa il required nell'html
+        $locandine = array();
+
+        if($titolo != null){
             $films = FPersistentManager::load("EFilm", null, null, null,
-                null, "", 1, null, false);
-        } else {
-            $films = FPersistentManager::load("EFilm", null, null, null,
-                null, $titolo, null, null, false);
+                            null, $titolo, null, null, false);
+            $locandine = FPersistentManager::loadLocandineFilms($films, false);
         }
-        $locandine = FPersistentManager::loadLocandineFilms($films, false);
-
-        //qua forse è più efficace una cosa del tipo:
-        //$films = array();
-        //$locandine = array();
-        //if($titolo != null){
-        //$films = FPersistentManager::load("EFilm", null, null, null,
-        //                null, $titolo, null, null, false);
-        //$locandine = FPersistentManager::loadLocandineFilms($films, false);
-        //}
-        //$view->avviaPaginaRicerca($films, $locandine);
-
-
-
-
 
         // CI ERAVAMO DETTI POI DI TOGLIE STA ROBA CHE è UNA PALLA IMMENSA COME CODICE
         /*
@@ -79,10 +61,13 @@ class CFilm {
         del film singolo
          */
         $visto = false;
-        if(SessionHelper::isLogged()){
+        $ha_scritto = false;
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             //se è un admin pazienza, tanto restituisce false
             $username = SessionHelper::getUtente()->getUsername();
             $visto = FPersistentManager::loHaiVisto($username, $id);
+            $ha_scritto = FPersistentManager::exist("ERecensione", $id, $username, null, null, null, null,
+                null, null);
         }
         $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
         $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
@@ -103,7 +88,7 @@ class CFilm {
             }
             $view->avviaPaginaFilm($film, $visto, $locandina);
         } */
-        $view->avviaPaginaFilm($film, $visto, $locandina, $filmPiuVisti, $locandineFilmPiuVisti);
+        $view->avviaPaginaFilm($film, $visto, $ha_scritto, $locandina, $filmPiuVisti, $locandineFilmPiuVisti);
     }
 
     /*
@@ -181,7 +166,7 @@ class CFilm {
             $array_modifica = $view->modificaRecensione();
             //la prendo completa perché, per ora, alla fine del metodo visualizziamo la sua pagina
             $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null
-                , null, null, null, null, true);
+                , null, null, null, null, false);
             if ($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
                 $updatedText = "prova aggiornamento"; // = $array_modifica[0];
                 FPersistentManager::update($recensione, "testo", $updatedText, null, null,
@@ -216,11 +201,11 @@ class CFilm {
     url localhost/film/elimina-recensione/id
      */
 
-    public static function eliminaRecensione(int $idFilm): void{
+    public static function eliminaRecensione(int $idFilm, string $usernameAutore): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //in teoria qua sarebbe meglio passare anche lo username dell'autore per fare un controllo
         //come sopra
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
 
             //$idFilm = 2; //recupero da Url
             $usernameAutore = "pippo"; //SessionHelper::getUtente()->getUsername();
@@ -280,10 +265,10 @@ class CFilm {
     , propongo di associare ,localhost/film/elimina-risposta/data, come fatto sopra.
      */
 
-    public static function eliminaRisposta(string $data): void{
+    public static function eliminaRisposta(string $usernameAutore, string $data): void{
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //in teoria qua sarebbe meglio passare anche lo username dell'autore per fare un controllo
-        if(SessionHelper::isLogged()) {
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             $usernameAutore = SessionHelper::getUtente()->getUsername();
 
             //$idFilm = 1; //non serve questo qui, giusto?
@@ -332,17 +317,13 @@ class CFilm {
             $oggetto_data = ERisposta::ConvertiFormatoUrlInData($data);
             $updatedText = $view->modificaRisposta(); //in teoria lo passo sempre pieno: ho messo required nell'html
             $updatedText = "prova aggiornamento";
+            $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
+                null, null, $oggetto_data, false);
             if($updatedText != null) {
-                $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
-                    null, null, $oggetto_data, false);
                 FPersistentManager::update($risposta, null, $updatedText, null,
                     null, null, null, null);
-                //dove reinderizzo? dato che abbiamo lo username autore, nel suo profilo?
             }
-            else{
-                $view = new VErrore();
-                $view->error(9);
-            }
+            header("Location: https:// /film/mostra-recensione/". $risposta->getIdFilmRecensito() . "/" . $risposta->getUsernameAutoreRecensione());
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -351,27 +332,6 @@ class CFilm {
         }
     }
 
-
-    /*
-    supponendo ci sia un pulsante per caricare le risposte della recensione
-    allora associamo una url localhost/film/carica-risposte/usernameAutoreRecensione/idFilm
-     */
-    //METODO UTILE UNA VOLTA ORA INUTILE
-    public static function caricaRisposte(string $usernameAutoreRecensione, int $id): void{
-
-        //leggere dalla view corrispondente i dati inviati, saranno la chiave che identifica la recensione
-        //quindi usernameAutore e idfilm
-
-        $usernameAutore = "damiano"; //vengono dall'url questi due paramentri
-        $idFilm = 2;
-
-        $risposte = FPersistentManager::loadRisposte($idFilm, $usernameAutore);
-        // print_r($risposte);
-
-        /* semplicemente
-        cliccando sul buttone parte un js che carica una finestra (?) ,non ne ho idea
-        Sì, dovrebbe essere il js a fare sta roba, si spera*/
-    }
 
     /*
      * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
@@ -395,7 +355,7 @@ class CFilm {
             }
             else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                 $view = new VErrore();
-                $view->error(5);
+                $view->error(11);
             }
         }
         else{
@@ -426,7 +386,7 @@ class CFilm {
             }
             else{
                 $view = new VErrore();
-                $view->error(5);
+                $view->error(11);
             }
         }
         else{

@@ -48,6 +48,9 @@ class VLogin
 
     //TODO: metodo per registrarsi, devo discriminare dai campi login -> MANCA IL CONFERMA PASSWORD
     public function RegistrazioneCredenziali(): array{
+        //$pattern1 = "/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[*!@$%^&£'\"#(){}\[\]>°?~_+-=|]).{8,32}$/";
+        //regola:1 lettera minuscola, 1 lettera maiuscola, 1 cifra, 1 carattere speciale e lunga da 8 a 32 caratteri
+        //CONTROLLO DELLE ESPRESSIONI REGOLARI QUI NELLE VIEW
         $username = null;
         $password = null;
         $bio = null;
