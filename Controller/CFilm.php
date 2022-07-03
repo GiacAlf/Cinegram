@@ -115,7 +115,7 @@ class CFilm {
                 FPersistentManager::store($recensione, null, null, null, null, null,
                     null, null);
                 //notifica che sto a salva le robe
-                header("Location: localhost/film/carica-film/" . $idFilm);//qui reinderizzo alla pagina del film di cui ho scritto la recensione
+                header("Location: https://". VUtility::getRootDir() ."/film/carica-film/" . $idFilm);//qui reinderizzo alla pagina del film di cui ho scritto la recensione
             }
             else{
                 $view = new VErrore();
@@ -164,7 +164,6 @@ class CFilm {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             $view = new VRecensione();
             $array_modifica = $view->modificaRecensione();
-            //la prendo completa perché, per ora, alla fine del metodo visualizziamo la sua pagina
             $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null
                 , null, null, null, null, false);
             if ($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
@@ -187,7 +186,7 @@ class CFilm {
             //così se tutti e due i campi sono null faccio rivedere direttamente la pagina della recensione
             //anche se modifico voglio far rivedere la pagina della recensione
             //poi rifacciamo vedere la pagina della recensione?
-            header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
+            header("Location: https://" . VUtility::getRootDir() ."/film/mostra-recensione/" . $idFilm . "/" . $usernameAutore);
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -213,7 +212,8 @@ class CFilm {
             //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
             FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
             //notifica che sto a salva le robe
-            header("Location:  localhost/film/carica-film/" . $idFilm); //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+            header("Location: https://". VUtility::getRootDir() ."/film/carica-film/" . $idFilm);
+            //qui reinderizzo alla pagina del film di cui ho scritto la recensione
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -245,7 +245,7 @@ class CFilm {
                 FPersistentManager::store($risposta, null, null, null, null, null,
                     null, null);
                 //notifica che sto a salva le robe
-                header("Location: localhost/film/mostra-recensione/" . $idFilm . "/" .$usernameAutore);
+                header("Location: https://" . VUtility::getRootDir() ."/film/mostra-recensione/" . $idFilm . "/" . $usernameAutore);
                 //qui reinderizzo alla pagina della recensione di cui ho scritto la risposta
             }
             else{
@@ -276,9 +276,14 @@ class CFilm {
             //nel caso dovesse servire, tanto è gratis
             //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
             $oggetto_data = ERisposta::ConvertiFormatoUrlInData($data);
+            $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
+                null, null, $oggetto_data, false);
+            $idFilm = $risposta->getIdFilmRecensito();
+            $usernameAutoreRecensione = $risposta->getUsernameAutoreRecensione();
             FPersistentManager::delete("ERisposta", $usernameAutore, null, null, null, $oggetto_data);
             //notifica che sto a salva le robe
-            header("Location  localhost/film/?id=" ); //qui dove reinderizzo? dato che abbiamo lo username autore, nel suo profilo?
+            header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/".
+                $idFilm . "/" . $usernameAutoreRecensione); //qui dove reinderizzo? dato che abbiamo lo username autore, nel suo profilo?
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -323,7 +328,8 @@ class CFilm {
                 FPersistentManager::update($risposta, null, $updatedText, null,
                     null, null, null, null);
             }
-            header("Location: https:// /film/mostra-recensione/". $risposta->getIdFilmRecensito() . "/" . $risposta->getUsernameAutoreRecensione());
+            header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/".
+                $risposta->getIdFilmRecensito() . "/" . $risposta->getUsernameAutoreRecensione());
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok

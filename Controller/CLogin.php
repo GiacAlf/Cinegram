@@ -44,6 +44,8 @@ class CLogin {
                         $view_member = new VUtenteSingolo();
                         $utente = FPersistentManager::load("EMember", null, $username, null,
                             null, null, null, null, false);
+                        //ATTENZIONE: PRIMA di fare l'avvia pagina utente o admin devo salvare l'utente loggato nella sessione!
+                        SessionHelper::login($utente);
                         $utente_completo = FPersistentManager::load("EMember", null, $username, null,
                             null, null, null, null, true);
                         $immagine_profilo = FPersistentManager::loadImmagineProfilo($utente, true);
@@ -58,10 +60,11 @@ class CLogin {
                         $view_admin = new VAdmin();
                         $utente = FPersistentManager::load("EAdmin", null, $username, null,
                             null, null, null, null, false);
+                        SessionHelper::login($utente);
                         $view_admin->avviaPaginaAdmin($utente); //visualizzo l'admin
                     }
                     //avvia la sessione con l'oggetto non completo
-                    SessionHelper::login($utente);
+                    //SessionHelper::login($utente);
                 }
             }
             else {
@@ -104,7 +107,7 @@ class CLogin {
         if(SessionHelper::isLogged()) {
             SessionHelper::logout(); //poi reinderizzo all'home page, oppure lo si fa
             //nei metodi di session helper
-            header("Location: https://localhost/homepage/imposta-homepage");
+            header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
         }
         else{
             $view = new VErrore();

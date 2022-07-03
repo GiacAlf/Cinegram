@@ -56,7 +56,7 @@ class CProfilo {
             }
 
             //ricaricare la pagina del member col l'immagine cambiata tramite il metodo sopra.
-            header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
+            header("Location: https://" . VUtility::getRootDir() . "/profilo/carica-profilo/" . $username);
             //qui reinderizzo alla pagina dell'utente
         }
         else{
@@ -87,7 +87,7 @@ class CProfilo {
                 FPersistentManager::updateBio($member, $updatedBio);
             }
             //ricaricare la pagina con la bio aggiornata tramite il metodo sopra
-            header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
+            header("Location: https://" . VUtility::getRootDir() . "/profilo/carica-profilo/" . $username);
             //qui reinderizzo alla pagina dell'utente
         }
         else{
@@ -139,7 +139,7 @@ class CProfilo {
                     null, null, false);
                 FPersistentManager::updatePassword($member, $nuovaPassword);
                 //notifica che sto a salva le robe
-                header("Location: http//" . $_SERVER['HTTP_HOST'] . "/member/carica-member/" . $username);
+                header("Location: https://" . VUtility::getRootDir() . "/profilo/carica-profilo/" . $username);
                 //qui reinderizzo alla pagina dell'utente
             }
         }
@@ -153,6 +153,7 @@ class CProfilo {
     //localhost/profilo/modifica-profilo
     public static function modificaProfilo(){
         //prendo l'utente dalla sessione, oppure lo passo nell'url per far i controlli?
+        //no perché la riga 158 è come se fosse un controllo di sicurezza: sono sicuro di prendere l'utente della sessione
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
             $username = SessionHelper::getUtente()->getUsername();
             $member = FPersistentManager::load("EMember",null, $username,null,null,

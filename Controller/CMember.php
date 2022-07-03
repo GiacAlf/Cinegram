@@ -203,7 +203,7 @@ class CMember {
                 //dovrà partire la sessione
                 SessionHelper::login($member);
                 //scritto brutto per dire che conviene redirectare all'homepage
-                header("Location: https://localhost/homepage/imposta-homepage");
+                header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
                 //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
             }
         }
