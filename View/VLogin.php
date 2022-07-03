@@ -39,7 +39,8 @@ class VLogin
     public function verificaLogin(): array{
         $username = null;
         $password = null;
-        if(isset($_POST['username_login']) && isset($_POST['password_login'])){
+        if(isset($_POST['username_login']) && isset($_POST['password_login'])
+            /*&& $this->checkPassword($_POST['password_login'])*/){
             $username = $_POST['username_login'];
             $password = $_POST['password_login'];
         }
@@ -56,7 +57,8 @@ class VLogin
         $bio = null;
         $conferma_password = null;
         if(isset($_POST['username_registrazione']) && isset($_POST['password_registrazione'])
-            && isset($_POST['conferma_password'])){
+            && isset($_POST['conferma_password']) && $this->checkPassword($_POST['password_registrazione'])
+            && $this->checkPassword($_POST['conferma_password'])){
             $username = $_POST['username_registrazione'];
             $password = $_POST['password_registrazione'];
             $conferma_password = $_POST['conferma_password'];
@@ -74,6 +76,15 @@ class VLogin
             $array_foto = $_FILES['immagine_profilo'];
         }
         return $array_foto;
+    }
+
+    public function checkPassword(string $password): bool{
+        $match = false;
+        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/";
+        if(preg_match($pattern, $password)){
+            $match = true;
+        }
+        return $match;
     }
 
     public function checkFoto(): bool{

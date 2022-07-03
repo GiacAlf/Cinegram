@@ -103,7 +103,7 @@ class VUtenteSingolo {
     //metodo che aggiorna la password
     public function aggiornaPassword(): ?string{
         $nuova_password = null;
-        if(isset($_POST['nuova_password'])){
+        if(isset($_POST['nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
             $nuova_password = $_POST['nuova_password'];
         }
         return $nuova_password;
@@ -119,10 +119,19 @@ class VUtenteSingolo {
 
     public function verificaConfermaPassword(): ?string{
         $conferma_password = null;
-        if(isset($_POST['conferma_nuova_password'])){
+        if(isset($_POST['conferma_nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
             $conferma_password = $_POST['conferma_nuova_password'];
         }
         return $conferma_password;
+    }
+
+    public function checkPassword(string $password): bool{
+        $match = false;
+        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/";
+        if(preg_match($pattern, $password)){
+            $match = true;
+        }
+        return $match;
     }
 
 

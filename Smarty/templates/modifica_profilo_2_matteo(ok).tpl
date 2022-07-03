@@ -128,8 +128,14 @@
                             <div id="divpass">
                                 <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
                                     <input name='vecchia_password' type='password' form="modifica_password" placeholder='Vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
-                                    <input name='nuova_password' type='password' form="modifica_password" placeholder='Nuova password'> <br>
-                                    <input name='conferma_nuova_password' type='password' form="modifica_password" placeholder='Conferma password' ><br><br>
+                                    <input name='nuova_password' type='password'
+                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                                           title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
+                                           form="modifica_password" placeholder='Nuova password'> <br>
+                                    <input name='conferma_nuova_password' type='password'
+                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                                           title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
+                                           form="modifica_password" placeholder='Conferma password' ><br><br>
                                     <input type='submit' value='Modifica la password' form="modifica_password" name='post_password'>
                             </div>
                             </form>

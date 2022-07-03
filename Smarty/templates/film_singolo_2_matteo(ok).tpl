@@ -124,13 +124,13 @@
     <div>
 
         <!-- sidenav vuota ma riutilizzabile -->
-        <div id="mydiv" class="col-sm-3 sidenav">
-            <p><h2>  {$titolo}  </h2></p> <!-- invece di passare l'istanza di EFilm, costruiamo la stringa(?) -->
+        <div id="mydiv" class="col-sm-3 sidenav"> <!-- https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg-->
+            <p><h2>  {$film->getTitolo()}  </h2></p> <!-- invece di passare l'istanza di EFilm, costruiamo la stringa(?) -->
             <!-- src="data: {$locandina_film[1]};base64,{$locandina_film[0]}" --> <!-- height e  width {$locandina_film[2]} -->
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="315" width="210" alt="Locandina"><br>
+            <img src="{$film->getSrc($locandina_film)}"  class="img-rectangle" {$locandina_film[2]} alt="Locandina"><br>
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
-                    <form action="https://{$root_dir}/film/vedi-film/{$id}">
+                    <form action="https://{$root_dir}/film/vedi-film/{$film->getId()}">
                         <button onclick="functionVisto()" id="buttonVisto"  type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -139,7 +139,7 @@
                         il button type=submit invece fa partire un'altra pagina-->
                     </form>
                 {else}
-                    <form action="https://{$root_dir}/film/rimuovi-film/{$id}">
+                    <form action="https://{$root_dir}/film/rimuovi-film/{$film->getId()}">
                         <button  onclick="functionNonVisto()" id="buttonNonVisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -150,23 +150,23 @@
                 {/if}
             </button>
             {if $user == "admin"}
-                <form action="https://{$root_dir}/admin/mostra-film/{$id}"> <!-- qua bisogna solo far vedere il template -->
+                <form action="https://{$root_dir}/admin/mostra-film/{$film->getId()}"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
                 </form>
             {/if}
             <br><br>
-            <span align="left">{$anno}</span>
-            <div>Durata: {$durata} minuti</div>
+            <span align="left">{$film->getAnno()->format("Y")}</span>
+            <div>Durata: {$film->getDurata()} minuti</div>
             <div>Diretto da </div>
             {foreach $registi as $regista}
                 <div> {$regista->getNome()} {$regista->getCognome()} </div>
             {foreachelse}
                 <div> Il film non ha registi </div>
             {/foreach}
-            <span align="left">{$sinossi}</span>
+            <span align="left">{$film->getSinossi()}</span>
             <br>
-            <h5> Views: {$numero_views} </h5>
-            <h5> Voto medio: {$voto_medio} </h5><br>
+            <h5> Views: {$film->getNumeroViews()} </h5>
+            <h5> Voto medio: {$film->getVotoMedio()} </h5><br>
             <h4>Lista attori</h4>
             <div >{foreach $attori as $attore}
                     <p> {$attore->getNome()} {$attore->getCognome()} </p>
@@ -177,10 +177,15 @@
         </div>
 
         <div class="col-sm-7 text-center">
-
+            {if $ha_scritto == true}
+            <div class="container-fluid bg-3 text-left">
+                <p>L'utente {$user} ha già scritto una recensione per questo film. Per poterla vedere cliccare
+                <a href="https://{$root_dir}/film/mostra-recensione/{$film->getId()}/{$user}"> qui. </a></p>
+            </div>
+            {/if}
             <div class="container-fluid bg-3 text-left">
                 <br><h4>Scrivi una Recensione:</h4>
-                <form action="https://{$root_dir}/film/scrivi-recensione/{$id}" role="form" id="scrivirecensione" method="post">
+                <form action="https://{$root_dir}/film/scrivi-recensione/{$film->getId()}" role="form" id="scrivirecensione" method="post">
                     <label for="voti">Scegli un voto:</label>
                     <div class="form-group">
                         <select name="voto" id="voti" form="scrivirecensione">
@@ -215,7 +220,7 @@
                             <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                             {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
                                 <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                                <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}"><button>Cancella</button></a>
+                                <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
                             {/if}
 
                             {if $user == "admin"}
@@ -232,6 +237,7 @@
 
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
+            {if isset($film_visti)}
             {for $i=0 to {$film_visti|count - 1}}
                 <p>{$film_visti[$i]->getTitolo()}</p>
                 <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
@@ -239,6 +245,7 @@
                         <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
                              height="105" width="75" alt="Locandina"></a></p><br>
             {/for}
+            {/if}
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>

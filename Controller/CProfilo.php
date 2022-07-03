@@ -121,10 +121,9 @@ class CProfilo {
             //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
             //regolare? O lo si fa nella view?
 
-            if ($nuovaPassword == null){
+            if ($nuovaPassword == null || $confermaNuovaPassword == null || $vecchiaPassword == null){
                 $view_errore = new VErrore();
                 $view_errore->error(6);
-
             }
             elseif (!$esattezzaVecchiaPassword){
                 $view_errore = new VErrore();
