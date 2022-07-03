@@ -9,8 +9,10 @@ class VErrore {
     }
 
     public function error(int $id_errore): void{
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('i', $id_errore);
         switch ($id_errore) {
             case '1' :

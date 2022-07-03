@@ -14,8 +14,10 @@ class VRicerca {
     //sempre un array da far visualizzare io prima faccio vedere quanti risultati ci sono
     //poi se ho effettivamente dei risultati li assegno a smarty. In ogni caso faccio display del template
     public function avviaPaginaRicerca(array $risultato_ricerca, array $immagini): void{
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('risultato_ricerca', $risultato_ricerca);
         $this->smarty->assign('immagini', $immagini);
         $this->smarty->display('ricerca.tpl');

@@ -16,10 +16,10 @@ class VLogin
     public function avviaPaginaLogin(): void{
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A LOGIN $user = "non_loggato"
         //QUINDI O FACCIO COSì
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
-        //OPPURE DIRETTAMENTE COSì
-        $this->smarty->assign('user', "non_loggato");
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->display('login.tpl');
     }
 
@@ -28,10 +28,10 @@ class VLogin
     public function avviaPaginaRegistrazione(): void{
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A REGISTRAZIONE $user = "non_loggato"
         //QUINDI O FACCIO COSì
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
-        //OPPURE DIRETTAMENTE COSì
-        $this->smarty->assign('user', "non_loggato");
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->display('registrazione.tpl');
     }
 

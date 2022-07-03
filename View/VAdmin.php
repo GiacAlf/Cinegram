@@ -15,11 +15,10 @@ class VAdmin {
     public function avviaPaginaAdmin(string $username_admin): void{
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
         //QUINDI O FACCIO COSì
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
-        //OPPURE DIRETTAMENTE COSì
-        $this->smarty->assign('user', "admin");
-        //$this->smarty->assign('root_dir', $_SERVER['HTTP_HOST']); => una cosa del genere
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
         $this->smarty->display('admin_2_matteo(ok).tpl');
     }
@@ -31,10 +30,10 @@ class VAdmin {
                                             string $username_admin): void{
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
         //QUINDI O FACCIO COSì
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
-        //OPPURE DIRETTAMENTE COSì
-        $this->smarty->assign('user', "admin");
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
         $this->smarty->assign( 'id', $film_da_modificare->getId());
         $this->smarty->assign( 'titolo', $film_da_modificare->getTitolo());
@@ -51,7 +50,10 @@ class VAdmin {
     //ban, ammonisci... e gli altri che non ricordo lol
     public function avviaPaginaModeraUtente(EMember $utente_da_moderare, bool $bannato, string $username_admin): void{
         //$this->smarty->assign('username_admin', $admin); -> boh forse dovrò mettere lo username dell'admin boh
-        //toccherà passare anche la locandina chissà
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
         $this->smarty->assign( 'username', $utente_da_moderare->getUsername());
         $this->smarty->assign( 'warning', $utente_da_moderare->getWarning());

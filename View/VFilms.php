@@ -20,6 +20,10 @@ class VFilms {
     public function avviaPaginaFilms(array $film_visti, array $locandine_film_visti, array $utenti_seguiti,
                                      array $immagini_seguiti, array $film_recenti, array $locandine_film_recenti,
                                      array $recensioni): void{
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('film_visti', $film_visti);
         $this->smarty->assign('locandine_film_visti', $locandine_film_visti);
         $this->smarty->assign('utenti_seguiti', $utenti_seguiti);

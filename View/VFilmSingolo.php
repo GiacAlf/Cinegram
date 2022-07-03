@@ -14,8 +14,10 @@ class VFilmSingolo
     //come parametro il film che ha selezionato l'utente
     public function avviaPaginaFilm(EFilm $film_selezionato, bool $visto, bool $ha_scritto, array $locandina, array $film_visti,
                                     array $locandine_film_visti){
-        $user = SessionHelper::UserNavBar();
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign( 'id', $film_selezionato->getId());
         $this->smarty->assign('locandina_film', $locandina);
         $this->smarty->assign('ha_scritto', $ha_scritto);

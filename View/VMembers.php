@@ -16,8 +16,10 @@ class VMembers {
     public function avviaPaginaMembers(array $recensioni, array $utenti, array $immagini_utenti,
                                        array $film_visti, array $locandine_film_visti, array $utenti_piu_seguiti,
                                        array $immagini_utenti_piu_seguiti, bool $identificato): void{
-        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('identificato', $identificato);
         $this->smarty->assign('recensioni', $recensioni);
         $this->smarty->assign('utenti_popolari', $utenti);

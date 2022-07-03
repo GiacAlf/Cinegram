@@ -16,8 +16,10 @@ class VUtenteSingolo {
     public function avviaPaginaUtente(EMember $utente_selezionato, array $immagine_profilo,
                                       int $numero_film_visti, int $numero_following,
                                       int $numero_follower, bool $seguito, array $utenti_popolari, array $immagini_utenti){
-        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('username', $utente_selezionato->getUsername());
         $this->smarty->assign('immagine_profilo', $immagine_profilo);
         $this->smarty->assign('seguito', $seguito);
@@ -34,8 +36,10 @@ class VUtenteSingolo {
     }
 
     public function avviaPaginaModificaUtente(EMember $utente, array $immagine_profilo): void{
-        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('username', $utente->getUsername());
         $this->smarty->assign('bio', $utente->getBio());
         $this->smarty->assign('immagine_vecchia', $immagine_profilo);
@@ -44,8 +48,10 @@ class VUtenteSingolo {
 
     public function avviaPaginaFollow(string $username, array $lista_follower, array $immagini_follower,
                                       array $lista_following, array $immagini_following): void{
-        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('username', $username);
         $this->smarty->assign('follower', $lista_follower);
         $this->smarty->assign('immagini_follower', $immagini_follower);

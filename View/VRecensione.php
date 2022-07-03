@@ -11,8 +11,10 @@ class VRecensione
 
     //sembra che così funzioni, mentre se chiamo showNavBar [$navbar->showNavBar()] no, la variabile user non la prende
     public function avviaPaginaRecensione(ERecensione $recensione): void{
-        $user = SessionHelper::UserNavBar();
-        $this->smarty->assign( 'user', $user);
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign( 'id', $recensione->getIdFilmRecensito());
         $this->smarty->assign( 'titolo', $recensione->getTitoloById());
         $this->smarty->assign( 'autore_rece', $recensione->getUsernameAutore());
@@ -24,8 +26,10 @@ class VRecensione
     }
 
     public function avviaPaginaModificaRecensione(ERecensione $recensione): void{
-        $user = SessionHelper::UserNavBar();
-        $this->smarty->assign( 'user', $user);
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign( 'id_film', $recensione->getIdFilmRecensito());
         $this->smarty->assign( 'username', $recensione->getUsernameAutore());
         $this->smarty->assign( 'voto', $recensione->getVoto());
@@ -34,8 +38,10 @@ class VRecensione
     }
 
     public function avviaPaginaModificaRisposta(ERisposta $risposta): void{
-        $user = SessionHelper::UserNavBar();
-        $this->smarty->assign( 'user', $user);
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
+        $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign( 'autore_rece', $risposta->getUsernameAutoreRecensione());
         $this->smarty->assign( 'testo', $risposta->getTesto());
         $this->smarty->assign( 'data', $risposta->ConvertiDatainFormatoUrl());

@@ -19,8 +19,10 @@ class VHomePage
     public function avviaHomePage(array $film_recenti, array $locandine_film_recenti, array $film_visti,
                                   array $locandine_film_visti, array $ultime_recensioni,
                                   array $utenti_popolari, array $immagini_utenti_popolari): void{
-        $user = SessionHelper::UserNavBar(); //conviene forse fare un metodo a parte per ogni view?
+        $root_dir = VUtility::getRootDir();
+        $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
+        $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('film_recenti', $film_recenti);
         $this->smarty->assign('locandine_film_recenti', $locandine_film_recenti);
         $this->smarty->assign('film_visti', $film_visti);
