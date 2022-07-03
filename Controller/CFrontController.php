@@ -11,14 +11,15 @@ class CFrontController {
         if ( class_exists( $controller ) ) {
             if ( method_exists($controller, $method ) ) {
                 $real_controller = new $controller();
-            } else {
-               print ("Errore 405");
-                return;
+            }
+            else {
+              $view = new VErrore();
+              $view->error(3);
             }
         }
         else {
-            print("Errore 404");
-            return;
+            $view = new VErrore();
+            $view->error(4);
         }
         array_shift($arraypath);
         switch (count($arraypath)){
