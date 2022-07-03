@@ -96,11 +96,21 @@
         <div class='col-sm-8 text-center'>
             <h3 class='title'>Riempi i seguenti campi. <br>I campi contrassegnati da * sono obbligatori.</h3><br>
             <form id='registrazione-form' action="https://{$root_dir}/member/registrazione-member" method='POST' enctype="multipart/form-data">
-                <input name='username_registrazione' type='text' form='registrazione-form' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
-                <input name='password_registrazione' type='password' form='registrazione-form' class='text-input' placeholder='Scegli una password' required> *<br><br> <!--qua converrà inserire l'espressione regolare -->
-                <input name='conferma_password' type='password' form='registrazione-form' class='text-input' placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
-                <p>Inserisci una bio:</p>
-                <textarea rows="4" cols="50" name="bio" form='registrazione-form' class='text-input'>
+                <label for="username">Username: </label><br>
+                <input name='username_registrazione' type='text' id="username" form='registrazione-form' class='text-input' placeholder='Scegli un nome utente' required> *<br><br>
+                <label for="pwd">Password: </label>
+                <p>Scegliere una password con: almeno 1 lettera maiuscola, una minuscola, un numero, un caratere speciale (no spazi), da 8 a 32 caratteri</p>
+                <input name='password_registrazione' type='password' id="pwd"
+                      {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                       form='registrazione-form' class='text-input' title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
+                       placeholder='Scegli una password' required> *<br><br>
+                <label for="conf_pwd">Conferma Password</label><br>
+                <input name='conferma_password' type='password' id="conf_pwd"
+                        {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                       form='registrazione-form' class='text-input' title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
+                       placeholder='Conferma password' required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
+                <label for="bio">Inserisci una bio:</label><br>
+                <textarea rows="4" id="bio" cols="50" name="bio" form='registrazione-form' class='text-input'>
       		  </textarea><br><br> <!-- anche questo l'ho fatto io, si spera che, come dice w3schools, effettivamente mettendo l'attributo form sia tutto allineato-->
                 <p id="p">Inserisci immagine profilo:</p>
                 <div id="div">
@@ -113,7 +123,7 @@
                 <input name='dob' type='date' class='text-input'><br> Data di nascita<br><br>
                 <input name='num_telefono' type='tel' class='text-input' placeholder='Numero di telefono'><br><br> -->
             </form>
-            <div id="mydiv2"class='col-sm-12 text-center'>
+            <div id="mydiv2" class='col-sm-12 text-center'>
                 <button type='submit' form='registrazione-form' class='btn'><span>Registrati </span></button>
                 &nbsp oppure &nbsp <a href="https://{$root_dir}/login/pagina-login">Login</a>
             </div>
