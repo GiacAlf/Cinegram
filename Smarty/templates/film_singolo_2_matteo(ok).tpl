@@ -125,7 +125,7 @@
 
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv" class="col-sm-3 sidenav"> <!-- https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg-->
-            <p><h2>  {$film->getTitolo()}  </h2></p> <!-- invece di passare l'istanza di EFilm, costruiamo la stringa(?) -->
+            <p><h2> {$film->getTitolo()} </h2></p> <!-- invece di passare l'istanza di EFilm, costruiamo la stringa(?) -->
             <!-- src="data: {$locandina_film[1]};base64,{$locandina_film[0]}" --> <!-- height e  width {$locandina_film[2]} -->
             <img src="{$film->getSrc($locandina_film)}"  class="img-rectangle" {$locandina_film[2]} alt="Locandina"><br>
             <button type="button" class="btn btn-default btn-sm">
@@ -168,11 +168,12 @@
             <h5> Views: {$film->getNumeroViews()} </h5>
             <h5> Voto medio: {$film->getVotoMedio()} </h5><br>
             <h4>Lista attori</h4>
-            <div >{foreach $attori as $attore}
+            <div >
+                {foreach $attori as $attore}
                     <p> {$attore->getNome()} {$attore->getCognome()} </p>
                     {foreachelse}
                     <p> Il film non ha attori </p>
-                  {/foreach}
+                {/foreach}
             </div>
         </div>
 
@@ -184,7 +185,7 @@
             </div>
             {/if}
             <div class="container-fluid bg-3 text-left">
-                <br><h4>Scrivi una Recensione:</h4>
+                <br><h4>Scrivi una Recensione</h4>
                 <form action="https://{$root_dir}/film/scrivi-recensione/{$film->getId()}" role="form" id="scrivirecensione" method="post">
                     <label for="voti">Scegli un voto:</label>
                     <div class="form-group">
@@ -199,7 +200,8 @@
                     </div>
 
                     <div class="form-group"> <!-- la textarea non deve essere required, le recensioni possono essere senza testo ma con voto-->
-                        <textarea form="scrivirecensione" name="testo" class="form-control" rows="3"></textarea>
+                        <label for="testo">Scrivi il testo: </label>
+                        <textarea form="scrivirecensione" id="testo" name="testo" class="form-control" rows="3"></textarea>
                     </div>
                     <button type="submit" form="scrivirecensione" class="btn btn-default">Salva</button>
                 </form>
@@ -208,9 +210,6 @@
                 <p><span class="badge"></span> <h3>Recensioni degli Utenti:</h3></p><br>
                 <div class="row">
                 {foreach $recensioni as $recensione}
-                        <div class="col-sm-2 text-center">
-                            <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
-                        </div>
                         <div class="col-sm-10">
                             <h3>Autore: <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
                             <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
@@ -238,13 +237,14 @@
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
             {if isset($film_visti)}
-            {for $i=0 to {$film_visti|count - 1}}
-                <p>{$film_visti[$i]->getTitolo()}</p>
-                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
-                                     height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
-                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
-                             height="105" width="75" alt="Locandina"></a></p><br>
-            {/for}
+                {for $i=0 to {$film_visti|count - 1}}
+                    <p>{$film_visti[$i]->getTitolo()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75" -->
+                    <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
+                        <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
+                                {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                {/for}
+            {else}
+                <p> Non ci sono film visti </p>
             {/if}
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>
             <p><a href="#"><img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle" height="105" width="75" alt="Locandina"></a></p><br>

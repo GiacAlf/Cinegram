@@ -20,11 +20,9 @@ class VUtenteSingolo {
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
-        $this->smarty->assign('username', $utente_selezionato->getUsername());
+        $this->smarty->assign('member', $utente_selezionato);
         $this->smarty->assign('immagine_profilo', $immagine_profilo);
         $this->smarty->assign('seguito', $seguito);
-        $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione()->format('d-m-Y'));
-        $this->smarty->assign('bio', $utente_selezionato->getBio());
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
         $this->smarty->assign('numero_film_visti', $numero_film_visti);

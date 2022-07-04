@@ -99,13 +99,16 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            {for $i=0 to {$film_visti|count - 1}}
-                <p>{$film_visti[$i]->getTitolo()}</p>
-                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}"> <!--src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"
-                                     height e width ={$locandine_film_visti[$film_visti[$i]->getId()][2]}   -->
-                        <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
-                             height="105" width="70" alt="Locandina"></a></p><br>
-            {/for}
+            {if isset($film_visti)}
+                {for $i=0 to {$film_visti|count - 1}}
+                 <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
+                    <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
+                        <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
+                                {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                {/for}
+            {else}
+                <p> Non ci sono film visti </p>
+            {/if}
             <p><a href="#">Film 1</a></p><br>
             <p><a href="#">Film 2</a></p><br>
             <p><a href="#">Film 3</a></p><br>
@@ -123,15 +126,20 @@
             								sostituiamo con film meglio votati oppure tutte e due-->
             <div class="container-fluid bg-3 text-left">
                 <div class="row">
-                    {for $i=0 to {$film_recenti|count - 1}}
-                        <div class="col-sm-3">
+                    {if isset($film_recenti)}
+                        {for $i=0 to {$film_recenti|count - 1}}
+                            <div class="col-sm-3">
                             <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}" {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive" style="width:80%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$film_recenti[$i]->getTitolo()}</h5>
-                            <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
-                            <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
-                        </div>
-                    {/for}
+                                <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}" {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"
+                                     style="width:80%" alt="Locandina">
+                                <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$film_recenti[$i]->getTitolo()}</h5>
+                                <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
+                                <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
+                            </div>
+                        {/for}
+                    {else}
+                        <div class="col-sm-3"> Non ci sono film recenti </div>
+                    {/if}
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/70x105" class="img-responsive" style="width:80%" alt="Film 1">
                         <h5> <a href="#">titolo</a></h5>
@@ -197,13 +205,15 @@
                         <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                         {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
                             <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
+                            <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
+                {foreachelse}
+                    <div class="col-sm-10"> Non ci sono recensioni </div>
                 {/foreach}
 
                 <br><br>
@@ -217,13 +227,16 @@
 
     <div id="mydiv" class="col-sm-2 sidenav">
         <h4>Membri più seguiti</h4><br><br>
-        {for $i=0 to {$utenti_seguiti|count - 1}}
-            <p>{$utenti_seguiti[$i]->getUsername()}</p>
-            <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}"> <!--src="{$utenti_seguiti[$i]->getSrc($immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()])}"
-                                     height e width ={$immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()][2]}   -->
-                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle"
-                         height="80" width="80" alt="Locandina"></a></p><br>
-        {/for}
+        {if isset($utenti_seguiti)}
+            {for $i=0 to {$utenti_seguiti|count - 1}}
+                <p>{$utenti_seguiti[$i]->getUsername()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="80" width="80"  -->
+                <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}">
+                    <img src="{$utenti_seguiti[$i]->getSrc($immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()])}"  class="img-circle"
+                            {$immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
+            {/for}
+        {else}
+            <p> Non ci sono utenti seguiti </p>
+        {/if}
         <p><a href="#">Member 1</a></p><br>
         <p><a href="#">Member 2</a></p><br>
         <p><a href="#">Member 3</a></p><br>

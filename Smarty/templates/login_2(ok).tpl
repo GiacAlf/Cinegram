@@ -98,11 +98,11 @@
             <form action="https://{$root_dir}/login/verifica-login" method="post" id="login">
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" name="username_login" class="form-control" id="username" placeholder="Inserisci lo username">
+                    <input type="text" name="username_login" class="form-control" form="login" id="username" placeholder="Inserisci lo username" required>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="password_login" class="form-control" id="pwd" placeholder="Inserisci la password">
+                    <label for="pwd">Password:</label> <!-- qua direi di non mettercela la regex -->
+                    <input type="password" name="password_login" class="form-control" form="login" id="pwd" placeholder="Inserisci la password" required>
                 </div>
                 <button type="submit" form="login" class="btn btn-default">Entra</button>
             </form>
