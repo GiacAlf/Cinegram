@@ -6,7 +6,7 @@ class CHomepage {
     sara' il metodo sempre chiamato all'inizio(?), url del tipo localhost/homepage/imposta-homepage in get */
     public static function impostaHomepage(): void {
 
-        $numero_estrazioni = 6;
+        $numero_estrazioni = 2;
         $view = new VHomePage();
 
         $filmRecenti = FPersistentManager::caricaFilmRecenti($numero_estrazioni);

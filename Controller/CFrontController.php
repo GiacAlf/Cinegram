@@ -2,7 +2,7 @@
 
 class CFrontController {
 
-    public function run(string $path): void{
+    public function run( $path): void{
         $arraypath = explode("/","$path");
         array_shift($arraypath);
         $controller = "C". ucfirst($arraypath[0]);
@@ -36,7 +36,7 @@ class CFrontController {
     }
 
 
-    private static function capisciUrl(string $path):string{
+    private static function capisciUrl(?string $path):?string{
         $arrayRisultato = explode("-",$path);
         $arrayRisultato[1] = ucfirst($arrayRisultato[1]);
         return ($arrayRisultato[0].$arrayRisultato[1]);
