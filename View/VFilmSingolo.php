@@ -18,22 +18,16 @@ class VFilmSingolo
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
-        $this->smarty->assign( 'id', $film_selezionato->getId());
+        $this->smarty->assign('film', $film_selezionato);
         $this->smarty->assign('locandina_film', $locandina);
         $this->smarty->assign('ha_scritto', $ha_scritto);
-        $this->smarty->assign( 'titolo', $film_selezionato->getTitolo());
-        $this->smarty->assign('durata', $film_selezionato->getDurata());
-        $this->smarty->assign('anno', $film_selezionato->getAnno()->format("Y"));
-        $this->smarty->assign('sinossi', $film_selezionato->getSinossi());
         $this->smarty->assign('visto', $visto);
         $this->smarty->assign('attori', $film_selezionato->getListaAttori());
         $this->smarty->assign('registi', $film_selezionato->getListaRegisti());
         $this->smarty->assign('recensioni', $film_selezionato->getListaRecensioni());
-        $this->smarty->assign('numero_views', $film_selezionato->getNumeroViews());
-        $this->smarty->assign('voto_medio', $film_selezionato->getVotoMedio());
         $this->smarty->assign('film_visti', $film_visti);
         $this->smarty->assign('locandine_film_visti', $locandine_film_visti);
-        $this->smarty->display('film_singolo.tpl');
+        $this->smarty->display('film_singolo_2_matteo(ok).tpl');
     }
 
     //metodo che restituisce al controllore il testo e il voto della recensione

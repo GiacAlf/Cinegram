@@ -97,17 +97,19 @@
             <h3>Follower di {$username}</h3><br>
             <div id="mydiv" >
                 <div  class="row">
-                    {for $i=0 to {$follower|count - 1}}
-                        <div class="col-sm-3">
-                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}" {$immagini_follower[$follower[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}"></a>{$follower[$i]->getUsername()}</h5>
-                            <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
-                            <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
-                        </div>
-                        {forelse}
-                        <p> L'utente {$username} non ha alcun follower </p>
-                    {/for}
+                    {if isset($follower)}
+                        {for $i=0 to {$follower|count - 1}}
+                            <div class="col-sm-3">
+                                <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}" {$immagini_follower[$follower[$i]->getUsername()][2]}
+                                     class="img-circle" style="width:100%" alt="Immagine profilo">
+                                <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}">{$follower[$i]->getUsername()}</h5></a>
+                                <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
+                                <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
+                            </div>
+                        {/for}
+                    {else}
+                        <div class="col-sm-3"> L'utente {$username} non ha alcun follower </div>
+                    {/if}
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
                         <h5> <a href="#">username</a></h5>
@@ -167,17 +169,19 @@
             <h3>Following di {$username}</h3><br>
             <div id="mydiv">
                 <div  class="row">
-                    {for $i=0 to {$following|count - 1}}
-                        <div class="col-sm-3">
-                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}" {$immagini_following[$following[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}"></a>{$following[$i]->getUsername()}</h5>
-                            <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
-                            <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
-                        </div>
-                    {forelse}
-                        <p> L'utente {$username} non ha alcun following </p>
-                    {/for}
+                    {if isset($following)}
+                        {for $i=0 to {$following|count - 1}}
+                            <div class="col-sm-3">
+                                <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}" {$immagini_following[$following[$i]->getUsername()][2]}
+                                     class="img-circle" style="width:100%" alt="Immagine profilo">
+                                <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}">{$following[$i]->getUsername()}</h5></a>
+                                <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
+                                <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
+                            </div>
+                        {/for}
+                    {else}
+                        <div class="col-sm-3"> L'utente {$username} non ha alcun following </div>
+                    {/if}
                     <div class="col-sm-3">
                         <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
                         <h5> <a href="#">username</a></h5>

@@ -20,11 +20,9 @@ class VUtenteSingolo {
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
-        $this->smarty->assign('username', $utente_selezionato->getUsername());
+        $this->smarty->assign('member', $utente_selezionato);
         $this->smarty->assign('immagine_profilo', $immagine_profilo);
         $this->smarty->assign('seguito', $seguito);
-        $this->smarty->assign('data_iscrizione', $utente_selezionato->getDataIscrizione()->format('d-m-Y'));
-        $this->smarty->assign('bio', $utente_selezionato->getBio());
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
         $this->smarty->assign('numero_film_visti', $numero_film_visti);
@@ -103,7 +101,7 @@ class VUtenteSingolo {
     //metodo che aggiorna la password
     public function aggiornaPassword(): ?string{
         $nuova_password = null;
-        if(isset($_POST['nuova_password'])){
+        if(isset($_POST['nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
             $nuova_password = $_POST['nuova_password'];
         }
         return $nuova_password;
@@ -119,10 +117,19 @@ class VUtenteSingolo {
 
     public function verificaConfermaPassword(): ?string{
         $conferma_password = null;
-        if(isset($_POST['conferma_nuova_password'])){
+        if(isset($_POST['conferma_nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
             $conferma_password = $_POST['conferma_nuova_password'];
         }
         return $conferma_password;
+    }
+
+    public function checkPassword(string $password): bool{
+        $match = false;
+        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/";
+        if(preg_match($pattern, $password)){
+            $match = true;
+        }
+        return $match;
     }
 
 

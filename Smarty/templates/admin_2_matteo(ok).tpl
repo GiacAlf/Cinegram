@@ -102,41 +102,40 @@
 
                 <!-- dato che non ha senso caricare un film a metà, ma soprattutto perché fare 12mila controlli in Php è una palla,
                     si mette tutto required qui?-->
-                <!-- forse per prendere il dominio esiste $smarty.server.HTTP_HOST-->
                 <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>
-                        <input type="text" name="titolo" class="form-control" id="titolo" placeholder="Inserisci il titolo">
+                        <input type="text" name="titolo" class="form-control" form="inserisci_film" id="titolo" placeholder="Inserisci il titolo" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="data_uscita">Anno:</label>
-                        <input type="date" name="data" class="form-control" id="data_uscita" placeholder="Inserisci la data di uscita">
+                        <input type="date" name="data" class="form-control" form="inserisci_film" id="data_uscita" placeholder="Inserisci la data di uscita" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="durata">Durata:</label>
-                        <input type="number" name="durata" class="form-control" id="titolo" placeholder="Inserisci la durata">
+                        <input type="number" name="durata" class="form-control" form="inserisci_film" id="durata" placeholder="Inserisci la durata" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="sinossi">Sinossi:</label>
-                        <input type="text" name="sinossi" class="form-control" id="sinossi" placeholder="Inserisci la sinossi">
+                        <input type="text" name="sinossi" class="form-control" form="inserisci_film" id="sinossi" placeholder="Inserisci la sinossi" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
-                        <input type="text" name="registi" class="form-control" id="registi" placeholder="Inserisci i registi">
+                        <input type="text" name="registi" class="form-control" form="inserisci_film" id="registi" placeholder="Inserisci i registi" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
-                        <input type="text" name="attori" class="form-control" id="attori" placeholder="Inserisci gli attori">
+                        <input type="text" name="attori" class="form-control" form="inserisci_film" id="attori" placeholder="Inserisci gli attori" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="locandina">Inserisci la locandina del film:</label>
-                        <input type="file" name="locandina" class="form-control" id="locandina">
+                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina"> <!-- forse l'unico non required?-->
                     </div>
 
                     <div id="div">

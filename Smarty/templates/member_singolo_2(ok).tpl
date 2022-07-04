@@ -124,19 +124,20 @@
     <div>
 
         <!-- sidenav vuota ma riutilizzabile -->
-        <div  id ="mydiv" class="col-sm-3 sidenav">
-            <p><h2> {$username} </h2></p> <!-- src="data: {$immagine_profilo[1]};base64,{$immagine_profilo[0]}" --> <!-- height e  width {$immagine_profilo[2]} -->
-            <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-circle" height="210" width="210" alt="Avatar"><br>
-            {if $user == $username}
+        <div  id ="mydiv" class="col-sm-3 sidenav"> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="210" width="210"-->
+            <p><h2> {$member->getUsername()} </h2></p>
+            <img src="{$member->getSrc($immagine_profilo)}"  class="img-circle" {$immagine_profilo[2]} alt="Avatar"><br>
+            {if $user == {$member->getUsername}}
                 <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
                 </form>
+                <p>Hai {$member->getWarning()} warning. </p>
             {/if}
             <button type="button" class="btn btn-default btn-sm">
-              {if $user != $username}
+              {if $user != {$member->getUsername}}
                 {if $seguito == false}
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/follow-member/{$username}">
+                    <form action="https://{$root_dir}/member/follow-member/{$member->getUsername}">
                         <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -147,7 +148,7 @@
                 {else}
 
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/unfollow-member/{$username}">
+                    <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername}">
                         <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un'altra pagina
                         e serve per il javascript(infatti nei
@@ -159,15 +160,15 @@
               {/if}
             </button>
             {if $user == "admin"}
-                <form action="https://{$root_dir}/admin/mostra-member/{$username}"> <!-- qua bisogna solo far vedere il template -->
+                <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername}"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modera Utente </button>
                 </form>
             {/if}
             <br><br>
-            <span align="center">Iscritto dal: {$data_iscrizione}</span><br>
-            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Follower: {$numero_follower}</span></a><br>
-            <a href="https://{$root_dir}/member/mostra-follow/{$username}"><span align="center">Following: {$numero_following}</span></a><br>
-            <span align="center">Bio: {$bio}</span><br>
+            <span align="center">Iscritto dal: {$member->getDataIscrizione()->format('d-m-Y')}</span><br>
+            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername}"><span align="center">Follower: {$numero_follower}</span></a><br>
+            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername}"><span align="center">Following: {$numero_following}</span></a><br>
+            <span align="center">Bio: {$member->getBio()}</span><br>
 
             <span align="center">Numero film visti: {$numero_film_visti}</span>
             <h4>Film visti: </h4>
@@ -175,7 +176,7 @@
                 {foreach $film_visti as $film}
                     <p><a href="https://{$root_dir}/film/carica-film/{$film->getId()}">{$film->getTitolo()}</a></p>
                 {foreachelse}
-                    <p>L'utente {$username} non ha visto alcun film </p>
+                    <p>L'utente {$member->getUsername} non ha visto alcun film </p>
                 {/foreach}
             </div>
         </div>
@@ -183,11 +184,8 @@
         <div class="col-sm-7 text-center">
 
             <p><span class="badge"></span> <br><h3>Recensioni dell'utente:</h3></p><br>
+            <div class="row">
             {foreach $recensioni as $recensione}
-                <div class="row">
-                    <div class="col-sm-2 text-center">
-                        <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">
-                    </div>
                     <div class="col-sm-10">
                         <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
                         <small>{$recensione->getDataScrittura()->format('d-m-Y H:i')}</small></h3>
@@ -197,29 +195,32 @@
                         <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                         {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
                             <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/"><button>Cancella</button></a>
+                            <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
-                </div>
                 {foreachelse}
-                     <div class="col-sm-10"> L'utente {$username} non ha scritto alcuna recensione. </div>
+                     <div class="col-sm-10"> L'utente {$member->getUsername} non ha scritto alcuna recensione. </div>
             {/foreach}
-
+            </div>
         </div>
     </div>
 
     <div   id ="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
-        {for $i=0 to {$utenti_popolari|count - 1}}
-            <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
+        {if isset($utenti_popolari)}
+            {for $i=0 to {$utenti_popolari|count - 1}} <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75"-->
+                <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"> <!--src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
                                      height e width ={$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]}   -->
-                    <img src="https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  class="img-rectangle"
-                         height="105" width="75" alt="Locandina"></a></p><br>
-        {/for}
+                    <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"  class="img-rectangle"
+                            {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
+            {/for}
+        {else}
+            <p> Non ci sono utenti popolari </p>
+        {/if}
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
         <p><a href="#"><img src="bandmember.jpg"  class="img-rectangle" height="75" width="75" alt="Locandina"></a></p><br>
