@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cinegram - Recensione di {$autore_rece} del film {$titolo}</title>
+    <title>Cinegram - Recensione di {$recensione->getUsernameAutore()} del film {$recensione->getTitoloById()}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -91,31 +91,32 @@
         <div class="col-sm-8 text-left">
 
             <div><br><br>
-                <span style='text-align:center;font-size:150%'>Film: <a href="https://{$root_dir}/film/carica-film/{$id}">{$titolo}</a></span>
-                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$autore_rece}">{$autore_rece}</a></span><br><br>
-                <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
-                <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
+                <span style='text-align:center;font-size:150%'>Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a></span>
+                <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a></span><br><br>
+                <span style='text-align:center;font-size:150%'>Voto: {$recensione->getVoto()}</span> &nbsp
+                <span style='text-align:center;font-size:95%'>scritta il {$recensione->getDataScrittura()->format('d-m-Y H:i')}</span>
                 <br><br><br>
                 <div style='text-align:center;font-size:200%'>
-                    <p>{$testo}</p>
+                    <p>{$recensione->getTesto()}</p>
                 </div>
                 <br><br>
                 <div>
-                    {if $user == $autore_rece}
-                        <a href="https://{$root_dir}/film/modifica-recensione/{$id}/{$autore_rece}"><button>Modifica</button></a>
-                        <a href="https://{$root_dir}/film/elimina-recensione/{$id}/{$autore_rece}"><button>Cancella</button></a>
+                    {if $user == {$recensione->getUsernameAutore()}}
+                        <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                        <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
                     {/if}
 
                     {if $user == "admin"}
-                        <a href="https://{$root_dir}/admin/rimuovi-recensione/{$id}/{$autore_rece}"><button>Elimina</button></a>
+                        <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                     {/if}
                 </div>
                 <br><br>
                 <div style="padding-left:0px; text-align:center">
                     <h3>Scrivi una risposta:</h3>
-                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$id}/{$autore_rece}" method="POST">
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}" method="POST">
                         <!-- in teoria la data viene creata al momento in PHP-->
-                        <textarea name="risposta" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
+                        <label for="testo">Scrivi il testo: </label>
+                        <textarea name="risposta" id="testo" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
                         <button type="submit" form="scrivirisposta">Salva</button>
                     </form>
                 </div>
@@ -128,8 +129,8 @@
                         &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
                         <p style="font-size:120%">{$risposta->getTesto()}</p>
                         {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
-                            <a href="https://{$root_dir}/film/modifica-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
+                            <a href="https://{$root_dir}/film/modifica-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}

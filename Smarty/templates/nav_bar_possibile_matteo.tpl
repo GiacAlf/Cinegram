@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-{assign var='user' value=$user|default:'non_loggato'}
 <head>
-    <title>Cinegram - Film Singolo</title>
+    <title>Cinegram </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -91,8 +90,8 @@
                 {if $user != "non_loggato"}
                     {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
                         <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
-                    {else} <!-- /profilo/carica-profilo/{$user}-->
-                        <li><a href="https://{$root_dir}/member/carica-member/{$user}">Profilo</a></li>
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
                     {/if}
                     <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
                 {/if}
@@ -110,11 +109,11 @@
                         <span class="input-group-btn">
             <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
-          </span>
+                        </span>
                         <span class="input-group-btn">
             <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
-          </span>
+                        </span>
                     </div>
                 </form>
             </div>

@@ -50,7 +50,9 @@
                 height: auto;
                 padding: 15px;
             }
-            .row.content {height:auto;}
+            .row.content {
+                height:auto;
+            }
         }
     </style>
 </head>
@@ -99,12 +101,15 @@
             <div class="container-fluid text-left"><br>
                 <h1>Modifica Recensione:</h1><br>
                 <div>
-                    <h3 style="display:inline;">Voto attuale: </h3><span>{$voto}</span> <br><br>
-                    <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
+                    <h3 style="display:inline;">Film: </h3><span>{$recensione->getTitoloById()}</span> <br><br>
+                    <h3 style="display:inline;">Autore: </h3><span>{$recensione->getUsernameAutore()}</span> <br><br>
+                    <h3 style="display:inline;">Voto attuale: </h3><span>{$recensione->getVoto()}</span> <br><br>
+                    <h3 style="display:inline;">Testo attuale: </h3><span>{$recensione->getTesto()}</span>
                     <!-- poco sopra conviene metterci il titolo del film = manca ancora il metodo  -->
                 </div>
                 <br>
-                <form id="modifica_recensione" action="https://{$root_dir}/film/salva-recensione/{$id_film}/{$username}" method="POST">
+                <form id="modifica_recensione"
+                      action="https://{$root_dir}/film/salva-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}" method="POST">
                     <div class="form-group">
                         <label for="voti">Scegli un nuovo voto:</label>
 
@@ -117,7 +122,9 @@
                             <option value="5">5</option>
                         </select>
                         <br>
-                        <textarea id="mytext" name="nuovo_testo" form="modifica_recensione" rows="4" cols="100" placeholder="Modifica il testo della recensione..."></textarea>
+                        <label for="mytext">Nuovo testo: </label>
+                        <textarea id="mytext" name="nuovo_testo" form="modifica_recensione" rows="4" cols="100"
+                                  placeholder="Modifica il testo della recensione..."></textarea>
                     </div>
                     <div class="mydiv">
                         <button type="submit" form="modifica_recensione" class="btn btn-default">Salva modifiche</button>

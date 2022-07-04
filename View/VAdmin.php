@@ -35,11 +35,7 @@ class VAdmin {
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
-        $this->smarty->assign( 'id', $film_da_modificare->getId());
-        $this->smarty->assign( 'titolo', $film_da_modificare->getTitolo());
-        $this->smarty->assign('durata', $film_da_modificare->getDurata());
-        $this->smarty->assign('data', $film_da_modificare->getAnno()->format('d-m-Y'));
-        $this->smarty->assign('sinossi', $film_da_modificare->getSinossi());
+        $this->smarty->assign( 'film', $film_da_modificare);
         $this->smarty->assign('attori', $film_da_modificare->getListaAttori());
         $this->smarty->assign('registi', $film_da_modificare->getListaRegisti());
         $this->smarty->assign('locandina', $locandina);
@@ -55,8 +51,7 @@ class VAdmin {
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
-        $this->smarty->assign( 'username', $utente_da_moderare->getUsername());
-        $this->smarty->assign( 'warning', $utente_da_moderare->getWarning());
+        $this->smarty->assign( 'member', $utente_da_moderare);
         $this->smarty->assign('bannato', $bannato);
         $this->smarty->display('modera_member.tpl');
     }

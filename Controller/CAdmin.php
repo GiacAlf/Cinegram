@@ -24,12 +24,19 @@ class CAdmin {
     //deve solo mostrare il template -> la url sarà localhost/mostra-film/id (?)
     public static function mostraFilm(int $idfilm): void{
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $film = FPersistentManager::load("EFilm", $idfilm, null, null,
-                null, null, null, null, true);
-            $locandina = FPersistentManager::loadLocandina($film, false);
-            $admin = SessionHelper::getUtente()->getUsername();
-            $view = new VAdmin();
-            $view->avviaPaginaModificaFilm($film, $locandina, $admin);
+            if(FPersistentManager::exist("EFilm", $idfilm, null, null, null, null, null,
+                null, null)) {
+                $film = FPersistentManager::load("EFilm", $idfilm, null, null,
+                    null, null, null, null, true);
+                $locandina = FPersistentManager::loadLocandina($film, false);
+                $admin = SessionHelper::getUtente()->getUsername();
+                $view = new VAdmin();
+                $view->avviaPaginaModificaFilm($film, $locandina, $admin);
+            }
+            else{
+                $view = new VErrore();
+                $view->error(3);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -42,12 +49,19 @@ class CAdmin {
     public static function mostraMember(string $username): void{
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
             //carico le info del member
-            $member = FPersistentManager::load("EMember", null, $username, null, null,
-                null, null, null, false);
-            $bannato = FPersistentManager::userBannato($username);
-            $admin = SessionHelper::getUtente()->getUsername();
-            $view = new VAdmin();
-            $view->avviaPaginaModeraUtente($member, $bannato, $admin);
+            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                null, null)) {
+                $member = FPersistentManager::load("EMember", null, $username, null, null,
+                    null, null, null, false);
+                $bannato = FPersistentManager::userBannato($username);
+                $admin = SessionHelper::getUtente()->getUsername();
+                $view = new VAdmin();
+                $view->avviaPaginaModeraUtente($member, $bannato, $admin);
+            }
+            else{
+                $view = new VErrore();
+                $view->error(3);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -107,44 +121,51 @@ class CAdmin {
     */
     public static function modificaFilm(int $id): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $id = 2;
-            $view = new VAdmin();
-            //se il film non è completo dà problemi con l'eventuale update di lista attori o registi
-            //ad esempio?
-            $film = FPersistentManager::load("EFilm", $id, null, null,
-                null, null, null, null, true);
-            $array_modifiche = $view->getElementidaModificare();
-            //l'idea è controllare se sono settati i valori strani da modificare poi andare con un ciclo
-            //oppure in maniera più safe procedere con gli isset
-            if(isset($array_modifiche['data'])){
-                FPersistentManager::update($film, null, null, null, null,
-                    $array_modifiche['data'], null, null);
+            if(FPersistentManager::exist("EFilm", $id, null, null, null, null, null,
+                null, null)) {
+                $id = 2;
+                $view = new VAdmin();
+                //se il film non è completo dà problemi con l'eventuale update di lista attori o registi
+                //ad esempio?
+                $film = FPersistentManager::load("EFilm", $id, null, null,
+                    null, null, null, null, true);
+                $array_modifiche = $view->getElementidaModificare();
+                //l'idea è controllare se sono settati i valori strani da modificare poi andare con un ciclo
+                //oppure in maniera più safe procedere con gli isset
+                if (isset($array_modifiche['data'])) {
+                    FPersistentManager::update($film, null, null, null, null,
+                        $array_modifiche['data'], null, null);
+                }
+                if (isset($array_modifiche['attori'])) {
+                    FPersistentManager::update($film, null, null, null,
+                        null, null, $array_modifiche['attori'], null);
+                }
+                if (isset($array_modifiche['registi'])) {
+                    FPersistentManager::update($film, null, null, null,
+                        null, null, null, $array_modifiche['registi']);
+                }
+                if (isset($array_modifiche['locandina'])) {
+                    FPersistentManager::updateLocandina($film, $array_modifiche['locandina']['tmp_name'],
+                        $array_modifiche['locandina']['type'], $array_modifiche['locandina']['size']);
+                }
+                if (isset($array_modifiche['titolo'])) {
+                    FPersistentManager::update($film, 'titolo', $array_modifiche['titolo'], null,
+                        null, null, null, null);
+                }
+                if (isset($array_modifiche['durata'])) {
+                    FPersistentManager::update($film, 'durata', $array_modifiche['durata'], null,
+                        null, null, null, null);
+                }
+                if (isset($array_modifiche['sinossi'])) {
+                    FPersistentManager::update($film, 'sinossi', $array_modifiche['sinossi'], null,
+                        null, null, null, null);
+                }
+                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
             }
-            if(isset($array_modifiche['attori'])){
-                FPersistentManager::update($film, null, null, null,
-                    null, null, $array_modifiche['attori'], null);
+            else{
+                $view = new VErrore();
+                $view->error(3);
             }
-            if(isset($array_modifiche['registi'])){
-                FPersistentManager::update($film, null, null, null,
-                    null, null, null, $array_modifiche['registi']);
-            }
-            if(isset($array_modifiche['locandina'])){
-                FPersistentManager::updateLocandina($film, $array_modifiche['locandina']['tmp_name'],
-                    $array_modifiche['locandina']['type'], $array_modifiche['locandina']['size']);
-            }
-            if(isset($array_modifiche['titolo'])){
-                FPersistentManager::update($film , 'titolo' , $array_modifiche['titolo'] , null ,
-                    null , null , null , null);
-            }
-            if(isset($array_modifiche['durata'])){
-                FPersistentManager::update($film , 'durata' , $array_modifiche['durata'] , null ,
-                    null , null , null , null);
-            }
-            if(isset($array_modifiche['sinossi'])){
-                FPersistentManager::update($film , 'sinossi' , $array_modifiche['sinossi'] , null ,
-                    null , null , null , null);
-            }
-            header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -159,11 +180,18 @@ class CAdmin {
     */
     public static function rimuoviRecensione(int $idFilm, string $usernameAutore): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $idFilm = 2;
-            $usernameAutore = "pippo";
-            FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
-            //o forse al modera utente tipo per ammonirlo una volta eliminatogli la recensione
-            header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+            if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null, null, null,
+                null, null)) {
+                $idFilm = 2;
+                $usernameAutore = "pippo";
+                FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
+                //o forse al modera utente tipo per ammonirlo una volta eliminatogli la recensione
+                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+            }
+            else{
+                $view = new VErrore();
+                $view->error(3);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -175,13 +203,20 @@ class CAdmin {
      //idem come sopra() url localhost/admin/rimuovi-risposta
     public static function rimuoviRisposta(string $usernameAutore, string $data): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            //qualcuno mi procurera' i dati
-            $idFilm = 1;
-            $data_oggetto = ERisposta::ConvertiFormatoUrlInData($data);
-            $usernameAutore = "matteo";
-            FPersistentManager::delete("ERisposta", $usernameAutore, null, null, null, $data_oggetto);
-            //o forse al modera utente tipo per ammonirlo una volta eliminatogli la risposta
-            header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+            if(FPersistentManager::exist("ERisposta", null, $usernameAutore, null, null,
+                null, null, null, ERisposta::ConvertiFormatoUrlInData($data))) {
+                //qualcuno mi procurera' i dati
+                $idFilm = 1;
+                $data_oggetto = ERisposta::ConvertiFormatoUrlInData($data);
+                $usernameAutore = "matteo";
+                FPersistentManager::delete("ERisposta", $usernameAutore, null, null, null, $data_oggetto);
+                //o forse al modera utente tipo per ammonirlo una volta eliminatogli la risposta
+                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+            }
+            else{
+                $view = new VErrore();
+                $view->error(3);
+            }
         }
         else{
             //forse un po' drastico far apparire una schermata di errore però per ora ok
@@ -196,25 +231,31 @@ class CAdmin {
     */
     public static function ammonisciUser(string $usernameMember): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $usernameMember = "matteo";
-            //in teoria si clicca su ammonisci user quando non è bannato
-            if (!FPersistentManager::userBannato($usernameMember)) {
-                $memberDaAmmonire = FPersistentManager::load("EMember", null, $usernameMember, null,
-                    null, null, null, null, false);
+            if(FPersistentManager::exist("EMember", null, $usernameMember, null, null, null, null,
+                null, null)) {
+                $usernameMember = "matteo";
+                //in teoria si clicca su ammonisci user quando non è bannato
+                if (!FPersistentManager::userBannato($usernameMember)) {
+                    $memberDaAmmonire = FPersistentManager::load("EMember", null, $usernameMember, null,
+                        null, null, null, null, false);
 
-                $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
-                if ($warningMemberDaAmmonire < EAdmin::$warningMassimi) {
-                    FPersistentManager::incrementaWarning($usernameMember);
-                    if ($memberDaAmmonire->getWarning() == EAdmin::$warningMassimi) {
-                        FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
+                    $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
+                    if ($warningMemberDaAmmonire < EAdmin::$warningMassimi) {
+                        FPersistentManager::incrementaWarning($usernameMember);
+                        if ($memberDaAmmonire->getWarning() == EAdmin::$warningMassimi) {
+                            FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
+                        }
                     }
+                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $usernameMember);
+                } else {
+                    //print("Utente bannato");
+                    $view = new VErrore();
+                    $view->error(13);
                 }
-                header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $usernameMember);
             }
-            else {
-                //print("Utente bannato");
+            else{
                 $view = new VErrore();
-                $view->error(13);
+                $view->error(3);
             }
         }
         else{
@@ -233,20 +274,26 @@ class CAdmin {
 
     public static function sbannaUser(string $username): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            $username = "giangiacomo";
+            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                null, null)) {
+                $username = "giangiacomo";
 
 
-            //in teoria qua avevamo pensato di togliere la moderazione degli admin
-            //e lasciare solo quella dei member, ma per non far casini lascio così per ora
-            if (FPersistentManager::userBannato($username)) {
-                FPersistentManager::sbannaUser($username);
-                FPersistentManager::decrementaWarning($username);
-                header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                //in teoria qua avevamo pensato di togliere la moderazione degli admin
+                //e lasciare solo quella dei member, ma per non far casini lascio così per ora
+                if (FPersistentManager::userBannato($username)) {
+                    FPersistentManager::sbannaUser($username);
+                    FPersistentManager::decrementaWarning($username);
+                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                } else {
+                    //print ("l'utente non è bannato");
+                    $view = new VErrore();
+                    $view->error(14);
+                }
             }
-            else {
-                //print ("l'utente non è bannato");
+            else{
                 $view = new VErrore();
-                $view->error(14);
+                $view->error(3);
             }
         }
         else{
@@ -262,21 +309,27 @@ class CAdmin {
     */
     public static function togliAmmonizione(string $username): void {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            //verifica che sei l'admin
-            $admin = SessionHelper::getUtente()->getUsername();
-            $memberDaAmmonire = FPersistentManager::load("EMember", null, $username, null,
-                null, null, null, null, false);
-            // calcolo dei warning attuali
-            $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
+            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                null, null)) {
+                //verifica che sei l'admin
+                $admin = SessionHelper::getUtente()->getUsername();
+                $memberDaAmmonire = FPersistentManager::load("EMember", null, $username, null,
+                    null, null, null, null, false);
+                // calcolo dei warning attuali
+                $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
 
-            if (!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire > 0) {
-                FPersistentManager::decrementaWarning($username);
-                header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                if (!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire > 0) {
+                    FPersistentManager::decrementaWarning($username);
+                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                } else {
+                    //print ("l'utente è bannato");
+                    $view = new VErrore();
+                    $view->error(13);
+                }
             }
-            else {
-                //print ("l'utente è bannato");
+            else{
                 $view = new VErrore();
-                $view->error(13);
+                $view->error(3);
             }
         }
         else{

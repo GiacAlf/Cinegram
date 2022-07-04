@@ -24,7 +24,7 @@ class VErrore {
                 $titolo = 'HTTP/1.1 404 URL Not Found';
                 break;
             case '3':
-                $testo = 'Il metodo richiesto non esiste/non è stato trovato!';  //lo chiama il front controller
+                $testo = 'Il metodo o la risorsa richiesto/a non esiste/non è stato trovato!';  //lo chiama il front controller
                 $titolo = 'HTTP/1.1 405 Method Not Allowed';
                 break;
             case '4':
@@ -71,6 +71,10 @@ class VErrore {
             case '14' :
                 $testo = 'il member moderato è già non bannato';
                 $titolo = 'Errore moderazione';
+                break;
+            case '15' :
+                $testo = 'Lo username usato è già occupatp';
+                $titolo = 'Errore registrazione';
                 break;
 
         }
