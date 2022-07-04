@@ -13,13 +13,16 @@ class CFrontController {
                 $real_controller = new $controller();
             }
             else {
-              $view = new VErrore();
-              $view->error(3);
+                $view = new VErrore();
+                $view ->error(3);
+                return;
+
             }
         }
         else {
             $view = new VErrore();
-            $view->error(4);
+            $view ->error(2);
+            return;
         }
         array_shift($arraypath);
         switch (count($arraypath)){
