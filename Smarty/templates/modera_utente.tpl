@@ -96,7 +96,7 @@
             <div id="div">
                 <h2>Pagina di Moderazione utenti</h2><br>
                 <h2>Benvenuto {$admin}</h2><br>
-                <h3>Moderazione dell'utente {$username}</h3><br>
+                <h3>Moderazione dell'utente {$member->getUsername()}</h3><br>
             </div>
             <!--<h3> se $ruolo == "member" Modera l'utente {$member}
                 altrimenti Modera l'amministratore {$admin}
@@ -106,15 +106,15 @@
 
 
                 <!-- se il $ruolo è == a member dovranno comparire solo ammonisci, togli ammonizione e sbanna, se è un admin solo sbanna e banna-->
-                <form action="">Ammonizioni attuale: {$warning} <br><br><!-- qui mettere se $bananto == true
+                <form action="">Ammonizioni attuale: {$member->getWarning()} <br><br><!-- qui mettere se $bananto == true
                     si stampa: "l'utente è bannato!" e di conseguenza comparirà il pulsante SBANNA -->	<!-- abbiamo tolto sta cosa della moderazione degli admin-->
                     {if $bannato == true}
                         <p>L'utente è bannato! </p>
-                        <input type='submit' formaction="https://{$root_dir}/admin/sbanna-user/{$username}" class='btn' name='sbanna' value='Sbanna'>
+                        <input type='submit' formaction="https://{$root_dir}/admin/sbanna-user/{$member->getUsername()}" class='btn' name='sbanna' value='Sbanna'>
                     {else}
-                        <input type='submit' formaction="https://{$root_dir}/admin/ammonisci-user/{$username}" class='btn' name='ammonizione' value='Ammonisci'> &nbsp
-                        <input type='submit' formaction="https://{$root_dir}/admin/togli-ammonizione/{$username}" class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
-                        <!--<input type='submit' formaction="https://{$root_dir}/admin/banna-user/{$username}" class='btn' name='banna' value='Banna'>&nbsp
+                        <input type='submit' formaction="https://{$root_dir}/admin/ammonisci-user/{$member->getUsername()}" class='btn' name='ammonizione' value='Ammonisci'> &nbsp
+                        <input type='submit' formaction="https://{$root_dir}/admin/togli-ammonizione/{$member->getUsername()}" class='btn' name='togli_ammonizione' value='Togli Ammonizione'> &nbsp
+                        <!--<input type='submit' formaction="https://{$root_dir}/admin/banna-user/{$member->getUsername()}" class='btn' name='banna' value='Banna'>&nbsp
                         questo metodo qua sopra ancora non c'è, dato che per ora non si può bannare per direttissima-->
                     {/if}
 

@@ -54,24 +54,31 @@ class CMember {
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
     public static function caricaMember(string $username): void{
-        $view = new VUtenteSingolo();
-        $member = FPersistentManager::load("EMember",null,$username,null,null,
-            null,null,null,true);
-        $filmvisti = FPersistentManager::calcolaNumeroFilmVisti($member);
-        $following = FPersistentManager::calcolaNumeroFollowing($member);
-        $follower = FPersistentManager::calcolaNumeroFollower($member);
-        $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
-        $seguito = false;
-        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member"){
-            //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
-            //se gli username sono uguali nel metodo lo segui, ti dà false
-            $username_sessione = SessionHelper::getUtente()->getUsername();
-            $seguito = FPersistentManager::loSegui($username_sessione, $username);
+        if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+            null, null)) {
+            $view = new VUtenteSingolo();
+            $member = FPersistentManager::load("EMember", null, $username, null, null,
+                null, null, null, true);
+            $filmvisti = FPersistentManager::calcolaNumeroFilmVisti($member);
+            $following = FPersistentManager::calcolaNumeroFollowing($member);
+            $follower = FPersistentManager::calcolaNumeroFollower($member);
+            $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
+            $seguito = false;
+            if (SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
+                //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
+                //se gli username sono uguali nel metodo lo segui, ti dà false
+                $username_sessione = SessionHelper::getUtente()->getUsername();
+                $seguito = FPersistentManager::loSegui($username_sessione, $username);
+            }
+            $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
+            $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
+            $view->avviaPaginaUtente($member, $immagine_profilo,
+                $filmvisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
         }
-        $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(5);
-        $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
-        $view->avviaPaginaUtente($member, $immagine_profilo,
-            $filmvisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
+        else{
+            $view = new VErrore();
+            $view->error(3);
+        }
 
 
         /* CHIUNQUE SIA L'UTENTE SUL SITO COMPARE LA PAGINA DEL MEMBER, POI L'ADMIN CLICCA SU
@@ -94,12 +101,19 @@ class CMember {
         //QUA HO PENSATO DI PRENDERE SOLO LE LISTE, TANTO SOLO QUELLE MI SERVONO
         //$member = FPersistentManager::load("EMember",null,$username,null,null,
           //  null,null,null,true);
-        $view = new VUtenteSingolo();
-        $lista_follower = FPersistentManager::loadListaFollower($username);
-        $immagini_follower = FPersistentManager::loadImmaginiProfiloMembers($lista_follower, true);
-        $lista_following = FPersistentManager::loadListaFollower($username);
-        $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
-        $view->avviaPaginaFollow($username, $lista_follower, $immagini_follower, $lista_following, $immagini_following);
+        if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+            null, null)) {
+            $view = new VUtenteSingolo();
+            $lista_follower = FPersistentManager::loadListaFollower($username);
+            $immagini_follower = FPersistentManager::loadImmaginiProfiloMembers($lista_follower, true);
+            $lista_following = FPersistentManager::loadListaFollower($username);
+            $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
+            $view->avviaPaginaFollow($username, $lista_follower, $immagini_follower, $lista_following, $immagini_following);
+        }
+        else{
+            $view = new VErrore();
+            $view->error(3);
+        }
     }
 
 
@@ -111,24 +125,31 @@ class CMember {
         //se sei loggato e se sei un member e se l'utente della sessione è diverso dell'utente da andare a seguire puoi fare
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
             SessionHelper::getUtente()->getUsername() != $username_da_seguire){
-            $username = SessionHelper::getUtente()->getUsername();
+            if(FPersistentManager::exist("EMember", null, $username_da_seguire, null, null, null, null,
+                null, null)) {
 
-            $following = "giangiacomo"; //lo si recupera dall'url = $username_da_seguire
+                $username = SessionHelper::getUtente()->getUsername();
 
-            //recupero dalla sessione il mio username => $follower = $username
-            $follower = "matteo";
-            //CONTROLLO COME IN UNFOLLOW MEMBER?
-            $segui = FPersistentManager::loSegui($follower, $following);
-            if(!$segui) {
-                $following = FPersistentManager::load("EMember", null, $following, null, null,
-                    null, null, null, false);
-                $follower = FPersistentManager::load("EMember", null, $follower, null, null,
-                    null, null, null, false);
-                FPersistentManager::follow($follower, $following);
+                $following = "giangiacomo"; //lo si recupera dall'url = $username_da_seguire
+
+                //recupero dalla sessione il mio username => $follower = $username
+                $follower = "matteo";
+                //CONTROLLO COME IN UNFOLLOW MEMBER?
+                $segui = FPersistentManager::loSegui($follower, $following);
+                if (!$segui) {
+                    $following = FPersistentManager::load("EMember", null, $following, null, null,
+                        null, null, null, false);
+                    $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                        null, null, null, false);
+                    FPersistentManager::follow($follower, $following);
+                } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                    $view = new VErrore();
+                    $view->error(11);
+                }
             }
-            else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+            else{
                 $view = new VErrore();
-                $view->error(11);
+                $view->error(3);
             }
         }
         else{
@@ -148,23 +169,29 @@ class CMember {
         //verificare che l'utente sia registrato
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
             SessionHelper::getUtente()->getUsername() != $username_da_non_seguire) {
-            $username = SessionHelper::getUtente()->getUsername();
-            $following = "giangiacomo"; //lo si recupera dall'url  = $username_da_non_seguire
-            //recupero dalla sessione il mio username => $follower = $username
-            $follower = "matteo"; //=> $follower = $username
-            //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
-            $segue = FPersistentManager::loSegui($follower, $following);
-            if($segue) {
-                $following = FPersistentManager::load("EMember", null, $following, null, null,
-                    null, null, null, false);
-                $follower = FPersistentManager::load("EMember", null, $follower, null, null,
-                    null, null, null, false);
+            if(FPersistentManager::exist("EMember", null, $username_da_non_seguire, null, null, null, null,
+                null, null)) {
+                $username = SessionHelper::getUtente()->getUsername();
+                $following = "giangiacomo"; //lo si recupera dall'url  = $username_da_non_seguire
+                //recupero dalla sessione il mio username => $follower = $username
+                $follower = "matteo"; //=> $follower = $username
+                //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
+                $segue = FPersistentManager::loSegui($follower, $following);
+                if ($segue) {
+                    $following = FPersistentManager::load("EMember", null, $following, null, null,
+                        null, null, null, false);
+                    $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                        null, null, null, false);
 
-                FPersistentManager::unfollow($follower, $following);
+                    FPersistentManager::unfollow($follower, $following);
+                } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                    $view = new VErrore();
+                    $view->error(11);
+                }
             }
-            else{ //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+            else{
                 $view = new VErrore();
-                $view->error(11);
+                $view->error(3);
             }
         }
         else{
@@ -198,13 +225,20 @@ class CMember {
                 //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
                 //qua se l'img è null pazienza
                 $member = new EMember($username, $data, $bio, 0, null, null, null, null);
-                FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
-                    $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
-                //dovrà partire la sessione
-                SessionHelper::login($member);
-                //scritto brutto per dire che conviene redirectare all'homepage
-                header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
-                //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
+                if(!FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                    null, null)) {
+                    FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
+                        $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
+                    //dovrà partire la sessione
+                    SessionHelper::login($member);
+                    //scritto brutto per dire che conviene redirectare all'homepage
+                    header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
+                    //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
+                }
+                else{
+                    $view = new VErrore();
+                    $view->error(15);
+                }
             }
         }
         else{

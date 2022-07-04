@@ -18,7 +18,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav_white {
             padding-top: 20px;
             background-color: #ffffff;
@@ -99,10 +99,11 @@
             <div class="col-sm-2 sidenav_white"></div>
 
             <div class="container-fluid text-left"><br>
-                <h1>Modifica profilo di {$username}</h1><br>
+                <h1>Modifica profilo di {$member->getUsername()}</h1><br>
                 <div class="container-fluid text-left">
-                    <h3 style="display:inline;">Bio attuale: </h3><span>{$bio}</span><br><br>
+                    <h3 style="display:inline;">Bio attuale: </h3><span>{$member->getBio()}</span><br><br>
                     <form  style="display:inline;" action='https://{$root_dir}/profilo/aggiorna-bio' method='POST' id='modifica_bio'>
+                        <label for="mytext">Modifica la bio:</label><br>
                         <textarea id ="mytext" name='nuova_bio' form='modifica_bio' placeholder="Modifica la tua bio..." rows="4" cols="100"></textarea> <br>
                         <div class="mydiv">
                             <input type='submit' form="modifica_bio" value='Salva bio' name='post_bio'>
@@ -111,7 +112,7 @@
                     <div class="mydiv">
                         <br><br> <!-- src="https://pad.mymovies.it/filmclub/2002/08/056/locandina288.jpg" height="100" width="100" -->
                         <h3 style="display:inline;">Immagine profilo attuale: </h3><br><br>
-                        <img src="data: {$immagine_vecchia[1]};base64,{$immagine_vecchia[0]}" {$immagine_vecchia[2]}> <br><br>
+                        <img src="{$member->getSrc($immagine_vecchia)}" {$immagine_vecchia[2]}><br><br>
                         <form id='nuova_immagine_profilo' action='https://{$root_dir}/profilo/aggiorna-immagine' method='POST' enctype="multipart/form-data">
                             <span> Seleziona la nuova immagine profilo: </span>
                             <br>
@@ -127,18 +128,21 @@
                             <h3 >Modifica password:</h3>
                             <div id="divpass">
                                 <form  action='https://{$root_dir}/profilo/aggiorna-password' method='POST' id='modifica_password'>
-                                    <input name='vecchia_password' type='password' form="modifica_password" placeholder='Vecchia password'><br> <!--qua converrà inserire l'espressione regolare -->
-                                    <input name='nuova_password' type='password'
+                                    <label for="vecchia_pwd">Vecchia password:</label>
+                                    <input name='vecchia_password' id="vecchia_pwd" type='password' form="modifica_password" placeholder='Vecchia password'><br>
+                                    <label for="nuova_pwd">Nuova password:</label>
+                                    <input name='nuova_password' type='password' id="nuova_pwd"
+                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                                           title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
+                                           form="modifica_password" placeholder='Nuova password'>
+                                    <label for="conferma_pwd">Conferma password:</label>
+                                    <input name='conferma_nuova_password' type='password' id="conferma_pwd"
                                             {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
                                            title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
-                                           form="modifica_password" placeholder='Nuova password'> <br>
-                                    <input name='conferma_nuova_password' type='password'
-                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
-                                           title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un caratere speciale (no spazi), da 8 a 32 caratteri"
-                                           form="modifica_password" placeholder='Conferma password' ><br><br>
+                                           form="modifica_password" placeholder='Conferma password'><br><br>
                                     <input type='submit' value='Modifica la password' form="modifica_password" name='post_password'>
                             </div>
-                            </form>
+                                </form>
                             <br><br>
 
                             <div class="col-sm-2 sidenav_white"></div>

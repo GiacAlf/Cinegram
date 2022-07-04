@@ -99,12 +99,16 @@
             <div class="container-fluid text-left"><br>
                 <h1>Modifica Risposta:</h1><br>
                 <div>
-                    <h3 style="display:inline;">Testo attuale: </h3><span>{$testo}</span>
+                    <h3 style="display:inline;">Autore della recensione: </h3><span>{$risposta->getUsernameAutoreRecensione()}</span>
+                    <h3 style="display:inline;">Autore: </h3><span>{$risposta->getUsernameAutore()}</span>
+                    <h3 style="display:inline;">Testo attuale: </h3><span>{$risposta->getTesto()}</span>
                 </div>
-                <form id="modifica_risposta" action="https://{$root_dir}/film/salva-risposta/{$autore_rece}/{$data}" method="POST">
+                <form id="modifica_risposta"
+                      action="https://{$root_dir}/film/salva-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}" method="POST">
                     <div class="form-group">
 
                         <br>
+                        <label for="mytext">Modifica il testo: </label>
                         <textarea id="mytext" name="nuova_risposta" form="modifica_risposta" rows="4" cols="100" placeholder="Modifica il testo della risposta..." required></textarea>
                     </div>
                     <div class="mydiv">

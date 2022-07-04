@@ -9,21 +9,27 @@ class CProfilo {
     */
     public static function caricaProfilo(string $username): void{
         if(SessionHelper::isLogged() && $username==SessionHelper::getUtente()->getUsername()) {
-
-            $numeroEstrazioni = 5;
-            //oppure viene passato nell'url. è uguale
-            $username = SessionHelper::getUtente()->getUsername();
-            $view = new VUtenteSingolo();
-            $member = FPersistentManager::load("EMember", null, $username, null, null,
-                null, null, null, true);
-            $immagineProfilo = FPersistentManager::loadImmagineProfilo($member, true);
-            $filmVisti = FPersistentManager::calcolaNumeroFilmVisti($member);
-            $following = FPersistentManager::calcolaNumeroFollowing($member);
-            $follower = FPersistentManager::calcolaNumeroFollower($member);
-            $utentiPopolari = FPersistentManager::caricaUtentiPiuPopolari($numeroEstrazioni);
-            $immaginiMembers = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
-            $view->avviaPaginaUtente($member, $immagineProfilo, $filmVisti, $following, $follower,
-                false, $utentiPopolari, $immaginiMembers);
+            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                null, null)) {
+                $numeroEstrazioni = 5;
+                //oppure viene passato nell'url. è uguale
+                $username = SessionHelper::getUtente()->getUsername();
+                $view = new VUtenteSingolo();
+                $member = FPersistentManager::load("EMember", null, $username, null, null,
+                    null, null, null, true);
+                $immagineProfilo = FPersistentManager::loadImmagineProfilo($member, true);
+                $filmVisti = FPersistentManager::calcolaNumeroFilmVisti($member);
+                $following = FPersistentManager::calcolaNumeroFollowing($member);
+                $follower = FPersistentManager::calcolaNumeroFollower($member);
+                $utentiPopolari = FPersistentManager::caricaUtentiPiuPopolari($numeroEstrazioni);
+                $immaginiMembers = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
+                $view->avviaPaginaUtente($member, $immagineProfilo, $filmVisti, $following, $follower,
+                    false, $utentiPopolari, $immaginiMembers);
+            }
+            else{
+                $view = new VErrore();
+                $view->error(3);
+            }
         }
         else{
             $view = new VErrore();

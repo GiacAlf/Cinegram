@@ -97,47 +97,49 @@
             <div id="div">
                 <br><h1>Risultato della ricerca:</h1></div><br><br> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
             <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
-            {for $i=0 to {$risultato_ricerca|count - 1}}
-                {if {get_class($risultato_ricerca[$i])} == "EFilm"}
-                    <div>
-                        <table border="0" cellpadding="0" cellspacing="0"> <!-- se dovessero dar problemi questi attributi si prova a toglierli-->
-                            <tr>
-                                <td>
-                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
-                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} >
-                                </td>
-                                <td>
-                                    <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getTitolo()}</h3></a> &nbsp
-                                    <span>{$risultato_ricerca[$i]->getAnno()->format('Y')}</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <br>
-                {else}
-                    <div>
-                        <table border="0" cellpadding="0" cellspacing="0"> <!-- provando a toglierli su w3schools non cambia nulla
+            {if isset($risultato_ricerca)}
+                {for $i=0 to {$risultato_ricerca|count - 1}}
+                    {if {get_class($risultato_ricerca[$i])} == "EFilm"}
+                        <div>
+                            <table border="0" cellpadding="0" cellspacing="0"> <!-- se dovessero dar problemi questi attributi si prova a toglierli-->
+                                <tr>
+                                    <td>
+                                        <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} alt="Locandina">
+                                    </td>
+                                    <td>
+                                        <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">
+                                            <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getTitolo()}</h3></a> &nbsp
+                                        <span>{$risultato_ricerca[$i]->getAnno()->format('Y')}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    {else}
+                        <div>
+                            <table border="0" cellpadding="0" cellspacing="0"> <!-- provando a toglierli su w3schools non cambia nulla
                          poi boh-->
-                            <tr>
-                                <td>
-                                    <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
-                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]}>
-                                </td>
-                                <td>
-                                    <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
-                                        <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getUsername()}</h3></a> &nbsp
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <br>
-                {/if}
-            {forelse}
+                                <tr>
+                                    <td>
+                                        <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]} alt="Immagine profilo">
+                                    </td>
+                                    <td>
+                                        <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
+                                            <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getUsername()}</h3></a> &nbsp
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    {/if}
+                {/for}
+            {else}
                 <div id="div">
                     <h3> La ricerca non ha prodotto risultati! </h3>
                 </div>
-            {/for}
+            {/if}
             <br><br>
         </div>
     </div>
