@@ -100,7 +100,7 @@
                 <h1>Modifica Risposta:</h1><br>
                 <div>
                     <h3 style="display:inline;">Autore della recensione: </h3><span>{$risposta->getUsernameAutoreRecensione()}</span>
-                    <h3 style="display:inline;">Autore: </h3><span>{$risposta->getUsernameAutore()}</span>
+                    <h3 style="display:inline;">Autore della risposta: </h3><span>{$risposta->getUsernameAutore()}</span>
                     <h3 style="display:inline;">Testo attuale: </h3><span>{$risposta->getTesto()}</span>
                 </div>
                 <form id="modifica_risposta"

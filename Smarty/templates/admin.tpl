@@ -1,42 +1,164 @@
-<!DOCTYPE html> <!-- questa è la pagina dell'admin quando deve bannare, ammonire, bisognerà aggiungere le robe per la modifica film-->
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Reptile - A slow social network</title>
-    <link rel='stylesheet' href='https://{$root_dir}/templates/css/basic_styles.css'>
-    <script type='text/javascript' src='./templates/js/home.js'></script>
+    <title>Cinegram - Amministrazione</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 450px;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav_white {
+            padding-top: 20px;
+            background-color: #ffffff;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {
+                height:auto;
+            }
+        }
+        #div {
+            margin: 0 auto;
+            position: relative;
+            width: 50%;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div class='top-bar'>
-    <div class='top-bar-left' style='float:left;'>
-        <a href='https://{$root_dir}'><span class='title'><img src='https://{$root_dir}/templates/res/logo_principale_sfondo.png' width=99 height=50</span></a>&nbsp
-        <span style='font-size:130%;'>PANNELLO DI AMMINISTRAZIONE</span>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Cinegram</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Homepage</a></li>
+                <li><a href="#">Films</a></li>
+                <li><a href="#">Members</a></li>
+                <li><a href="#">Profilo</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" placeholder="Search..">
+                    <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class='top-bar-right' style='float:right;'>
-        <a href='https://{$root_dir}/logout'>Logout</a>
+</nav>
+
+<div class="container-fluid text-center">
+    <div class="row content">
+
+        <div class="col-sm-2 sidenav_white"></div>
+
+        <div class="container-fluid text-left">
+            <br>
+            <div id="div">
+                <h2>Pagina di Amministrazione</h2><br>
+                <h2>Benvenuto {$admin}</h2><br>
+            </div>
+            <h3>Inserisci Nuovo Film:</h3><br>
+            <div class="col-sm-8 text-left">
+
+                <!-- dato che non ha senso caricare un film a metà, ma soprattutto perché fare 12mila controlli in Php è una palla,
+                    si mette tutto required qui?-->
+                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="titolo">Titolo:</label>
+                        <input type="text" name="titolo" class="form-control" form="inserisci_film" id="titolo" placeholder="Inserisci il titolo" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data_uscita">Anno:</label>
+                        <input type="date" name="data" class="form-control" form="inserisci_film" id="data_uscita" placeholder="Inserisci la data di uscita" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="durata">Durata:</label>
+                        <input type="number" name="durata" class="form-control" form="inserisci_film" id="durata" placeholder="Inserisci la durata" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sinossi">Sinossi:</label>
+                        <input type="text" name="sinossi" class="form-control" form="inserisci_film" id="sinossi" placeholder="Inserisci la sinossi" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <input type="text" name="registi" class="form-control" form="inserisci_film" id="registi" placeholder="Inserisci i registi" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <input type="text" name="attori" class="form-control" form="inserisci_film" id="attori" placeholder="Inserisci gli attori" required>*
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locandina">Inserisci la locandina del film:</label>
+                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required>* <!-- forse l'unico non required?-->
+                    </div>
+
+                    <div id="div">
+                        <button type="submit" form="inserisci_film" class="btn btn-default">Salva Film</button>
+                    </div>
+                </form>
+                <br><br>
+                <!--<h3>Oppure:</h3> per accedere alla modifica film o al modera utente
+                 servono informazioni: questi due link da togliere poi
+                <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
+                <a href="https://{$root_dir}/admin/modifica"><h3>Modera Utente</h3></a><br/>
+                -->
+            </div>
+            <br><br>
+
+            <div class="col-sm-2 sidenav_white"></div>
+        </div>
     </div>
-    <div style='clear:both;'></div>
 </div>
-<div class='main-container' style='margin-top:10%;margin-bottom:3%;text-align:center;'>
-    <h1>AMMINISTRAZIONE</h1>
-    <h2>Banna utente</h2>
-    <form action='https://{$root_dir}/admin/ban' method='POST'>
-        <input type='text' name='utente_da_bannare' class='text-input' placeholder='Nome utente'> &nbsp <input type='submit' class='btn' name='invia_ban' value='Banna'>
-    </form>
-    <h2>Sbanna utente</h2>
-    <form action='https://{$root_dir}/admin/unban' method='POST'>
-        <input type='text' name='utente_da_sbannare' class='text-input' placeholder='Nome utente'> &nbsp <input type='submit' class='btn' name='invia_sban' value='Sbanna'>
-    </form>
-    <h2>Rendi utente admin</h2>
-    <form action='https://{$root_dir}/admin/admin' method='POST'>
-        <input type='text' name='utente_da_adminizzare' class='text-input' placeholder='Nome utente'> &nbsp <input type='submit' class='btn' name='invia_ban' value='Rendi Admin'>
-    </form>
-    <h2>Rimuovi utente dal ruolo di admin</h2>
-    <form action='https://{$root_dir}/admin/deadmin' method='POST'>
-        <input type='text' name='utente_da_deadminizzare' class='text-input' placeholder='Nome utente'> &nbsp <input type='submit' class='btn' name='invia_ban' value='Rimuovi da Admin'>
-    </form>
-</div>
-<footer class='footer-home'>
-    <a href='https://{$root_dir}/about'>Informazioni su Reptile</a> &nbsp &nbsp <a href='https://{$root_dir}/credits'>Crediti</a> &nbsp &nbsp (C) 2021 Reptile
+<br>
+
+<footer class="container-fluid text-center">
+    <p>Cinegram 2022</p>
 </footer>
 </body>
 </html>

@@ -128,13 +128,13 @@
                         <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/{$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
                         &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
                         <p style="font-size:120%">{$risposta->getTesto()}</p>
-                        {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? --> {$autore_rece}
+                        {if $user == {$risposta->getUsernameAutore()}}
                             <a href="https://{$root_dir}/film/modifica-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
                             <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}
-                            <a href="https://{$root_dir}/admin/rimuovi-risposta/{$autore_rece}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Elimina</button></a>
+                            <a href="https://{$root_dir}/admin/rimuovi-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Elimina</button></a>
                         {/if}
                     </div>
                     {foreachelse}

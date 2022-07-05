@@ -26,9 +26,6 @@ class CHomepage {
         // ma qua tipo non bisogna richiamare pure il Persistent Manager per prendermi le locandine piccole? certo, fatto
         // io!!
 
-
-
-
         $view->avviaHomePage($filmRecenti, $locandineFilmRecenti, $filmPiuVisti, $locandineFilmPiuVisti, $ultimeRecensioniScritte,
             $utentiPopolari, $immaginiUtentiPopolari);
     }

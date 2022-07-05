@@ -50,12 +50,12 @@ class CFilm {
     sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/carica-film/id
     ,parsificando la stringa il front controller passera' l'id come parametro
      */
-    public static function caricaFilm(int $id): void{
+    public static function caricaFilm(int $idFilm): void{
         //restituzione del film completo
-        if(FPersistentManager::exist("EFilm", $id, null, null, null, null, null,
+        if(FPersistentManager::exist("EFilm", $idFilm, null, null, null, null, null,
                     null, null)) {
             $view = new VFilmSingolo();
-            $film = FPersistentManager::load("EFilm", $id, null, null,
+            $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                 null, null, null, null, true);
             $locandina = FPersistentManager::loadLocandina($film, true);
             //$locandina=FPersistentManager::loadLocandina($film,true)
@@ -67,8 +67,8 @@ class CFilm {
             if (SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
                 //se è un admin pazienza, tanto restituisce false
                 $username = SessionHelper::getUtente()->getUsername();
-                $visto = FPersistentManager::loHaiVisto($username, $id);
-                $ha_scritto = FPersistentManager::exist("ERecensione", $id, $username, null, null, null, null,
+                $visto = FPersistentManager::loHaiVisto($username, $idFilm);
+                $ha_scritto = FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
                     null, null);
             }
             $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
@@ -115,11 +115,11 @@ class CFilm {
                 //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
                 //solo nella pagina del film singolo
                 $array_post = $view->scriviRecensione();
-                $testo = "prova"; //$testo = $array_post[0]
+                $voto = $array_post[1];
+                $testo = $array_post[0];
                 $data = new DateTime();
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($username, $idFilm);
-                $voto = 3; //$voto = $array_post[1]
                 if ($voto != null && !FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
                         null, null)) {
                     $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data, null);
@@ -198,17 +198,17 @@ class CFilm {
                 $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null
                     , null, null, null, null, false);
                 if ($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
-                    $updatedText = "prova aggiornamento"; // = $array_modifica[0];
+                    $updatedText = $array_modifica[0];
                     FPersistentManager::update($recensione, "testo", $updatedText, null, null,
                         null, null, null);
                 } elseif ($array_modifica[0] == null && $array_modifica[1] != null) { //se il testo nuovo è null modifico solo il voto
                     //se ricevo il voto aggiorno quello
-                    $updatedVote = 3; // = $array_modifica[1];
+                    $updatedVote = $array_modifica[1];
                     FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
                         null, null, null);
                 } elseif ($array_modifica[0] != null && $array_modifica[1] != null) { //se tutti e due sono pieni, modifico tutte e due
-                    $updatedText = "prova aggiornamento"; // = $array_modifica[0];
-                    $updatedVote = 3; // = $array_modifica[0];
+                    $updatedText = $array_modifica[0];
+                    $updatedVote = $array_modifica[1];
                     FPersistentManager::update($recensione, "testo", $updatedText, null, null,
                         null, null, null);
                     FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
@@ -243,8 +243,7 @@ class CFilm {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null, null, null,
                 null, null)) {
-                //$idFilm = 2; //recupero da Url
-                $usernameAutore = "pippo"; //SessionHelper::getUtente()->getUsername();
+                //$usernameAutore = "pippo"; //SessionHelper::getUtente()->getUsername();
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
                 FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
@@ -277,19 +276,16 @@ class CFilm {
                 //prova
                 $view = new VRecensione();
                 $date = new DateTime(); //il format giusto viene fatto in Foundation
-                $usernameAutore = "damiano"; // SessionHelper::getUtente()->getUsername();
+                $usernameAutoreRisposta = SessionHelper::getUtente()->getUsername();
                 $testo = $view->scriviRisposta();
-                $testo = "prova risposta";
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
-                //$idFilm = 2; //presa dall'url
-                //$usernameAutoreRecensione = "matteo"; //dall'url (?)
                 if ($testo != null) {
-                    $risposta = new ERisposta($usernameAutore, $date, $testo, $idFilm, $usernameAutoreRecensione);
+                    $risposta = new ERisposta($usernameAutoreRisposta, $date, $testo, $idFilm, $usernameAutoreRecensione);
                     FPersistentManager::store($risposta, null, null, null, null, null,
                         null, null);
                     //notifica che sto a salva le robe
-                    header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/" . $idFilm . "/" . $usernameAutore);
+                    header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/" . $idFilm . "/" . $usernameAutoreRecensione);
                     //qui reinderizzo alla pagina della recensione di cui ho scritto la risposta
                 } else {
                     $view = new VErrore();
@@ -319,10 +315,7 @@ class CFilm {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             if(FPersistentManager::exist("ERisposta", null, $usernameAutore, null, null,
                 null, null, null, ERisposta::ConvertiFormatoUrlInData($data))) {
-                $usernameAutore = SessionHelper::getUtente()->getUsername();
 
-                //$idFilm = 1; //non serve questo qui, giusto?
-                $usernameAutore = "matteo"; //recupero da sessione
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
                 $oggetto_data = ERisposta::ConvertiFormatoUrlInData($data);
@@ -354,9 +347,9 @@ class CFilm {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             if(FPersistentManager::exist("ERisposta", null, $usernameAutore, null, null,
                 null, null, null, ERisposta::ConvertiFormatoUrlInData($data))) {
-                $data = ERisposta::ConvertiFormatoUrlInData($data);
+                $oggetto_data = ERisposta::ConvertiFormatoUrlInData($data);
                 $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore,
-                    null, null, null, null, $data, false);
+                    null, null, null, null, $oggetto_data, false);
                 $view = new VRecensione();
                 $view->avviaPaginaModificaRisposta($risposta);
             }
@@ -385,7 +378,6 @@ class CFilm {
                 $view = new VRecensione();
                 $oggetto_data = ERisposta::ConvertiFormatoUrlInData($data);
                 $updatedText = $view->modificaRisposta(); //in teoria lo passo sempre pieno: ho messo required nell'html
-                $updatedText = "prova aggiornamento";
                 $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
                     null, null, $oggetto_data, false);
                 if ($updatedText != null) {
@@ -412,17 +404,16 @@ class CFilm {
      * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
     propongo anche qui una url particolare: localhost/film/vedi-film/id
     */
-    public static function vediFilm(int $id): void{
+    public static function vediFilm(int $idFilm): void{
         //controllo se utente è loggato
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
-            if(FPersistentManager::exist("EFilm", $id, null, null, null, null, null,
+            if(FPersistentManager::exist("EFilm", $idFilm, null, null, null, null, null,
                 null, null)) {
                 //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
-                $id = 3; //dall'url
-                $username = "matteo"; //SessionHelper::getUtente()->getUsername();
-                $visto = FPersistentManager::loHaiVisto($username, $id);
+                $username = SessionHelper::getUtente()->getUsername();
+                $visto = FPersistentManager::loHaiVisto($username, $idFilm);
                 if (!$visto) {
-                    $film = FPersistentManager::load("EFilm", $id, null, null,
+                    $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                         null, null, null, null, false);
                     $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);
@@ -450,17 +441,16 @@ class CFilm {
      metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
     propongo anche qui una url particolare: localhost/rimuovi-film/id
     */
-    public static function rimuoviFilm(int $id): void{
+    public static function rimuoviFilm(int $idFilm): void{
         //controllo se utente è loggato
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
-            if(FPersistentManager::exist("EFilm", $id, null, null, null, null, null,
+            if(FPersistentManager::exist("EFilm", $idFilm, null, null, null, null, null,
                 null, null)) {
                 //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
-                $id = 1; //dall'url
-                $username = "matteo"; //SessionHelper::getUtente()->getUsername();
-                $visto = FPersistentManager::loHaiVisto($username, $id);
+                $username = SessionHelper::getUtente()->getUsername();
+                $visto = FPersistentManager::loHaiVisto($username, $idFilm);
                 if ($visto) {
-                    $film = FPersistentManager::load("EFilm", $id, null, null,
+                    $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                         null, null, null, null, false);
                     $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);

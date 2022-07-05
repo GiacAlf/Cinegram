@@ -20,7 +20,7 @@ class VAdmin {
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('admin', $username_admin);
-        $this->smarty->display('admin_2_matteo(ok).tpl');
+        $this->smarty->display('admin.tpl');
     }
 
 
@@ -181,7 +181,7 @@ class VAdmin {
             $attoreOggetto = new EAttore(null, $arrayAttore[0], $arrayAttore[1]);
             $arrayAttoriOggetti[] = $attoreOggetto;
         }
-        return $arrayAttoriOggetti;
+        return array_filter($arrayAttoriOggetti);
     }
 
     private function getListaRegisti(string $input): ?array{
@@ -192,7 +192,7 @@ class VAdmin {
             $registaOggetto = new ERegista(null, $arrayRegista[0], $arrayRegista[1]);
             $arrayRegistiOggetti[] = $registaOggetto;
         }
-        return $arrayRegistiOggetti;
+        return array_filter($arrayRegistiOggetti);
     }
 
 

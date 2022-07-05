@@ -8,12 +8,12 @@ class CProfilo {
     localhost/profilo/carica-profilo/username
     */
     public static function caricaProfilo(string $username): void{
-        if(SessionHelper::isLogged() && $username==SessionHelper::getUtente()->getUsername()) {
+        if(SessionHelper::isLogged() && $username == SessionHelper::getUtente()->getUsername()) {
             if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
                 null, null)) {
                 $numeroEstrazioni = 5;
                 //oppure viene passato nell'url. è uguale
-                $username = SessionHelper::getUtente()->getUsername();
+                //$username = SessionHelper::getUtente()->getUsername();
                 $view = new VUtenteSingolo();
                 $member = FPersistentManager::load("EMember", null, $username, null, null,
                     null, null, null, true);

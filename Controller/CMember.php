@@ -22,19 +22,19 @@ class CMember {
         if(SessionHelper::isLogged()
             && SessionHelper::getUtente()->chiSei() == "Member"){
             $identificato = true;
-            $username = "Matteo"; //SessionHelper::getUtente()->getUsername()
-            $member = FPersistentManager::load("EMember",null,$username,null,
+            $username = SessionHelper::getUtente()->getUsername();
+            $member = FPersistentManager::load("EMember",null, $username,null,
                 null,null,null,null,false);
-            $ultimeRecensioni=FPersistentManager::caricaUltimeRecensioniScritteUtentiSeguiti($member,6);
+            $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritteUtentiSeguiti($member,6);
         }
         else{
             $identificato = false;
-            $ultimeRecensioni=FPersistentManager::caricaUltimeRecensioniScritte(5);
+            $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritte(5);
         }
-        $utentiPiuPopolari=FPersistentManager::caricaUtentiPiuPopolari(5);
+        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, true);
 
-        $utentiPiuSeguiti=FPersistentManager::caricaUtentiConPiuFollower(5);
+        $utentiPiuSeguiti = FPersistentManager::caricaUtentiConPiuFollower(5);
         $immaginiUtentiSeguiti = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuSeguiti, false);
 
         $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
@@ -59,7 +59,7 @@ class CMember {
             $view = new VUtenteSingolo();
             $member = FPersistentManager::load("EMember", null, $username, null, null,
                 null, null, null, true);
-            $filmvisti = FPersistentManager::calcolaNumeroFilmVisti($member);
+            $filmVisti = FPersistentManager::calcolaNumeroFilmVisti($member);
             $following = FPersistentManager::calcolaNumeroFollowing($member);
             $follower = FPersistentManager::calcolaNumeroFollower($member);
             $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
@@ -73,7 +73,7 @@ class CMember {
             $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
             $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
             $view->avviaPaginaUtente($member, $immagine_profilo,
-                $filmvisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
+                $filmVisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
         }
         else{
             $view = new VErrore();
@@ -130,10 +130,10 @@ class CMember {
 
                 $username = SessionHelper::getUtente()->getUsername();
 
-                $following = "giangiacomo"; //lo si recupera dall'url = $username_da_seguire
+                $following = $username_da_seguire; //lo si recupera dall'url = $username_da_seguire
 
                 //recupero dalla sessione il mio username => $follower = $username
-                $follower = "matteo";
+                $follower = $username;
                 //CONTROLLO COME IN UNFOLLOW MEMBER?
                 $segui = FPersistentManager::loSegui($follower, $following);
                 if (!$segui) {
@@ -172,9 +172,9 @@ class CMember {
             if(FPersistentManager::exist("EMember", null, $username_da_non_seguire, null, null, null, null,
                 null, null)) {
                 $username = SessionHelper::getUtente()->getUsername();
-                $following = "giangiacomo"; //lo si recupera dall'url  = $username_da_non_seguire
+                $following = $username_da_non_seguire; //lo si recupera dall'url  = $username_da_non_seguire
                 //recupero dalla sessione il mio username => $follower = $username
-                $follower = "matteo"; //=> $follower = $username
+                $follower = $username; //=> $follower = $username
                 //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
                 $segue = FPersistentManager::loSegui($follower, $following);
                 if ($segue) {
