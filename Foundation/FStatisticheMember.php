@@ -240,9 +240,14 @@ class FStatisticheMember {
         $arrayPopolari = array();
         // si uniscono i due array caricati da DB prendendo un elemento da uno e uno dall'altro partendo dall'indice
         // più basso e fino a esaurire tutti gli elementi
-        for($i = 0; $i < $numeroDiEstrazioni; $i++) {
-            $arrayPopolari[] = $arrayFollower[$i];
-            $arrayPopolari[] = $arrayRisposteRecenti[$i];
+        if(isset($arrayRisposteRecenti)) {
+            for ($i = 0; $i < $numeroDiEstrazioni; $i++) {
+                $arrayPopolari[] = $arrayFollower[$i];
+                $arrayPopolari[] = $arrayRisposteRecenti[$i];
+            }
+        }
+        else {
+            $arrayPopolari = $arrayFollower;
         }
         $arrayPopolari = array_unique($arrayPopolari, SORT_REGULAR);
         // si prendono i primi $numeroDiEstrazioni elementi
