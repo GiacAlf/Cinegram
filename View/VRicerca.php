@@ -20,7 +20,7 @@ class VRicerca {
         $this->smarty->assign('root_dir', $root_dir);
         $this->smarty->assign('risultato_ricerca', $risultato_ricerca);
         $this->smarty->assign('immagini', $immagini);
-        $this->smarty->display('ricer34f3ca.tpl');
+        $this->smarty->display('ricerca.tpl');
     }
 
     //metodo che restituisce al controller il prompt scritto dall'utente
