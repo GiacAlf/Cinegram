@@ -5,7 +5,7 @@ class CLogin {
     metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
     propongo una url localhost/login/verifica-login
      */
-    public static function verificaLogin(): void{
+    public static function verificaLogin(): void {
         /* recupero i dati dalla view in $POST[username] e $POST[password]
         */
         if(!SessionHelper::isLogged()) {
@@ -74,7 +74,7 @@ class CLogin {
                 $view_errore->error(1);
             }
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(12);
         }
@@ -85,36 +85,36 @@ class CLogin {
      metodo che serve solo a caricare soltanto la pagina di login
     url: localhost/login/pagina-login
      */
-    public static function paginaLogin(): void{
+    public static function paginaLogin(): void {
+
         if(!SessionHelper::isLogged()) {
             $view = new VLogin();
             $view->avviaPaginaLogin();
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(12);
         }
-
     }
+
 
     /*L'utente clicca su questo pulsante e semplicemente verra' effettuato il classico logout
     associo una url localhost/login/logout-member
     */
-    public static function logoutMember(): void{
-        /*
-        l'unica cosa da fare qui dentro è distruggere completamente la sessione cosi' che
+    public static function logoutMember(): void {
+
+        /* l'unica cosa da fare qui dentro è distruggere completamente la sessione cosi' che
         l'utente dovra' fare nuovamente il login perche si distrugge la cartella associata a lui
         sul server grazie a session_destroy(), eliminiamo gli array in ram con unset() e possiamo anche
-        inviare un cookie con chiave PHPSESSID e valore ""*/
+        inviare un cookie con chiave PHPSESSID e valore "" */
         if(SessionHelper::isLogged()) {
             SessionHelper::logout(); //poi reinderizzo all'home page, oppure lo si fa
             //nei metodi di session helper
             header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(8);
         }
-
     }
 }

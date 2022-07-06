@@ -10,7 +10,8 @@ class CMember {
     localhost/member/carica-members
     */
 
-    public static function caricaMembers(): void{
+    public static function caricaMembers(): void {
+
         //controlli per quanto riguarda l'utente loggato o meno
         //if(SessionHelper::isLogged()){
         //  $username = SessionHelper::getUtente()->getUsername();
@@ -19,15 +20,14 @@ class CMember {
         //se l'utente è loggato e se è un member
         //QUA NON CONVIENE CHIEDERE ALL'UTENTE DELLA SESSIONE IL SUO RUOLO? METODO chiSei
         //alternativa: FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"
-        if(SessionHelper::isLogged()
-            && SessionHelper::getUtente()->chiSei() == "Member"){
+        if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             $identificato = true;
             $username = SessionHelper::getUtente()->getUsername();
             $member = FPersistentManager::load("EMember",null, $username,null,
                 null,null,null,null,false);
             $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritteUtentiSeguiti($member,6);
         }
-        else{
+        else {
             $identificato = false;
             $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritte(5);
         }
@@ -53,7 +53,8 @@ class CMember {
 
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
-    public static function caricaMember(string $username): void{
+    public static function caricaMember(string $username): void {
+
         if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
             null, null)) {
             $view = new VUtenteSingolo();
@@ -75,7 +76,7 @@ class CMember {
             $view->avviaPaginaUtente($member, $immagine_profilo,
                 $filmVisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(3);
         }
@@ -97,11 +98,12 @@ class CMember {
     }
 
 
-    public static function mostraFollow(string $username): void{
+    public static function mostraFollow(string $username): void {
+
         //QUA HO PENSATO DI PRENDERE SOLO LE LISTE, TANTO SOLO QUELLE MI SERVONO
         //$member = FPersistentManager::load("EMember",null,$username,null,null,
           //  null,null,null,true);
-        if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+        if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
             null, null)) {
             $view = new VUtenteSingolo();
             $lista_follower = FPersistentManager::loadListaFollower($username);
@@ -110,7 +112,7 @@ class CMember {
             $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
             $view->avviaPaginaFollow($username, $lista_follower, $immagini_follower, $lista_following, $immagini_following);
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(3);
         }
@@ -121,11 +123,12 @@ class CMember {
     l'utente in sessione potra' seguire il member, sara' una richiesta in get
     al seguente url localhost/member/follow-member/username */
     public static function followMember(string $username_da_seguire): void {
+
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //se sei loggato e se sei un member e se l'utente della sessione è diverso dell'utente da andare a seguire puoi fare
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
             SessionHelper::getUtente()->getUsername() != $username_da_seguire){
-            if(FPersistentManager::exist("EMember", null, $username_da_seguire, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $username_da_seguire, null, null, null, null,
                 null, null)) {
 
                 $username = SessionHelper::getUtente()->getUsername();
@@ -147,12 +150,12 @@ class CMember {
                     $view->error(11);
                 }
             }
-            else{
+            else {
                 $view = new VErrore();
                 $view->error(3);
             }
         }
-        else{
+        else {
             //forse un po' drastico far apparire una schermata di errore però per ora ok
             $view = new VErrore();
             $view->error(8);
@@ -164,12 +167,13 @@ class CMember {
     l'utente in sessione potra' unfolloware il member, sara' una richiesta in get
     al seguente url localhost/member/unfollow-member/username. */
 
-    public static function unfollowMember(string $username_da_non_seguire): void{
+    public static function unfollowMember(string $username_da_non_seguire): void {
+
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //verificare che l'utente sia registrato
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member" &&
             SessionHelper::getUtente()->getUsername() != $username_da_non_seguire) {
-            if(FPersistentManager::exist("EMember", null, $username_da_non_seguire, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $username_da_non_seguire, null, null, null, null,
                 null, null)) {
                 $username = SessionHelper::getUtente()->getUsername();
                 $following = $username_da_non_seguire; //lo si recupera dall'url  = $username_da_non_seguire
@@ -189,23 +193,24 @@ class CMember {
                     $view->error(11);
                 }
             }
-            else{
+            else {
                 $view = new VErrore();
                 $view->error(3);
             }
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(8);
         }
-
     }
+
 
     /*
     metodo che serve per far registrare l'utente, ci sara' una form ed una richiesta fatta in post
     alla seguente url : localhost/member/registrazione-member
     */
-    public static function registrazioneMember(): void{
+    public static function registrazioneMember(): void {
+
         if(!SessionHelper::isLogged()) {
             $view = new VLogin();
             $array_credenziali = $view->RegistrazioneCredenziali();
@@ -215,7 +220,8 @@ class CMember {
                 $array_credenziali[1] != $array_credenziali[2]) {
                 $view_errore = new VErrore();
                 $view_errore->error(6);
-            } else {
+            }
+            else {
                 $username = $array_credenziali[0];
                 $password = $array_credenziali[1];
                 $bio = $array_credenziali[3];
@@ -225,7 +231,7 @@ class CMember {
                 //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
                 //qua se l'img è null pazienza
                 $member = new EMember($username, $data, $bio, 0, null, null, null, null);
-                if(!FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                if(!FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                     null, null)) {
                     FPersistentManager::store($member, null, $password, null, null, $foto_profilo['tmp_name'],
                         $foto_profilo['type'], $foto_profilo['size']); //immagino si chiami così poi boh
@@ -235,13 +241,13 @@ class CMember {
                     header("Location: https://" . VUtility::getRootDir() . "/homepage/imposta-homepage");
                     //REGISTRAZIONE COME ADMIN? DA DATABASE DIRETTAMENTE?
                 }
-                else{
+                else {
                     $view = new VErrore();
                     $view->error(15);
                 }
             }
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(12);
         }
@@ -249,12 +255,13 @@ class CMember {
 
 
     //qua basta che facevo vedere il template
-    public static function paginaRegistrazione():void{
+    public static function paginaRegistrazione(): void {
+
         if(!SessionHelper::isLogged()) {
             $view = new VLogin();
             $view->avviaPaginaRegistrazione();
         }
-        else{
+        else {
             $view = new VErrore();
             $view->error(12);
         }
@@ -265,14 +272,15 @@ class CMember {
      richiesta in get con url  localhost/member/cerca-member/username, viene chiamato quando nella barra di ricerca
     si vuole cercare un member passando il suo username
     */
-    public static function cercaMember(): void{
+    public static function cercaMember(): void {
+
         //qua l'utente avrà cliccato il bottone cercaMember con la form, il cui contenuto viene recuperato
         //dalla view
         $view = new VRicerca();
         $array_risultati = array();
         $immagini_profilo = array();
         $username = $view->eseguiRicerca();
-        if($username != null && FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+        if($username != null && FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                 null, null)){
             $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);
