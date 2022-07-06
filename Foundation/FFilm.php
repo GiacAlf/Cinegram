@@ -46,14 +46,14 @@ class FFilm {
 
 
     // metodo che verifica l'esistenza di un film in db passando il EFilm, tramite il valore della chiave idFilm
-    public static function existById(EFilm $film): ?bool {
+    public static function existById(int $id): ?bool {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $id . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);

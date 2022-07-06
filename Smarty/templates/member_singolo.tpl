@@ -161,17 +161,17 @@
         <div  id ="mydiv" class="col-sm-3 sidenav"> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="210" width="210"-->
             <p><h2> {$member->getUsername()} </h2></p>
             <img src="{$member->getSrc($immagine_profilo)}"  class="img-circle" {$immagine_profilo[2]} alt="Avatar"><br>
-            {if $user == {$member->getUsername}}
+            {if $user == {$member->getUsername()}}
                 <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
                 </form>
                 <p>Hai {$member->getWarning()} warning. </p>
             {/if}
             <button type="button" class="btn btn-default btn-sm">
-              {if $user != {$member->getUsername}}
+              {if $user != {$member->getUsername()}}
                 {if $seguito == false}
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/follow-member/{$member->getUsername}">
+                    <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}">
                         <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
                         <!-- il button type=button non reinderizza ad un"altra pagina
                         e serve per il javascript(infatti nei
@@ -182,7 +182,7 @@
                 {else}
 
                     <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername}">
+                    <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}">
                         <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                         <!-- il button type=button non reinderizza ad un"altra pagina
                         e serve per il javascript(infatti nei
@@ -194,14 +194,14 @@
               {/if}
             </button>
             {if $user == "admin"}
-                <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername}"> <!-- qua bisogna solo far vedere il template -->
+                <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername()}"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm"> Modera Utente </button>
                 </form>
             {/if}
             <br><br>
             <span align="center">Iscritto dal: {$member->getDataIscrizione()->format("d-m-Y")}</span><br>
-            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername}"><span align="center">Follower: {$numero_follower}</span></a><br>
-            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername}"><span align="center">Following: {$numero_following}</span></a><br>
+            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername()}"><span align="center">Follower: {$numero_follower}</span></a><br>
+            <a href="https://{$root_dir}/member/mostra-follow/{$member->getUsername()}"><span align="center">Following: {$numero_following}</span></a><br>
             <span align="center">Bio: {$member->getBio()}</span><br>
 
             <span align="center">Numero film visti: {$numero_film_visti}</span>
@@ -210,14 +210,14 @@
                 {foreach $film_visti as $film}
                     <p><a href="https://{$root_dir}/film/carica-film/{$film->getId()}">{$film->getTitolo()}</a></p>
                 {foreachelse}
-                    <p>{$member->getUsername} non ha visto alcun film </p>
+                    <p>{$member->getUsername()} non ha visto alcun film </p>
                 {/foreach}
             </div>
         </div>
 
         <div class="col-sm-7 text-center">
 
-            <p><span class="badge"></span> <br><h3>Recensioni di {$member->getUsername}</h3></p><br>
+            <p><span class="badge"></span> <br><h3>Recensioni di {$member->getUsername()}</h3></p><br>
             <div class="row">
             {foreach $recensioni as $recensione}
                     <div class="col-sm-10">
@@ -237,7 +237,7 @@
                         {/if}
                     </div>
                 {foreachelse}
-                     <div class="col-sm-10">{$member->getUsername} non ha scritto alcuna recensione. </div>
+                     <div class="col-sm-10">{$member->getUsername()} non ha scritto alcuna recensione. </div>
             {/foreach}
             </div>
         </div>

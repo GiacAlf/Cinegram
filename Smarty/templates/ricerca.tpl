@@ -180,6 +180,7 @@
                     <h3> La ricerca non ha prodotto risultati! </h3>
                 </div>
             {/if}
+
             <br><br>
         </div>
     </div>

@@ -164,6 +164,10 @@ class EMember extends EUser {
         return FPersistentManager::calcolaNumeroRisposte($this);
     }
 
+    public function getNumeroFollower(): ?int{
+        return FPersistentManager::calcolaNumeroFollower($this);
+    }
+
 
     /* metodo che restituisce un immagine profilo più piccola dell'originale (che verrà passata per parametro e
     caricata dal DB) se si setta il parametro $grande a false oppure non si setta affatto.

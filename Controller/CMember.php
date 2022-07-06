@@ -31,13 +31,13 @@ class CMember {
             $identificato = false;
             $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritte(5);
         }
-        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
+        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, true);
 
-        $utentiPiuSeguiti = FPersistentManager::caricaUtentiConPiuFollower(5);
+        $utentiPiuSeguiti = FPersistentManager::caricaUtentiConPiuFollower(2);
         $immaginiUtentiSeguiti = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuSeguiti, false);
 
-        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(2);
         $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
 
         $view = new VMembers();
@@ -54,7 +54,7 @@ class CMember {
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
     public static function caricaMember(string $username): void{
-        if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+        if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
             null, null)) {
             $view = new VUtenteSingolo();
             $member = FPersistentManager::load("EMember", null, $username, null, null,
@@ -70,7 +70,7 @@ class CMember {
                 $username_sessione = SessionHelper::getUtente()->getUsername();
                 $seguito = FPersistentManager::loSegui($username_sessione, $username);
             }
-            $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
+            $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
             $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
             $view->avviaPaginaUtente($member, $immagine_profilo,
                 $filmVisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
@@ -272,11 +272,12 @@ class CMember {
         $array_risultati = array();
         $immagini_profilo = array();
         $username = $view->eseguiRicerca();
-        if($username != null){
+        if($username != null && FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+                null, null)){
             $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);
-            $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
             $array_risultati[] = $member;
+            $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
         }
         //qua forse è più efficace una cosa del tipo:
         //$array_risultati = array();

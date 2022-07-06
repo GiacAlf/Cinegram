@@ -15,8 +15,8 @@ class FPersistentManager {
         if($FClass == "FAttore" || $FClass == "FRegista") return $FClass::exist($nome, $cognome);
 
         if($FClass == "FFilm") {
-            if($film)
-                return $FClass::existById($film);
+            if($id)
+                return $FClass::existById($id);
             if($titolo && $anno)
                 return $FClass::existByTitoloEAnno($titolo, $anno);
             return $FClass::existByTitolo($titolo);

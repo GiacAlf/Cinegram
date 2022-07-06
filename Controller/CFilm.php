@@ -20,7 +20,8 @@ class CFilm {
         $films = array();
         $locandine = array();
 
-        if($titolo != null){
+        if($titolo != null && FPersistentManager::exist("EFilm", null, null, null, null, null, $titolo,
+            null, null)){
             $films = FPersistentManager::load("EFilm", null, null, null,
                             null, $titolo, null, null, false);
             $locandine = FPersistentManager::loadLocandineFilms($films, false);

@@ -6,7 +6,7 @@ class EFilm {
     private String $titolo;
     private DateTime $data;
     private int $durata;    // durata in minuti
-    private String $sinossi;
+    private ?String $sinossi;
     private ?int $numeroViews;
     private ?float $votoMedio;
     private ?array $listaRegisti;
@@ -20,7 +20,7 @@ class EFilm {
     public static int $larghezzaPiccola = 70;  // in pixel
     public static int $altezzaPiccola = 105;    // in pixel
 
-    public function __construct(?int $id, string $titolo, DateTime $data, int $durata, string $sinossi, ?int $numeroViews,
+    public function __construct(?int $id, string $titolo, DateTime $data, int $durata, ?string $sinossi, ?int $numeroViews,
                                 ?float $votoMedio, ?array $listaRegisti, ?array $listaAttori, ?array $listaRecensioni) {
         $this->idFilm = $id;
         $this->titolo = $titolo;
