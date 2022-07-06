@@ -8,7 +8,9 @@ class VErrore {
         $this->smarty = StartSmarty::configuration();
     }
 
-    public function error(int $id_errore): void{
+
+    public function error(int $id_errore): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -76,7 +78,6 @@ class VErrore {
                 $testo = 'Lo username usato è già occupatp';
                 $titolo = 'Errore registrazione';
                 break;
-
         }
         $this->smarty->assign('testo', $testo);
         $this->smarty->assign('titolo', $titolo);

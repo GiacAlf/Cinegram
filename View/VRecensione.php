@@ -1,7 +1,7 @@
 <?php
 
-class VRecensione
-{
+class VRecensione {
+
     private Smarty $smarty;
 
 
@@ -9,8 +9,10 @@ class VRecensione
         $this->smarty = StartSmarty::configuration();
     }
 
+
     //sembra che così funzioni, mentre se chiamo showNavBar [$navbar->showNavBar()] no, la variabile user non la prende
-    public function avviaPaginaRecensione(ERecensione $recensione): void{
+    public function avviaPaginaRecensione(ERecensione $recensione): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -20,7 +22,9 @@ class VRecensione
         $this->smarty->display('recensione.tpl');
     }
 
-    public function avviaPaginaModificaRecensione(ERecensione $recensione): void{
+
+    public function avviaPaginaModificaRecensione(ERecensione $recensione): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -29,7 +33,9 @@ class VRecensione
         $this->smarty->display('modifica_recensione.tpl');
     }
 
-    public function avviaPaginaModificaRisposta(ERisposta $risposta): void{
+
+    public function avviaPaginaModificaRisposta(ERisposta $risposta): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -38,7 +44,9 @@ class VRecensione
         $this->smarty->display('modifica_risposta.tpl');
     }
 
-    public function scriviRisposta(): ?string{
+
+    public function scriviRisposta(): ?string {
+
         $testo_risposta = null;
         if(isset($_POST['risposta'])){
             $testo_risposta = $_POST['risposta'];
@@ -46,14 +54,16 @@ class VRecensione
         return $testo_risposta;
     }
 
-    public function modificaRecensione(): ?array{
+
+    public function modificaRecensione(): ?array {
+
         $array_recensione = array();
         $nuovo_testo_recensione = null;
         $nuovo_voto_recensione = null;
-        if(isset($_POST['nuovo_testo'])){
+        if(isset($_POST['nuovo_testo'])) {
             $nuovo_testo_recensione = $_POST['nuovo_testo'];
         }
-        if(isset($_POST['nuovo_voto'])){
+        if(isset($_POST['nuovo_voto'])) {
             $nuovo_voto_recensione = $_POST['nuovo_voto'];
         }
         //se non è settato ne il voto ne il testo vaffanculo -> oppure dall'html lo fa
@@ -62,12 +72,13 @@ class VRecensione
         return $array_recensione;
     }
 
-    public function modificaRisposta(): ?string{
+
+    public function modificaRisposta(): ?string {
+
         $nuovo_testo_risposta = null;
         if(isset($_POST['nuova_risposta'])){
             $nuovo_testo_risposta = $_POST['nuova_risposta'];
         }
         return $nuovo_testo_risposta;
     }
-
 }

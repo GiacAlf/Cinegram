@@ -10,9 +10,11 @@ class VAdmin {
         $this->smarty = StartSmarty::configuration();
     }
 
+
     //per ora immagino che il template dell'admin sia pieno di form in cui caricare tutte le informazioni
     //su un film e qualche altra form tipo per scrivere gli username dei tipi da ammonire e bannare
-    public function avviaPaginaAdmin(string $username_admin): void{
+    public function avviaPaginaAdmin(string $username_admin): void {
+
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
         //QUINDI O FACCIO COSì
         $root_dir = VUtility::getRootDir();
@@ -27,7 +29,8 @@ class VAdmin {
     //funzione che fa il display della pagina di modifica film: ci sono tutti gli attributi modificabili e, accanto,
     //ci saranno tutte le varie form
     public function avviaPaginaModificaFilm(EFilm $film_da_modificare, array $locandina,
-                                            string $username_admin): void{
+                                            string $username_admin): void {
+
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
         //QUINDI O FACCIO COSì
         $root_dir = VUtility::getRootDir();
@@ -42,9 +45,11 @@ class VAdmin {
         $this->smarty->display('modifica_film.tpl');
     }
 
+
     //funzione che fa il display della pagina di moderazione utente: ci sono l'username e i warning, accanto i bottoni
     //ban, ammonisci... e gli altri che non ricordo lol
-    public function avviaPaginaModeraUtente(EMember $utente_da_moderare, bool $bannato, string $username_admin): void{
+    public function avviaPaginaModeraUtente(EMember $utente_da_moderare, bool $bannato, string $username_admin): void {
+
         //$this->smarty->assign('username_admin', $admin); -> boh forse dovrò mettere lo username dell'admin boh
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
@@ -56,17 +61,21 @@ class VAdmin {
         $this->smarty->display('modera_utente.tpl');
     }
 
+
     //ora metto tutti i metodi per prendere l'input per caricare un film
     //tutti separati, per ora, perché secondo me tutto insieme è un po' un casino
-    public function getTitolo(): string{
+    public function getTitolo(): string {
+
         $titolo = null;
-        if(isset($_POST['titolo'])){
+        if(isset($_POST['titolo'])) {
             $titolo = $_POST['titolo'];
         }
         return $titolo;
     }
 
-    public function getDurata(): int{
+
+    public function getDurata(): int {
+
         $durata = null;
         if(isset($_POST['durata'])){
             $durata = $_POST['durata'];
@@ -74,7 +83,9 @@ class VAdmin {
         return $durata;
     }
 
-    public function getSinossi(): string{
+
+    public function getSinossi(): string {
+
         $sinossi = null;
         if(isset($_POST['sinossi'])){
             $sinossi = $_POST['sinossi'];
@@ -82,9 +93,11 @@ class VAdmin {
         return $sinossi;
     }
 
+
     //non ricordo minimamente come viene restituita la data da quel calendarino
     //delle form, per ora come scheletro ci sta
-    public function getData(): DateTime{
+    public function getData(): DateTime {
+
         $data = null;
         if(isset($_POST['data'])){
             //se restituisce la stringa del tipo d-m-Y
@@ -93,11 +106,13 @@ class VAdmin {
         return $data;
     }
 
+
     //se come valori nell'array $_POST ci si possono ficcare anche altri
     //array, il che in teoria è fattibile ma in pratica vallo a sapere,
     //allora questi metodi hanno senso, in caso contrario tocca farsi il segno
     //della croce
-    public function getRegisti(): array{
+    public function getRegisti(): array {
+
         $registi = array();
         if(isset($_POST['registi'])){
             $registi = $this->getListaRegisti($_POST['registi']);
@@ -105,7 +120,9 @@ class VAdmin {
         return $registi;
     }
 
-    public function getAttori(): array{
+
+    public function getAttori(): array {
+
         $attori = array();
         if(isset($_POST['attori'])){
             $attori = $this->getListaAttori($_POST['attori']);
@@ -113,30 +130,34 @@ class VAdmin {
         return $attori;
     }
 
+
     //metodo che controlla che sia tutto ok
-    public function checkFoto(array $array_foto): bool{
+    public function checkFoto(?array $array_foto): bool {
+
         $check = false;
         if(isset($array_foto)){  //forse questo controllo ulteriore è inutile, però boh
             if($array_foto['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($array_foto['type'] != 'image/jpeg' || $array_foto['type'] != 'image/png'){
+            elseif($array_foto['type'] != 'image/jpeg' || $array_foto['type'] != 'image/png') {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            else{
+            else {
                 $check = true;
             }
         }
         return $check;
     }
 
+
     //per ora facciamo che restituisco tutto $_FILES poi vedrò (o vedremo, perché io sono debilitato ahah)
     //come funziona il controllo e se bisogna discriminare tra le chiavi di $_FILES
     //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
-    public function getLocandina(): ?array{
+    public function getLocandina(): ?array {
+
         $locandina = null;
         if(isset($_FILES['locandina']) && $this->checkFoto($_FILES['locandina'])){
             $locandina = $_FILES['locandina'];
@@ -144,7 +165,9 @@ class VAdmin {
         return $locandina;
     }
 
+
     public function getElementidaModificare(): ?array{
+
         $array_modifiche = array();
         if(isset($_POST['modifica_titolo'])){
             $array_modifiche['titolo'] = $_POST['modifica_titolo'];
@@ -171,9 +194,11 @@ class VAdmin {
         return $array_modifiche;
     }
 
+
     //magari possono servire alcuni controlli perché così se l'admin scrive male
     //get lista attori restituisca null
-    private function getListaAttori(string $input): ?array{
+    private function getListaAttori(string $input): ?array {
+
         $arrayAttoriStringa = explode(";", $input);
         $arrayAttoriOggetti = array();
         foreach ($arrayAttoriStringa as $attore) {
@@ -184,7 +209,9 @@ class VAdmin {
         return array_filter($arrayAttoriOggetti);
     }
 
-    private function getListaRegisti(string $input): ?array{
+
+    private function getListaRegisti(string $input): ?array {
+
         $arrayRegistiStringa = explode(";", $input);
         $arrayRegistiOggetti = array();
         foreach ($arrayRegistiStringa as $regista) {
@@ -194,7 +221,4 @@ class VAdmin {
         }
         return array_filter($arrayRegistiOggetti);
     }
-
-
-
 }

@@ -15,7 +15,8 @@ class VUtenteSingolo {
     //come parametro l'utente selezionato
     public function avviaPaginaUtente(EMember $utente_selezionato, array $immagine_profilo,
                                       int $numero_film_visti, int $numero_following,
-                                      int $numero_follower, bool $seguito, array $utenti_popolari, array $immagini_utenti){
+                                      int $numero_follower, bool $seguito, array $utenti_popolari, array $immagini_utenti) {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -33,7 +34,9 @@ class VUtenteSingolo {
         $this->smarty->display('member_singolo.tpl');
     }
 
-    public function avviaPaginaModificaUtente(EMember $utente, array $immagine_profilo): void{
+
+    public function avviaPaginaModificaUtente(EMember $utente, array $immagine_profilo): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -43,8 +46,10 @@ class VUtenteSingolo {
         $this->smarty->display('modifica_profilo.tpl');
     }
 
+
     public function avviaPaginaFollow(string $username, array $lista_follower, array $immagini_follower,
-                                      array $lista_following, array $immagini_following): void{
+                                      array $lista_following, array $immagini_following): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -57,79 +62,90 @@ class VUtenteSingolo {
         $this->smarty->display('follower.tpl');
     }
 
+
     //metodo che restituisce l'array contenente tutte le info
     //della nuova foto profilo
     //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
     public function aggiornaFoto(): ?array{
         $foto = null;
-        if(isset($_FILES['nuova_img_profilo']) && $this->checkFoto()){
+        if(isset($_FILES['nuova_img_profilo']) && $this->checkFoto()) {
             $foto = $_FILES['nuova_img_profilo'];
         }
         return $foto;
     }
 
+
     //metodo che controlla che sia tutto ok
     public function checkFoto(): bool{
+
         $check = false;
         if(isset($_FILES['nuova_img_profilo'])){  //forse questo controllo ulteriore è inutile, però boh
-            if($_FILES['nuova_img_profilo']['size'] > self::$maxSizeImmagineProfilo){
+            if($_FILES['nuova_img_profilo']['size'] > self::$maxSizeImmagineProfilo) {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
+            }
+            elseif($_FILES['nuova_img_profilo']['type'] != 'image/jpeg' || $_FILES['nuova_img_profilo']['type'] != 'image/png') {
+                $view_errore = new VErrore();
+                $view_errore->error(4);
+            }
+            else {
+               $check = true;
+            }
         }
-        elseif($_FILES['nuova_img_profilo']['type'] != 'image/jpeg' || $_FILES['nuova_img_profilo']['type'] != 'image/png'){
-            $view_errore = new VErrore();
-            $view_errore->error(4);
-        }
-        else{
-           $check = true;
-        }
-    }
         return $check;
     }
 
+
     //metodo che aggiorna la bio
-    public function aggiornaBio(): ?string{
+    public function aggiornaBio(): ?string {
+
         $nuova_bio = null;
-        if(isset($_POST['nuova_bio'])){
+        if(isset($_POST['nuova_bio'])) {
             $nuova_bio = $_POST['nuova_bio'];
         }
         return $nuova_bio;
     }
 
+
     //metodo che aggiorna la password
-    public function aggiornaPassword(): ?string{
+    public function aggiornaPassword(): ?string {
+
         $nuova_password = null;
-        if(isset($_POST['nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
+        if(isset($_POST['nuova_password']) && $this->checkPassword($_POST['nuova_password'])) {
             $nuova_password = $_POST['nuova_password'];
         }
         return $nuova_password;
     }
 
-    public function recuperaVecchiaPassword(): ?string{
+
+    public function recuperaVecchiaPassword(): ?string {
+
         $vecchia_password = null;
-        if(isset($_POST['vecchia_password'])){
+        if(isset($_POST['vecchia_password'])) {
             $vecchia_password = $_POST['vecchia_password'];
         }
         return $vecchia_password;
     }
 
-    public function verificaConfermaPassword(): ?string{
+
+    public function verificaConfermaPassword(): ?string {
+
         $conferma_password = null;
-        if(isset($_POST['conferma_nuova_password']) && $this->checkPassword($_POST['nuova_password'])){
+        if(isset($_POST['conferma_nuova_password']) && $this->checkPassword($_POST['nuova_password'])) {
             $conferma_password = $_POST['conferma_nuova_password'];
         }
         return $conferma_password;
     }
 
-    public function checkPassword(string $password): bool{
+
+    public function checkPassword(string $password): bool {
+
         $match = false;
         $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/";
-        if(preg_match($pattern, $password)){
+        if(preg_match($pattern, $password)) {
             $match = true;
         }
         return $match;
     }
-
-
 }

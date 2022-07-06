@@ -1,7 +1,7 @@
 <?php
 
-class VHomePage
-{
+class VHomePage {
+
     private Smarty $smarty;
 
     //il costruttore della home page richiama l'oggetto smarty configurato
@@ -18,7 +18,8 @@ class VHomePage
     //è ok il ritorno void, credo
     public function avviaHomePage(array $film_recenti, array $locandine_film_recenti, array $film_visti,
                                   array $locandine_film_visti, array $ultime_recensioni,
-                                  array $utenti_popolari, array $immagini_utenti_popolari): void{
+                                  array $utenti_popolari, array $immagini_utenti_popolari): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -33,5 +34,4 @@ class VHomePage
         $this->smarty->display('home_page.tpl');
         //passo gli interi array a smarty, che poi si preoccuperà di prendere le robe che gli interessano
     }
-
 }

@@ -19,7 +19,8 @@ class VFilms {
     //La pagina cambia a seconda se si è registrati o meno
     public function avviaPaginaFilms(array $film_visti, array $locandine_film_visti, array $utenti_seguiti,
                                      array $immagini_seguiti, array $film_recenti, array $locandine_film_recenti,
-                                     array $recensioni): void{
+                                     array $recensioni): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -33,5 +34,4 @@ class VFilms {
         $this->smarty->assign('recensioni', $recensioni);
         $this->smarty->display('films.tpl');
     }
-
 }

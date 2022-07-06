@@ -15,7 +15,8 @@ class VMembers {
     //La pagina cambia a seconda se si è registrati o meno
     public function avviaPaginaMembers(array $recensioni, array $utenti, array $immagini_utenti,
                                        array $film_visti, array $locandine_film_visti, array $utenti_piu_seguiti,
-                                       array $immagini_utenti_piu_seguiti, bool $identificato): void{
+                                       array $immagini_utenti_piu_seguiti, bool $identificato): void {
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -30,5 +31,4 @@ class VMembers {
         $this->smarty->assign('immagini_utenti_seguiti', $immagini_utenti_piu_seguiti);
         $this->smarty->display('members.tpl');
     }
-
 }

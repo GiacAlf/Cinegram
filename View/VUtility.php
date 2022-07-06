@@ -1,15 +1,12 @@
 <?php
 
-class VUtility
-{
-    public static function getRootDir(): ?string{
-        $root_dir = $GLOBALS['URLBASE'];
-        return $root_dir;
+class VUtility {
+
+    public static function getRootDir(): ?string {
+        return $GLOBALS['URLBASE'];
     }
 
     public static function getUserNavBar(): string {
-        $user = SessionHelper::UserNavBar();
-        return $user;
+        return SessionHelper::UserNavBar();
     }
-
 }
