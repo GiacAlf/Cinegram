@@ -66,12 +66,12 @@ class CFilm {
              */
             $visto = false;
             $ha_scritto = false;
-            if (SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
+            if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
                 //se è un admin pazienza, tanto restituisce false
                 $username = SessionHelper::getUtente()->getUsername();
                 $visto = FPersistentManager::loHaiVisto($username, $idFilm);
-                $ha_scritto = FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
-                    null, null);
+                $ha_scritto = FPersistentManager::exist("ERecensione", $idFilm, $username, null,
+                    null, null, null, null, null);
             }
             $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
             $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
@@ -123,7 +123,7 @@ class CFilm {
                 $data = new DateTime();
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($username, $idFilm);
-                if ($voto != null && !FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
+                if($voto != null && !FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
                         null, null)) {
                     $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data, null);
                     FPersistentManager::store($recensione, null, null, null, null, null,
@@ -173,8 +173,8 @@ class CFilm {
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
         //se l'utente è loggato ed è l'autore (di conseguenza escludo gli admin) -> roba che c'è anche in smarty
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
-            if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null, null, null,
-                null, null)) {
+            if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null,
+                null, null, null, null)) {
                 $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore,
                     null, null, null, null, null, false);
                 $view = new VRecensione();
@@ -204,9 +204,9 @@ class CFilm {
                 null, null)) {
                 $view = new VRecensione();
                 $array_modifica = $view->modificaRecensione();
-                $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null
-                    , null, null, null, null, false);
-                if ($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
+                $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null,
+                    null, null, null, null, false);
+                if($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
                     $updatedText = $array_modifica[0];
                     FPersistentManager::update($recensione, "testo", $updatedText, null, null,
                         null, null, null);
@@ -291,7 +291,7 @@ class CFilm {
                 $testo = $view->scriviRisposta();
                 //nel caso dovesse servire, tanto è gratis
                 //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
-                if ($testo != null) {
+                if($testo != null) {
                     $risposta = new ERisposta($usernameAutoreRisposta, $date, $testo, $idFilm, $usernameAutoreRecensione);
                     FPersistentManager::store($risposta, null, null, null, null, null,
                         null, null);
@@ -393,7 +393,7 @@ class CFilm {
                 $updatedText = $view->modificaRisposta(); //in teoria lo passo sempre pieno: ho messo required nell'html
                 $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
                     null, null, $oggetto_data, false);
-                if ($updatedText != null) {
+                if($updatedText != null) {
                     FPersistentManager::update($risposta, null, $updatedText, null,
                         null, null, null, null);
                 }
@@ -426,7 +426,7 @@ class CFilm {
                 //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
                 $username = SessionHelper::getUtente()->getUsername();
                 $visto = FPersistentManager::loHaiVisto($username, $idFilm);
-                if (!$visto) {
+                if(!$visto) {
                     $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                         null, null, null, null, false);
                     $member = FPersistentManager::load("EMember", null, $username, null, null,
@@ -464,7 +464,7 @@ class CFilm {
                 //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
                 $username = SessionHelper::getUtente()->getUsername();
                 $visto = FPersistentManager::loHaiVisto($username, $idFilm);
-                if ($visto) {
+                if($visto) {
                     $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                         null, null, null, null, false);
                     $member = FPersistentManager::load("EMember", null, $username, null, null,

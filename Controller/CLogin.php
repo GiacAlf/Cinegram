@@ -1,11 +1,13 @@
 <?php
 
 class CLogin {
+
     /*
     metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
     propongo una url localhost/login/verifica-login
-     */
+    */
     public static function verificaLogin(): void {
+
         /* recupero i dati dalla view in $POST[username] e $POST[password]
         */
         if(!SessionHelper::isLogged()) {
@@ -14,10 +16,10 @@ class CLogin {
             $view = new VLogin();
             $array_credenziali = $view->verificaLogin();
             //se è pieno il campo username E il campo password, parte tutto il codice, sennò subito l'errore
-            if ($array_credenziali[0] != null && $array_credenziali[1] != null) {
+            if($array_credenziali[0] != null && $array_credenziali[1] != null) {
                 $username = $array_credenziali[0];
                 $password = $array_credenziali[1];
-                if (FPersistentManager::userBannato($username)) {
+                if(FPersistentManager::userBannato($username)) {
                     //print("sei bannato");
                     /*chiamo una schermata di errore che dice che l'utente
                     che ha fatto il login è in realta bannato, dobbiamo notificarlo*/
@@ -26,7 +28,7 @@ class CLogin {
                     $view_errore->error(7);
                     return;
                 }
-                if (!FPersistentManager::userRegistrato($username, $password)) {
+                if(!FPersistentManager::userRegistrato($username, $password)) {
                     /* mostrare la classica schermata che dice che username e password non corrispondo*/
                     //print ("username e password non corrispondo");
                     //chiamo la VErrore con il suo id numerico
@@ -34,14 +36,14 @@ class CLogin {
                     $view_errore->error(1);
                     return;
                 }
-                if (FPersistentManager::userRegistrato($username, $password) && !FPersistentManager::userBannato($username)) {
+                if(FPersistentManager::userRegistrato($username, $password) && !FPersistentManager::userBannato($username)) {
                     /*decidere se mettere tutto l'oggetto in sessione oppure solo lo username, io propongo per la seconda.
                     Dopo dobbiamo discriminare tra member ed admin quindi */
                     $chiSei = FPersistentManager::tipoUserRegistrato($username);
                     // print($chiSei);
                     //$utente = null;
                     //se sei un member ti faccio vedere la pagina VUtenteSingolo sennò la VAdmin
-                    if ($chiSei == "Member") {
+                    if($chiSei == "Member") {
                         //c'è la possibilità di chiamare il cercaMember, ma boh
                         $view_member = new VUtenteSingolo();
                         $utente = FPersistentManager::load("EMember", null, $username, null,
