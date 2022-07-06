@@ -112,11 +112,11 @@
                     <div class="form-group input-group">
                         <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/film/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/member/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                     </div>

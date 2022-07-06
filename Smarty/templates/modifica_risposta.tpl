@@ -129,8 +129,8 @@
             </div>
         </div>
     </div>
-</nav>>
 </nav>
+
 
 <div class="mydiv">
     <div class="container-fluid text-center">
