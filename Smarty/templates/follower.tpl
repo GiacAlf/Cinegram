@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 
 
-    <title>Cinegram - Members</title>
+    <title>Cinegram - Pagina Follower</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-        /* Remove the navbar's default margin-bottom and rounded borders */
+        /* Remove the navbar"s default margin-bottom and rounded borders */
         .navbar {
             margin-bottom: 0;
             border-radius: 0;
@@ -34,7 +34,7 @@
             padding: 15px;
         }
 
-        /* On small screens, set height to 'auto' for sidenav and grid */
+        /* On small screens, set height to "auto" for sidenav and grid */
         @media screen and (max-width: 767px) {
             .sidenav {
                 height: auto;
@@ -44,17 +44,29 @@
                 height:auto;
             }
         }
-
         #mydiv{
-
-            height: 190vh;
+            margin: 0 auto;
+            position: relative;
+            width: 70%;
+            text-align: center;
+        }
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
 
         }
-
-        #mydiv2{
-
-            height:190vh;
-
+        #mydivnavbar{
+            position:relative;
+            left:22%;
 
         }
 
@@ -71,150 +83,88 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a>
+            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Homepage</a></li>
-                <li><a href="#">Films</a></li>
-                <li><a href="#">Members</a></li>
-                <li><a href="#">Profilo</a></li>
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi, con il link -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
             </ul>
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
-            </button>
-          </span>
-                </div>
-            </form>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid text-center">
-    <div class="row content">
-
-        <div class="col-sm-8 text-center">
-            <h3>Follower</h3><br>
-            <div class="container-fluid bg-3 text-center">
-                <div class="row">
-                    {for $i=0 to {$follower|count - 1}}
-                        <div class="col-sm-3">
-                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}" {$immagini_follower[$follower[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}"></a>{$follower[$i]->getUsername()}</h5>
-                            <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
-                            <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
-                        </div>
-                    {/for}
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
+<div  class="container-fluid text-center">
+    <div>
+        <div>
+            <h3>Follower di {$username}</h3><br>
+            <div id="mydiv" >
+                <div  class="row">
+                    {if isset($follower)}
+                        {for $i=0 to {$follower|count - 1}}
+                            <div class="col-sm-3">
+                                <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}"
+                                     {$immagini_follower[$follower[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Immagine profilo">
+                                <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}">{$follower[$i]->getUsername()}</h5></a>
+                                <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
+                                <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
+                            </div>
+                        {/for}
+                    {else}
+                        <div class="col-sm-3">{$username} non ha alcun follower </div>
+                    {/if}
 
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-8 text-center">
-            <h3>Following</h3><br>
-            <div class="container-fluid bg-3 text-center">
-                <div class="row">
-                    {for $i=0 to {$following|count - 1}}
-                        <div class="col-sm-3">
-                            <!-- src="data: {$locandine_film_recenti[$film_recenti[$i]->getId()][1]};base64,{$locandine_film_recenti[$film_recenti[$i]->getId()][0]}" -->
-                            <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}" {$immagini_following[$following[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Locandina 1">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}"></a>{$following[$i]->getUsername()}</h5>
-                            <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
-                            <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
-                        </div>
-                    {/for}
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="https://via.placeholder.com/150" class="img-circle" style="width:100%" alt="Member 2">
-                        <h5> <a href="#">username</a></h5>
-                        <h9>follower:</h9><br>
-                        <h9>risposte:</h9><br><br>
-                    </div>
+        <div>
+            <h3>Following di {$username}</h3><br>
+            <div id="mydiv">
+                <div  class="row">
+                    {if isset($following)}
+                        {for $i=0 to {$following|count - 1}}
+                            <div class="col-sm-3">
+                                <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}"
+                                        {$immagini_following[$following[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Immagine profilo">
+                                <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}">{$following[$i]->getUsername()}</h5></a>
+                                <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
+                                <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
+                            </div>
+                        {/for}
+                    {else}
+                        <div class="col-sm-3">{$username} non ha alcun following </div>
+                    {/if}
 
                 </div>
             </div>
@@ -223,7 +173,7 @@
 </div>
 
 <footer class="container-fluid text-center">
-    <p>Cinegram 2022</p>
+    <p id="myfooter">Cinegram 2022</p>
 </footer>
 
 </body>

@@ -1,66 +1,194 @@
-<!DOCTYPE>
-<html> <!-- può essere un'idea avere il template per la ricerca dei film e quello per gli utenti,
-senza stare a usare smarty per vedere se sono film, member e così via -->
+<!DOCTYPE html>
+<html>
 <head>
-    <title>Reptile - Ricerca</title>
-    <link rel='stylesheet' href='https://{$root_dir}/templates/css/basic_styles.css'>
-    <script type='text/javascript' src='https://{$root_dir}/templates/js/home.js'></script>
+    <title>Cinegram - Risultato Ricerca</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar"s default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 450px;
+        }
+
+            /* Set gray background color and 100% height */
+        .sidenav_white {
+            padding-top: 20px;
+            background-color: #ffffff;
+            height: 100%;
+        }
+        /* Set gray background color and 100% height => ERA DELLA NAV BAR*/
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to "auto" for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav.white {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {
+                height:auto;
+            }
+        }
+        #div {
+            margin: 0 auto;
+            position: relative;
+            width: 50%;
+            text-align: center;
+        }
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+        }
+        #mydivnavbar{
+            position:relative;
+            left:22%;
+
+        }
+    </style>
 </head>
-<body> <!-- da qua -->
-<div class='top-bar'>
-    <div class='top-bar-left' style='float:left;'>
-        <a href='https://{$root_dir}'><span class='title'><img src='https://{$root_dir}/templates/res/logo_principale_sfondo.png' width=99 height=50</span></a>&nbsp
-        <span class='title'>Ricerca - Reptile</span>&nbsp
-        <a href='https://{$root_dir}'>Homepage</a>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span id="myspanNavbar">Cinegram</span>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi, con il link -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
+            </ul>
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class='top-bar-right' style='float:right;'>
-        <a href='https://{$root_dir}/logout'>Logout</a>
+</nav>
+
+<div class="container-fluid text-center">
+    <div class="row content">
+
+        <div class="col-sm-2 sidenav_white">
+            <p></p>
+        </div>
+
+        <div class="col-sm-8 text-left">
+            <div id="div">
+                <br><h1>Risultato della ricerca:</h1></div><br><br> <!-- l"idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
+            <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
+            {if isset($risultato_ricerca)}
+                {for $i=0 to {$risultato_ricerca|count - 1}}
+                    {if {get_class($risultato_ricerca[$i])} == "EFilm"}
+                        <div>
+                            <table border="0" cellpadding="0" cellspacing="0"> <!-- se dovessero dar problemi questi attributi si prova a toglierli-->
+                                <tr>
+                                    <td>
+                                        <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getId()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getId()][2]} alt="Locandina">
+                                    </td>
+                                    <td>
+                                        <a href="https://{$root_dir}/film/carica-film/{$risultato_ricerca[$i]->getId()}">
+                                            <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getTitolo()}</h3></a> &nbsp
+                                        <span>{$risultato_ricerca[$i]->getAnno()->format("Y")}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    {else}
+                        <div>
+                            <table border="0" cellpadding="0" cellspacing="0"> <!-- provando a toglierli su w3schools non cambia nulla
+                         poi boh-->
+                                <tr>
+                                    <td>
+                                        <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
+                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]} alt="Immagine profilo">
+                                    </td>
+                                    <td>
+                                        <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
+                                            <h3 style="display:inline; padding-left:10px;">{$risultato_ricerca[$i]->getUsername()}</h3></a> &nbsp
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    {/if}
+                {/for}
+            {else}
+                <div id="div">
+                    <h3> La ricerca non ha prodotto risultati! </h3>
+                </div>
+            {/if}
+            <br><br>
+        </div>
     </div>
-    <div style='clear:both;'></div>
+
+    <div class="col-sm-2 sidenav.white"></div>
 </div>
-<!-- fino a qua mettiamo la nostra magica nav bar-->
-<div class='main-post-container' style='margin-top:10%;'>
-    <h1>Risultati della ricerca</h1> <!-- l'idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
-    <br><hr> <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
-    {foreach $risultato_ricerca as $risultato}
-        {if {get_class($risultato)} == "EFilm"}
-        <div>
-            <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td>
-                        <img src="{$src}" {$params}> <!-- qua mi convince poco, sarebbe ottimo se ad ogni film
-                         ci fosse tipo un attributo per il suo src e i suoi params-->
-                    </td>
-                    <td>
-                        <a href="https://{$root_dir}/film/carica-film/id={$risultato->getId()}">
-                            <h1 style="display:inline; padding-left:10px;">{$risultato->getTitolo()}</h1></a> &nbsp <span>{$recensione->getDataScrittura()->format('Y')}</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <hr>
-        {else}
-        <div>
-            <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td>
-                        <img src="{$src}" {$params}>
-                    </td>
-                    <td>
-                        <a href="https://{$root_dir}/member/carica-member/username={$risultato->getUsername()}">
-                            <h1 style="display:inline; padding-left:10px;">{$risultato->getUsername()}</h1></a> &nbsp
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <hr>
-    {/if}
-        {foreachelse}
-        <h2> La ricerca non ha prodotto risultati </h2>
-    {/foreach}
-    <br><br>
-    <footer class='footer-home'>
-        <a href='https://{$root_dir}/about'>Informazioni su Reptile</a> &nbsp &nbsp <a href='https://{$root_dir}/credits'>Crediti</a> &nbsp &nbsp (C) 2021 Reptile
-    </footer>
+
+<footer class="container-fluid text-center">
+    <p id="myfooter">Cinegram 2022</p>
+</footer>
 </body>
 </html>

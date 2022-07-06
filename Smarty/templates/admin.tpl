@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Cinegram - Amministrazione</title>
     <meta charset="utf-8">
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-        /* Remove the navbar's default margin-bottom and rounded borders */
+        /* Remove the navbar"s default margin-bottom and rounded borders */
         .navbar {
             margin-bottom: 0;
             border-radius: 0;
@@ -16,6 +16,13 @@
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content {
             height: 450px;
+        }
+
+        /* Set gray background color and 100% height => QUESTO CI ERA SOLO IN NAV BAR */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
         }
 
         /* Set gray background color and 100% height */
@@ -32,7 +39,7 @@
             padding: 15px;
         }
 
-        /* On small screens, set height to 'auto' for sidenav and grid */
+        /* On small screens, set height to "auto" for sidenav and grid */
         @media screen and (max-width: 767px) {
             .sidenav {
                 height: auto;
@@ -48,6 +55,26 @@
             width: 50%;
             text-align: center;
         }
+        /* da qua in poi roba della NavBar */
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+        }
+        #mydivnavbar{
+            position:relative;
+            left:22%;
+
+        }
     </style>
 </head>
 <body>
@@ -60,28 +87,42 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a>
+            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Homepage</a></li>
-                <li><a href="#">Films</a></li>
-                <li><a href="#">Members</a></li>
-                <li><a href="#">Profilo</a></li>
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {if $user == "non_loggato"}
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
             </ul>
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search..">
-                    <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
-            </button>
-          </span>
-                </div>
-            </form>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
@@ -102,7 +143,7 @@
 
                 <!-- dato che non ha senso caricare un film a metà, ma soprattutto perché fare 12mila controlli in Php è una palla,
                     si mette tutto required qui?-->
-                <form action="https://{$root_dir}/admin/carica-film" method="post" id="inserisci_film" enctype="multipart/form-data">
+                <form action="https://{$root_dir}/admin/carica-film" method="POST" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>
                         <input type="text" name="titolo" class="form-control" form="inserisci_film" id="titolo" placeholder="Inserisci il titolo" required>*
@@ -124,18 +165,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="registi" class="form-control" form="inserisci_film" id="registi" placeholder="Inserisci i registi" required>*
                     </div>
 
                     <div class="form-group">
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="attori" class="form-control" form="inserisci_film" id="attori" placeholder="Inserisci gli attori" required>*
                     </div>
 
                     <div class="form-group">
                         <label for="locandina">Inserisci la locandina del film:</label>
-                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required>* <!-- forse l'unico non required?-->
+                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required>* <!-- forse l"unico non required?-->
                     </div>
 
                     <div id="div">
@@ -143,11 +184,6 @@
                     </div>
                 </form>
                 <br><br>
-                <!--<h3>Oppure:</h3> per accedere alla modifica film o al modera utente
-                 servono informazioni: questi due link da togliere poi
-                <a href="https://{$root_dir}/admin/modifica-film"> <h3>Modifica Film</h3> </a>
-                <a href="https://{$root_dir}/admin/modifica"><h3>Modera Utente</h3></a><br/>
-                -->
             </div>
             <br><br>
 
@@ -158,7 +194,7 @@
 <br>
 
 <footer class="container-fluid text-center">
-    <p>Cinegram 2022</p>
+    <p id="myfooter">Cinegram 2022</p>
 </footer>
 </body>
 </html>

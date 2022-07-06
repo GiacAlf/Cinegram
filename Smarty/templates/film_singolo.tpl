@@ -1,164 +1,292 @@
-<!DOCTYPE html> <!-- dovrebbe essere il template dei dettagli di un libro di BookStore,
- può essere un'idea partire da qui come base per farci il template del film  -->
-{assign var='visto' value=$visto|default:false}
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Pagina del film {$titolo} - Cinegram</title>
-    <!-- dovesse servire qua mettiamo i vari link a css e js -->
-    <link rel='stylesheet' href='https://{$root_dir}/templates/css/basic_styles.css'>
-    <script type='text/javascript' src='./templates/js/home.js'></script>
+    <title>Cinegram - Film Singolo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar"s default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 450px;
+        }
+
+            /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to "auto" for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {
+                height:auto;
+            }
+        }
+        #mydiv{
+            position:relative;
+            height:200vh;
+            right:2%;
+
+        }
+        #mydiv2{
+            position:relative;
+            height:200vh;
+            left:2%;
+        }
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+        }
+        #mydivnavbar{
+            position:relative;
+            left:22%;
+
+        }
+    </style>
+    <script>
+        function functionVisto(){
+
+            button=document.getElementById("buttonVisto")
+            if(button.innerHTML=="Vedi Film"){
+                button.innerHTML="Togli Visto Film"
+                button.className="glyphicon glyphicon-eye-close"
+            }
+            else
+            {
+                button.innerHTML="Vedi Film"
+                button.className="glyphicon glyphicon-eye-open"
+            }
+        }
+
+        function functionNonVisto(){
+
+            button=document.getElementById("buttonNonVisto")
+            if(button.innerHTML=="Vedi Film"){
+                button.innerHTML="Togli Visto Film"
+                button.className="glyphicon glyphicon-eye-close"
+            }
+            else
+            {
+                button.innerHTML="Vedi Film"
+                button.className="glyphicon glyphicon-eye-open"
+            }
+        }
+    </script>
 </head>
 <body>
 
-<!-- nav bar per ora senza stile -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bluecolor">
-
-
-    <!--
-    NON HO ASSOLUTAMENTE IDEA DI CHE COSA SIA QUESTA ROBA SOTTO
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>-->
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <!-- <a class="navbar-brand" href="/FillSpaceWEB/"><img src="/FillSpaceWEB/Smarty/immagini/logo_app2_w.png" width="40" height="30" class="d-inline-block align-top" alt="">
-             FillSpace
-         </a>-->
-
-
-        <!-- in questo modo gli elementi vengono stampati nell'ordine corretto, chiaramente sono da correggere tutti i link e cose varie però l'idea è questa -->
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <img src="/FillSpaceWEB/Smarty/immagini/logo_app2_w.png" width="40" height="30" class="d-inline-block align-top" alt="">
-                Cinegram
-            </li>
-            <li class="nav-item text-light" style="float:right">
-                <div class='top-bar-right'>
-                    &nbsp <form action='https://{$root_dir}/ricerca' method='POST'><input type='text' class='text-input' name='ricerca' placeholder='Cerca un film o un utente...'> &nbsp <input type='submit' name='cerca' value='Cerca' class='btn'></form>
-                </div> <!-- con l'input type submit, in teoria, siamo sicuri che l'input viene trasferito correttamente => manca la check box poi vediamo -->
-            </li>
-            {if $userlogged!='nouser'}
-                <li class="nav-item text-light" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/logout">Disconnetti</a>
-                </li>
-                <li class="nav-item text-light" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/profile">Profilo</a> <!-- se l'utente qui è un admin mettiamo il link per la pagina da admin -->
-                </li>
-            {else}
-                <li class="nav-item" style="float:right">
-                    <a class="nav-link" href="/FillSpaceWEB/Utente/login">Accedi</a>
-                </li>
-            {/if}
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="/FillSpaceWEB/Utente/login">Films</a>
-            </li>
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="/FillSpaceWEB/Utente/login">Members</a>
-            </li>
-            <li class="nav-item" style="float:right">
-                <a class="nav-link" href="#" hidden >Home<span class="sr-only"></span></a>
-            </li>
-        </ul>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span id="myspanNavbar">Cinegram</span>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi, con il link -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
+            </ul>
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </nav>
 
-<div>
+<div class="container-fluid text-center">
     <div>
-        <img src="{$src}" {$params} style="float: left; margin: 15px;">
-        <br><br>
-        <h1 align="left">{$titolo}</h1> <br>
-        <span align="left">{$anno}</span> &nbsp <span>Diretto da </span>
+
+        <!-- sidenav vuota ma riutilizzabile -->
+        <div id="mydiv" class="col-sm-3 sidenav"> <!-- https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg-->
+            <p><h2> {$film->getTitolo()} </h2></p>
+            <img src="{$film->getSrc($locandina_film)}"  class="img-rectangle" {$locandina_film[2]} alt="Locandina"><br>
+            <button type="button" class="btn btn-default btn-sm">
+                {if $visto == false}
+                    <form action="https://{$root_dir}/film/vedi-film/{$film->getId()}">
+                        <button onclick="functionVisto()" id="buttonVisto"  type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
+                        <!-- il button type=button non reinderizza ad un"altra pagina
+                        e serve per il javascript(infatti nei
+                        template di bootstrap è proprio di questo
+                        tipo => speriamo che comunque parta quell"url lì
+                        il button type=submit invece fa partire un"altra pagina-->
+                    </form>
+                {else}
+                    <form action="https://{$root_dir}/film/rimuovi-film/{$film->getId()}">
+                        <button  onclick="functionNonVisto()" id="buttonNonVisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
+                        <!-- il button type=button non reinderizza ad un"altra pagina
+                        e serve per il javascript(infatti nei
+                        template di bootstrap è proprio di questo
+                        tipo => speriamo che comunque parta quell"url lì
+                        il button type=submit invece fa partire un"altra pagina-->
+                    </form>
+                {/if}
+            </button>
+            {if $user == "admin"}
+                <form action="https://{$root_dir}/admin/mostra-film/{$film->getId()}"> <!-- qua bisogna solo far vedere il template -->
+                    <button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
+                </form>
+            {/if}
+            <br><br>
+            <span align="left">{$film->getAnno()->format("Y")}</span>
+            <div>Durata: {$film->getDurata()} minuti</div>
+            <div>Diretto da </div>
             {foreach $registi as $regista}
-                <span> {$regista->getNome()} {$regista->getCognome()} </span>
+                <div> {$regista->getNome()} {$regista->getCognome()} </div>
+            {foreachelse}
+                <div> Il film non ha registi </div>
             {/foreach}
-        &nbsp <span>Durata {$durata} minuti</span>
-        <br>
-        <span align="left">{$sinossi}</span>
-        <br>
-        {if $visto == false}
-            <form action="https://{$root_dir}/film/id={$id}/vedi">
-                <button type="button">Vedi Film</button>
-                <!-- il button type=button non reinderizza ad un'altra pagina
-                e serve per il javascript(infatti nei
-                template di bootstrap è proprio di questo
-                tipo => speriamo che comunque parta quell'url lì
-                il button type=submit invece fa partire un'altra pagina-->
-            </form>
-        {else}
-            <form action="https://{$root_dir}/film/id={$id}/toglivisto">
-                <button type="button">Togli Visto Film</button>
-                <!-- il button type=button non reinderizza ad un'altra pagina
-                e serve per il javascript(infatti nei
-                template di bootstrap è proprio di questo
-                tipo => speriamo che comunque parta quell'url lì
-                il button type=submit invece fa partire un'altra pagina-->
-            </form>
-        {/if}
-        <!-- per renderli più carucci ci metteremo l'occhio, essendo io ebete non so
-        mettercelo con i colori giusti -->
-    </div>
-
-    <br>
-
-    <div>
-
-        <div style="float:left;padding-left:75px;display=inline;">
-            <h4> {$numero_views} views </h4>
-            <h4> {$voto_medio}: voto medio </h4>
+            <span align="left">{$film->getSinossi()}</span>
             <br>
-            <h3>Lista attori</h3>
-            {foreach $attori as $attore}
-                <p> {$attore->getNome()} {$attore->getCognome()} </p>
-            {/foreach}
+            <h5> Views: {$film->getNumeroViews()} </h5>
+            <h5> Voto medio: {$film->getVotoMedio()} </h5><br>
+            <h4>Lista attori</h4>
+            <div >
+                {foreach $attori as $attore}
+                    <p> {$attore->getNome()} {$attore->getCognome()} </p>
+                    {foreachelse}
+                    <p> Il film non ha attori </p>
+                {/foreach}
+            </div>
         </div>
 
-        <div style="float:left;display=inline;padding-left:45px;">
-            <h4>Scrivi una recensione:</h4>
-            <form id="scrivirecensione" action="https://{$root_dir}/film/scrivi-recensione" method="POST">
-                <div class="form-group">
+        <div class="col-sm-7 text-center">
+            {if $ha_scritto == true}
+            <div class="container-fluid bg-3 text-left">
+                <p>L"utente {$user} ha già scritto una recensione per questo film. Per poterla vedere cliccare
+                <a href="https://{$root_dir}/film/mostra-recensione/{$film->getId()}/{$user}"> qui. </a></p>
+            </div>
+            {/if}
+            <div class="container-fluid bg-3 text-left">
+                <br><h4>Scrivi una Recensione</h4>
+                <form action="https://{$root_dir}/film/scrivi-recensione/{$film->getId()}" role="form" id="scrivirecensione" method="POST">
                     <label for="voti">Scegli un voto:</label>
+                    <div class="form-group">
+                        <select name="voto" id="voti" form="scrivirecensione">
+                            <!--<option value="null">Nessun voto</option> -->
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
 
-                    <select name="voto" id="voti" form="scrivirecensione">
-                        <option value="null">Nessun voto</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                    <br>
-                    <textarea name="testo" form_id="scrivirecensione" rows="4" cols="30"></textarea>
+                    <div class="form-group"> <!-- la textarea non deve essere required, le recensioni possono essere senza testo ma con voto-->
+                        <label for="testo">Scrivi il testo: </label>
+                        <textarea form="scrivirecensione" id="testo" name="testo" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" form="scrivirecensione" class="btn btn-default">Salva</button>
+                </form>
+                <br><br>
+
+                <p><span class="badge"></span> <h3>Recensioni degli Utenti:</h3></p><br>
+                <div class="row">
+                {foreach $recensioni as $recensione}
+                        <div class="col-sm-10">
+                            <h3>Autore: <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
+                            <small>{$recensione->getDataScrittura()->format("d-m-Y H:i")}</small></h3>
+                            <h4>Voto: {$recensione->getVoto()}</h4>
+                            <p>{$recensione->getTesto()}</p>
+                            <br>
+                            <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
+                            {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
+                                <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                                <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
+                            {/if}
+
+                            {if $user == "admin"}
+                                <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">
+                                    <button>Elimina</button></a>
+                            {/if}
+                        </div>
+                    {foreachelse}
+                    <div class="col-sm-10"> Il film non ha recensioni </div>
+                {/foreach}
                 </div>
-                <button type="submit" class="btn btn-success">Salva</button>
-            </form>
-
-            <br>
-
-            <h4>Recensioni del film:</h4>
-            {foreach $recensioni as $recensione}
-                <hr>
-                <div>
-                    <h5 style="display:inline;">Voto: {$recensione->getVoto()} </h5> &nbsp &nbsp &nbsp &nbsp
-                        <h5 style="display:inline;"> Data: {$recensione->getDataScrittura()->format('d-m-Y H:i')}</h5> &nbsp &nbsp &nbsp &nbsp
-                    <h5 style="display:inline;">Autore: </h5><a href="https://{$root_dir}/member/username={$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a>
-                    <p>{$recensione->getTesto()}</p>
-                    <a href="https://{$root_dir}/recensione/username={$recensione->getUsernameAutore()}&id={$recensione->getIdFilmRecensito()}">Rispondi</a>
-                    {if $utente_sessione == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
-                        <a href="link per modificare"><button>Modifica</button></a>
-                        <a href="link per cancellare"><button>Cancella</button></a>
-                    {/if}
-                </div>
-            {/foreach}
-
+            </div>
         </div>
 
-    </div>
+        <div id="mydiv2" class="col-sm-2 sidenav">
+            <h4>Film più visti</h4><br><br>
+            {if isset($film_visti)}
+                {for $i=0 to {$film_visti|count - 1}}
+                    <p>{$film_visti[$i]->getTitolo()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75" -->
+                    <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
+                        <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
+                                {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                {/for}
+            {else}
+                <p> Non ci sono film visti </p>
+            {/if}
 
+        </div>
+    </div>
 </div>
 
-<footer class='footer-home'>
-    <a href='./about'>Informazioni su Cinegram</a> &nbsp &nbsp <a href='./credits'>Crediti</a> &nbsp &nbsp (C) 2022 Cinegram
+<footer class="container-fluid text-center">
+    <p id="myfooter">Cinegram 2022</p>
 </footer>
+
 </body>
 </html>

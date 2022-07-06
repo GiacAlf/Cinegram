@@ -3,7 +3,7 @@
 class VUtility
 {
     public static function getRootDir(): ?string{
-        $root_dir = $_SERVER['HTTP_HOST'];
+        $root_dir = $GLOBALS['URLBASE'];
         return $root_dir;
     }
 

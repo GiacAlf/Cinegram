@@ -13,7 +13,7 @@ class VErrore {
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
-        $this->smarty->assign('i', $id_errore);
+        $this->smarty->assign('id_errore', $id_errore);
         switch ($id_errore) {
             case '1' :
                 $testo = 'Le credenziali inserite sono errate o sono mancanti';
@@ -80,6 +80,6 @@ class VErrore {
         }
         $this->smarty->assign('testo', $testo);
         $this->smarty->assign('titolo', $titolo);
-        $this->smarty->display('error.tpl');
+        $this->smarty->display('errore.tpl');
     }
 }

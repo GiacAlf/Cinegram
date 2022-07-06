@@ -39,7 +39,7 @@ class VAdmin {
         $this->smarty->assign('attori', $film_da_modificare->getListaAttori());
         $this->smarty->assign('registi', $film_da_modificare->getListaRegisti());
         $this->smarty->assign('locandina', $locandina);
-        $this->smarty->display('film_admin.tpl');
+        $this->smarty->display('modifica_film.tpl');
     }
 
     //funzione che fa il display della pagina di moderazione utente: ci sono l'username e i warning, accanto i bottoni
@@ -53,7 +53,7 @@ class VAdmin {
         $this->smarty->assign('admin', $username_admin);
         $this->smarty->assign( 'member', $utente_da_moderare);
         $this->smarty->assign('bannato', $bannato);
-        $this->smarty->display('modera_member.tpl');
+        $this->smarty->display('modera_utente.tpl');
     }
 
     //ora metto tutti i metodi per prendere l'input per caricare un film
@@ -196,57 +196,5 @@ class VAdmin {
     }
 
 
-
-
-
-
-
-    // TODO da modificare: qua sotto tutta roba che non serve però teniamo nel caso
-/*
-    //per quanto riguarda il ban o l'ammonizione, possiamo immaginare per
-    //semplicità che ci sia una piccola form dove l'admin scrive lo username
-    //del tipo da bannare o ammonire
-    public function getUsernameDaAmmonireOBannare(): ?string{
-        $username = null;
-        if(isset($_POST['username'])){
-            $username = $_POST['username'];
-        }
-        return $username;
-    }
-
-    //se dovesse servire, si potrebbe anche discriminare -> una form solo per
-    //ammonire, un'altra solo per bannare ma secondo me non è il caso perché l'admin
-    //dovrebbe ricordare quanti warning ha l'utente. Io ce lo metto, nel caso, basta cancellare
-
-    //il metodo di sopra servirebbe ad ammonire e basta
-    public function getUsernameDaBannare(): ?string{
-        $username_da_bannare = null;
-        if(isset($_POST['username_ban'])){
-            $username_da_bannare = $_POST['username_ban'];
-        }
-        return $username_da_bannare;
-    }
-
-    /* per quanto riguarda modifica film, boh, forse conviene che l'id venga passato per
-    url, ma non saprei in che occasione -> nella pagina film singolo? Nella pagina dell'admin?
-    Nel secondo caso, l'admin dovrebbe sapere l'id del film, sai che palle, dovrebbe cercare per titolo
-    ma poi c'è il problema dei doppioni..., intanto un metodino del cazzo lo metto, sai mai...
-
-    Magari ripropongo la mia idea risalente tipo ad aprile di silurare l'opzione di modificare un film ahaha
-     */
-    /*
-    public function getTitoloDaModificare(): ?string{
-        $titolo_da_modificare = null;
-        if(isset($_POST['titolo_modifica'])){
-            $titolo = $_POST['titolo_modifica'];
-        }
-        return $titolo_da_modificare;
-    }
-
-    /* invece per rimuovi recensione e risposta, l'idea è dare a TUTTE le recensioni e risposte
-    un url con le loro chiavi => per le recensioni id film + username autore, per le risposte username autore
-    + data scrittura, in questo modo si sa già quale risposta o recensione cancellare -> mettere un tastino elimina
-    che è visibile solo all'admin? Boh
-     */
 
 }

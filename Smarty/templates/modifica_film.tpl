@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Cinegram - Amministrazione</title>
     <meta charset="utf-8">
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-        /* Remove the navbar's default margin-bottom and rounded borders */
+        /* Remove the navbar"s default margin-bottom and rounded borders */
         .navbar {
             margin-bottom: 0;
             border-radius: 0;
@@ -25,6 +25,13 @@
             height: 100%;
         }
 
+        /* Set gray background color and 100% height => ERA DELLA NAV BAR*/
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
         /* Set black background color, white text and some padding */
         footer {
             background-color: #555;
@@ -32,7 +39,7 @@
             padding: 15px;
         }
 
-        /* On small screens, set height to 'auto' for sidenav and grid */
+        /* On small screens, set height to "auto" for sidenav and grid */
         @media screen and (max-width: 767px) {
             .sidenav {
                 height: auto;
@@ -48,6 +55,25 @@
             width: 50%;
             text-align: center;
         }
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+        }
+        #mydivnavbar{
+            position:relative;
+            left:22%;
+
+        }
     </style>
 </head>
 <body>
@@ -60,28 +86,43 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cinegram</a>
+            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Homepage</a></li>
-                <li><a href="#">Films</a></li>
-                <li><a href="#">Members</a></li>
-                <li><a href="#">Profilo</a></li>
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi, con il link -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
             </ul>
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group input-group">
-                    <input type="text" class="form-control" placeholder="Search..">
-                    <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
-            </button>
-          </span>
-                </div>
-            </form>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
@@ -111,7 +152,7 @@
                     </div>
 
                     <div class="form-group">
-                        <h4>Data d'uscita attuale: {$film->getAnno()->format('d-m-Y')} </h4>
+                        <h4>Data di uscita attuale: {$film->getAnno()->format("d-m-Y")} </h4>
                         <label for="data_uscita">Anno:</label>
                         <input type="date" name="modifica_data" form="modifica_film" class="form-control" id="data_uscita" placeholder="">
                     </div>
@@ -133,7 +174,7 @@
                         {foreach $registi as $regista}
                             <span>{$regista->getNome()} {$regista->getCognome()}, </span>
                         {/foreach}
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall'altro dal " ; "</h6></label>
+                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="modifica_registi" form="modifica_film" class="form-control" id="registi" placeholder="">
                     </div>
 
@@ -142,7 +183,7 @@
                         {foreach $attori as $attore}
                             <span>{$attore->getNome()} {$attore->getCognome()}, </span>
                         {/foreach}
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall'altro dal " ; "</h6></label>
+                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="modifica_attori" form="modifica_film" class="form-control" id="attori" placeholder="">
                     </div>
 
@@ -168,7 +209,7 @@
 <br>
 
 <footer class="container-fluid text-center">
-    <p>Cinegram 2022</p>
+    <p id="myfooter">Cinegram 2022</p>
 </footer>
 </body>
 </html>

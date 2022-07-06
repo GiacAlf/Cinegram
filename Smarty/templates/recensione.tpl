@@ -1,69 +1,199 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
-<head> <!-- questo può essere il buon template per fare la view della recensione
-                bisognerà fare il display di: username autore, film recensito (basta il titolo penso),
-                data scrittura, voto, testo, risposte + form per lasciare risposte -->
-    <title>Cinegram - Post di {$autore}</title>
-    <link rel='stylesheet' href='https://{$root_dir}/templates/css/basic_styles.css'>
-    <script type='text/javascript' src='https://{$root_dir}/templates/js/home.js'></script>
+<head>
+    <title>Cinegram - Recensione di {$recensione->getUsernameAutore()} del film {$recensione->getTitoloById()}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar"s default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 450px;
+        }
+
+        /* Set gray background color and 100% height => ERA DELLA NAV BAR*/
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+            /* Set gray background color and 100% height */
+        .sidenav_white {
+            padding-top: 20px;
+            background-color: #ffffff;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to "auto" for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav.white {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {
+                height:auto;
+            }
+        }
+        #myspanNavbar{
+            font-family: "Sofia", sans-serif;
+            font-size: 30px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+            padding:10px;
+        }
+        #myfooter{
+            font-family: "Sofia", sans-serif;
+            font-size: 15px;
+            text-shadow: 2.5px 2.5px 2.5px #ababab;
+            color:white;
+
+        }
+        #mydivnavbar{
+            position:relative;
+            left:22%;
+
+        }
+    </style>
 </head>
 <body>
-<div class='top-bar'>
-    <!-- qua in teoria va messa la nav bar -->
-    <div class='top-bar-left' style='float:left;'>
-        <a href='https://{$root_dir}'><span class='title'><img src='https://{$root_dir}/templates/res/logo_principale_sfondo.png' width=99 height=50</span></a>&nbsp
-        <span class='title'>Post di {$autore}</span>&nbsp
-    </div>
-    <div class='top-bar-right' style='float:right;'>
-        <a href='https://{$root_dir}/logout'>Logout</a>
-    </div>
-    <div style='clear:both;'></div>
-</div>
-<!-- fino a qua tipo -->
 
-
-<!-- per ora passiamo a smarty tutti gli attributi, se è gli passiamo la recensione in toto-->
-<div>
-    <span style='text-align:center;font-size:150%'>Voto: {$voto}</span> &nbsp
-    <span style='text-align:center;font-size:95%'>scritta il {$data}</span>
-    <span style='float:right;font-size:150%'>Autore: <a href="https://{$root_dir}/member/carica-member/username={$autore_rece}">{$autore_rece}</a></span><hr>
-    <div style='text-align:center;font-size:200%'>
-        <p>{$testo}</p>
-    </div>
-    <hr>
-    <div>
-        {if $user == $autore_rece}
-            <a href="https://{$root_dir}/film/modifica-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Modifica</button></a>
-            <a href="https://{$root_dir}/film/elimina-recensione/id={$id}/usernameAutore={$autore_rece}"><button>Cancella</button></a>
-        {/if}
-    </div>
-    <br>
-    <div style="padding-left:45px;">
-        <h3>Scrivi una risposta:</h3>
-        <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/usernameAutoreRecensione={$autore_rece}" method="POST">
-            <textarea name="risposta" form_id="scrivirisposta" rows="4" cols="30"></textarea>
-            <button type="submit">Salva</button>
-        </form>
-    </div>
-    <br>
-    <h2 style="padding-left:45px;">Risposte della recensione:</h2>
-    {foreach $risposte as $risposta}
-        <hr>
-        <div style="padding-left:45px;">
-            <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/username={$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
-            &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format('d-m-Y H:i')}</span>
-            <p style="font-size:120%">{$risposta->getTesto()}</p>
-            {if $user == {$risposta->getUsernameAutore()}} <!--  in che formato la data? -->
-                <a href="https://{$root_dir}/film/modifica-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"><button>Modifica</button></a>
-                <a href="https://{$root_dir}/film/elimina-risposta/data={$risposta->ConvertiDatainFormatoUrl()}/usernameAutoreRecensione={$autore_rece}"> <button>Cancella</button></a>
-            {/if}
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span id="myspanNavbar">Cinegram</span>
         </div>
-    {/foreach}
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul id="myul" class="nav navbar-nav">
+                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
+                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                {if $user != "non_loggato"}
+                    {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
+                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                    {else}
+                        <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
+                    {/if}
+                    <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
+                {/if}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
+                                               lo user non registrato può registrarsi, con il link -->
+                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {/if}
+            </ul>
+            <div id="mydivnavbar" >
+                <form action="" id="ricerca_elementi" method="post" class="navbar-form navbar-right" role="search">
+                    <div class="form-group input-group">
+                        <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
+              <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
 
+<div class="container-fluid text-center">
+    <div class="row content">
+
+        <!-- side nav vuota e bianca-->
+        <div class="col-sm-2 sidenav_white">
+            <p></p>
+        </div>
+
+        <div class="col-sm-8 text-left">
+
+            <div><br><br>
+                <span style="text-align:center;font-size:150%">Film: <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}">{$recensione->getTitoloById()}</a></span>
+                <span style="float:right;font-size:150%">Autore: <a href="https://{$root_dir}/member/carica-member/{$recensione->getUsernameAutore()}">{$recensione->getUsernameAutore()}</a></span><br><br>
+                <span style="text-align:center;font-size:150%">Voto: {$recensione->getVoto()}</span> &nbsp
+                <span style="text-align:center;font-size:95%">scritta il {$recensione->getDataScrittura()->format("d-m-Y H:i")}</span>
+                <br><br><br>
+                <div style="text-align:center;font-size:200%">
+                    <p>{$recensione->getTesto()}</p>
+                </div>
+                <br><br>
+                <div>
+                    {if $user == {$recensione->getUsernameAutore()}}
+                        <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                        <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
+                    {/if}
+
+                    {if $user == "admin"}
+                        <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
+                    {/if}
+                </div>
+                <br><br>
+                <div style="padding-left:0px; text-align:center">
+                    <h3>Scrivi una risposta:</h3>
+                    <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}" method="POST">
+                        <!-- in teoria la data viene creata al momento in PHP-->
+                        <label for="testo">Scrivi il testo: </label>
+                        <textarea name="risposta" id="testo" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
+                        <button type="submit" form="scrivirisposta">Salva</button>
+                    </form>
+                </div>
+                <br><br>
+                <h3 style="padding-left:45px;">Risposte della recensione:</h3><br>
+                {foreach $risposte as $risposta}
+                    <br>
+                    <div style="padding-left:45px;">
+                        <h3 style="display:inline;">Autore: <a href="https://{$root_dir}/member/carica-member/{$risposta->getUsernameAutore()}">{$risposta->getUsernameAutore()}</a></h3>
+                        &nbsp <span style="font-size:90%">scritta il {$risposta->getDataScrittura()->format("d-m-Y H:i")}</span>
+                        <p style="font-size:120%">{$risposta->getTesto()}</p>
+                        {if $user == {$risposta->getUsernameAutore()}}
+                            <a href="https://{$root_dir}/film/modifica-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"> <button>Cancella</button></a>
+                        {/if}
+
+                        {if $user == "admin"}
+                            <a href="https://{$root_dir}/admin/rimuovi-risposta/{$risposta->getUsernameAutore()}/{$risposta->ConvertiDatainFormatoUrl()}"><button>Elimina</button></a>
+                        {/if}
+                    </div>
+                    {foreachelse}
+                    <br>
+                    <div style="padding-left:45px;"> La recensione non ha risposte </div>
+                {/foreach}
+
+            </div>
+            <br><br>
+        </div>
+    </div>
+
+    <!-- side nav vuota e bianca-->
+    <div class="col-sm-2 sidenav.white"></div>
 </div>
-<br><br>
-<footer class='footer-home'>
-    <a href='https://{$root_dir}/about'>Informazioni su Reptile</a> &nbsp &nbsp <a href='https://{$root_dir}/credits'>Crediti</a> &nbsp &nbsp (C) 2021 Reptile
+
+<footer class="container-fluid text-center">
+    <p id="myfooter">Cinegram 2022</p>
 </footer>
 </body>
 </html>

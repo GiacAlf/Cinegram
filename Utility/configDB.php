@@ -6,3 +6,4 @@ $GLOBALS["database"]= "cinegram";
 // dovranno essere modificati
 $GLOBALS["username"]= "root";
 $GLOBALS["password"]= "";
+$GLOBALS["URLBASE"] = $_SERVER['HTTP_HOST'];
