@@ -2,12 +2,13 @@
 
 class CFrontController {
 
-    public function run( $path): void{
+    public function run(): void{
+        $path = $this->parsingFrontControllerUrl() ;
         $arraypath = explode("/","$path");
         array_shift($arraypath);
         $controller = "C". ucfirst($arraypath[0]);
         array_shift($arraypath);
-        $method = self::capisciUrl($arraypath[0]);
+        $method = $this->capisciUrl($arraypath[0]);
         if ( class_exists( $controller ) ) {
             if ( method_exists($controller, $method ) ) {
                 $real_controller = new $controller();
@@ -39,9 +40,16 @@ class CFrontController {
     }
 
 
-    private static function capisciUrl(?string $path):?string{
+    private function capisciUrl(?string $path): ?string{
         $arrayRisultato = explode("-",$path);
         $arrayRisultato[1] = ucfirst($arrayRisultato[1]);
         return ($arrayRisultato[0].$arrayRisultato[1]);
+    }
+
+    private function parsingFrontControllerUrl():string{
+        $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $url_base = $GLOBALS["URLBASE"];
+        $frontUrl = str_replace($url_base , "", $url);
+        return $frontUrl;
     }
 }
