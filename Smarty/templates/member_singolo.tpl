@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cinegram - Film Singolo</title>
+    <title>Cinegram - Pagina di {$member->getUsername()}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -173,8 +173,8 @@
             <p><h2> {$member->getUsername()} </h2></p>
             <img src="{$member->getSrc($immagine_profilo)}"  class="img-circle" {$immagine_profilo[2]} alt="Avatar"><br>
             {if $user == {$member->getUsername()}}
-                <form action="https://{$root_dir}/profilo/modifica-profilo"> <!-- qua bisogna solo far vedere il template -->
-                    <button type="submit" class="btn btn-default btn-sm"> Modifica Profilo </button>
+                <form action="https://{$root_dir}/profilo/modifica-profilo" id="modificaprofilo" method="POST"> <!-- qua bisogna solo far vedere il template -->
+                    <button type="submit" form="modificaprofilo" class="btn btn-default btn-sm"> Modifica Profilo </button>
                 </form>
                 <p>Hai {$member->getWarning()} warning. </p>
             {/if}
@@ -182,8 +182,8 @@
                 {if $user != {$member->getUsername()}}
                     {if $seguito == false}
                         <!-- cambiare la url-->
-                        <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}">
-                            <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
+                        <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}" id="segui" method="POST">
+                            <button  id="buttonNonSeguito" form="segui" type="submit" class="glyphicon glyphicon-plus"> Segui</button>
                             <!-- il button type=button non reinderizza ad un"altra pagina
                             e serve per il javascript(infatti nei
                             template di bootstrap è proprio di questo
@@ -193,8 +193,8 @@
                     {else}
 
                         <!-- cambiare la url-->
-                        <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}">
-                            <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
+                        <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}" id="non_segui" method="POST">
+                            <button id="buttonSeguito" form="non_segui" type="submit" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
                             <!-- il button type=button non reinderizza ad un"altra pagina
                             e serve per il javascript(infatti nei
                             template di bootstrap è proprio di questo
@@ -205,8 +205,8 @@
                 {/if}
             </button>
             {if $user == "admin"}
-                <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername()}"> <!-- qua bisogna solo far vedere il template -->
-                    <button type="submit" class="btn btn-default btn-sm"> Modera Utente </button>
+                <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername()}" id="modera" method="POST"> <!-- qua bisogna solo far vedere il template -->
+                    <button type="submit" class="btn btn-default btn-sm" form="modera"> Modera Utente </button>
                 </form>
             {/if}
             <br><br>

@@ -175,8 +175,8 @@
             <img src="{$film->getSrc($locandina_film)}"  class="img-rectangle" {$locandina_film[2]} alt="Locandina"><br>
             <button type="button" class="btn btn-default btn-sm">
                 {if $visto == false}
-                    <form action="https://{$root_dir}/film/vedi-film/{$film->getId()}">
-                        <button onclick="functionVisto()" id="buttonVisto"  type="button" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
+                    <form action="https://{$root_dir}/film/vedi-film/{$film->getId()}" id="vedi" method="POST">
+                        <button id="buttonVisto" form="vedi" type="submit" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
                         <!-- il button type=button non reinderizza ad un"altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -184,8 +184,8 @@
                         il button type=submit invece fa partire un"altra pagina-->
                     </form>
                 {else}
-                    <form action="https://{$root_dir}/film/rimuovi-film/{$film->getId()}">
-                        <button  onclick="functionNonVisto()" id="buttonNonVisto" type="button" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
+                    <form action="https://{$root_dir}/film/rimuovi-film/{$film->getId()}" id="non_vedi" method="POST">
+                        <button  id="buttonNonVisto" form="non_vedi" type="submit" class="glyphicon glyphicon-eye-close"> Togli Visto Film</button>
                         <!-- il button type=button non reinderizza ad un"altra pagina
                         e serve per il javascript(infatti nei
                         template di bootstrap è proprio di questo
@@ -195,8 +195,8 @@
                 {/if}
             </button>
             {if $user == "admin"}
-                <form action="https://{$root_dir}/admin/mostra-film/{$film->getId()}"> <!-- qua bisogna solo far vedere il template -->
-                    <button type="submit" class="btn btn-default btn-sm"> Modifica Film </button>
+                <form action="https://{$root_dir}/admin/mostra-film/{$film->getId()}" id="modifica" method="POST"> <!-- qua bisogna solo far vedere il template -->
+                    <button type="submit" class="btn btn-default btn-sm" form="modifica"> Modifica Film </button>
                 </form>
             {/if}
             <br><br>

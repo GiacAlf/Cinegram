@@ -155,7 +155,7 @@
                         <label for="voti">Scegli un nuovo voto:</label>
 
                         <select name="nuovo_voto" id="voti" form="modifica_recensione">
-                            <option value="null">Nessuna modifica</option>
+                            <!--<option value="null">Nessuna modifica</option>-->
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>

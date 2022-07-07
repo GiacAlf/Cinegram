@@ -206,7 +206,7 @@ class CFilm {
                 $array_modifica = $view->modificaRecensione();
                 $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null,
                     null, null, null, null, false);
-                if($array_modifica[1] == null && $array_modifica[0] != null) { //se il voto è null modifico solo il testo
+                if($array_modifica[1] == null && $array_modifica[0] != null) {//se il voto è null modifico solo il testo
                     $updatedText = $array_modifica[0];
                     FPersistentManager::update($recensione, "testo", $updatedText, null, null,
                         null, null, null);
@@ -433,7 +433,7 @@ class CFilm {
                     $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);
                     FPersistentManager::vediFilm($member, $film);
-                    //qua grazie al js, in teoria, non devi reindirizzare nulla
+                    header("Location: https://" . VUtility::getRootDir() . "/film/carica-film/" . $idFilm);
                 } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                     $view = new VErrore();
                     $view->error(11);
@@ -471,6 +471,7 @@ class CFilm {
                     $member = FPersistentManager::load("EMember", null, $username, null, null,
                         null, null, null, false);
                     FPersistentManager::rimuoviFilmVisto($member, $film);
+                    header("Location: https://" . VUtility::getRootDir() . "/film/carica-film/" . $idFilm);
                 }
                 else {
                     $view = new VErrore();

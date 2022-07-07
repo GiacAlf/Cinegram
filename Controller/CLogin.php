@@ -65,7 +65,7 @@ class CLogin {
                         $utente = FPersistentManager::load("EAdmin", null, $username, null,
                             null, null, null, null, false);
                         SessionHelper::login($utente);
-                        $view_admin->avviaPaginaAdmin($utente); //visualizzo l'admin
+                        $view_admin->avviaPaginaAdmin($utente->getUsername()); //visualizzo l'admin
                     }
                     //avvia la sessione con l'oggetto non completo
                     //SessionHelper::login($utente);

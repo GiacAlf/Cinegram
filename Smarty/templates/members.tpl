@@ -148,7 +148,7 @@
                         <div class="col-sm-3">
                             <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
                                     {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Immagine profilo">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}"></a>{$utenti_popolari[$i]->getUsername()}</h5>
+                            <h5><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">{$utenti_popolari[$i]->getUsername()}</a></h5>
                             <h9>follower: {$utenti_popolari[$i]->getNumeroFollower()}</h9><br>
                             <h9>risposte: {$utenti_popolari[$i]->getNumeroRisposte()}</h9><br><br>
                         </div>

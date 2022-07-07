@@ -108,7 +108,7 @@ class CMember {
             $view = new VUtenteSingolo();
             $lista_follower = FPersistentManager::loadListaFollower($username);
             $immagini_follower = FPersistentManager::loadImmaginiProfiloMembers($lista_follower, true);
-            $lista_following = FPersistentManager::loadListaFollower($username);
+            $lista_following = FPersistentManager::loadListaFollowing($username);
             $immagini_following = FPersistentManager::loadImmaginiProfiloMembers($lista_following, true);
             $view->avviaPaginaFollow($username, $lista_follower, $immagini_follower, $lista_following, $immagini_following);
         }
@@ -145,6 +145,7 @@ class CMember {
                     $follower = FPersistentManager::load("EMember", null, $follower, null, null,
                         null, null, null, false);
                     FPersistentManager::follow($follower, $following);
+                    header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_seguire);
                 } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                     $view = new VErrore();
                     $view->error(11);
@@ -188,6 +189,7 @@ class CMember {
                         null, null, null, false);
 
                     FPersistentManager::unfollow($follower, $following);
+                    header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_non_seguire);
                 } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
                     $view = new VErrore();
                     $view->error(11);

@@ -152,7 +152,6 @@
                     <h3>Scrivi una risposta:</h3>
                     <form id="scrivirisposta" action="https://{$root_dir}/film/scrivi-risposta/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}" method="POST">
                         <!-- in teoria la data viene creata al momento in PHP-->
-                        <label for="testo">Scrivi il testo: </label>
                         <textarea name="risposta" id="testo" form="scrivirisposta" rows="5" cols="100" required></textarea><br>
                         <button type="submit" form="scrivirisposta">Salva</button>
                     </form>

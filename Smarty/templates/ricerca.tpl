@@ -158,7 +158,7 @@
                             <tr>
                                 <td>
                                     <img src="{$risultato_ricerca[$i]->getSrc($immagini[$risultato_ricerca[$i]->getUsername()])}"
-                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]} alt="Immagine profilo">
+                                            {$immagini[$risultato_ricerca[$i]->getUsername()][2]} alt="Immagine profilo" class="img_circle">
                                 </td>
                                 <td>
                                     <a href="https://{$root_dir}/member/carica-member/{$risultato_ricerca[$i]->getUsername()}">
