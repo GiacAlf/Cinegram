@@ -160,9 +160,11 @@ class FRecensione {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nuovaData = new DateTime();
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
+                    " SET " . $nomeAttributo . " = '" . $nuovoValore . "', " .
+                        self::$nomeAttributoDataScrittura . " = '" . $nuovaData->format("Y-m-d H:i:s") . "'" .
                     " WHERE " . self::$chiave1Tabella . " = '" . $recensione->getIdFilmRecensito() . "'" .
                     " AND " . self::$chiave2Tabella . " = '" . $recensione->getUsernameAutore() . "';";
                 $stmt = $pdo->prepare($query);

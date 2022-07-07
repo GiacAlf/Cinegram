@@ -102,9 +102,11 @@ class FRisposta {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nuovaData = new DateTime();
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoTesto . " = '" . $nuovoTesto . "'" .
+                    " SET " . self::$nomeAttributoTesto . " = '" . $nuovoTesto . "', " .
+                        self::$chiaveTabella2 . " = '" . $nuovaData->format("Y-m-d H:i:s") . "'" .
                     " WHERE " . self::$chiaveTabella1 . " = '" . $risposta->getUsernameAutore() . "'" .
                     " AND " . self::$chiaveTabella2 . " = '" . $risposta->getDataScrittura()->format("Y-m-d H:i:s") . "';";
                 $stmt = $pdo->prepare($query);
