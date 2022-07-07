@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <style>
         /* Remove the navbar"s default margin-bottom and rounded borders */
         .navbar {
@@ -18,7 +18,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav {
             padding-top: 20px;
             background-color: #f1f1f1;
@@ -44,22 +44,15 @@
         }
         #mydiv{
             position:relative;
-            height:200vh;
+            height:210vh;
             left:2%;
 
         }
         #mydiv2{
             position:relative;
-            height:200vh;
+            height:210vh;
             right:2%;
 
-        }
-        #myspanNavbar{
-            font-family: "Sofia", sans-serif;
-            font-size: 30px;
-            text-shadow: 2.5px 2.5px 2.5px #ababab;
-            color:white;
-            padding:10px;
         }
         #myfooter{
             font-family: "Sofia", sans-serif;
@@ -70,7 +63,7 @@
         }
         #mydivnavbar{
             position:relative;
-            left:22%;
+            left:1%;
 
         }
     </style>
@@ -85,7 +78,6 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
@@ -101,10 +93,13 @@
                     <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
                 {/if}
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+
+            <ul>
                 {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
                                                lo user non registrato può registrarsi, con il link -->
-                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <span class="nav navbar-nav navbar-right" id="myspan">
+                     <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </span>
                 {/if}
             </ul>
             <div id="mydivnavbar" >
@@ -112,11 +107,11 @@
                     <div class="form-group input-group">
                         <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/film/cerca-film" value="Cerca film">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/member/cerca-member" value="Cerca utente">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                     </div>
@@ -132,14 +127,14 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-                {for $i=0 to {$film_visti|count - 1}}
-                 <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
-                    <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
+            {for $i=0 to {$film_visti|count - 1}}
+                <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
+                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
                         <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
                                 {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
-                    {forelse}
-                        <p> Non ci sono film visti </p>
-                {/for}
+            {forelse}
+                <p> Non ci sono film visti </p>
+            {/for}
 
         </div>
 
@@ -148,18 +143,18 @@
             								sostituiamo con film meglio votati oppure tutte e due-->
             <div class="container-fluid bg-3 text-left">
                 <div class="row">
-                        {for $i=0 to {$film_recenti|count - 1}}
-                            <div class="col-sm-3">
-                                <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
-                                        {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"
-                                     style="width:80%" alt="Locandina">
-                                <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$film_recenti[$i]->getTitolo()}</h5>
-                                <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
-                                <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
-                            </div>
-                            {forelse}
-                                <div class="col-sm-3"> Non ci sono film recenti </div>
-                        {/for}
+                    {for $i=0 to {$film_recenti|count - 1}}
+                        <div class="col-sm-3">
+                            <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
+                                    {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive"
+                                 style="width:80%" alt="Locandina">
+                            <h5><a href="https://{$root_dir}/film/carica-film/{$film_recenti[$i]->getId()}"></a>{$film_recenti[$i]->getTitolo()}</h5>
+                            <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
+                            <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
+                        </div>
+                    {forelse}
+                        <div class="col-sm-3"> Non ci sono film recenti </div>
+                    {/for}
                 </div>
             </div>
 
@@ -184,7 +179,7 @@
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
-                {foreachelse}
+                    {foreachelse}
                     <div class="col-sm-10"> Non ci sono recensioni </div>
                 {/foreach}
 
@@ -196,14 +191,14 @@
 
     <div id="mydiv" class="col-sm-2 sidenav">
         <h4>Membri più seguiti</h4><br><br>
-            {for $i=0 to {$utenti_seguiti|count - 1}}
-                <p>{$utenti_seguiti[$i]->getUsername()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="80" width="80"  -->
-                <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}">
+        {for $i=0 to {$utenti_seguiti|count - 1}}
+            <p>{$utenti_seguiti[$i]->getUsername()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="80" width="80"  -->
+            <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}">
                     <img src="{$utenti_seguiti[$i]->getSrc($immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()])}"  class="img-circle"
                             {$immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
-                {forelse}
-                    <p> Non ci sono utenti seguiti </p>
-            {/for}
+        {forelse}
+            <p> Non ci sono utenti seguiti </p>
+        {/for}
 
     </div>
 </div>
