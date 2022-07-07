@@ -132,16 +132,15 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            {if isset($film_visti)}
                 {for $i=0 to {$film_visti|count - 1}}
                  <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
                     <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
                         <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
                                 {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                    {forelse}
+                        <p> Non ci sono film visti </p>
                 {/for}
-            {else}
-                <p> Non ci sono film visti </p>
-            {/if}
+
         </div>
 
         <div class="col-sm-8 text-center">
@@ -149,7 +148,6 @@
             								sostituiamo con film meglio votati oppure tutte e due-->
             <div class="container-fluid bg-3 text-left">
                 <div class="row">
-                    {if isset($film_recenti)}
                         {for $i=0 to {$film_recenti|count - 1}}
                             <div class="col-sm-3">
                                 <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
@@ -159,10 +157,9 @@
                                 <h9>views: {$film_recenti[$i]->getNumeroViews()}</h9><br>
                                 <h9>recensioni: {$film_recenti[$i]->getNumeroRecensioni()}</h9><br><br> <!-- o questo o il voto medio-->
                             </div>
+                            {forelse}
+                                <div class="col-sm-3"> Non ci sono film recenti </div>
                         {/for}
-                    {else}
-                        <div class="col-sm-3"> Non ci sono film recenti </div>
-                    {/if}
                 </div>
             </div>
 
@@ -199,16 +196,14 @@
 
     <div id="mydiv" class="col-sm-2 sidenav">
         <h4>Membri più seguiti</h4><br><br>
-        {if isset($utenti_seguiti)}
             {for $i=0 to {$utenti_seguiti|count - 1}}
                 <p>{$utenti_seguiti[$i]->getUsername()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="80" width="80"  -->
                 <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}">
                     <img src="{$utenti_seguiti[$i]->getSrc($immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()])}"  class="img-circle"
                             {$immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
+                {forelse}
+                    <p> Non ci sono utenti seguiti </p>
             {/for}
-        {else}
-            <p> Non ci sono utenti seguiti </p>
-        {/if}
 
     </div>
 </div>

@@ -269,16 +269,14 @@
 
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            {if isset($film_visti)}
                 {for $i=0 to {$film_visti|count - 1}}
                     <p>{$film_visti[$i]->getTitolo()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75" -->
                     <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
                         <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
                                 {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                    {forelse}
+                        <p> Non ci sono film visti </p>
                 {/for}
-            {else}
-                <p> Non ci sono film visti </p>
-            {/if}
 
         </div>
     </div>

@@ -128,16 +128,14 @@
     <div class="row content">
         <div id="mydiv" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            {if isset($film_visti)}
                 {for $i=0 to {$film_visti|count - 1}}
                     <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70"-->
                     <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
                         <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
                                 {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+                    {forelse}
+                        <p> Non ci sono film visti </p>
                 {/for}
-            {else}
-                <p> Non ci sono film visti </p>
-            {/if}
 
         </div>
         <div class="col-sm-8 text-left">
@@ -149,7 +147,6 @@
             <div class="container-fluid bg-3 text-center">
                 <h3>Film Recenti</h3><br>
                 <div class="row">
-                    {if isset($film_recenti)}
                         {for $i=0 to {$film_recenti|count - 1}}
                             <div class="col-sm-3">
                                 <p>{$film_recenti[$i]->getTitolo()}</p>
@@ -157,10 +154,9 @@
                                     <img src="{$film_recenti[$i]->getSrc($locandine_film_recenti[$film_recenti[$i]->getId()])}"
                                             {$locandine_film_recenti[$film_recenti[$i]->getId()][2]} class="img-responsive" alt="Locandina"></a>
                             </div>
+                            {forelse}
+                                <div class="col-sm-3"> Non ci sono film recenti </div>
                         {/for}
-                    {else}
-                        <div class="col-sm-3"> Non ci sono film visti </div>
-                    {/if}
                 </div>
             </div>
             <br><hr>
@@ -192,16 +188,14 @@
 
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Membri più popolari</h4><br><br>
-            {if isset($utenti_popolari)}
                 {for $i=0 to {$utenti_popolari|count - 1}}
                     <p>{$utenti_popolari[$i]->getUsername()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="80" width="80" -->
                     <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">
                         <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"  class="img-circle"
                                 {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
+                    {forelse}
+                        <p> Non ci sono utenti popolari </p>
                 {/for}
-            {else}
-                <p> Non ci sono utenti popolari </p>
-            {/if}
 
         </div>
     </div>

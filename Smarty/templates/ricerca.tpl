@@ -137,7 +137,6 @@
             <div id="div">
                 <br><h1>Risultato della ricerca:</h1></div><br><br> <!-- l"idea è di fare un controllo sul tipo degli oggetti e fare un ciclo rispetto ad un altro-->
             <!-- non dovesse funzionare abbiamo già la struttura ad hoc per fare un template a parte per i film o per i member -->
-            {if isset($risultato_ricerca)}
                 {for $i=0 to {$risultato_ricerca|count - 1}}
                     {if {get_class($risultato_ricerca[$i])} == "EFilm"}
                         <div>
@@ -174,12 +173,11 @@
                         </div>
                         <br>
                     {/if}
+                    {forelse}
+                    <div id="div">
+                        <h3> La ricerca non ha prodotto risultati! </h3>
+                    </div>
                 {/for}
-            {else}
-                <div id="div">
-                    <h3> La ricerca non ha prodotto risultati! </h3>
-                </div>
-            {/if}
 
             <br><br>
         </div>

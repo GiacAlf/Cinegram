@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="form-group">
-                        <h4>Locandina attuale: </h4><img src="{$film->getSrc($locandina)}" {$locandina[2]}><br>
+                        <h4>Locandina attuale: </h4><img src="{$film->getSrc($locandina)}" {$locandina[2]} alt="Locandina"><br>
                         <label for="locandina">Inserisci la locandina del film:</label>
                         <input type="file" name="modifica_locandina" form="modifica_film" class="form-control" id="locandina">
                     </div>

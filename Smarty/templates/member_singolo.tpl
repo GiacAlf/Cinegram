@@ -245,15 +245,13 @@
 
     <div   id ="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
-        {if isset($utenti_popolari)}
             {for $i=0 to {$utenti_popolari|count - 1}} <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75"-->
                 <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">
                     <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"  class="img-circle"
                             {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
+                {forelse}
+                     <p> Non ci sono utenti popolari </p>
             {/for}
-        {else}
-            <p> Non ci sono utenti popolari </p>
-        {/if}
     </div>
 </div>
 

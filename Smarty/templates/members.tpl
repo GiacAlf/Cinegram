@@ -134,16 +134,14 @@
         <div >
             <div id="mydiv" class="col-sm-2 sidenav">
                 <h4>Film più visti</h4><br><br>
-                {if isset($film_visti)}
                     {for $i=0 to {$film_visti|count - 1}}
                         <p>{$film_visti[$i]->getTitolo()}</p> <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
                         <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
                             <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
                                     {$locandine_film_visti[$film_visti[$i]->getId()][2]}  alt="Locandina"></a></p><br>
+                        {forelse}
+                            <p> Non ci sono film visti </p>
                     {/for}
-                {else}
-                    <p> Non ci sono film visti </p>
-                {/if}
             </div>
         </div>
 
@@ -151,7 +149,6 @@
             <h3>Utenti Popolari</h3><br>
             <div class="container-fluid bg-3 text-center">
                 <div class="row">
-                    {if isset($utenti_popolari)}
                         {for $i=0 to {$utenti_popolari|count - 1}}
                             <div class="col-sm-3">
                                 <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"
@@ -160,10 +157,9 @@
                                 <h9>follower: {$utenti_popolari[$i]->getNumeroFollower()}</h9><br>
                                 <h9>risposte: {$utenti_popolari[$i]->getNumeroRisposte()}</h9><br><br>
                             </div>
+                            {forelse}
+                                <div class="col-sm-3"> Non ci sono utenti popolari </div>
                         {/for}
-                    {else}
-                        <div class="col-sm-3"> Non ci sono utenti popolari </div>
-                    {/if}
 
 
                     <br><hr>
@@ -203,16 +199,14 @@
         <div id="main2">
             <div id="mydiv2"  class="col-sm-2 sidenav">
                 <h4>Membri più seguiti</h4><br><br>
-                {if isset($utenti_seguiti)}
                     {for $i=0 to {$utenti_seguiti|count - 1}}
                         <p>{$utenti_seguiti[$i]->getUsername()}</p>  <!--"https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg"  height="80" width="80"-->
                         <p><a href="https://{$root_dir}/member/carica-member/{$utenti_seguiti[$i]->getUsername()}">
                             <img src="{$utenti_seguiti[$i]->getSrc($immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()])}"  class="img-circle"
                                     {$immagini_utenti_seguiti[$utenti_seguiti[$i]->getUsername()][2]} alt="Locandina"></a></p><br>
+                    {forelse}
+                        <p> Non ci sono utenti seguiti </p>
                     {/for}
-                {else}
-                    <p> Non ci sono utenti seguiti </p>
-                {/if}
             </div>
         </div>
     </div>

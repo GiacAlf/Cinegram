@@ -130,7 +130,6 @@
             <h3>Follower di {$username}</h3><br>
             <div id="mydiv" >
                 <div  class="row">
-                    {if isset($follower)}
                         {for $i=0 to {$follower|count - 1}}
                             <div class="col-sm-3">
                                 <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}"
@@ -139,10 +138,9 @@
                                 <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
                                 <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                             </div>
+                            {forelse}
+                                <div class="col-sm-3">{$username} non ha alcun follower </div>
                         {/for}
-                    {else}
-                        <div class="col-sm-3">{$username} non ha alcun follower </div>
-                    {/if}
 
                 </div>
             </div>
@@ -152,7 +150,6 @@
             <h3>Following di {$username}</h3><br>
             <div id="mydiv">
                 <div  class="row">
-                    {if isset($following)}
                         {for $i=0 to {$following|count - 1}}
                             <div class="col-sm-3">
                                 <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}"
@@ -161,10 +158,9 @@
                                 <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
                                 <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                             </div>
+                            {forelse}
+                                <div class="col-sm-3">{$username} non ha alcun following </div>
                         {/for}
-                    {else}
-                        <div class="col-sm-3">{$username} non ha alcun following </div>
-                    {/if}
 
                 </div>
             </div>
