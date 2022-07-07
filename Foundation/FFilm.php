@@ -46,14 +46,14 @@ class FFilm {
 
 
     // metodo che verifica l'esistenza di un film in db passando il EFilm, tramite il valore della chiave idFilm
-    public static function existById(int $id): ?bool {
+    public static function existById(int $idFilm): ?bool {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $id . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $idFilm . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -512,7 +512,7 @@ class FFilm {
     // anche se intera verrà convertita in stringa con la concatenazione)
     public static function update(EFilm $film, string $nomeAttributo, string $nuovoValore): void {
 
-        if((FFilm::existById($film))) {
+        if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -536,7 +536,7 @@ class FFilm {
     // questo update aggiorna solo la data di uscita del film, che sul DB si chiama Anno
     public static function updateData(EFilm $film, DateTime $nuovaData): void {
 
-        if((FFilm::existById($film))) {
+        if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -575,7 +575,7 @@ class FFilm {
     // cancella un film dal db ovvero dalle tabelle film, filmvisti recensione e risposta
     public static function delete(EFilm $film): void {
 
-        if(FFilm::existById($film)) {
+        if(FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -620,7 +620,7 @@ class FFilm {
     // cancella le recensioni riferite al film passato per parametro dal DB
     private static function deleteFromPersoneFilm(EFilm $film): void {
 
-        if (FFilm::existById($film)) {
+        if (FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -643,7 +643,7 @@ class FFilm {
     // cancella le recensioni riferite al film passato per parametro dal DB
     private static function deleteFromRecensione(EFilm $film): void {
 
-        if (FFilm::existById($film)) {
+        if (FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -666,7 +666,7 @@ class FFilm {
     // cancella le risposte riferite al film passato per parametro dal DB
     private static function deleteFromRisposta(EFilm $film): void {
 
-        if (FFilm::existById($film)) {
+        if (FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -689,7 +689,7 @@ class FFilm {
     // cancella le risposte riferite al film passato per parametro dal DB
     private static function deleteFromFilmVisti(EFilm $film): void {
 
-        if(FFilm::existById($film)) {
+        if(FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -828,7 +828,7 @@ class FFilm {
         //$locandinaDaSalvare = addslashes($locandinaContenuto);
         $locandinaDaSalvare = $nuovaLocandina;
 
-        if((FFilm::existById($film))) {
+        if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
@@ -854,7 +854,7 @@ class FFilm {
     // metodo che modifica una locandina facendo "update a null"
     public static function deleteLocandina(EFilm $film): void {
 
-        if((FFilm::existById($film))) {
+        if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
