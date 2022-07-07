@@ -394,6 +394,7 @@ class CFilm {
                 $risposta = FPersistentManager::load("ERisposta", null, $usernameAutore, null, null,
                     null, null, $oggetto_data, false);
                 if($updatedText != null) {
+                    $updatedText = addslashes($updatedText);
                     FPersistentManager::update($risposta, null, $updatedText, null,
                         null, null, null, null);
                 }
