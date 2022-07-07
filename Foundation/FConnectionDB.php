@@ -1,6 +1,6 @@
 <?php
 
-// if(file_exists("configDB.php")) require_once "configDB.php";
+// if(file_exists("config.php")) require_once "config.php";
 
 class FConnectionDB {
 
