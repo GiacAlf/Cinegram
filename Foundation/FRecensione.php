@@ -97,7 +97,7 @@ class FRecensione {
                 " AND " . "re." . self::$chiave2Tabella . " = " . "ri." . self::$nomeFK2Tabella .
                 " WHERE " . "ri." . self::$nomeFK1Tabella . " = '" . $idFilmRecensito . "'" .
                 " AND " . "ri." . self::$nomeFK2Tabella . " = '" . $usernameAutoreRecensione . "'" .
-                " ORDER BY " . self::$chiave2TabellaRisposta . " DESC;";
+                " ORDER BY " . self::$chiave2TabellaRisposta . " ASC;";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -179,7 +179,7 @@ class FRecensione {
 
 
     // cancella una recensione dal DB passando la $chiaveTabella1 e $chiaveTabella2
-    public static function delete(string $usernameAutore, int $idFilmRecensito): void {
+    public static function delete(int $idFilmRecensito, string $usernameAutore): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
