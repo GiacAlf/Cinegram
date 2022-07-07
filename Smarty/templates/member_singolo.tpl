@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <script>
         function functionSeguito(){
 
@@ -13,11 +13,19 @@
             if(button.innerHTML=="Segui"){
                 button.innerHTML="Smetti di Seguire"
                 button.className="glyphicon glyphicon-minus"
+                const Http = new XMLHttpRequest();
+                const url="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}";
+                Http.open("GET", url);
+                Http.send();
             }
             else
             {
                 button.innerHTML="Segui"
                 button.className="glyphicon glyphicon-plus"
+                const Http = new XMLHttpRequest();
+                const url="https://{$root_dir}/member/follow-member/{$member->getUsername()}";
+                Http.open("GET", url);
+                Http.send();
             }
         }
 
@@ -27,11 +35,19 @@
             if(button.innerHTML=="Segui"){
                 button.innerHTML="Smetti di Seguire"
                 button.className="glyphicon glyphicon-minus"
+                const Http = new XMLHttpRequest();
+                const url="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}";
+                Http.open("GET", url);
+                Http.send();
             }
             else
             {
                 button.innerHTML="Segui"
                 button.className="glyphicon glyphicon-plus"
+                const Http = new XMLHttpRequest();
+                const url="https://{$root_dir}/member/follow-member/{$member->getUsername()}";
+                Http.open("GET", url);
+                Http.send();
             }
 
         }
@@ -48,7 +64,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav {
             padding-top: 20px;
             background-color: #f1f1f1;
@@ -74,20 +90,13 @@
         }
         #mydiv{
             position:relative;
-            height:150vh;
+            height:200vh;
             right:1.9%;
         }
         #mydiv2{
             position:relative;
-            height:150vh;
+            height:200vh;
             left:1.3%;
-        }
-        #myspanNavbar{
-            font-family: "Sofia", sans-serif;
-            font-size: 30px;
-            text-shadow: 2.5px 2.5px 2.5px #ababab;
-            color:white;
-            padding:10px;
         }
         #myfooter{
             font-family: "Sofia", sans-serif;
@@ -98,7 +107,7 @@
         }
         #mydivnavbar{
             position:relative;
-            left:22%;
+            left:1%;
 
         }
     </style>
@@ -113,7 +122,6 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
@@ -129,10 +137,13 @@
                     <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
                 {/if}
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+
+            <ul>
                 {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
                                                lo user non registrato può registrarsi, con il link -->
-                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <span class="nav navbar-nav navbar-right" id="myspan">
+                     <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </span>
                 {/if}
             </ul>
             <div id="mydivnavbar" >
@@ -140,11 +151,11 @@
                     <div class="form-group input-group">
                         <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/film/cerca-film" value="Cerca film">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/member/cerca-member" value="Cerca utente">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                     </div>
@@ -168,30 +179,30 @@
                 <p>Hai {$member->getWarning()} warning. </p>
             {/if}
             <button type="button" class="btn btn-default btn-sm">
-              {if $user != {$member->getUsername()}}
-                {if $seguito == false}
-                    <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}">
-                        <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
-                        <!-- il button type=button non reinderizza ad un"altra pagina
-                        e serve per il javascript(infatti nei
-                        template di bootstrap è proprio di questo
-                        tipo => speriamo che comunque parta quell"url lì
-                        il button type=submit invece fa partire un"altra pagina-->
-                    </form>
-                {else}
+                {if $user != {$member->getUsername()}}
+                    {if $seguito == false}
+                        <!-- cambiare la url-->
+                        <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}">
+                            <button  id="buttonNonSeguito" onclick="functionNonSeguito()" type="button" class="glyphicon glyphicon-plus"> Segui</button>
+                            <!-- il button type=button non reinderizza ad un"altra pagina
+                            e serve per il javascript(infatti nei
+                            template di bootstrap è proprio di questo
+                            tipo => speriamo che comunque parta quell"url lì
+                            il button type=submit invece fa partire un"altra pagina-->
+                        </form>
+                    {else}
 
-                    <!-- cambiare la url-->
-                    <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}">
-                        <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
-                        <!-- il button type=button non reinderizza ad un"altra pagina
-                        e serve per il javascript(infatti nei
-                        template di bootstrap è proprio di questo
-                        tipo => speriamo che comunque parta quell"url lì
-                        il button type=submit invece fa partire un"altra pagina-->
-                    </form>
+                        <!-- cambiare la url-->
+                        <form action="https://{$root_dir}/member/unfollow-member/{$member->getUsername()}">
+                            <button id="buttonSeguito" onclick="functionSeguito()" type="button" class="glyphicon glyphicon-minus"> Smetti di Seguire</button>
+                            <!-- il button type=button non reinderizza ad un"altra pagina
+                            e serve per il javascript(infatti nei
+                            template di bootstrap è proprio di questo
+                            tipo => speriamo che comunque parta quell"url lì
+                            il button type=submit invece fa partire un"altra pagina-->
+                        </form>
+                    {/if}
                 {/if}
-              {/if}
             </button>
             {if $user == "admin"}
                 <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername()}"> <!-- qua bisogna solo far vedere il template -->
@@ -209,7 +220,7 @@
             <div>
                 {foreach $film_visti as $film}
                     <p><a href="https://{$root_dir}/film/carica-film/{$film->getId()}">{$film->getTitolo()}</a></p>
-                {foreachelse}
+                    {foreachelse}
                     <p>{$member->getUsername()} non ha visto alcun film </p>
                 {/foreach}
             </div>
@@ -219,7 +230,7 @@
 
             <p><span class="badge"></span> <br><h3>Recensioni di {$member->getUsername()}</h3></p><br>
             <div class="row">
-            {foreach $recensioni as $recensione}
+                {foreach $recensioni as $recensione}
                     <div class="col-sm-10">
                         <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
                         <small>{$recensione->getDataScrittura()->format("d-m-Y H:i")}</small></h3>
@@ -236,22 +247,22 @@
                             <a href="https://{$root_dir}/admin/rimuovi-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Elimina</button></a>
                         {/if}
                     </div>
-                {foreachelse}
-                     <div class="col-sm-10">{$member->getUsername()} non ha scritto alcuna recensione. </div>
-            {/foreach}
+                    {foreachelse}
+                    <div class="col-sm-10">{$member->getUsername()} non ha scritto alcuna recensione. </div>
+                {/foreach}
             </div>
         </div>
     </div>
 
     <div   id ="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
-            {for $i=0 to {$utenti_popolari|count - 1}} <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75"-->
-                <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">
+        {for $i=0 to {$utenti_popolari|count - 1}} <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75"-->
+            <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">
                     <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"  class="img-circle"
                             {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
-                {forelse}
-                     <p> Non ci sono utenti popolari </p>
-            {/for}
+        {forelse}
+            <p> Non ci sono utenti popolari </p>
+        {/for}
     </div>
 </div>
 

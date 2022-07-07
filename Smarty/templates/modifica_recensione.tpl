@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+
     <style>
         /* Remove the navbar"s default margin-bottom and rounded borders */
         .navbar {
@@ -18,7 +19,7 @@
             height: 450px;
         }
 
-            /* Set gray background color and 100% height */
+        /* Set gray background color and 100% height */
         .sidenav_white {
             padding-top: 20px;
             background-color: #ffffff;
@@ -49,6 +50,11 @@
             width: 450px;
         }
 
+        #salva {
+            position:relative;
+            bottom:20px;
+        }
+
 
         /* On small screens, set height to "auto" for sidenav and grid */
         @media screen and (max-width: 767px) {
@@ -60,13 +66,6 @@
                 height:auto;
             }
         }
-        #myspanNavbar{
-            font-family: "Sofia", sans-serif;
-            font-size: 30px;
-            text-shadow: 2.5px 2.5px 2.5px #ababab;
-            color:white;
-            padding:10px;
-        }
         #myfooter{
             font-family: "Sofia", sans-serif;
             font-size: 15px;
@@ -76,7 +75,7 @@
         }
         #mydivnavbar{
             position:relative;
-            left:22%;
+            left:1%;
 
         }
     </style>
@@ -91,7 +90,6 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span id="myspanNavbar">Cinegram</span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
@@ -107,10 +105,13 @@
                     <li><a href="https://{$root_dir}/login/logout-member">Logout</a></li>
                 {/if}
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+
+            <ul>
                 {if $user == "non_loggato"} <!-- basta il bottone di login, poi dalla pagina di login
                                                lo user non registrato può registrarsi, con il link -->
-                    <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <span class="nav navbar-nav navbar-right" id="myspan">
+                     <li><a href="https://{$root_dir}/login/pagina-login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </span>
                 {/if}
             </ul>
             <div id="mydivnavbar" >
@@ -118,11 +119,11 @@
                     <div class="form-group input-group">
                         <input type="text" name="ricerca" form="ricerca_elementi" class="form-control" placeholder="Cerca un film o un utente..">
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/film/cerca-film" value="Cerca film">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-film" value="Cerca film">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                         <span class="input-group-btn">
-            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/member/cerca-member" value="Cerca utente">
+            <input type="submit" class="btn btn-default" form="ricerca_elementi" formaction="https://{$root_dir}/cerca-member" value="Cerca utente">
               <span class="glyphicon glyphicon-search"></span>
                         </span>
                     </div>
@@ -131,6 +132,7 @@
         </div>
     </div>
 </nav>
+
 
 <div class="mydiv">
     <div class="container-fluid text-center">
@@ -165,7 +167,7 @@
                         <textarea id="mytext" name="nuovo_testo" form="modifica_recensione" rows="4" cols="100"
                                   placeholder="Modifica il testo della recensione..."></textarea>
                     </div>
-                    <div class="mydiv">
+                    <div id="salva" class="mydiv">
                         <button type="submit" form="modifica_recensione" class="btn btn-default">Salva modifiche</button>
                     </div>
                 </form>
