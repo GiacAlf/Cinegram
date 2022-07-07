@@ -54,7 +54,7 @@ class CLogin {
                             null, null, null, null, true);
                         $immagine_profilo = FPersistentManager::loadImmagineProfilo($utente, true);
                         //perché avvio la pagina dell'utente della sessione in teoria
-                        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(5);
+                        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
                         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
                         $view_member->avviaPaginaUtente($utente_completo, $immagine_profilo, FPersistentManager::calcolaNumeroFilmVisti($utente_completo),
                             FPersistentManager::calcolaNumeroFollowing($utente_completo), FPersistentManager::calcolaNumeroFollower($utente_completo),
