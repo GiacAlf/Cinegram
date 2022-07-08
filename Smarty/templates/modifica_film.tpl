@@ -83,7 +83,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
-                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
                 <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
                 <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
                 {if $user != "non_loggato"}
@@ -142,35 +142,35 @@
                 <form action="https://{$root_dir}/admin/modifica-film/{$film->getId()}" method="post" id="modifica_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <h4>Titolo attuale: {$film->getTitolo()} </h4>
-                        <label for="titolo">Titolo:</label>
+                        <label for="titolo">Nuovo titolo:</label>
                         <!-- da qui andranno inseriti i dati attuali del film, caricati dal db, nelle loro rispettive caselle, così si potranno modificare e reinserire -->
                         <input type="text" name="modifica_titolo" form="modifica_film" class="form-control" id="titolo" placeholder="">
                     </div>
 
                     <div class="form-group">
                         <h4>Data di uscita attuale: {$film->getAnno()->format("d-m-Y")} </h4>
-                        <label for="data_uscita">Anno:</label>
+                        <label for="data_uscita">Nuova data di uscita:</label>
                         <input type="date" name="modifica_data" form="modifica_film" class="form-control" id="data_uscita" placeholder="">
                     </div>
 
                     <div class="form-group">
                         <h4>Durata attuale: {$film->getDurata()} </h4>
-                        <label for="durata">Durata:</label>
+                        <label for="durata">Nuova durata:</label>
                         <input type="number" name="modifica_durata" form="modifica_film" class="form-control" id="titolo" placeholder="">
                     </div>
 
                     <div class="form-group">
                         <h4>Sinossi attuale: {$film->getSinossi()} </h4>
-                        <label for="sinossi">Sinossi:</label>
+                        <label for="sinossi">Nuova sinossi:</label>
                         <input type="text" name="modifica_sinossi" form="modifica_film" class="form-control" id="sinossi" placeholder="">
                     </div>
 
                     <div class="form-group">
-                        <h4>Registi attuali: </h4>
+                        <h4>Registi attuali:</h4>
                         {foreach $registi as $regista}
                             <span>{$regista->getNome()} {$regista->getCognome()}, </span>
                         {/foreach}
-                        <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
+                        <label for="registi">Nuova lista registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="modifica_registi" form="modifica_film" class="form-control" id="registi" placeholder="">
                     </div>
 
@@ -179,13 +179,13 @@
                         {foreach $attori as $attore}
                             <span>{$attore->getNome()} {$attore->getCognome()}, </span>
                         {/foreach}
-                        <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una " , ", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
+                        <label for="attori">Nuova lista attori:<h6>Inserire nome e cognome, separati da una " , ", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="modifica_attori" form="modifica_film" class="form-control" id="attori" placeholder="">
                     </div>
 
                     <div class="form-group">
                         <h4>Locandina attuale: </h4><img src="{$film->getSrc($locandina)}" {$locandina[2]} alt="Locandina"><br>
-                        <label for="locandina">Inserisci la locandina del film:</label>
+                        <label for="locandina">Inserisci la nuova locandina del film:</label>
                         <input type="file" name="modifica_locandina" form="modifica_film" class="form-control" id="locandina">
                     </div>
 
