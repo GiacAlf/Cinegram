@@ -446,13 +446,29 @@ class FFilm {
     // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina per il
     // momento inserire null nei 3 parametri relativi a essa
     public static function store(EFilm $film, ?array $listaAttori, ?array $listaRegisti,
-                                 ?string $locandina, ?string $tipoLocandina, ?string $sizeLocandina): void {
+                                 ?string $locandinaPath, ?string $tipoLocandina, ?string $sizeLocandina): void {
 
         // si controlla se il film non è presente in DB prima di procedere
         if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()->format('Y')))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                if($sizeLocandina > self::$maxSizeImmagineLocandina) {
+                    print("Il file caricato è troppo grande!");
+                    return;
+                }
+                // ricavo l'array con le info dell'immagine
+                $arrayGetImageSize = getimagesize($locandinaPath);
+
+                // si accettano solo jpeg e png
+                if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
+                    return;
+
+                // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+                $locandina = file_get_contents($locandinaPath);
+                // eseguo l'escape
+                $locandina = addslashes($locandina);
+
                 $query =
                     "INSERT INTO " . self::$nomeTabella .
                     " VALUES (null, :Titolo, :Anno, :Durata, :Sinossi, :Locandina, :TipoLocandina, :SizeLocandina);";
@@ -463,7 +479,7 @@ class FFilm {
                     ":Durata" => $film->getDurata(),
                     ":Sinossi" => $film->getSinossi(),
                     ":Locandina" => $locandina,
-                    ":TipoLocandina" => $tipoLocandina,
+                    ":TipoLocandina" => $arrayGetImageSize['mime'],
                     ":SizeLocandina" => $sizeLocandina));
 
                 // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
@@ -809,10 +825,6 @@ class FFilm {
             print("Il file caricato è troppo grande!");
             return;
         }
-
-        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-        $nuovaLocandinaStringa = file_get_contents($nuovaLocandinaPath);
-
         // ricavo l'array con le info dell'immagine
         $arrayGetImageSize = getimagesize($nuovaLocandinaPath);
 
@@ -821,7 +833,8 @@ class FFilm {
             print("Formato non valido!");
             return;
         }
-
+        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+        $nuovaLocandinaStringa = file_get_contents($nuovaLocandinaPath);
         // eseguo l'escape
         $nuovaLocandinaStringa = addslashes($nuovaLocandinaStringa);
 
@@ -832,7 +845,7 @@ class FFilm {
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoLocandina . " = '" . $nuovaLocandinaStringa . "', " .
-                    self::$nomeAttributoTipoLocandina . " = '" . $nuovoTipoLocandina . "', " .
+                    self::$nomeAttributoTipoLocandina . " = '" . $arrayGetImageSize['mime'] . "', " .
                     self::$nomeAttributoSizeLocandina . " = '" . $nuovaSizeLocandina . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
                 $stmt = $pdo->prepare($query);
