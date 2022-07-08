@@ -1046,7 +1046,7 @@ class FMember {
         $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
 
         // ricavo l'array con le info dell'immagine
-        $arrayGetImageSize = getimagesize($nuovaImmagineStringa);
+        $arrayGetImageSize = getimagesize($nuovaImmaginePath);
 
         // si accettano solo jpeg e png
         if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
