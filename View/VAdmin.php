@@ -3,7 +3,7 @@
 class VAdmin {
 
     private Smarty $smarty;
-    private static int $maxSizeImmagineProfilo = 8192;
+    private static int $maxSizeImmagineProfilo = 524288;
 
     //il costruttore inizializza l'oggetto Smarty e basta
     public function __construct(){

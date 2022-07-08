@@ -54,7 +54,7 @@ class CAdmin {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
             //carico le info del member
-            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                 null, null)) {
                 $member = FPersistentManager::load("EMember", null, $username, null, null,
                     null, null, null, false);
@@ -240,7 +240,7 @@ class CAdmin {
     public static function ammonisciUser(string $usernameMember): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            if(FPersistentManager::exist("EMember", null, $usernameMember, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $usernameMember, null, null, null, null,
                 null, null)) {
 
                 //in teoria si clicca su ammonisci user quando non è bannato
@@ -283,7 +283,7 @@ class CAdmin {
     public static function sbannaUser(string $username): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                 null, null)) {
 
                 //in teoria qua avevamo pensato di togliere la moderazione degli admin
@@ -319,7 +319,7 @@ class CAdmin {
     public static function togliAmmonizione(string $username): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
-            if(FPersistentManager::exist("EMember", null, $username, null, null, null, null,
+            if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                 null, null)) {
                 //verifica che sei l'admin
                 $memberDaAmmonire = FPersistentManager::load("EMember", null, $username, null,

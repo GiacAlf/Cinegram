@@ -3,7 +3,7 @@
 class VLogin {
 
     private Smarty $smarty;
-    private static int $maxSizeImmagineProfilo = 8192;
+    private static int $maxSizeImmagineProfilo = 524288;
 
     //il costruttore della  page richiama l'oggetto smarty configurato
     //e se lo salva

@@ -284,23 +284,29 @@ class CFilm {
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutoreRecensione, null, null,
                 null, null, null, null)) {
-                //prova
-                $view = new VRecensione();
-                $date = new DateTime(); //il format giusto viene fatto in Foundation
-                $usernameAutoreRisposta = SessionHelper::getUtente()->getUsername();
-                $testo = $view->scriviRisposta();
-                //nel caso dovesse servire, tanto è gratis
-                //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
-                if($testo != null) {
-                    $risposta = new ERisposta($usernameAutoreRisposta, $date, $testo, $idFilm, $usernameAutoreRecensione);
-                    FPersistentManager::store($risposta, null, null, null, null, null,
-                        null, null);
-                    //notifica che sto a salva le robe
-                    header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/" . $idFilm . "/" . $usernameAutoreRecensione);
-                    //qui reinderizzo alla pagina della recensione di cui ho scritto la risposta
-                } else {
+                if(!FPersistentManager::userBannato($usernameAutoreRecensione)) {
+                    //prova
+                    $view = new VRecensione();
+                    $date = new DateTime(); //il format giusto viene fatto in Foundation
+                    $usernameAutoreRisposta = SessionHelper::getUtente()->getUsername();
+                    $testo = $view->scriviRisposta();
+                    //nel caso dovesse servire, tanto è gratis
+                    //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
+                    if ($testo != null) {
+                        $risposta = new ERisposta($usernameAutoreRisposta, $date, $testo, $idFilm, $usernameAutoreRecensione);
+                        FPersistentManager::store($risposta, null, null, null, null, null,
+                            null, null);
+                        //notifica che sto a salva le robe
+                        header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/" . $idFilm . "/" . $usernameAutoreRecensione);
+                        //qui reinderizzo alla pagina della recensione di cui ho scritto la risposta
+                    } else {
+                        $view = new VErrore();
+                        $view->error(9);
+                    }
+                }
+                else{
                     $view = new VErrore();
-                    $view->error(9);
+                    $view->error(16);
                 }
             }
             else {

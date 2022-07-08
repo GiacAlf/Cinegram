@@ -130,25 +130,30 @@ class CMember {
             SessionHelper::getUtente()->getUsername() != $username_da_seguire){
             if(FPersistentManager::exist("EUser", null, $username_da_seguire, null, null, null, null,
                 null, null)) {
+                if(!FPersistentManager::userBannato($username_da_seguire)) {
+                    $username = SessionHelper::getUtente()->getUsername();
 
-                $username = SessionHelper::getUtente()->getUsername();
+                    $following = $username_da_seguire; //lo si recupera dall'url = $username_da_seguire
 
-                $following = $username_da_seguire; //lo si recupera dall'url = $username_da_seguire
-
-                //recupero dalla sessione il mio username => $follower = $username
-                $follower = $username;
-                //CONTROLLO COME IN UNFOLLOW MEMBER?
-                $segui = FPersistentManager::loSegui($follower, $following);
-                if (!$segui) {
-                    $following = FPersistentManager::load("EMember", null, $following, null, null,
-                        null, null, null, false);
-                    $follower = FPersistentManager::load("EMember", null, $follower, null, null,
-                        null, null, null, false);
-                    FPersistentManager::follow($follower, $following);
-                    header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_seguire);
-                } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                    //recupero dalla sessione il mio username => $follower = $username
+                    $follower = $username;
+                    //CONTROLLO COME IN UNFOLLOW MEMBER?
+                    $segui = FPersistentManager::loSegui($follower, $following);
+                    if (!$segui) {
+                        $following = FPersistentManager::load("EMember", null, $following, null, null,
+                            null, null, null, false);
+                        $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                            null, null, null, false);
+                        FPersistentManager::follow($follower, $following);
+                        header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_seguire);
+                    } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                        $view = new VErrore();
+                        $view->error(11);
+                    }
+                }
+                else{
                     $view = new VErrore();
-                    $view->error(11);
+                    $view->error(16);
                 }
             }
             else {
@@ -176,23 +181,29 @@ class CMember {
             SessionHelper::getUtente()->getUsername() != $username_da_non_seguire) {
             if(FPersistentManager::exist("EUser", null, $username_da_non_seguire, null, null, null, null,
                 null, null)) {
-                $username = SessionHelper::getUtente()->getUsername();
-                $following = $username_da_non_seguire; //lo si recupera dall'url  = $username_da_non_seguire
-                //recupero dalla sessione il mio username => $follower = $username
-                $follower = $username; //=> $follower = $username
-                //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
-                $segue = FPersistentManager::loSegui($follower, $following);
-                if ($segue) {
-                    $following = FPersistentManager::load("EMember", null, $following, null, null,
-                        null, null, null, false);
-                    $follower = FPersistentManager::load("EMember", null, $follower, null, null,
-                        null, null, null, false);
+                if(!FPersistentManager::userBannato($username_da_non_seguire)) {
+                    $username = SessionHelper::getUtente()->getUsername();
+                    $following = $username_da_non_seguire; //lo si recupera dall'url  = $username_da_non_seguire
+                    //recupero dalla sessione il mio username => $follower = $username
+                    $follower = $username; //=> $follower = $username
+                    //una volta che sei loggato, però bisogna verificare che l'utente effettivamente è seguito
+                    $segue = FPersistentManager::loSegui($follower, $following);
+                    if ($segue) {
+                        $following = FPersistentManager::load("EMember", null, $following, null, null,
+                            null, null, null, false);
+                        $follower = FPersistentManager::load("EMember", null, $follower, null, null,
+                            null, null, null, false);
 
-                    FPersistentManager::unfollow($follower, $following);
-                    header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_non_seguire);
-                } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                        FPersistentManager::unfollow($follower, $following);
+                        header("Location: https://" . VUtility::getRootDir() . "/member/carica-member/" . $username_da_non_seguire);
+                    } else { //FA UN PO' CAGARE COME SINTASSI PERò SPERO SIA OK
+                        $view = new VErrore();
+                        $view->error(11);
+                    }
+                }
+                else{
                     $view = new VErrore();
-                    $view->error(11);
+                    $view->error(16);
                 }
             }
             else {

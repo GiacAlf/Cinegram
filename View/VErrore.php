@@ -75,8 +75,12 @@ class VErrore {
                 $titolo = 'Errore moderazione';
                 break;
             case '15' :
-                $testo = 'Lo username usato è già occupatp';
+                $testo = 'Lo username usato è già occupato';
                 $titolo = 'Errore registrazione';
+                break;
+            case '16' :
+                $testo = 'Il member selezionato è al momento bannato: non è possibile seguirlo o rispondere alle sue recensioni';
+                $titolo = 'Errore utente!';
                 break;
         }
         $this->smarty->assign('testo', $testo);

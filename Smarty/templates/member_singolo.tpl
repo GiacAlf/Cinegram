@@ -179,7 +179,7 @@
                 <p>Hai {$member->getWarning()} warning. </p>
             {/if}
             <button type="button" class="btn btn-default btn-sm">
-                {if $user != {$member->getUsername()}}
+                {if $user != {$member->getUsername()} && $bannato == false}
                     {if $seguito == false}
                         <!-- cambiare la url-->
                         <form action="https://{$root_dir}/member/follow-member/{$member->getUsername()}" id="segui" method="POST">
@@ -230,6 +230,11 @@
 
             <p><span class="badge"></span> <br><h3>Recensioni di {$member->getUsername()}</h3></p><br>
             <div class="row">
+                {if $bannato == true}
+                <div class="col-sm-10">
+                    <h1>{$member->getUsername()} è bannato al momento!</h1>
+                </div>
+                {/if}
                 {foreach $recensioni as $recensione}
                     <div class="col-sm-10">
                         <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
