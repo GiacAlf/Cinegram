@@ -2,7 +2,7 @@
 
 class FMember {
 
-    private static int $maxSizeImmagineProfilo = 8192; // corrisponde ad 1 MByte (0 16MiB sul DB) di size massima consentita
+    private static int $maxSizeImmagineProfilo = 524288; // corrisponde ad mezzo Mebibyte, circa mezzo Megabyte (sui 16MiB di size massima consentita)
 
     private static string $nomeClasse = "FMember"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "member";   // da cambiare se cambia il nome della tabella in DB
