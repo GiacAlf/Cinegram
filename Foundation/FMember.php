@@ -1034,7 +1034,7 @@ class FMember {
     // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
     // questo $_FILES['file']['tmp_name'], cioè la $nuovaImmagine appena caricata, con $_FILES['file']['type'] il
     // $nuovoTipoImmagine dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeImmagine
-    public static function updateImmagineProfilo(string $username, string $nuovaImmagine, string $nuovoTipoImmagine,
+    public static function updateImmagineProfilo(string $username, string $nuovaImmaginePath, string $nuovoTipoImmagine,
                                            string $nuovaSizeImmagine): void {
 
         if($nuovaSizeImmagine > self::$maxSizeImmagineProfilo) {
@@ -1042,25 +1042,20 @@ class FMember {
             return;
         }
 
+        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+        $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
 
-        /* TODO vedere se con il seguente commentato il tutto funziona
-        if($nuovoTipoImmagine == "image/jpeg")
-            $immagine = imagecreatefromjpeg($nuovaImmagine);
-        elseif($nuovoTipoImmagine == "image/png")
-            $immagine = imagecreatefrompng($nuovaImmagine);
-        else {
+        // ricavo l'array con le info dell'immagine
+        $arrayGetImageSize = getimagesize($nuovaImmagineStringa);
+
+        // si accettano solo jpeg e png
+        if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
             print("Formato non valido!");
             return;
         }
-        */
 
-        /*
-        // prendo il contenuto grezzo dell'immagine
-        $immagineContenuto = file_get_contents($immagine);
         // eseguo l'escape
-        $immagineDaSalvare = addslashes($immagineContenuto);
-        */
-        $immagineDaSalvare = addslashes($nuovaImmagine);
+        //$nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
 
         if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();
@@ -1068,9 +1063,9 @@ class FMember {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $immagineDaSalvare . "', " .
-                    self::$nomeAttributoTipoImmagineProfilo . " = '" . $nuovoTipoImmagine . "', " .
-                    self::$nomeAttributoSizeImmagineProfilo . " = '" . $nuovaSizeImmagine . "'" .
+                    " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $nuovaImmagineStringa . "', " .
+                    self::$nomeAttributoTipoImmagineProfilo . " = '" . $arrayGetImageSize['mime'] . "', " .
+                    self::$nomeAttributoSizeImmagineProfilo . " = '" . $arrayGetImageSize[3] . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
