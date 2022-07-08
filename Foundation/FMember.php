@@ -1055,7 +1055,7 @@ class FMember {
         }
 
         // eseguo l'escape
-        //$nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
+        $nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
 
         if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();
