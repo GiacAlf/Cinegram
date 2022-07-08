@@ -255,7 +255,7 @@ class CAdmin {
                             FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                         }
                     }
-                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $usernameMember);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member/" . $usernameMember);
                 }
                 else {
                     //print("Utente bannato");
@@ -291,7 +291,7 @@ class CAdmin {
                 if (FPersistentManager::userBannato($username)) {
                     FPersistentManager::sbannaUser($username);
                     FPersistentManager::decrementaWarning($username);
-                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $username);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member/" . $username);
                 }
                 else {
                     //print ("l'utente non è bannato");
@@ -329,7 +329,7 @@ class CAdmin {
 
                 if(!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire > 0) {
                     FPersistentManager::decrementaWarning($username);
-                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $username);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member/" . $username);
                 }
                 else {
                     //print ("l'utente è bannato");
