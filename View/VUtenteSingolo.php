@@ -142,7 +142,7 @@ class VUtenteSingolo {
     public function checkPassword(string $password): bool {
 
         $match = false;
-        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/";
+        $pattern = "((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32})";
         if(preg_match($pattern, $password)) {
             $match = true;
         }

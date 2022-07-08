@@ -191,34 +191,61 @@ class VAdmin {
             $array_modifiche['locandina'] = $_FILES['modifica_locandina'];
         }
         //si può usare array_filter per togliere gli eventuali campi nulli
-        return $array_modifiche;
+        return array_filter($array_modifiche);
     }
 
 
     //magari possono servire alcuni controlli perché così se l'admin scrive male
     //get lista attori restituisca null
-    private function getListaAttori(string $input): ?array {
+    public function getListaAttori(string $input): ?array {
 
-        $arrayAttoriStringa = explode(";", $input);
-        $arrayAttoriOggetti = array();
-        foreach ($arrayAttoriStringa as $attore) {
-            $arrayAttore = explode("," , $attore);
-            $attoreOggetto = new EAttore(null, $arrayAttore[0], $arrayAttore[1]);
-            $arrayAttoriOggetti[] = $attoreOggetto;
+        if($this->tuttiVerificati($input)) {
+            $arrayAttoriStringa = explode(";", $input);
+            $arrayAttoriOggetti = array();
+            foreach ($arrayAttoriStringa as $attore) {
+                $arrayAttore = explode(",", $attore);
+                $attoreOggetto = new EAttore(null, $arrayAttore[0], $arrayAttore[1]);
+                $arrayAttoriOggetti[] = $attoreOggetto;
+            }
+            return array_filter($arrayAttoriOggetti);
         }
-        return array_filter($arrayAttoriOggetti);
+        else{
+            return null;
+        }
     }
 
 
-    private function getListaRegisti(string $input): ?array {
+    public function getListaRegisti(string $input): ?array {
 
-        $arrayRegistiStringa = explode(";", $input);
-        $arrayRegistiOggetti = array();
-        foreach ($arrayRegistiStringa as $regista) {
-            $arrayRegista = explode("," , $regista);
-            $registaOggetto = new ERegista(null, $arrayRegista[0], $arrayRegista[1]);
-            $arrayRegistiOggetti[] = $registaOggetto;
+        if($this->tuttiVerificati($input)) {
+            $arrayRegistiStringa = explode(";", $input);
+            $arrayRegistiOggetti = array();
+            foreach ($arrayRegistiStringa as $regista) {
+                $arrayRegista = explode(",", $regista);
+                $registaOggetto = new ERegista(null, $arrayRegista[0], $arrayRegista[1]);
+                $arrayRegistiOggetti[] = $registaOggetto;
+            }
+            return array_filter($arrayRegistiOggetti);
         }
-        return array_filter($arrayRegistiOggetti);
+        else{
+            return null;
+        }
+    }
+
+    public function tuttiVerificati(string $stringaPersoneDaForm): ?bool {
+
+        if($stringaPersoneDaForm == null)
+            return null;
+
+        $pattern2 = "/[A-Z][a-z.][A-Za-z. ]?[a-z.]?[A-Za-z ]?[A-Za-z ]*,[A-Z][a-z.][A-Za-z. ]?[a-z.]?[A-Za-z ]?[A-Za-z ]*/";
+
+        $arrayExplodePersone = explode(";", $stringaPersoneDaForm);
+
+        $sonoTuttiVerificati = true;
+        foreach ($arrayExplodePersone as $persona) {
+            if (!preg_match($pattern2, $persona))
+                $sonoTuttiVerificati = false;
+        }
+        return $sonoTuttiVerificati;
     }
 }

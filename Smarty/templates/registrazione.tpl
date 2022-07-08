@@ -135,13 +135,13 @@
                 <label for="pwd">Password: </label>
                 <p>Scegliere una password con: almeno una lettera maiuscola, una minuscola, un numero, un carattere speciale (no spazi), da 8 a 32 caratteri</p>
                 <input name="password_registrazione" type="password" id="pwd"
-                        {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
-                       form="registrazione-form" class="text-input" title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
+                        {literal} pattern="((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32})" {/literal}
+                       form="registrazione-form" class="text-input" title="Almeno una lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
                        placeholder="Scegli una password" required> *<br><br>
                 <label for="conf_pwd">Conferma Password</label><br>
                 <input name="conferma_password" type="password" id="conf_pwd"
-                        {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
-                       form="registrazione-form" class="text-input" title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
+                        {literal} pattern="((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32})" {/literal}
+                       form="registrazione-form" class="text-input" title="Almeno una lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
                        placeholder="Conferma password" required> *<br><br> <!--potremo lasciarlo e in php controllare che le stringhe passate siano uguali -->
                 <label for="bio">Inserisci una bio:</label><br>
                 <textarea rows="4" id="bio" cols="50" name="bio" form="registrazione-form" class="text-input">

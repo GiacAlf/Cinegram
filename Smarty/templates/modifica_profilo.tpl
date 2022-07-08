@@ -168,12 +168,12 @@
                                     <input name="vecchia_password" id="vecchia_pwd" type="password" form="modifica_password" placeholder="Vecchia password" required><br>
                                     <label for="nuova_pwd">Nuova password:</label>
                                     <input name="nuova_password" type="password" id="nuova_pwd"
-                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                                            {literal} pattern="((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32})" {/literal}
                                            title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
                                            form="modifica_password" placeholder="Nuova password" required>
                                     <label for="conferma_pwd">Conferma password:</label>
                                     <input name="conferma_nuova_password" type="password" id="conferma_pwd"
-                                            {literal} pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32}$/" {/literal}
+                                            {literal} pattern="((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*([^\w\s]|_)).{8,32})" {/literal}
                                            title="Almeno 1 lettera maiuscola, almeno una minuscola, almeno un numero, almeno un carattere speciale (no spazi), da 8 a 32 caratteri"
                                            form="modifica_password" placeholder="Conferma password" required><br><br>
                                     <input type="submit" value="Modifica la password" form="modifica_password" name="post_password">
