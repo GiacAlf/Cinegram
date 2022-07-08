@@ -467,7 +467,8 @@ class FFilm {
                 // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
                 $locandina = file_get_contents($locandinaPath);
                 // eseguo l'escape
-                $locandina = addslashes($locandina);
+                // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
+                // $locandina = addslashes($locandina);
 
                 $query =
                     "INSERT INTO " . self::$nomeTabella .
