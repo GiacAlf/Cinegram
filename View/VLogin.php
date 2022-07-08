@@ -107,7 +107,7 @@ class VLogin {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($_FILES['immagine_profilo']['type'] != 'image/jpeg' || $_FILES['immagine_profilo']['type'] != 'image/png') {
+            elseif($_FILES['immagine_profilo']['type'] != 'image/jpeg' && $_FILES['immagine_profilo']['type'] != 'image/png') {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }

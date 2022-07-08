@@ -106,7 +106,7 @@ class CAdmin {
 
                 FPersistentManager::store($film, $film, null, null, null,
                     $immagine, $tipoImmagine, $sizeImmagine);
-                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+                header("Location: https://" . VUtility::getRootDir() . "/admin/carica-amministrazione");
             }
             else {
                 $view = new VErrore();
@@ -166,7 +166,7 @@ class CAdmin {
                     FPersistentManager::update($film, 'sinossi', $array_modifiche['sinossi'], null,
                         null, null, null, null);
                 }
-                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+                header("Location: https://" . VUtility::getRootDir() . "/admin/carica-amministrazione");
             }
             else {
                 $view = new VErrore();
@@ -192,7 +192,7 @@ class CAdmin {
                 null, null, null, null)) {
                 FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
                 //o forse al modera utente tipo per ammonirlo una volta eliminatogli la recensione
-                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+                header("Location: https://" . VUtility::getRootDir() . "/admin/carica-amministrazione");
             }
             else {
                 $view = new VErrore();
@@ -218,7 +218,7 @@ class CAdmin {
 
                 FPersistentManager::delete("ERisposta", $usernameAutore, null, null, null, $data_oggetto);
                 //o forse al modera utente tipo per ammonirlo una volta eliminatogli la risposta
-                header("Location: https://" . VUtility::getRootDir() . "admin/carica-amministrazione");
+                header("Location: https://" . VUtility::getRootDir() . "/admin/carica-amministrazione");
             }
             else {
                 $view = new VErrore();
@@ -255,7 +255,7 @@ class CAdmin {
                             FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                         }
                     }
-                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $usernameMember);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $usernameMember);
                 }
                 else {
                     //print("Utente bannato");
@@ -291,7 +291,7 @@ class CAdmin {
                 if (FPersistentManager::userBannato($username)) {
                     FPersistentManager::sbannaUser($username);
                     FPersistentManager::decrementaWarning($username);
-                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $username);
                 }
                 else {
                     //print ("l'utente non è bannato");
@@ -329,7 +329,7 @@ class CAdmin {
 
                 if(!FPersistentManager::userBannato($username) && $warningMemberDaAmmonire > 0) {
                     FPersistentManager::decrementaWarning($username);
-                    header("Location: https://" . VUtility::getRootDir() . "admin/mostra-member" . $username);
+                    header("Location: https://" . VUtility::getRootDir() . "/admin/mostra-member" . $username);
                 }
                 else {
                     //print ("l'utente è bannato");

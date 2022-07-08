@@ -139,7 +139,7 @@
             <div class="col-sm-8 text-left">
 
                 <!-- da cambiare la url-->
-                <form action="https://{$root_dir}/admin/modifica-film/{$film->getId()}" method="post" id="modifica_film" enctype="multipart/form-data">
+                <form action="https://{$root_dir}/admin/modifica-film/{$film->getId()}" method="POST" id="modifica_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <h4>Titolo attuale: {$film->getTitolo()} </h4>
                         <label for="titolo">Titolo:</label>

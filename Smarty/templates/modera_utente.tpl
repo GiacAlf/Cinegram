@@ -140,13 +140,13 @@
             <div class="col-sm-8 text-center">
 
 
-                <form action="">Ammonizioni attuale: {$member->getWarning()} <br><br><!-- abbiamo tolto sta cosa della moderazione degli admin-->
+                <form action="" method="POST" id="moderazione">Ammonizioni attuale: {$member->getWarning()} <br><br><!-- abbiamo tolto sta cosa della moderazione degli admin-->
                     {if $bannato == true}
                         <p>L"utente è bannato! </p>
-                        <input type="submit" formaction="https://{$root_dir}/admin/sbanna-user/{$member->getUsername()}" class="btn" name="sbanna" value="Sbanna">
+                        <input type="submit" form="moderazione" formaction="https://{$root_dir}/admin/sbanna-user/{$member->getUsername()}" class="btn" name="sbanna" value="Sbanna">
                     {else}
-                        <input type="submit" formaction="https://{$root_dir}/admin/ammonisci-user/{$member->getUsername()}" class="btn" name="ammonizione" value="Ammonisci"> &nbsp
-                        <input type="submit" formaction="https://{$root_dir}/admin/togli-ammonizione/{$member->getUsername()}" class="btn" name="togli_ammonizione" value="Togli Ammonizione"> &nbsp
+                        <input type="submit" form="moderazione" formaction="https://{$root_dir}/admin/ammonisci-user/{$member->getUsername()}" class="btn" name="ammonizione" value="Ammonisci"> &nbsp
+                        <input type="submit" form="moderazione" formaction="https://{$root_dir}/admin/togli-ammonizione/{$member->getUsername()}" class="btn" name="togli_ammonizione" value="Togli Ammonizione"> &nbsp
 
                     {/if}
 

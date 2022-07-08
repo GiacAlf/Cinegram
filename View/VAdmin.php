@@ -140,7 +140,7 @@ class VAdmin {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
-            elseif($array_foto['type'] != 'image/jpeg' || $array_foto['type'] != 'image/png') {
+            elseif($array_foto['type'] != 'image/jpeg' && $array_foto['type'] != 'image/png') {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
             }
@@ -172,7 +172,7 @@ class VAdmin {
         if(isset($_POST['modifica_titolo'])){
             $array_modifiche['titolo'] = $_POST['modifica_titolo'];
         }
-        if(isset($_POST['modifica_data'])){
+        if(($_POST['modifica_data']) != null){
             $array_modifiche['data'] = new DateTime($_POST['modifica_data']);
         }
         if(isset($_POST['modifica_durata'])){

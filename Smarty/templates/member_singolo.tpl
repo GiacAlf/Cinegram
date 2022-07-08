@@ -233,6 +233,7 @@
                 {if $bannato == true}
                 <div class="col-sm-10">
                     <h1>{$member->getUsername()} è bannato al momento!</h1>
+                    <h2> Non è possibile interagire con questo utente</h2>
                 </div>
                 {/if}
                 {foreach $recensioni as $recensione}
