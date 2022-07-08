@@ -802,7 +802,7 @@ class FFilm {
     // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
     // questo $_FILES['file']['tmp_name'], cioè la $nuovaLocandina appena caricata, con $_FILES['file']['type'] il
     // $nuovoTipoLocandina dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeLocandina
-    public static function updateLocandina(EFilm $film, string $nuovaLocandina, string $nuovoTipoLocandina,
+    public static function updateLocandina(EFilm $film, string $nuovaLocandinaPath, string $nuovoTipoLocandina,
                                            string $nuovaSizeLocandina): void {
 
         if($nuovaSizeLocandina > self::$maxSizeImmagineLocandina) {
@@ -810,23 +810,20 @@ class FFilm {
             return;
         }
 
-        // TODO
-        /* inizio piccola modifica, da testare
-        if($nuovoTipoLocandina == "image/jpeg")
-            $locandina = imagecreatefromjpeg($nuovaLocandina);
-        elseif($nuovoTipoLocandina == "image/png")
-            $locandina = imagecreatefrompng($nuovaLocandina);
-        else {
+        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+        $nuovaLocandinaStringa = file_get_contents($nuovaLocandinaPath);
+
+        // ricavo l'array con le info dell'immagine
+        $arrayGetImageSize = getimagesize($nuovaLocandinaStringa);
+
+        // si accettano solo jpeg e png
+        if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
             print("Formato non valido!");
             return;
         }
-        */ //fine piccola modifica
 
-        // prendo il contenuto grezzo dell'immagine
-        //$locandinaContenuto = file_get_contents($locandina);
         // eseguo l'escape
-        //$locandinaDaSalvare = addslashes($locandinaContenuto);
-        $locandinaDaSalvare = $nuovaLocandina;
+        $nuovaLocandinaStringa = addslashes($nuovaLocandinaStringa);
 
         if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
@@ -834,7 +831,7 @@ class FFilm {
             try {
                 $query =
                     "UPDATE " . self::$nomeTabella .
-                    " SET " . self::$nomeAttributoLocandina . " = '" . $locandinaDaSalvare . "', " .
+                    " SET " . self::$nomeAttributoLocandina . " = '" . $nuovaLocandinaStringa . "', " .
                     self::$nomeAttributoTipoLocandina . " = '" . $nuovoTipoLocandina . "', " .
                     self::$nomeAttributoSizeLocandina . " = '" . $nuovaSizeLocandina . "'" .
                     " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
