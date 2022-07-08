@@ -320,7 +320,8 @@ class FMember {
                 // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
                 $immagineProfilo = file_get_contents($immagineProfiloPath);
                 // eseguo l'escape
-                $immagineProfilo = addslashes($immagineProfilo);
+                // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
+                // $immagineProfilo = addslashes($immagineProfilo);
 
                 // salvataggio nella tabella User
                 $query =
