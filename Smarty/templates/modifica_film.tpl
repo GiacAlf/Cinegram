@@ -179,7 +179,7 @@
                         {foreach $attori as $attore}
                             <span>{$attore->getNome()} {$attore->getCognome()}, </span>
                         {/foreach}
-                        <label for="attori">Nuova lista attori:<h6>Inserire nome e cognome, separati da una " , ", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
+                        <label for="attori">Nuova lista attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="modifica_attori" form="modifica_film" class="form-control" id="attori" placeholder="">
                     </div>
 

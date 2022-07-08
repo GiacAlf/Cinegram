@@ -500,7 +500,6 @@ class FFilm {
         }
     }
 
-
     // metodo che salva gli attori nel DB legati ad un particolare film $film
     // l'array è settato anche con di null perchè ci fa comodo con il Persistent Manager, dove chiamiamo
     // i due metodi storeAttori e storeRegisti insieme
@@ -508,8 +507,16 @@ class FFilm {
 
         foreach ($listaAttori as $attore) {
             FAttore::store($attore);
+        }
+        foreach($listaAttori as $attore){
+            //creo questo array perché se faccio subito lo storePersoneFilm, gli passo degli oggetti
+            //attore senza l'id, quindi, prima li salvo nel db e poi li recupero completi
+            $listaAttoriId[] = FAttore::loadbyNomeECognome($attore->getNome(), $attore->getCognome());
+        }
+        foreach ($listaAttoriId as $attore) {
             FAttore::storePersoneFilm($attore, $film);
         }
+
     }
 
 
@@ -520,6 +527,11 @@ class FFilm {
 
         foreach ($listaRegisti as $regista) {
             FRegista::store($regista);
+        }
+        foreach ($listaRegisti as $regista){
+            $listaRegistiId[] = FRegista::loadByNomeECognome($regista->getNome(), $regista->getCognome());
+        }
+        foreach ($listaRegistiId as $regista){
             FRegista::storePersoneFilm($regista, $film);
         }
     }

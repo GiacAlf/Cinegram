@@ -173,7 +173,7 @@
         <div id="mydiv" class="col-sm-3 sidenav"> <!-- https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg-->
             <p><h2> {$film->getTitolo()} </h2></p>
             <img src="{$film->getSrc($locandina_film)}"  class="img-rectangle" {$locandina_film[2]} alt="Locandina"><br>
-            <button type="button" class="btn btn-default btn-sm">
+            <div>
                 {if $visto == false}
                     <form action="https://{$root_dir}/film/vedi-film/{$film->getId()}" id="vedi" method="POST">
                         <button id="buttonVisto" form="vedi" type="submit" class="glyphicon glyphicon-eye-open"> Vedi Film</button>
@@ -193,7 +193,7 @@
                         il button type=submit invece fa partire un"altra pagina-->
                     </form>
                 {/if}
-            </button>
+            </div>
             {if $user == "admin"}
                 <form action="https://{$root_dir}/admin/mostra-film/{$film->getId()}" id="modifica" method="POST"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm" form="modifica"> Modifica Film </button>

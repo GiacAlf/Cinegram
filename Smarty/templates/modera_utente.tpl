@@ -134,7 +134,7 @@
             <div id="div">
                 <h2>Pagina di Moderazione Utenti</h2><br>
                 <h2>Benvenuto {$admin}</h2><br>
-                <h3>Moderazione dell"utente {$member->getUsername()}</h3><br>
+                <h3>Moderazione dell'utente {$member->getUsername()}</h3><br>
             </div>
 
             <div class="col-sm-8 text-center">

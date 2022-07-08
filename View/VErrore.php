@@ -67,7 +67,7 @@ class VErrore {
                 $titolo = 'Autenticazione non necessaria!';
                 break;
             case '13' :
-                $testo = 'il member moderato è già bannato';
+                $testo = 'il member moderato è già bannato oppure ha già 0 ammonizioni';
                 $titolo = 'Errore moderazione';
                 break;
             case '14' :

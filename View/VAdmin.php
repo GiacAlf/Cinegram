@@ -132,17 +132,19 @@ class VAdmin {
 
 
     //metodo che controlla che sia tutto ok
-    public function checkFoto(?array $array_foto): bool {
+    public function checkFoto(?array $array_foto): ?bool {
 
         $check = false;
-        if(isset($array_foto)){  //forse questo controllo ulteriore è inutile, però boh
+        if($array_foto['size'] != null && $array_foto['type']!= null){  //forse questo controllo ulteriore è inutile, però boh
             if($array_foto['size'] > self::$maxSizeImmagineProfilo){
                 $view_errore = new VErrore();
                 $view_errore->error(4);
+                return null;
             }
             elseif($array_foto['type'] != 'image/jpeg' && $array_foto['type'] != 'image/png') {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
+                return null;
             }
             else {
                 $check = true;
@@ -189,6 +191,7 @@ class VAdmin {
         }
         if(isset($_FILES['modifica_locandina']) && $this->checkFoto($_FILES['modifica_locandina'])){
             $array_modifiche['locandina'] = $_FILES['modifica_locandina'];
+
         }
         //si può usare array_filter per togliere gli eventuali campi nulli
         return array_filter($array_modifiche);

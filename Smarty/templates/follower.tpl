@@ -129,7 +129,7 @@
                         <div class="col-sm-3">
                             <img src="{$follower[$i]->getSrc($immagini_follower[$follower[$i]->getUsername()])}"
                                     {$immagini_follower[$follower[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Immagine profilo">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}">{$follower[$i]->getUsername()}</h5></a>
+                            <h5><a href="https://{$root_dir}/member/carica-member/{$follower[$i]->getUsername()}">{$follower[$i]->getUsername()}</a></h5>
                             <h9>follower: {$follower[$i]->getNumeroFollower()}</h9><br>
                             <h9>risposte: {$follower[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>
@@ -149,7 +149,7 @@
                         <div class="col-sm-3">
                             <img src="{$following[$i]->getSrc($immagini_following[$following[$i]->getUsername()])}"
                                     {$immagini_following[$following[$i]->getUsername()][2]} class="img-circle" style="width:100%" alt="Immagine profilo">
-                            <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}">{$following[$i]->getUsername()}</h5></a>
+                            <h5><a href="https://{$root_dir}/member/carica-member/{$following[$i]->getUsername()}">{$following[$i]->getUsername()}</a></h5>
                             <h9>follower: {$following[$i]->getNumeroFollower()}</h9><br>
                             <h9>risposte: {$following[$i]->getNumeroRisposte()}</h9><br><br> <!-- serve il metodo-->
                         </div>

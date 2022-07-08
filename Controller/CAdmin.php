@@ -251,6 +251,7 @@ class CAdmin {
                     $warningMemberDaAmmonire = $memberDaAmmonire->getWarning();
                     if($warningMemberDaAmmonire < EAdmin::$warningMassimi) {
                         FPersistentManager::incrementaWarning($usernameMember);
+                        $memberDaAmmonire->incrementaWarning();
                         if($memberDaAmmonire->getWarning() == EAdmin::$warningMassimi) {
                             FPersistentManager::bannaUser($memberDaAmmonire->getUsername());
                         }

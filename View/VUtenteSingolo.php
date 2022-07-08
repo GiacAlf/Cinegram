@@ -81,7 +81,7 @@ class VUtenteSingolo {
     public function checkFoto(): ?bool{
 
         $check = false;
-        if(isset($_FILES['nuova_img_profilo'])){  //forse questo controllo ulteriore è inutile, però boh
+        if($_FILES['size'] != null && $_FILES['type']!= null) { //forse questo controllo ulteriore è inutile, però boh
             if($_FILES['nuova_img_profilo']['size'] > self::$maxSizeImmagineProfilo) {
                 $view_errore = new VErrore();
                 $view_errore->error(4);

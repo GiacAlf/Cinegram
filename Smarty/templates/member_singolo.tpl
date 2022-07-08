@@ -178,7 +178,7 @@
                 </form>
                 <p>Hai {$member->getWarning()} warning. </p>
             {/if}
-            <button type="button" class="btn btn-default btn-sm">
+            <div>
                 {if $user != {$member->getUsername()} && $bannato == false}
                     {if $seguito == false}
                         <!-- cambiare la url-->
@@ -203,7 +203,7 @@
                         </form>
                     {/if}
                 {/if}
-            </button>
+            </div>
             {if $user == "admin"}
                 <form action="https://{$root_dir}/admin/mostra-member/{$member->getUsername()}" id="modera" method="POST"> <!-- qua bisogna solo far vedere il template -->
                     <button type="submit" class="btn btn-default btn-sm" form="modera"> Modera Utente </button>
@@ -245,8 +245,8 @@
                         <br>
                         <a href="https://{$root_dir}/film/mostra-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}">Rispondi</a>
                         {if $user == {$recensione->getUsernameAutore()}} &nbsp &nbsp &nbsp &nbsp
-                            <a href="https://{$root_dir}/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
-                            <a href="https://{$root_dir}/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
+                            <a href="https://{$root_dir}/film/modifica-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Modifica</button></a>
+                            <a href="https://{$root_dir}/film/elimina-recensione/{$recensione->getIdFilmRecensito()}/{$recensione->getUsernameAutore()}"><button>Cancella</button></a>
                         {/if}
 
                         {if $user == "admin"}
@@ -263,6 +263,7 @@
     <div   id ="mydiv2" class="col-sm-2 sidenav">
         <h4>Utenti più popolari</h4><br><br>
         {for $i=0 to {$utenti_popolari|count - 1}} <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="75"-->
+            <p>{$utenti_popolari[$i]->getUsername()}</p>
             <p><a href="https://{$root_dir}/member/carica-member/{$utenti_popolari[$i]->getUsername()}">
                     <img src="{$utenti_popolari[$i]->getSrc($immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()])}"  class="img-circle"
                             {$immagini_utenti_popolari[$utenti_popolari[$i]->getUsername()][2]} alt="Immagine profilo"></a></p><br>
