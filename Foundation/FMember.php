@@ -1042,7 +1042,8 @@ class FMember {
             return;
         }
 
-        // inizio piccola modifica, da testare
+
+        /* TODO vedere se con il seguente commentato il tutto funziona
         if($nuovoTipoImmagine == "image/jpeg")
             $immagine = imagecreatefromjpeg($nuovaImmagine);
         elseif($nuovoTipoImmagine == "image/png")
@@ -1051,12 +1052,15 @@ class FMember {
             print("Formato non valido!");
             return;
         }
-        // fine piccola modifica
+        */
 
+        /*
         // prendo il contenuto grezzo dell'immagine
         $immagineContenuto = file_get_contents($immagine);
         // eseguo l'escape
         $immagineDaSalvare = addslashes($immagineContenuto);
+        */
+        $immagineDaSalvare = addslashes($nuovaImmagine);
 
         if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();
