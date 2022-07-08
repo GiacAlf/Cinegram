@@ -298,7 +298,7 @@ class FMember {
     // salva l'oggetto member sul DB insieme alla sua immagine profilo, se non si vuole salvare l'immagine del profilo
     // per il momento inserire null nei 3 parametri relativi a essa
     // la password verrà criptata
-    public static function store(EMember $member, string $password, ?string $immagineProfilo, ?string $tipoImmagineProfilo,
+    public static function store(EMember $member, string $password, ?string $immagineProfiloPath, ?string $tipoImmagineProfilo,
                                  ?string $sizeImmagineProfilo): void {
 
         // si controlla se il member non sia già presente in DB prima di procedere
@@ -306,6 +306,22 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                if($sizeImmagineProfilo > self::$maxSizeImmagineProfilo) {
+                    print("Il file caricato è troppo grande!");
+                    return;
+                }
+                // ricavo l'array con le info dell'immagine
+                $arrayGetImageSize = getimagesize($immagineProfiloPath);
+
+                // si accettano solo jpeg e png
+                if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
+                    return;
+
+                // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+                $immagineProfilo = file_get_contents($immagineProfiloPath);
+                // eseguo l'escape
+                $immagineProfilo = addslashes($immagineProfilo);
+
                 // salvataggio nella tabella User
                 $query =
                     "INSERT INTO " . self::$nomeTabellaUser .
@@ -328,7 +344,7 @@ class FMember {
                     ":Warning" => $member->getWarning(),
                     ":DataIscrizione" => $member->getDataIscrizione()->format('Y-m-d'),
                     ":ImmagineProfilo" => $immagineProfilo,
-                    ":TipoImmagineProfilo" => $tipoImmagineProfilo,
+                    ":TipoImmagineProfilo" => $arrayGetImageSize['mime'],
                     ":SizeImmagineProfilo" => $sizeImmagineProfilo));
 
                 $pdo->commit();
@@ -1041,10 +1057,6 @@ class FMember {
             print("Il file caricato è troppo grande!");
             return;
         }
-
-        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-        $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
-
         // ricavo l'array con le info dell'immagine
         $arrayGetImageSize = getimagesize($nuovaImmaginePath);
 
@@ -1053,7 +1065,8 @@ class FMember {
             print("Formato non valido!");
             return;
         }
-
+        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+        $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
         // eseguo l'escape
         $nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
 
