@@ -88,7 +88,7 @@
                 <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
                 {if $user != "non_loggato"}
                     {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
-                        <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
+                        <li class="active"><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->
                     {else}
                         <li><a href="https://{$root_dir}/profilo/carica-profilo/{$user}">Profilo</a></li>
                     {/if}

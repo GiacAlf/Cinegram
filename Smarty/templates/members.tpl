@@ -84,9 +84,9 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
-                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
                 <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
-                <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
+                <li class="active"><a href="https://{$root_dir}/member/carica-members">Members</a></li>
                 {if $user != "non_loggato"}
                     {if $user == "admin"} <!-- i valori di user: "non_loggato", "admin", username del member -->
                         <li><a href="https://{$root_dir}/admin/carica-amministrazione">Amministrazione</a></li> <!-- qua dovrebbe dare la pagina principale di admin -->

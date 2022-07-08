@@ -82,7 +82,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="myul" class="nav navbar-nav">
-                <li class="active"><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
+                <li><a href="https://{$root_dir}/homepage/imposta-homepage">Homepage</a></li>
                 <li><a href="https://{$root_dir}/film/carica-films">Films</a></li>
                 <li><a href="https://{$root_dir}/member/carica-members">Members</a></li>
                 {if $user != "non_loggato"}
