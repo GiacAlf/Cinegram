@@ -15,7 +15,7 @@ class VUtenteSingolo {
     //come parametro l'utente selezionato
     public function avviaPaginaUtente(EMember $utente_selezionato, array $immagine_profilo,
                                       int $numero_film_visti, int $numero_following,
-                                      int $numero_follower, bool $seguito, array $utenti_popolari, array $immagini_utenti) {
+                                      int $numero_follower, bool $seguito, bool $bannato, array $utenti_popolari, array $immagini_utenti) {
 
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
@@ -24,6 +24,7 @@ class VUtenteSingolo {
         $this->smarty->assign('member', $utente_selezionato);
         $this->smarty->assign('immagine_profilo', $immagine_profilo);
         $this->smarty->assign('seguito', $seguito);
+        $this->smarty->assign('bannato', $bannato);
         $this->smarty->assign('film_visti', $utente_selezionato->getFilmVisti());
         $this->smarty->assign('recensioni', $utente_selezionato->getRecensioniScritte());
         $this->smarty->assign('numero_film_visti', $numero_film_visti);

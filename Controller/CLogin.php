@@ -58,7 +58,7 @@ class CLogin {
                         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
                         $view_member->avviaPaginaUtente($utente_completo, $immagine_profilo, FPersistentManager::calcolaNumeroFilmVisti($utente_completo),
                             FPersistentManager::calcolaNumeroFollowing($utente_completo), FPersistentManager::calcolaNumeroFollower($utente_completo),
-                            false, $utentiPiuPopolari, $immaginiUtentiPopolari);
+                            false, false, $utentiPiuPopolari, $immaginiUtentiPopolari);
                     }
                     else {
                         $view_admin = new VAdmin();

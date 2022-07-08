@@ -25,7 +25,7 @@ class CProfilo {
                 $utentiPopolari = FPersistentManager::caricaUtentiPiuPopolari($numeroEstrazioni);
                 $immaginiMembers = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
                 $view->avviaPaginaUtente($member, $immagineProfilo, $filmVisti, $following, $follower,
-                    false, $utentiPopolari, $immaginiMembers);
+                    false, false, $utentiPopolari, $immaginiMembers);
             }
             else {
                 $view = new VErrore();

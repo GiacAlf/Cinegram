@@ -63,6 +63,7 @@ class CMember {
             $filmVisti = FPersistentManager::calcolaNumeroFilmVisti($member);
             $following = FPersistentManager::calcolaNumeroFollowing($member);
             $follower = FPersistentManager::calcolaNumeroFollower($member);
+            $bannato = FPersistentManager::userBannato($username);
             $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
             $seguito = false;
             if (SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
@@ -74,7 +75,7 @@ class CMember {
             $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
             $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
             $view->avviaPaginaUtente($member, $immagine_profilo,
-                $filmVisti, $following, $follower, $seguito, $utentiPiuPopolari, $immaginiUtentiPopolari);
+                $filmVisti, $following, $follower, $seguito, $bannato, $utentiPiuPopolari, $immaginiUtentiPopolari);
         }
         else {
             $view = new VErrore();
