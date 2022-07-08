@@ -230,7 +230,7 @@
                 </div>
             {/if}
             <div class="container-fluid bg-3 text-left">
-                <br><h4>Scrivi una Recensione</h4>
+                <br><h4>Scrivi una Recensione:</h4>
                 <form action="https://{$root_dir}/film/scrivi-recensione/{$film->getId()}" role="form" id="scrivirecensione" method="POST">
                     <label for="voti">Scegli un voto:</label>
                     <div class="form-group">
