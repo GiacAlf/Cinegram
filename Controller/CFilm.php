@@ -206,16 +206,13 @@ class CFilm {
                 $array_modifica = $view->modificaRecensione();
                 $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null,
                     null, null, null, null, false);
-                if($array_modifica[1] == null && $array_modifica[0] != null) {//se il voto è null modifico solo il testo
-                    $updatedText = $array_modifica[0];
-                    FPersistentManager::update($recensione, "testo", $updatedText, null, null,
-                        null, null, null);
-                } elseif ($array_modifica[0] == null && $array_modifica[1] != null) { //se il testo nuovo è null modifico solo il voto
+                if($array_modifica[0] == null) { //se il testo nuovo è null modifico solo il voto
                     //se ricevo il voto aggiorno quello
                     $updatedVote = $array_modifica[1];
                     FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
                         null, null, null);
-                } elseif ($array_modifica[0] != null && $array_modifica[1] != null) { //se tutti e due sono pieni, modifico tutte e due
+                }
+                else{ //se tutti e due sono pieni, modifico tutte e due
                     $updatedText = $array_modifica[0];
                     $updatedVote = $array_modifica[1];
                     FPersistentManager::update($recensione, "testo", $updatedText, null, null,
