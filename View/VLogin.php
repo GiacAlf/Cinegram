@@ -102,7 +102,7 @@ class VLogin {
 
     public function checkFoto(): ?bool {
         $check = false;
-        if($_FILES['size'] != null && $_FILES['type']!= null){  //forse questo controllo ulteriore è inutile, però boh
+        if($_FILES['immagine_profilo']['size'] != null && $_FILES['immagine_profilo']['type']!= null){  //forse questo controllo ulteriore è inutile, però boh
             if($_FILES['immagine_profilo']['size'] > self::$maxSizeImmagineProfilo) {
                 $view_errore = new VErrore();
                 $view_errore->error(4);
