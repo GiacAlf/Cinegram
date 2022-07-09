@@ -64,7 +64,7 @@ class VAdmin {
 
     //ora metto tutti i metodi per prendere l'input per caricare un film
     //tutti separati, per ora, perché secondo me tutto insieme è un po' un casino
-    public function getTitolo(): string {
+    public function getTitolo(): ?string {
 
         $titolo = null;
         if(isset($_POST['titolo'])) {
@@ -74,7 +74,7 @@ class VAdmin {
     }
 
 
-    public function getDurata(): int {
+    public function getDurata(): ?int {
 
         $durata = null;
         if(isset($_POST['durata'])){
@@ -84,7 +84,7 @@ class VAdmin {
     }
 
 
-    public function getSinossi(): string {
+    public function getSinossi(): ?string {
 
         $sinossi = null;
         if(isset($_POST['sinossi'])){
@@ -96,7 +96,7 @@ class VAdmin {
 
     //non ricordo minimamente come viene restituita la data da quel calendarino
     //delle form, per ora come scheletro ci sta
-    public function getData(): DateTime {
+    public function getData(): ?DateTime {
 
         $data = null;
         if(isset($_POST['data'])){
@@ -111,7 +111,7 @@ class VAdmin {
     //array, il che in teoria è fattibile ma in pratica vallo a sapere,
     //allora questi metodi hanno senso, in caso contrario tocca farsi il segno
     //della croce
-    public function getRegisti(): array {
+    public function getRegisti(): ?array {
 
         $registi = array();
         if(isset($_POST['registi'])){
@@ -121,7 +121,7 @@ class VAdmin {
     }
 
 
-    public function getAttori(): array {
+    public function getAttori(): ?array {
 
         $attori = array();
         if(isset($_POST['attori'])){

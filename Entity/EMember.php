@@ -230,7 +230,7 @@ class EMember extends EUser {
     // prende come parametro l'array risultante da EMember::loadImmagineProfilo
     public static function getSrc(?array $immagineProfilo): ?string {
 
-        if($immagineProfilo[0] === null)
+        if($immagineProfilo[0] == null)
             return "/Src/Avatar_Nullo.jpeg";
 
         $encodeBase64 = $immagineProfilo[0];

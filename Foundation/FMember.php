@@ -1064,18 +1064,24 @@ class FMember {
             print("Il file caricato è troppo grande!");
             return;
         }
-        // ricavo l'array con le info dell'immagine
-        $arrayGetImageSize = getimagesize($nuovaImmaginePath);
+        if($nuovaImmaginePath != null) {
+            // ricavo l'array con le info dell'immagine
+            $arrayGetImageSize = getimagesize($nuovaImmaginePath);
 
-        // si accettano solo jpeg e png
-        if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
-            print("Formato non valido!");
-            return;
+            // si accettano solo jpeg e png
+            if ($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
+                print("Formato non valido!");
+                return;
+            }
+            // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+            $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
+            // eseguo l'escape
+            $nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
         }
-        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-        $nuovaImmagineStringa = file_get_contents($nuovaImmaginePath);
-        // eseguo l'escape
-        $nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
+        else{
+            $nuovaImmagineStringa = null;
+            $arrayGetImageSize['mime'] = null;
+        }
 
         if((FUser::exist($username))) {
             $pdo = FConnectionDB::connect();

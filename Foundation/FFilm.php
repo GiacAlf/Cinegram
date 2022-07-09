@@ -457,18 +457,24 @@ class FFilm {
                     print("Il file caricato è troppo grande!");
                     return;
                 }
-                // ricavo l'array con le info dell'immagine
-                $arrayGetImageSize = getimagesize($locandinaPath);
+                if($locandinaPath != null) {
+                    // ricavo l'array con le info dell'immagine
+                    $arrayGetImageSize = getimagesize($locandinaPath);
 
-                // si accettano solo jpeg e png
-                if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
-                    return;
+                    // si accettano solo jpeg e png
+                    if ($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
+                        return;
 
-                // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-                $locandina = file_get_contents($locandinaPath);
-                // eseguo l'escape
-                // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
-                // $locandina = addslashes($locandina);
+                    // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+                    $locandina = file_get_contents($locandinaPath);
+                    // eseguo l'escape
+                    // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
+                    // $locandina = addslashes($locandina);
+                }
+                else{
+                    $locandina = null;
+                    $arrayGetImageSize['mime'] = null;
+                }
 
                 $query =
                     "INSERT INTO " . self::$nomeTabella .
@@ -838,18 +844,24 @@ class FFilm {
             print("Il file caricato è troppo grande!");
             return;
         }
-        // ricavo l'array con le info dell'immagine
-        $arrayGetImageSize = getimagesize($nuovaLocandinaPath);
+        if($nuovaLocandinaPath != null) {
+            // ricavo l'array con le info dell'immagine
+            $arrayGetImageSize = getimagesize($nuovaLocandinaPath);
 
-        // si accettano solo jpeg e png
-        if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
-            print("Formato non valido!");
-            return;
+            // si accettano solo jpeg e png
+            if ($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png") {
+                print("Formato non valido!");
+                return;
+            }
+            // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+            $nuovaLocandinaStringa = file_get_contents($nuovaLocandinaPath);
+            // eseguo l'escape
+            $nuovaLocandinaStringa = addslashes($nuovaLocandinaStringa);
         }
-        // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-        $nuovaLocandinaStringa = file_get_contents($nuovaLocandinaPath);
-        // eseguo l'escape
-        $nuovaLocandinaStringa = addslashes($nuovaLocandinaStringa);
+        else{
+            $nuovaLocandinaStringa = null;
+            $arrayGetImageSize['mime'] = null;
+        }
 
         if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
