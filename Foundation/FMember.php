@@ -310,19 +310,25 @@ class FMember {
                     print("Il file caricato è troppo grande!");
                     return;
                 }
-                // ricavo l'array con le info dell'immagine
-                $arrayGetImageSize = getimagesize($immagineProfiloPath);
 
-                // si accettano solo jpeg e png
-                if($arrayGetImageSize['mime'] ==! "image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
-                    return;
+                if($immagineProfiloPath != null) {
+                    // ricavo l'array con le info dell'immagine
+                    $arrayGetImageSize = getimagesize($immagineProfiloPath);
 
-                // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
-                $immagineProfilo = file_get_contents($immagineProfiloPath);
-                // eseguo l'escape
-                // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
-                // $immagineProfilo = addslashes($immagineProfilo);
+                    // si accettano solo jpeg e png
+                    if ($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
+                        return;
 
+                    // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
+                    $immagineProfilo = file_get_contents($immagineProfiloPath);
+                    // eseguo l'escape
+                    // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
+                    // $immagineProfilo = addslashes($immagineProfilo);
+                }
+                else{
+                    $immagineProfilo = null;
+                    $arrayGetImageSize['mime'] = null;
+                }
                 // salvataggio nella tabella User
                 $query =
                     "INSERT INTO " . self::$nomeTabellaUser .
