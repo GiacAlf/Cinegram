@@ -7,52 +7,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://{$root_dir}/Cinegram/Smarty/css/filmSingolo.css"">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-
-    <script>
-        function functionVisto(){
-
-            button=document.getElementById("buttonVisto")
-            if(button.innerHTML=="Vedi Film"){
-                button.innerHTML="Togli Visto Film"
-                button.className="glyphicon glyphicon-eye-close"
-                const Http = new XMLHttpRequest();
-                const url="https://{$root_dir}/film/rimuovi-film/{{$film->getId()}}";
-                Http.open("GET", url);
-                Http.send();
-            }
-            else
-            {
-                button.innerHTML="Vedi Film"
-                button.className="glyphicon glyphicon-eye-open"
-                const Http = new XMLHttpRequest();
-                const url="https://{$root_dir}/film/vedi-film/{{$film->getId()}}";
-                Http.open("GET", url);
-                Http.send();
-            }
-        }
-
-        function functionNonVisto(){
-
-            button=document.getElementById("buttonNonVisto")
-            if(button.innerHTML=="Vedi Film"){
-                button.innerHTML="Togli Visto Film"
-                button.className="glyphicon glyphicon-eye-close"
-                const Http = new XMLHttpRequest();
-                const url="https://{$root_dir}/film/rimuovi-film/{{$film->getId()}}";
-                Http.open("GET", url);
-                Http.send();
-            }
-            else
-            {
-                button.innerHTML="Vedi Film"
-                button.className="glyphicon glyphicon-eye-open"
-                const Http = new XMLHttpRequest();
-                const url="https://{$root_dir}/film/vedi-film/{{$film->getId()}}";
-                Http.open("GET", url);
-                Http.send();
-            }
-        }
-    </script>
 </head>
 <body>
 
