@@ -1,12 +1,27 @@
 <?php
 
+/**
+ *Classe adibita a gestire tutto l'input e l'output inerenti alle attività di login
+ * e registrazione dell'utente
+ */
 class VLogin {
-
+    /**
+     * L'oggetto smarty con cui configurare i template
+     * @var Smarty
+     */
     private Smarty $smarty;
+    /**
+     * Il massimo peso, in byte, delle immagini che l'utente può caricare
+     * @var int
+     */
     private static int $maxSizeImmagineProfilo = 524288;
 
     //il costruttore della  page richiama l'oggetto smarty configurato
     //e se lo salva
+    /**
+     *Costruttore della classe che configura l'oggetto smarty con i giusti path per
+     * la cartella dei template
+     */
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
     }
@@ -14,6 +29,11 @@ class VLogin {
 
     //il metodo di avvio della pagina non fa altro che presentare la form di login
     //e basta, non devo assegnare niente
+    /**
+     * Metodo che fa visualizzare la pagina utile all'utente per loggarsi
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaPaginaLogin(): void {
 
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A LOGIN $user = "non_loggato"
@@ -28,6 +48,11 @@ class VLogin {
 
     //due template diversi per il login e la registrazione? Sennò
     //penso vada bene uno solo comunque
+    /**
+     * Metodo che fa visualizzare la pagina utile all'utente per registrarsi
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaPaginaRegistrazione(): void {
 
         //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE A REGISTRAZIONE $user = "non_loggato"
@@ -41,6 +66,11 @@ class VLogin {
 
 
     //metodo per verificare il login, devo discriminare dai campi registrazione
+
+    /**
+     * Metodo che recupera lo username e la password inserite dall'utente per loggarsi
+     * @return array
+     */
     public function verificaLogin(): array {
 
         $username = null;
@@ -55,6 +85,12 @@ class VLogin {
 
 
     //TODO: metodo per registrarsi, devo discriminare dai campi login -> MANCA IL CONFERMA PASSWORD
+
+    /**
+     * Metodo che recupera tutte le credenziali inserite dall'utente necessarie per loggarsi: username, password
+     * conferma della password ed, eventualmente, una bio
+     * @return array
+     */
     public function RegistrazioneCredenziali(): array {
 
         //$pattern1 = "/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[*!@$%^&£'\"#(){}\[\]>°?~_+-=|]).{8,32}$/";
@@ -79,6 +115,12 @@ class VLogin {
 
 
     //metto a parte la roba per le foto, non ho idea per ora di come gestirlo $_Files
+
+    /**
+     *Metodo che recupera l'eventuale immagine profilo che l'utente ha caricato per
+     * registrarsi
+     * @return array|null
+     */
     public function RegistrazioneImmagineProfilo(): ?array {
 
         $array_foto = null;
@@ -89,6 +131,11 @@ class VLogin {
     }
 
 
+    /**
+     * Metodo che verifica e controlla la robustezza della password
+     * @param string $password
+     * @return bool
+     */
     public function checkPassword(string $password): bool {
 
         $match = false;
@@ -100,6 +147,12 @@ class VLogin {
     }
 
 
+    /**
+     * Metodo che controlla se l'immagine caricata dall'utente rispetti le specifiche desiderate:
+     * peso non superiore a 500 KB e tipo jpeg o png
+     * @return bool|null
+     * @throws SmartyException
+     */
     public function checkFoto(): ?bool {
         $check = false;
         if($_FILES['immagine_profilo']['size'] != null && $_FILES['immagine_profilo']['type']!= null){  //forse questo controllo ulteriore è inutile, però boh

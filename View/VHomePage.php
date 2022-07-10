@@ -1,11 +1,21 @@
 <?php
 
+/**
+ *Classe adibita a far visualizzare la home page dell'applicazione
+ */
 class VHomePage {
-
+    /**
+     * L'oggetto smarty con cui configurare i template
+     * @var Smarty
+     */
     private Smarty $smarty;
 
     //il costruttore della home page richiama l'oggetto smarty configurato
     //e se lo salva
+    /**
+     *Costruttore della classe che configura l'oggetto smarty con i giusti path per
+     * la cartella dei template
+     */
     public function __construct() {
         $this->smarty = StartSmarty::configuration();
     }
@@ -16,6 +26,19 @@ class VHomePage {
 
     //metodo per farmi comparire l'home page riempita con tutti i dati necessari -> dato che il display è un print
     //è ok il ritorno void, credo
+    /**
+     * Metodo che fa visualizzare l'home page dell'applicazione con alcune info: film recenti, ultime recensioni
+     * film più visti e utenti più popolari
+     * @param array $film_recenti
+     * @param array $locandine_film_recenti
+     * @param array $film_visti
+     * @param array $locandine_film_visti
+     * @param array $ultime_recensioni
+     * @param array $utenti_popolari
+     * @param array $immagini_utenti_popolari
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaHomePage(array $film_recenti, array $locandine_film_recenti, array $film_visti,
                                   array $locandine_film_visti, array $ultime_recensioni,
                                   array $utenti_popolari, array $immagini_utenti_popolari): void {

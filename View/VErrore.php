@@ -1,14 +1,33 @@
 <?php
 
+/**
+ *Classe adibita a far visualizzare all'utente l'errore che ha commesso
+ * durante varie azioni
+ */
 class VErrore {
 
+    /**
+     * L'oggetto smarty con cui configurare i template
+     * @var Smarty
+     */
     private Smarty $smarty;
 
+    /**
+     *Costruttore della classe che configura l'oggetto smarty con i giusti path per
+     * la cartella dei template
+     */
     public function __construct() {
         $this->smarty = StartSmarty::configuration();
     }
 
 
+    /**
+     * Metodo che fa visualizzare una pagina di errore differente a seconda dell'errore commesso
+     * dall'utente
+     * @param int $id_errore
+     * @return void
+     * @throws SmartyException
+     */
     public function error(int $id_errore): void {
 
         $root_dir = VUtility::getRootDir();

@@ -1,11 +1,22 @@
 <?php
 
+/**
+ *Classe adibita a gestire e a mostrare la pagina dell'applicazione
+ * nota come Films
+ */
 class VFilms {
-
+    /**
+     * L'oggetto smarty con cui configurare i template
+     * @var Smarty
+     */
     private Smarty $smarty;
 
     //il costruttore della page richiama l'oggetto smarty configurato
     //e se lo salva
+    /**
+     *Costruttore della classe che configura l'oggetto smarty con i giusti path per
+     * la cartella dei template
+     */
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
     }
@@ -17,6 +28,19 @@ class VFilms {
     //metodo per creare la pagina dei films: per forza di cose qua credo che sia necessario
     //chiedere le statistiche ai Controller direttamente nel metodo
     //La pagina cambia a seconda se si è registrati o meno
+    /**
+     * Metodo che fa visualizzare una pagina in cui l'utente può vedere diverse tipologie
+     * di film, scelti per data d'uscita o per votazione media
+     * @param array $film_voto_medio
+     * @param array $locandine_film_voto
+     * @param array $utenti_seguiti
+     * @param array $immagini_seguiti
+     * @param array $film_recenti
+     * @param array $locandine_film_recenti
+     * @param array $recensioni
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaPaginaFilms(array $film_voto_medio, array $locandine_film_voto, array $utenti_seguiti,
                                      array $immagini_seguiti, array $film_recenti, array $locandine_film_recenti,
                                      array $recensioni): void {
