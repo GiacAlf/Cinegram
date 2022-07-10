@@ -490,13 +490,14 @@ class FFilm {
                     ":SizeLocandina" => $sizeLocandina));
 
                 // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
-                if($listaAttori) FFilm::storeAttori($film, $listaAttori);
+                //if($listaAttori) FFilm::storeAttori($film, $listaAttori);
 
                 // ogni regista della lista, se non vuota, verrà salvato in persona e in personefilm
-                if($listaRegisti) FFilm::storeRegisti($film, $listaRegisti);
+                //if($listaRegisti) FFilm::storeRegisti($film, $listaRegisti);
 
                 $pdo->commit();
                 echo "\nInserimento avvenuto con successo!";
+
             }
             catch (PDOException $e) {
                 $pdo->rollback();
@@ -602,7 +603,7 @@ class FFilm {
         // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
         // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
         if($listaAttori) {
-            FFilm::deleteFromPersoneFilm($film);
+            //FFilm::deleteFromPersoneFilm($film);
             FFilm::storeAttori($film, $listaAttori);
         }
     }
@@ -615,7 +616,7 @@ class FFilm {
         // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
         // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
         if($listaRegisti) {
-            FFilm::deleteFromPersoneFilm($film);
+            //FFilm::deleteFromPersoneFilm($film);
             FFilm::storeRegisti($film, $listaRegisti);
         }
     }
@@ -667,7 +668,7 @@ class FFilm {
 
 
     // cancella le recensioni riferite al film passato per parametro dal DB
-    private static function deleteFromPersoneFilm(EFilm $film): void {
+    public static function deleteFromPersoneFilm(EFilm $film): void {
 
         if (FFilm::existById($film->getId())) {
             $pdo = FConnectionDB::connect();

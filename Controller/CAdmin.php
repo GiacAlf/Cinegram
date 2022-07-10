@@ -104,7 +104,7 @@ class CAdmin {
                 $film = new EFilm(null, $titolo, $data, $durata, $sinossi, null, null,
                     $listaRegisti, $listaAttori, null);
 
-                FPersistentManager::store($film, $film, null, null, null,
+                FPersistentManager::store($film, $film, null, $listaAttori, $listaRegisti,
                     $immagine, $tipoImmagine, $sizeImmagine);
                 header("Location: https://" . VUtility::getRootDir() . "/admin/carica-amministrazione");
             }
@@ -142,13 +142,19 @@ class CAdmin {
                     FPersistentManager::update($film, null, null, null, null,
                         $array_modifiche['data'], null, null);
                 }
-                if(isset($array_modifiche['attori'])) {
+                if(isset($array_modifiche['attori']) && isset($array_modifiche['registi'])){
                     FPersistentManager::update($film, null, null, null,
-                        null, null, $array_modifiche['attori'], null);
+                        null, null, $array_modifiche['attori'], $array_modifiche['registi']);
                 }
-                if(isset($array_modifiche['registi'])) {
-                    FPersistentManager::update($film, null, null, null,
-                        null, null, null, $array_modifiche['registi']);
+                else {
+                    if (isset($array_modifiche['attori'])) {
+                        FPersistentManager::update($film, null, null, null,
+                            null, null, $array_modifiche['attori'], null);
+                    }
+                    if (isset($array_modifiche['registi'])) {
+                        FPersistentManager::update($film, null, null, null,
+                            null, null, null, $array_modifiche['registi']);
+                    }
                 }
                 if(isset($array_modifiche['locandina'])) {
                     FPersistentManager::updateLocandina($film, $array_modifiche['locandina']['tmp_name'],

@@ -208,6 +208,7 @@
                 {foreachelse}
                 <div> Il film non ha registi </div>
             {/foreach}
+            <br>
             <span align="left">{$film->getSinossi()}</span>
             <br>
             <h5> Views: {$film->getNumeroViews()} </h5>

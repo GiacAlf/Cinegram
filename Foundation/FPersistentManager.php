@@ -104,10 +104,19 @@ class FPersistentManager {
         if($FClass == "FFilm") {
             if($nuovaData)
                 return $FClass::updateData($object, $nuovaData);
-            if($listaAttori)
-                return $FClass::updateAttori($object, $listaAttori);
-            if($listaRegisti)
-                return $FClass::updateAttori($object, $listaRegisti);
+            //mi serve che il delete lo faccia e poi va giù
+            if($listaAttori && $listaRegisti) {
+                $FClass::deleteFromPersoneFilm($object);
+                $FClass::updateAttori($object, $listaAttori);
+                $FClass::updateRegisti($object, $listaRegisti);
+                return null;
+            }
+                else{
+                if ($listaAttori)
+                    return $FClass::updateAttori($object, $listaAttori);
+                if ($listaRegisti)
+                    return $FClass::updateRegisti($object, $listaRegisti);
+            }
             return $FClass::update($object, $nomeAttributo, $nuovoValore);
         }
         return null;
