@@ -5,7 +5,7 @@ class CHomepage {
     /* sara' il metodo sempre chiamato all'inizio(?), url del tipo localhost/homepage/imposta-homepage in get */
     public static function impostaHomepage(): void {
 
-        $numero_estrazioni = 2;
+        $numero_estrazioni = 4;
         $view = new VHomePage();
 
         $filmRecenti = FPersistentManager::caricaFilmRecenti($numero_estrazioni);
@@ -15,7 +15,7 @@ class CHomepage {
         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
 
         // per ora no agli avatar vicino alle recensioni (e risposte) ci mettiamo solo gli username
-        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte($numero_estrazioni);
+        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte(6);
 
         //nel template ci sono i film più visti, prima qua c'erano i più recensiti
         //sceglieremo poi

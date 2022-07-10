@@ -226,7 +226,7 @@
         <div class="col-sm-7 text-center">
             {if $ha_scritto == true}
                 <div class="container-fluid bg-3 text-left">
-                    <p>L"utente {$user} ha già scritto una recensione per questo film. Per poterla vedere cliccare
+                    <p>L'utente {$user} ha già scritto una recensione per questo film. Per poterla vedere cliccare
                         <a href="https://{$root_dir}/film/mostra-recensione/{$film->getId()}/{$user}"> qui. </a></p>
                 </div>
             {/if}

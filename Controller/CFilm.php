@@ -501,13 +501,13 @@ class CFilm {
 
         $numero_estrazioni = 5;
 
-        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti($numero_estrazioni);
-        $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
+        $filmVotoMedioPiuAlto = FPersistentManager::caricaFilmConVotoMedioPiuAlto($numero_estrazioni);
+        $locandineVotoMedioPiuAlto = FPersistentManager::loadLocandineFilms($filmVotoMedioPiuAlto, false);
 
         $utentiPiuSeguiti=FPersistentManager::caricaUtentiConPiuFollower($numero_estrazioni);
         $immaginiUtentiSeguiti = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuSeguiti, false);
 
-        $filmPiuRecenti = FPersistentManager::caricaFilmRecenti($numero_estrazioni);
+        $filmPiuRecenti = FPersistentManager::caricaFilmRecenti(8);
         $locandineFilmRecenti = FPersistentManager::loadLocandineFilms($filmPiuRecenti, true);
 
         $recensioni = FPersistentManager::caricaUltimeRecensioniScritte($numero_estrazioni);
@@ -518,7 +518,7 @@ class CFilm {
         $view = new VFilms();
 
         //far fare il display della pagina alla view
-        $view->avviaPaginaFilms($filmPiuVisti, $locandineFilmPiuVisti, $utentiPiuSeguiti, $immaginiUtentiSeguiti,
+        $view->avviaPaginaFilms($filmVotoMedioPiuAlto, $locandineVotoMedioPiuAlto, $utentiPiuSeguiti, $immaginiUtentiSeguiti,
             $filmPiuRecenti, $locandineFilmRecenti, $recensioni);
     }
 }

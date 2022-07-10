@@ -17,7 +17,7 @@ class VFilms {
     //metodo per creare la pagina dei films: per forza di cose qua credo che sia necessario
     //chiedere le statistiche ai Controller direttamente nel metodo
     //La pagina cambia a seconda se si è registrati o meno
-    public function avviaPaginaFilms(array $film_visti, array $locandine_film_visti, array $utenti_seguiti,
+    public function avviaPaginaFilms(array $film_voto_medio, array $locandine_film_voto, array $utenti_seguiti,
                                      array $immagini_seguiti, array $film_recenti, array $locandine_film_recenti,
                                      array $recensioni): void {
 
@@ -25,8 +25,8 @@ class VFilms {
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
         $this->smarty->assign('root_dir', $root_dir);
-        $this->smarty->assign('film_visti', $film_visti);
-        $this->smarty->assign('locandine_film_visti', $locandine_film_visti);
+        $this->smarty->assign('film_voto_medio', $film_voto_medio);
+        $this->smarty->assign('locandine_voto_medio', $locandine_film_voto);
         $this->smarty->assign('utenti_seguiti', $utenti_seguiti);
         $this->smarty->assign('immagini_utenti_seguiti', $immagini_seguiti);
         $this->smarty->assign('film_recenti', $film_recenti);

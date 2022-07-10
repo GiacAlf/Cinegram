@@ -161,7 +161,7 @@
                         <input type="text" name="sinossi" class="form-control" form="inserisci_film" id="sinossi" placeholder="Inserisci la sinossi" required>*
                     </div>
 
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label for="registi">Lista Registi:<h6>Inserire nome e cognome, separati da una ",", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="registi" class="form-control" form="inserisci_film" id="registi" placeholder="Inserisci i registi" required>*
                     </div>
@@ -169,7 +169,7 @@
                     <div class="form-group">
                         <label for="attori">Lista Attori:<h6>Inserire nome e cognome, separati da una ",", dell"attore, ciascun attore separato dall"altro dal " ; "</h6></label>
                         <input type="text" name="attori" class="form-control" form="inserisci_film" id="attori" placeholder="Inserisci gli attori" required>*
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="locandina">Inserisci la locandina del film:</label>

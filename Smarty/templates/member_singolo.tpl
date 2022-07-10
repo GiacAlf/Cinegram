@@ -238,7 +238,7 @@
                 {/if}
                 {foreach $recensioni as $recensione}
                     <div class="col-sm-10">
-                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getTitoloById()}"><h3>{$recensione->getTitoloById()}</a>
+                        <a href="https://{$root_dir}/film/carica-film/{$recensione->getIdFilmRecensito()}"><h3>{$recensione->getTitoloById()}</a>
                         <small>{$recensione->getDataScrittura()->format("d-m-Y H:i")}</small></h3>
                         <h4>Voto: {$recensione->getVoto()}</h4>
                         <p>{$recensione->getTesto()}</p>

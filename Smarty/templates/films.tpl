@@ -127,11 +127,11 @@
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv2" class="col-sm-2 sidenav">
             <h4>Film più visti</h4><br><br>
-            {for $i=0 to {$film_visti|count - 1}}
-                <p>{$film_visti[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
-                <p><a href="https://{$root_dir}/film/carica-film/{$film_visti[$i]->getId()}">
-                        <img src="{$film_visti[$i]->getSrc($locandine_film_visti[$film_visti[$i]->getId()])}"  class="img-rectangle"
-                                {$locandine_film_visti[$film_visti[$i]->getId()][2]} alt="Locandina"></a></p><br>
+            {for $i=0 to {$film_voto_medio|count - 1}}
+                <p>{$film_voto_medio[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
+                <p><a href="https://{$root_dir}/film/carica-film/{$film_voto_medio[$i]->getId()}">
+                        <img src="{$film_voto_medio[$i]->getSrc($locandine_voto_medio[$film_voto_medio[$i]->getId()])}"  class="img-rectangle"
+                                {$locandine_voto_medio[$film_voto_medio[$i]->getId()][2]} alt="Locandina"></a></p><br>
             {forelse}
                 <p> Non ci sono film visti </p>
             {/for}
