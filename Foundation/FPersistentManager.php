@@ -104,8 +104,10 @@ class FPersistentManager {
         if($FClass == "FFilm") {
             if($nuovaData)
                 return $FClass::updateData($object, $nuovaData);
-            if($listaAttori || $listaRegisti)
-                return $FClass::updateAttoriERegisti($object, $listaAttori, $listaRegisti);
+            if($listaAttori)
+                return $FClass::updateAttori($object, $listaAttori);
+            if($listaRegisti)
+                return $FClass::updateAttori($object, $listaRegisti);
             return $FClass::update($object, $nomeAttributo, $nuovoValore);
         }
         return null;

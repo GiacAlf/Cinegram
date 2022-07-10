@@ -595,15 +595,29 @@ class FFilm {
     // L'update è intesto come sostituzione di un vecchio parametro con un nuovo ma in questo caso si tratta di più
     // parametri che vanno aggiornati, quindi, non potendo usare una singola istruzione di update, si procederà
     // con la cancellazione degli esistenti e l'inserimento dei nuovi
-    public static function updateAttoriERegisti(EFilm $film, ?array $listaAttori, ?array $listaRegisti): void {
+    public static function updateAttori(EFilm $film, ?array $listaAttori): void {
 
         // cancellando il film dalla tabella PersoneFilm si eliminano tutti gli attori e registi ad esso collegato, che
         // é proprio quello che vogliamo fare quì, e si considererà trascurabile l'aver inserito un attore o un regista
         // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
         // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
-        FFilm::deleteFromPersoneFilm($film);
-        FFilm::storeAttori($film, $listaAttori);
-        FFilm::storeRegisti($film, $listaRegisti);
+        if($listaAttori) {
+            FFilm::deleteFromPersoneFilm($film);
+            FFilm::storeAttori($film, $listaAttori);
+        }
+    }
+
+
+    public static function updateRegisti(EFilm $film, ?array $listaRegisti): void {
+
+        // cancellando il film dalla tabella PersoneFilm si eliminano tutti gli attori e registi ad esso collegato, che
+        // é proprio quello che vogliamo fare quì, e si considererà trascurabile l'aver inserito un attore o un regista
+        // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
+        // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
+        if($listaRegisti) {
+            FFilm::deleteFromPersoneFilm($film);
+            FFilm::storeRegisti($film, $listaRegisti);
+        }
     }
 
 
