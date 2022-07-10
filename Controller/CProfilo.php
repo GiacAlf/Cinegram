@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Controllore che gestisce le funzionalità legate alla gestione del
+ * profilo personale dell'utente
+ */
 class CProfilo {
 
     /*
@@ -7,6 +11,13 @@ class CProfilo {
     bottone da premere), inviera' una url in get
     localhost/profilo/carica-profilo/username
     */
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la pagina personale
+     * dell'utente loggato, raccogliendo dal database tutte le informazioni necessarie
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaProfilo(string $username): void {
 
         if(SessionHelper::isLogged() && $username == SessionHelper::getUtente()->getUsername()) {
@@ -45,6 +56,12 @@ class CProfilo {
     la foto con la form per i file vista a lezione. Url localhost/profilo/aggiorna-immagine
     */
 
+    /**
+     * Metodo che, una volta recuperati i dati dalla view, aggiorna l'immagine profilo dell'utente
+     * loggato
+     * @return void
+     * @throws SmartyException
+     */
     public static function aggiornaImmagine(): void {
 
         //verifica che l'utente sia registrato
@@ -78,6 +95,12 @@ class CProfilo {
     mettiamo stringa vuota e le deve modificare lui la prima volta tramite questo metodo(?), da vedere.
     Associamo una richiesta http fatta in get con url localhost/profilo/aggiorna-bio
     */
+    /**
+     * Metodo che, una volta recuperati i dati dalla view, aggiorna la bio dell'utente
+     * loggato
+     * @return void
+     * @throws SmartyException
+     */
     public static function aggiornaBio(): void {
 
         //verificare che l'utente è registrato e caricare il suo username dalla sessione
@@ -108,6 +131,12 @@ class CProfilo {
     localhost/profilo/aggiorna-password, metodo post dove inviera' la nuova password
     */
 
+    /**
+     * Metodo che, una volta recuperati i dati necessari dalla view, aggiorna la password dell'utente
+     * loggato
+     * @return void
+     * @throws SmartyException
+     */
     public static function aggiornaPassword(): void {
 
         /* recupero della nuova password dalla form, ma questa funzione puo' essere
@@ -158,6 +187,13 @@ class CProfilo {
 
 
     //localhost/profilo/modifica-profilo
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la pagina per modificare
+     * il profilo dell'utente loggato
+     * @return void
+     * @throws SmartyException
+     */
     public static function modificaProfilo(): void {
 
         //prendo l'utente dalla sessione, oppure lo passo nell'url per far i controlli?

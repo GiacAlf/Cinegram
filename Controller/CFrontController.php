@@ -1,7 +1,17 @@
 <?php
 
+/**
+ *Classe che fa partire il controllore e il metodo corretto a
+ * seconda del clic dell'utente
+ */
 class CFrontController {
 
+    /**
+     * Metodo che, una volta interpretata l'url e gli eventuali parametri in ingresso,
+     * chiama ed esegue un metodo di un controllore
+     * @return void
+     * @throws SmartyException
+     */
     public function run(): void {
 
         $path = $this->parsingFrontControllerUrl();
@@ -40,6 +50,11 @@ class CFrontController {
     }
 
 
+    /**
+     * Metodo che interpreta il corretto metodo del controllore da chiamare
+     * @param string|null $path
+     * @return string|null
+     */
     private function capisciUrl(?string $path): ?string {
 
         $arrayRisultato = explode("-", $path);
@@ -48,6 +63,10 @@ class CFrontController {
     }
 
 
+    /**
+     * Metodo che restituisce la url cliccata dall'utente
+     * @return string
+     */
     private function parsingFrontControllerUrl(): string {
 
         $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

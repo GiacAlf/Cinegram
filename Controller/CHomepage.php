@@ -1,8 +1,17 @@
 <?php
 
+/**
+ *Controllore che gestisce unicamente le funzionalità legate alla homepage
+ */
 class CHomepage {
 
     /* sara' il metodo sempre chiamato all'inizio(?), url del tipo localhost/homepage/imposta-homepage in get */
+    /**
+     * Metodo che, recuperando dal database alcune informazioni su film, utenti e recensioni, chiama la view adibita
+     * a far visualizzare l'home page
+     * @return void
+     * @throws SmartyException
+     */
     public static function impostaHomepage(): void {
 
         $numero_estrazioni = 4;

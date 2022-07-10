@@ -1,11 +1,20 @@
 <?php
 
+/**
+ *Controllore che gestisce le funzionalità legate al login dell'utente
+ */
 class CLogin {
 
     /*
     metodo che permette al member di fare login, ci sara' una form che inviera' i dati in post
     propongo una url localhost/login/verifica-login
     */
+    /**
+     * Date le credenziali in ingresso dalle view, il metodo verifica se queste siano corrette, se l'utente non è bannato
+     * ed infine logga l'utente
+     * @return void
+     * @throws SmartyException
+     */
     public static function verificaLogin(): void {
 
         /* recupero i dati dalla view in $POST[username] e $POST[password]
@@ -87,6 +96,12 @@ class CLogin {
      metodo che serve solo a caricare soltanto la pagina di login
     url: localhost/login/pagina-login
      */
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la pagina
+     * in cui l'utente può loggarsi
+     * @return void
+     * @throws SmartyException
+     */
     public static function paginaLogin(): void {
 
         if(!SessionHelper::isLogged()) {
@@ -103,6 +118,12 @@ class CLogin {
     /*L'utente clicca su questo pulsante e semplicemente verra' effettuato il classico logout
     associo una url localhost/login/logout-member
     */
+    /**
+     * Metodo che ha il compito di chiamare la classe responsabile delle sessioni
+     * affinché slogghi l'utente
+     * @return void
+     * @throws SmartyException
+     */
     public static function logoutMember(): void {
 
         /* l'unica cosa da fare qui dentro è distruggere completamente la sessione cosi' che
