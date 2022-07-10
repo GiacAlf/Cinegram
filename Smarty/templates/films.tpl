@@ -126,7 +126,7 @@
 
         <!-- sidenav vuota ma riutilizzabile -->
         <div id="mydiv2" class="col-sm-2 sidenav">
-            <h4>Film più visti</h4><br><br>
+            <h4>Film con voto medio più alto</h4><br><br>
             {for $i=0 to {$film_voto_medio|count - 1}}
                 <p>{$film_voto_medio[$i]->getTitolo()}</p> <!-- "https://mr.comingsoon.it/imgdb/locandine/235x336/1401.jpg" height="105" width="70" -->
                 <p><a href="https://{$root_dir}/film/carica-film/{$film_voto_medio[$i]->getId()}">

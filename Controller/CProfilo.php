@@ -12,7 +12,7 @@ class CProfilo {
         if(SessionHelper::isLogged() && $username == SessionHelper::getUtente()->getUsername()) {
             if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
                 null, null)) {
-                $numeroEstrazioni = 2;
+                $numeroEstrazioni = 4;
                 //oppure viene passato nell'url. è uguale
                 //$username = SessionHelper::getUtente()->getUsername();
                 $view = new VUtenteSingolo();

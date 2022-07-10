@@ -29,15 +29,15 @@ class CMember {
         }
         else {
             $identificato = false;
-            $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritte(5);
+            $ultimeRecensioni = FPersistentManager::caricaUltimeRecensioniScritte(6);
         }
-        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
+        $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(4);
         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, true);
 
-        $utentiPiuSeguiti = FPersistentManager::caricaUtentiConPiuFollower(2);
+        $utentiPiuSeguiti = FPersistentManager::caricaUtentiConPiuFollower(5);
         $immaginiUtentiSeguiti = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuSeguiti, false);
 
-        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(2);
+        $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
         $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
 
         $view = new VMembers();
@@ -72,7 +72,7 @@ class CMember {
                 $username_sessione = SessionHelper::getUtente()->getUsername();
                 $seguito = FPersistentManager::loSegui($username_sessione, $username);
             }
-            $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(2);
+            $utentiPiuPopolari = FPersistentManager::caricaUtentiPiuPopolari(4);
             $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPiuPopolari, false);
             $view->avviaPaginaUtente($member, $immagine_profilo,
                 $filmVisti, $following, $follower, $seguito, $bannato, $utentiPiuPopolari, $immaginiUtentiPopolari);
