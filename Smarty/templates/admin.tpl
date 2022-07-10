@@ -173,6 +173,7 @@
 
                     <div class="form-group">
                         <label for="locandina">Inserisci la locandina del film:</label>
+                        <p>Inserire jpeg o png, di peso non superiore a 500 KB</p>
                         <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required>* <!-- forse l"unico non required?-->
                     </div>
 

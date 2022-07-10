@@ -147,6 +147,7 @@
                 <textarea rows="4" id="bio" cols="50" name="bio" form="registrazione-form" class="text-input">
       		    </textarea><br><br> <!-- anche questo l"ho fatto io, si spera che, come dice w3schools, effettivamente mettendo l"attributo form sia tutto allineato-->
                 <p id="p">Inserisci immagine profilo:</p>
+                <p>Inserire jpeg o png, di peso non superiore a 500 KB</p>
                 <div id="div">
                     <input  name="immagine_profilo" type="file" form="registrazione-form" class="text-input" cols="20" rows="5"><br><br>
                 </div>

@@ -152,6 +152,7 @@
                         <form id="nuova_immagine_profilo" action="https://{$root_dir}/profilo/aggiorna-immagine" method="POST" enctype="multipart/form-data">
                             <span> Seleziona la nuova immagine profilo: </span>
                             <br>
+                            <p>Inserire jpeg o png, di peso non superiore a 500 KB</p>
                             <div class="mydiv">
                                 <input name="nuova_img_profilo" type="file" form="nuova_immagine_profilo">
                             </div>

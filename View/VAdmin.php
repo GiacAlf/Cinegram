@@ -1,11 +1,27 @@
 <?php
 
+/**
+ *Classe adibita a gestire l'input e l'output delle mansioni e delle pagine
+ * dell'admin
+ */
 class VAdmin {
 
+    /**
+     * L'oggetto smarty con cui configurare i template
+     * @var Smarty
+     */
     private Smarty $smarty;
+    /**
+     * Il massimo peso, in byte, delle immagini che l'utente può caricare
+     * @var int
+     */
     private static int $maxSizeImmagineProfilo = 524288;
 
-    //il costruttore inizializza l'oggetto Smarty e basta
+
+    /**
+     *Costruttore della classe che configura l'oggetto smarty con i giusti path per
+     * la cartella dei template
+     */
     public function __construct(){
         $this->smarty = StartSmarty::configuration();
     }
@@ -13,10 +29,14 @@ class VAdmin {
 
     //per ora immagino che il template dell'admin sia pieno di form in cui caricare tutte le informazioni
     //su un film e qualche altra form tipo per scrivere gli username dei tipi da ammonire e bannare
+    /**
+     * Metodo che fa visualizzare la pagina principale dell'admin
+     * @param string $username_admin
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaPaginaAdmin(string $username_admin): void {
 
-        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
-        //QUINDI O FACCIO COSì
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -28,11 +48,19 @@ class VAdmin {
 
     //funzione che fa il display della pagina di modifica film: ci sono tutti gli attributi modificabili e, accanto,
     //ci saranno tutte le varie form
-    public function avviaPaginaModificaFilm(EFilm $film_da_modificare, array $locandina,
+    /**
+     * Metodo che fa visualizzare la pagina in cui l'admin può modificare le varie informazioni
+     * di un film selezionato
+     * @param EFilm $film_da_modificare
+     * @param array $locandina
+     * @param string $username_admin
+     * @return void
+     * @throws SmartyException
+     */
+    public function avviaPaginaModificaFilm(EFilm  $film_da_modificare, array $locandina,
                                             string $username_admin): void {
 
-        //QUA ATTENZIONE: SI PRESUPPONE CHE PER ACCEDERE ALLA PAGINA $user = "admin"
-        //QUINDI O FACCIO COSì
+
         $root_dir = VUtility::getRootDir();
         $user = VUtility::getUserNavBar();
         $this->smarty->assign('user', $user);
@@ -48,6 +76,15 @@ class VAdmin {
 
     //funzione che fa il display della pagina di moderazione utente: ci sono l'username e i warning, accanto i bottoni
     //ban, ammonisci... e gli altri che non ricordo lol
+    /**
+     * Metodo che fa visualizzare la pagina in cui l'admin può ammonire, o sbannare nel caso sia
+     * già bannato, l'utente selezionato
+     * @param EMember $utente_da_moderare
+     * @param bool $bannato
+     * @param string $username_admin
+     * @return void
+     * @throws SmartyException
+     */
     public function avviaPaginaModeraUtente(EMember $utente_da_moderare, bool $bannato, string $username_admin): void {
 
         //$this->smarty->assign('username_admin', $admin); -> boh forse dovrò mettere lo username dell'admin boh
@@ -64,6 +101,10 @@ class VAdmin {
 
     //ora metto tutti i metodi per prendere l'input per caricare un film
     //tutti separati, per ora, perché secondo me tutto insieme è un po' un casino
+    /**
+     * Metodo che restituisce il titolo del film da creare
+     * @return string|null
+     */
     public function getTitolo(): ?string {
 
         $titolo = null;
@@ -74,6 +115,10 @@ class VAdmin {
     }
 
 
+    /**
+     * Metodo che restituisce la durata del film da creare
+     * @return int|null
+     */
     public function getDurata(): ?int {
 
         $durata = null;
@@ -84,6 +129,10 @@ class VAdmin {
     }
 
 
+    /**
+     * Metodo che restituisce la sinossi del film da creare
+     * @return string|null
+     */
     public function getSinossi(): ?string {
 
         $sinossi = null;
@@ -96,6 +145,11 @@ class VAdmin {
 
     //non ricordo minimamente come viene restituita la data da quel calendarino
     //delle form, per ora come scheletro ci sta
+    /**
+     * Metodo che restituisce la data d'uscita del film da creare
+     * @return DateTime|null
+     * @throws Exception
+     */
     public function getData(): ?DateTime {
 
         $data = null;
@@ -111,6 +165,10 @@ class VAdmin {
     //array, il che in teoria è fattibile ma in pratica vallo a sapere,
     //allora questi metodi hanno senso, in caso contrario tocca farsi il segno
     //della croce
+    /**
+     * Metodo che restituisce la lista di registi del film da creare
+     * @return array|null
+     */
     public function getRegisti(): ?array {
 
         $registi = array();
@@ -121,6 +179,10 @@ class VAdmin {
     }
 
 
+    /**
+     * Metodo che restituisce la lista degli attori del film da creare
+     * @return array|null
+     */
     public function getAttori(): ?array {
 
         $attori = array();
@@ -132,6 +194,13 @@ class VAdmin {
 
 
     //metodo che controlla che sia tutto ok
+
+    /**
+     * Metodo che controlla se l'immagine caricata dall'utente rispetti le specifiche desiderate:
+     * peso non superiore a 500 KB e tipo jpeg o png
+     * @param array|null $array_foto
+     * @return bool|null
+     */
     public function checkFoto(?array $array_foto): ?bool {
 
         $check = false;
@@ -158,6 +227,10 @@ class VAdmin {
     //come funziona il controllo e se bisogna discriminare tra le chiavi di $_FILES
     //le chiavi di $_FILES che ci interessano saranno $_FILES['file']['tmp_name'] (la nuova immagine),
     //$_FILES['file']['type'] (il nuovo tipo), $_FILES['file']['size'] (la nuova size)
+    /**
+     * Metodo che restituisce la locandina del film da creare
+     * @return array|null
+     */
     public function getLocandina(): ?array {
 
         $locandina = null;
@@ -168,6 +241,12 @@ class VAdmin {
     }
 
 
+    /**
+     * Metodo che restituisce un array contenenti tutte le info necessarie
+     * per modificare il film richiesto
+     * @return array|null
+     * @throws Exception
+     */
     public function getElementidaModificare(): ?array{
 
         $array_modifiche = array();
@@ -200,6 +279,11 @@ class VAdmin {
 
     //magari possono servire alcuni controlli perché così se l'admin scrive male
     //get lista attori restituisca null
+    /**
+     * Metodo che, presa in input la stringa scritta dall'admin, restituisce la lista di oggetti attore
+     * @param string $input
+     * @return array|null
+     */
     public function getListaAttori(string $input): ?array {
 
         if($this->tuttiVerificati($input)) {
@@ -218,6 +302,11 @@ class VAdmin {
     }
 
 
+    /**
+     * Metodo che, presa in input la stringa scritta dall'admin, restituisce la lista di oggetti registi
+     * @param string $input
+     * @return array|null
+     */
     public function getListaRegisti(string $input): ?array {
 
         if($this->tuttiVerificati($input)) {
@@ -235,6 +324,11 @@ class VAdmin {
         }
     }
 
+    /**
+     * Metodo che, presa in input la stringa scritta dall'admin, verifica se coincide con il pattern prestabilito
+     * @param string $stringaPersoneDaForm
+     * @return bool|null
+     */
     public function tuttiVerificati(string $stringaPersoneDaForm): ?bool {
 
         if($stringaPersoneDaForm == null)

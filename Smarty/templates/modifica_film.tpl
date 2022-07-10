@@ -186,6 +186,7 @@
                     <div class="form-group">
                         <h4>Locandina attuale: </h4><img src="{$film->getSrc($locandina)}" {$locandina[2]} alt="Locandina"><br>
                         <label for="locandina">Inserisci la nuova locandina del film:</label>
+                        <p>Inserire jpeg o png, di peso non superiore a 500 KB</p>
                         <input type="file" name="modifica_locandina" form="modifica_film" class="form-control" id="locandina">
                     </div>
 
