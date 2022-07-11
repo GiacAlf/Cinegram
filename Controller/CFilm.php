@@ -1,22 +1,23 @@
 <?php
 
+/**
+ * Controllore che gestisce i casi d'uso dell'applicazione legati
+ * a tutto ciò che riguarda i film
+ */
 class CFilm {
 
-    //TODO: OGNI VOLTA CHE SI STAMPA LA VFILMSINGOLO BISOGNA VEDERE SE L'UTENTE DELLA SESSIONE HA VISTO IL FILM O MENO: VAR BOOL
-
-    /* questo sara' il metodo associato alla ricerca del film per titolo avra' una URL
-    del tipo localhost/film/cerca-film/titolo
-
-    io ricordo che questo viene chiamato a causa dell'URL modificata dalla scelta della checkbox dell'HTML, dunque se l'url è
-    tipo localhost/member/.... chiamo il cercaMember
-    */
+    /**
+     * Metodo che, preso in ingresso il prompt scritto dall'utente,
+     * cerca e restituisce il film richiesto, se esiste
+     * @return void
+     * @throws SmartyException
+     */
     public static function cercaFilm(): void {
 
         /*il titolo lo recuperiamo dalla view dato che arrivera nell'array $get */
         $view = new VRicerca();
         $titolo = $view->eseguiRicerca();
 
-        //$titolo="suspiria";
         $films = array();
         $locandine = array();
 
@@ -26,30 +27,17 @@ class CFilm {
                             null, $titolo, null, null, false);
             $locandine = FPersistentManager::loadLocandineFilms($films, false);
         }
-
-        // CI ERAVAMO DETTI POI DI TOGLIE STA ROBA CHE è UNA PALLA IMMENSA COME CODICE
-        /*
-        else{
-            //qua dato che ci stanno nome e cognome devo stare attento, specie se uno, tipo Francis Ford Coppola, ha più nomi
-            $array = explode(" ", $titolo); // TODO mettere carattere spazio query e gestione casi strani J.J.Abrams
-            if(count($array) > 2){
-                $nome = $array[0] . " " . $array[1];
-                $cognome = $array[2];
-            }
-            else {
-                $nome = $array[0];
-                $cognome = $array[1];
-            }
-            $films = FPersistentManager::loadFilmByNomeECognome($nome, $cognome);
-        }*/
         $view->avviaPaginaRicerca($films, $locandine);
     }
 
 
-    /*
-     * questo metodo verra' chiamato quando l'utente clicca su uno specifico film,
-    sara' associata una url (secondo lo standard Restful) fatta in get del tipo localhost/film/carica-film/id
-    ,parsificando la stringa il front controller passera' l'id come parametro
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la pagina del film singolo
+     * cliccato dall'utente, non necessariamente loggato, nell'applicazione
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
      */
     public static function caricaFilm(int $idFilm): void {
 
@@ -60,10 +48,7 @@ class CFilm {
             $film = FPersistentManager::load("EFilm", $idFilm, null, null,
                 null, null, null, null, true);
             $locandina = FPersistentManager::loadLocandina($film, true);
-            //$locandina=FPersistentManager::loadLocandina($film,true)
-            /*qui dovro' passare alla view che fara' il display della pagina
-            del film singolo
-             */
+
             $visto = false;
             $ha_scritto = false;
             if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
@@ -76,22 +61,6 @@ class CFilm {
             $filmPiuVisti = FPersistentManager::caricaFilmPiuVisti(5);
             $locandineFilmPiuVisti = FPersistentManager::loadLocandineFilms($filmPiuVisti, false);
 
-            /* CHIUNQUE SIA L'UTENTE SUL SITO COMPARE LA PAGINA DEL FILM, POI L'ADMIN CLICCA SU
-            "MODIFICA FILM" PER MODIFICARE E TUTTO IL RESTO
-
-            if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
-                $view_admin = new VAdmin();
-                $view_admin->avviaPaginaModificaFilm($film);
-            }
-            else {
-                //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
-                $visto = false;
-                if(SessionHelper::isLogged()){
-                    $username = SessionHelper::getUtente()->getUsername();
-                    $visto = FPersistentManager::loHaiVisto($username, $id);
-                }
-                $view->avviaPaginaFilm($film, $visto, $locandina);
-            } */
             $view->avviaPaginaFilm($film, $visto, $ha_scritto, $locandina, $filmPiuVisti, $locandineFilmPiuVisti);
         }
         else {
@@ -105,30 +74,31 @@ class CFilm {
     ad un film. I dati verranno generati da una form. Sara' associato una url del tipo
     localhost/film/scrivi-recensione/id
     */
+    /**
+     * Metodo che, presi in ingresso i dati necessari per scrivere una recensione,
+     * crea una nuova recensione dell'utente loggato nel database
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
+     */
     public static function scriviRecensione(int $idFilm): void {
 
-        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //se l'utente è loggato ed è un member
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
-            //FORSE NON SERVE DATO CHE IL METODO Dà ERRORE SE IL $POST è VUOTO
             if(FPersistentManager::exist("EFilm", $idFilm, null, null, null, null, null,
                 null, null)) {
                 $username = SessionHelper::getUtente()->getUsername(); //sarà lo username autore
                 $view = new VFilmSingolo();
-                //l'id del film viene preso dall'URL perché per ora abbiamo stabilito che la recensione la possiamo scrivere
-                //solo nella pagina del film singolo
                 $array_post = $view->scriviRecensione();
                 $voto = $array_post[1];
                 $testo = $array_post[0];
                 $data = new DateTime();
-                //nel caso dovesse servire, tanto è gratis
-                //$visto = FPersistentManager::loHaiVisto($username, $idFilm);
+
                 if($voto != null && !FPersistentManager::exist("ERecensione", $idFilm, $username, null, null, null, null,
                         null, null)) {
                     $recensione = new ERecensione($idFilm, $username, $voto, $testo, $data, null);
                     FPersistentManager::store($recensione, null, null, null, null, null,
                         null, null);
-                    //notifica che sto a salva le robe
+
                     header("Location: https://" . VUtility::getRootDir() . "/film/carica-film/" . $idFilm);//qui reinderizzo alla pagina del film di cui ho scritto la recensione
                 }
                 else {
@@ -150,6 +120,15 @@ class CFilm {
 
 
     //localhost/film/mostra-recensione/id/usernameAutore
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la
+     * pagina della recensione cliccata dall'utente
+     * @param int $idFilm
+     * @param string $usernameAutore
+     * @return void
+     * @throws SmartyException
+     */
     public static function mostraRecensione(int $idFilm, string $usernameAutore): void {
 
         //fa vedere il template associato
@@ -168,10 +147,17 @@ class CFilm {
 
 
     //localhost/film/modifica-recensione/id/usernameAutore
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la
+     * pagina per modificare la recensione cliccata dall'utente
+     * @param int $idFilm
+     * @param string $usernameAutore
+     * @return void
+     * @throws SmartyException
+     */
     public static function modificaRecensione(int $idFilm, string $usernameAutore): void {
 
-        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //se l'utente è loggato ed è l'autore (di conseguenza escludo gli admin) -> roba che c'è anche in smarty
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null,
                 null, null, null, null)) {
@@ -195,6 +181,15 @@ class CFilm {
 
 
     //localhost/film/salva-recensione/id/usernameAutore
+
+    /**
+     * Metodo che, una volta presi i dati necessari, modifica e salva
+     * la recensione cliccata dall'utente
+     * @param int $idFilm
+     * @param string $usernameAutore
+     * @return void
+     * @throws SmartyException
+     */
     public static function salvaRecensione(int $idFilm, string $usernameAutore): void {
 
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
@@ -207,7 +202,7 @@ class CFilm {
                 $recensione = FPersistentManager::load("ERecensione", $idFilm, $usernameAutore, null,
                     null, null, null, null, false);
                 if($array_modifica[0] == null) { //se il testo nuovo è null modifico solo il voto
-                    //se ricevo il voto aggiorno quello
+
                     $updatedVote = $array_modifica[1];
                     FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
                         null, null, null);
@@ -220,9 +215,7 @@ class CFilm {
                     FPersistentManager::update($recensione, "voto", $updatedVote, null, null,
                         null, null, null);
                 }
-                //così se tutti e due i campi sono null faccio rivedere direttamente la pagina della recensione
-                //anche se modifico voglio far rivedere la pagina della recensione
-                //poi rifacciamo vedere la pagina della recensione?
+
                 header("Location: https://" . VUtility::getRootDir() . "/film/mostra-recensione/" . $idFilm . "/" . $usernameAutore);
             }
             else {
@@ -242,21 +235,22 @@ class CFilm {
     url localhost/film/elimina-recensione/id
      */
 
+    /**
+     * Metodo che elimina una recensione scelta e scritta dall'utente
+     * @param int $idFilm
+     * @param string $usernameAutore
+     * @return void
+     * @throws SmartyException
+     */
     public static function eliminaRecensione(int $idFilm, string $usernameAutore): void {
 
-        //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
-        //in teoria qua sarebbe meglio passare anche lo username dell'autore per fare un controllo
-        //come sopra
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
             if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutore, null, null, null, null,
                 null, null)) {
-                //$usernameAutore = "pippo"; //SessionHelper::getUtente()->getUsername();
-                //nel caso dovesse servire, tanto è gratis
-                //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
+
                 FPersistentManager::delete("ERecensione", $usernameAutore, null, null, $idFilm, null);
-                //notifica che sto a salva le robe
                 header("Location: https://" . VUtility::getRootDir() . "/film/carica-film/" . $idFilm);
-                //qui reinderizzo alla pagina del film di cui ho scritto la recensione
+
             }
             else {
                 $view = new VErrore();
@@ -275,6 +269,14 @@ class CFilm {
     localhost/film/scrivi-risposta/usernameAutoreRecensione/data
     i dati come nella recensione vengono passati con una form */
 
+    /**
+     * Metodo che, presi in ingresso i dati necessari per scrivere una risposta,
+     * crea una nuova risposta dell'utente loggato nel database
+     * @param int $idFilm
+     * @param string $usernameAutoreRecensione
+     * @return void
+     * @throws SmartyException
+     */
     public static function scriviRisposta(int $idFilm, string $usernameAutoreRecensione): void {
 
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
@@ -282,13 +284,10 @@ class CFilm {
             if(FPersistentManager::exist("ERecensione", $idFilm, $usernameAutoreRecensione, null, null,
                 null, null, null, null)) {
                 if(!FPersistentManager::userBannato($usernameAutoreRecensione)) {
-                    //prova
                     $view = new VRecensione();
                     $date = new DateTime(); //il format giusto viene fatto in Foundation
                     $usernameAutoreRisposta = SessionHelper::getUtente()->getUsername();
                     $testo = $view->scriviRisposta();
-                    //nel caso dovesse servire, tanto è gratis
-                    //$visto = FPersistentManager::loHaiVisto($usernameAutore, $idFilm);
                     if ($testo != null) {
                         $risposta = new ERisposta($usernameAutoreRisposta, $date, $testo, $idFilm, $usernameAutoreRecensione);
                         FPersistentManager::store($risposta, null, null, null, null, null,
@@ -318,12 +317,14 @@ class CFilm {
         }
     }
 
-    /*
-      metodo che verra' chiamato quando si vuole eliminare una risposta
-    , propongo di associare ,localhost/film/elimina-risposta/data, come fatto sopra.
+
+    /**
+     * Metodo che elimina una risposta scelta e scritta dall'utente
+     * @param string $usernameAutore
+     * @param string $data
+     * @return void
+     * @throws SmartyException
      */
-
-
     public static function eliminaRisposta(string $usernameAutore, string $data): void {
 
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
@@ -358,6 +359,15 @@ class CFilm {
 
 
     //url localhost/film/modifica-risposta/usernameAutoreRecensione/data
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la
+     * pagina per modificare la risposta cliccata dall'utente
+     * @param string $usernameAutore
+     * @param string $data
+     * @return void
+     * @throws SmartyException
+     */
     public static function modificaRisposta(string $usernameAutore, string $data): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
@@ -386,6 +396,14 @@ class CFilm {
     metodo che serve effettivamente a salvare la risposta modificata dal member
     url localhost/film/salva-risposta/usernameAutoreRecensione/data
     */
+    /**
+     * Metodo che, una volta presi i dati necessari, modifica e salva
+     * la risposta cliccata dall'utente
+     * @param string $usernameAutore
+     * @param string $data
+     * @return void
+     * @throws SmartyException
+     */
     public static function salvaRisposta(string $usernameAutore, string $data): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->getUsername() == $usernameAutore) {
@@ -421,6 +439,13 @@ class CFilm {
      * metodo che che parte quando si vuole aggiungere il film alla lista di quelli visti
     propongo anche qui una url particolare: localhost/film/vedi-film/id
     */
+    /**
+     * Metodo che aggiunge alla lista dei film visti dall'utente
+     * il film cliccato e selezionato dallo stesso
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
+     */
     public static function vediFilm(int $idFilm): void {
 
         //controllo se utente è loggato
@@ -459,13 +484,19 @@ class CFilm {
      metodo che che parte quando si vuole rimuovere il film dalla lista di quelli visti
     propongo anche qui una url particolare: localhost/rimuovi-film/id
     */
+    /**
+     * Metodo che rimuove dalla lista dei film visti dall'utente
+     * il film cliccato e selezionato dallo stesso
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
+     */
     public static function rimuoviFilm(int $idFilm): void {
 
         //controllo se utente è loggato
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             if(FPersistentManager::exist("EFilm", $idFilm, null, null, null, null, null,
                 null, null)) {
-                //recupero dalla view il dato che è solo l'id del film visto che lo username lo prendiamo dalla sessione
                 $username = SessionHelper::getUtente()->getUsername();
                 $visto = FPersistentManager::loHaiVisto($username, $idFilm);
                 if($visto) {
@@ -497,6 +528,12 @@ class CFilm {
     /* metodo associato al bottone per caricare la pagina dove ci sono tutti i film
     sara' una semplice get con url localhost/film/carica-films
     */
+    /**
+     * Metodo che, recuperando alcune informazioni soprattutto dei film dal database, chiama la
+     * view adibita a far visualizzare la pagina nota come "Films"
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaFilms(): void {
 
         $numero_estrazioni = 5;

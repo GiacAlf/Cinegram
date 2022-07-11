@@ -231,7 +231,7 @@ class EMember extends EUser {
     public static function getSrc(?array $immagineProfilo): ?string {
 
         if($immagineProfilo[0] == null)
-            return "/Src/Avatar_Nullo.jpeg";
+            return "Src/Avatar_Nullo.jpeg";
 
         $encodeBase64 = $immagineProfilo[0];
         $type = $immagineProfilo[1];
