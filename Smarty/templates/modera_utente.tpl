@@ -80,7 +80,7 @@
 
                 <form action="" method="POST" id="moderazione">Ammonizioni attuale: {$member->getWarning()} <br><br><!-- abbiamo tolto sta cosa della moderazione degli admin-->
                     {if $bannato == true}
-                        <p>L"utente è bannato! </p>
+                        <p>L'utente è bannato! </p>
                         <input type="submit" form="moderazione" formaction="https://{$root_dir}/admin/sbanna-user/{$member->getUsername()}" class="btn" name="sbanna" value="Sbanna">
                     {else}
                         <input type="submit" form="moderazione" formaction="https://{$root_dir}/admin/ammonisci-user/{$member->getUsername()}" class="btn" name="ammonizione" value="Ammonisci"> &nbsp
