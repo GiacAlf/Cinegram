@@ -1,25 +1,19 @@
 <?php
 
+/**
+ * Controllore che gestisce i casi d'uso legati
+ * a tutto ciò che riguarda gli utenti e la parte più social dell'applicazione
+ */
 class CMember {
 
-    /*
-     L'utente clicca su Members ed a seconda se è registrato oppure no vedra' la stessa
-    schermata con diversi dati, le diverse schermate le potrebbe gestire Smarty, noi gli passiamo
-    un parametro registrato o non registrato e lei capisce, oppure fare due schermate diverse che
-    richiamiamo noi dentro questo metodo. Sara' associata una url del tipo
-    localhost/member/carica-members
-    */
-
+    /**
+     * Metodo che, recuperando alcune informazioni soprattutto degli utenti dal database, chiama la
+     * view adibita a far visualizzare la pagina nota come "Members"
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaMembers(): void {
 
-        //controlli per quanto riguarda l'utente loggato o meno
-        //if(SessionHelper::isLogged()){
-        //  $username = SessionHelper::getUtente()->getUsername();
-
-        //}
-        //se l'utente è loggato e se è un member
-        //QUA NON CONVIENE CHIEDERE ALL'UTENTE DELLA SESSIONE IL SUO RUOLO? METODO chiSei
-        //alternativa: FPersistentManager::tipoUserRegistrato(SessionHelper::getUtente()->getUsername()) == "Member"
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
             $identificato = true;
             $username = SessionHelper::getUtente()->getUsername();
@@ -42,10 +36,6 @@ class CMember {
 
         $view = new VMembers();
 
-         /* passo questi dati ad un unico metodo di una view insieme ad un parametro
-         per discriminare l'utente registrato da quello non registrato oppure ci saranno
-         due metodi della view separati, uno per la grafica di ogni tipologia di utente(la
-         prima è sicuramente migliore)*/
         $view->avviaPaginaMembers($ultimeRecensioni, $utentiPiuPopolari, $immaginiUtentiPopolari,
             $filmPiuVisti, $locandineFilmPiuVisti, $utentiPiuSeguiti, $immaginiUtentiSeguiti, $identificato);
     }
@@ -53,6 +43,13 @@ class CMember {
 
     /*L'utente clicca sul singolo member per accedere alla sua pagina personale, avra' associato una
     url localhost/member/carica-member/username con metodo get-> infatti lo username viene passato dall'url */
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la pagina dell'utente singolo
+     * cliccato dall'utente, non necessariamente loggato, nell'applicazione
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaMember(string $username): void {
 
         if(FPersistentManager::exist("EUser", null, $username, null, null, null, null,
@@ -67,8 +64,7 @@ class CMember {
             $immagine_profilo = FPersistentManager::loadImmagineProfilo($member, true);
             $seguito = false;
             if (SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Member") {
-                //se dovesse essere un admin pazienza, non lo trova nel metodo loSegui
-                //se gli username sono uguali nel metodo lo segui, ti dà false
+
                 $username_sessione = SessionHelper::getUtente()->getUsername();
                 $seguito = FPersistentManager::loSegui($username_sessione, $username);
             }
@@ -82,23 +78,16 @@ class CMember {
             $view->error(3);
         }
 
-
-        /* CHIUNQUE SIA L'UTENTE SUL SITO COMPARE LA PAGINA DEL MEMBER, POI L'ADMIN CLICCA SU
-        "MODERA UTENTE" PER AMMONIRLO E TUTTO IL RESTO
-
-
-        // TODO se sei l'admin carica una pagina per fare le cose dell'admin sull'utente
-        if(SessionHelper::getUtente()->chiSei() == "Admin"){ //ma se ho un utente non registrato che succede?
-            $view_admin = new VAdmin(); //in teoria la stringa a sinistra dovrebbe essere null, si spera
-            $view_admin->avviaPaginaModeraUtente($member);
-        }
-        else {
-            //TODO if($user:chiSei == "Admin") chiama la VAdmin sennò la VFilms
-            $view->avviaPaginaUtente($member, $filmvisti, $following, $follower);
-        }*/
     }
 
 
+    /**
+     * Metodo che chiama la view adibita a far visualizzare la
+     * pagina dei follower e following dell'utente cliccato
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function mostraFollow(string $username): void {
 
         //QUA HO PENSATO DI PRENDERE SOLO LE LISTE, TANTO SOLO QUELLE MI SERVONO
@@ -123,6 +112,13 @@ class CMember {
     /* una volta fatto l'accesso ed essere entrato nella pagina del singolo member
     l'utente in sessione potra' seguire il member, sara' una richiesta in get
     al seguente url localhost/member/follow-member/username */
+    /**
+     * Metodo che aggiunge alla lista dei following dell'utente, necessariamente loggato,
+     * l'utente cliccato e selezionato dallo stesso
+     * @param string $username_da_seguire
+     * @return void
+     * @throws SmartyException
+     */
     public static function followMember(string $username_da_seguire): void {
 
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
@@ -136,9 +132,7 @@ class CMember {
 
                     $following = $username_da_seguire; //lo si recupera dall'url = $username_da_seguire
 
-                    //recupero dalla sessione il mio username => $follower = $username
                     $follower = $username;
-                    //CONTROLLO COME IN UNFOLLOW MEMBER?
                     $segui = FPersistentManager::loSegui($follower, $following);
                     if (!$segui) {
                         $following = FPersistentManager::load("EMember", null, $following, null, null,
@@ -174,6 +168,13 @@ class CMember {
     l'utente in sessione potra' unfolloware il member, sara' una richiesta in get
     al seguente url localhost/member/unfollow-member/username. */
 
+    /**
+     * Metodo che rimuove dalla lista dei following dell'utente, necessariamente loggato,
+     * l'utente cliccato e selezionato dallo stesso
+     * @param string $username_da_non_seguire
+     * @return void
+     * @throws SmartyException
+     */
     public static function unfollowMember(string $username_da_non_seguire): void {
 
         //QUESTO METODO PUò PARTIRE SOLO SE L'UTENTE è LOGGATO
@@ -223,6 +224,12 @@ class CMember {
     metodo che serve per far registrare l'utente, ci sara' una form ed una richiesta fatta in post
     alla seguente url : localhost/member/registrazione-member
     */
+    /**
+     * Metodo che, una volta recuperate tutte le credenziali necessarie,
+     * registra e salva nel database un nuovo utente
+     * @return void
+     * @throws SmartyException
+     */
     public static function registrazioneMember(): void {
 
         if(!SessionHelper::isLogged()) {
@@ -269,6 +276,13 @@ class CMember {
 
 
     //qua basta che facevo vedere il template
+
+    /**
+     * Metodo che ha il compito di chiamare la view adibita a visualizzare
+     * la pagina per registarsi
+     * @return void
+     * @throws SmartyException
+     */
     public static function paginaRegistrazione(): void {
 
         if(!SessionHelper::isLogged()) {
@@ -286,10 +300,14 @@ class CMember {
      richiesta in get con url  localhost/member/cerca-member/username, viene chiamato quando nella barra di ricerca
     si vuole cercare un member passando il suo username
     */
+    /**
+     * Metodo che, preso in ingresso il prompt scritto dall'utente,
+     * cerca e restituisce l'utente richiesto, se esiste
+     * @return void
+     * @throws SmartyException
+     */
     public static function cercaMember(): void {
 
-        //qua l'utente avrà cliccato il bottone cercaMember con la form, il cui contenuto viene recuperato
-        //dalla view
         $view = new VRicerca();
         $array_risultati = array();
         $immagini_profilo = array();
@@ -301,15 +319,7 @@ class CMember {
             $array_risultati[] = $member;
             $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
         }
-        //qua forse è più efficace una cosa del tipo:
-        //$array_risultati = array();
-        //$immagini_profilo = array();
-        //if($username != null){
-        //$member = FPersistentManager::load("EMember", null, $username, null, null,
-        //                null, null, null, false);
-        // $immagini_profilo = FPersistentManager::loadImmaginiProfiloMembers($array_risultati, false);
-        //}
-        //$view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
+
 
         $view->avviaPaginaRicerca($array_risultati, $immagini_profilo);
     }

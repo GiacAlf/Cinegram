@@ -1,11 +1,21 @@
 <?php
 
+/**
+ *Controllore che gestisce le funzionalità legate ai doveri dell'admin, quali
+ * modificare e creare nuovi film per l'applicazione e moderare gli utenti
+ */
 class CAdmin {
 
     /*
     una volta che l'admin è loggato per andare alla sua pagina,
     url localhost/admin/carica-amministrazione
     */
+    /**
+     * Metodo che ha il compito di chiamare la view adibita a visualizzare
+     * la pagina principale dell'admin
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaAmministrazione(): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -22,8 +32,15 @@ class CAdmin {
     }
 
 
-    //TODO: ricontrolla le url
+
     //deve solo mostrare il template -> la url sarà localhost/mostra-film/id (?)
+    /**
+     * Metodo che chiama la view adibita a far visualizzare
+     * la pagina per modificare un film
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
+     */
     public static function mostraFilm(int $idFilm): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -50,6 +67,14 @@ class CAdmin {
 
 
     //deve solo mostrare il template -> la url sarà localhost/mostra-member/username (?)
+
+    /**
+     * Metodo che chiama la view adibita a far visualizzare
+     * la pagina per moderare un utente
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function mostraMember(string $username): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -80,6 +105,12 @@ class CAdmin {
     metodo che serve all'admin per caricare un film nella piattaforma, metodo in post, url
     localhost/admin/carica-film
     */
+    /**
+     * Una volta raccolti i dati necessari per creare un film provenienti dalla view,
+     * il metodo salva il nuovo film nel database
+     * @return void
+     * @throws SmartyException
+     */
     public static function caricaFilm(): void {
 
         //prendere dalla view le informazioni del film
@@ -125,6 +156,13 @@ class CAdmin {
     L'admin vuole modificare un attributo di un film,
     url localhost/admin/modifica-film/id
     */
+    /**
+     * Metodo che, date le info necessarie per modificare vari attributi di un film,
+     * li salva nel database
+     * @param int $idFilm
+     * @return void
+     * @throws SmartyException
+     */
     public static function modificaFilm(int $idFilm): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -191,6 +229,14 @@ class CAdmin {
      metodo che serve all'admin quando vuole eliminare una recensione di un member.
     Url localhost/admin/rimuovi-recensione fatta in post i dati vengono inviati nel body della richiesta
     */
+    /**
+     * Metodo che elimina una recensione dall'applicazione ritenuta
+     * scorretta da parte dell'admin
+     * @param int $idFilm
+     * @param string $usernameAutore
+     * @return void
+     * @throws SmartyException
+     */
     public static function rimuoviRecensione(int $idFilm, string $usernameAutore): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -214,6 +260,15 @@ class CAdmin {
 
 
     //idem come sopra() url localhost/admin/rimuovi-risposta
+
+    /**
+     * Metodo che elimina una risposta dall'applicazione ritenuta
+     * scorretta da parte dell'admin
+     * @param string $usernameAutore
+     * @param string $data
+     * @return void
+     * @throws SmartyException
+     */
     public static function rimuoviRisposta(string $usernameAutore, string $data): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -243,6 +298,13 @@ class CAdmin {
     metodo che permette all'admin di ammonire il member,
     url localhost/admin/ammonisci-user/username
     */
+    /**
+     * Metodo che permette di ammonire un utente dell'applicazione a seguito di
+     * azioni ritenute sbagliate dall'admin
+     * @param string $usernameMember
+     * @return void
+     * @throws SmartyException
+     */
     public static function ammonisciUser(string $usernameMember): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -287,6 +349,13 @@ class CAdmin {
     metodo che permette all'admin di sbannare il member o l'admin
     url localhost/admin/sbanna-user/username
     */
+    /**
+     * Metodo che permette di sbannare un utente dell'applicazione a seguito di
+     * decisioni dell'admin
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function sbannaUser(string $username): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
@@ -323,6 +392,13 @@ class CAdmin {
      metodo che permette di decrementare un warning al member
     url localhost/admin/togli-ammonizione/username
     */
+    /**
+     * Metodo che permette di togliere un'ammonizione a un utente dell'applicazione
+     * a seguito di decisioni dell'admin
+     * @param string $username
+     * @return void
+     * @throws SmartyException
+     */
     public static function togliAmmonizione(string $username): void {
 
         if(SessionHelper::isLogged() && SessionHelper::getUtente()->chiSei() == "Admin") {
