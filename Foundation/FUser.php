@@ -2,7 +2,7 @@
 
 class FUser {
 
-    private static string $nomeClasse = "FUser";  // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FUser";  // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "user";  // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "Username";   // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoPassword = "Password";   // da cambiare se cambia il nome dell'attributo in DB
@@ -11,15 +11,19 @@ class FUser {
     private static string $nomeTabellaBan = "ban";  // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabellaBan = "UtenteBannato";   // da cambiare se cambia il nome della chiave in DB
 
-    // Questa classe avrà solo exist e delete, gli altri saranno demandati a FAdmin e FMember
-    // la load, lo store e l'update verranno fatti dal FMember e FAdmin
-    // metodo che verifica l'esistenza di uno User in db inserendo il valore della chiave Username
+
+    // la load, lo store e l'update verranno fatti da FMember e FAdmin
+    /**
+     * Metodo che verifica l'esistenza di uno user nel DB
+     * @param string $username
+     * @return bool|null
+     */
     public static function exist(string $username): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
@@ -33,77 +37,90 @@ class FUser {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che verifica l'esistenza di uno User registrato in db inserendo il valore della chiave Username
-    // e l'attributo password
+    /**
+     * Metodo che verifica l'esistenza di uno user registrato nel DB
+     * @param string $username
+     * @param string $password
+     * @return bool|null
+     */
     public static function userRegistrato(string $username, string $password): ?bool {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
+            $password = addslashes($password);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
-            // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
             // verificaPassword controlla se la password inserita corrisponde alla password hash recuperata da DB
-            if($queryResult && EUser::verificaPassword($password, $queryResult[self::$nomeAttributoPassword])) return true;
+            if($queryResult && EUser::verificaPassword($password, $queryResult[self::$nomeAttributoPassword]))
+                return true;
             return false;
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che restituisce il ruolo dello user inserendo il valore della chiave Username
+    /**
+     * Metodo che restituisce il tipo dello user
+     * @param string $username
+     * @return string|null
+     */
     public static function tipoUserRegistrato(string $username): ?string {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT " . self::$nomeAttributoRuolo .
                 " FROM " . self::$nomeTabella .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
-                // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) {
+            if($queryResult)
                 return $queryResult[self::$nomeAttributoRuolo];
-            }
+
             return false;
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // verifica se uno User (Member o Admin) è stato bannato
+    /**
+     * Metodo che verifica se uno user è bannato
+     * @param string $username
+     * @return bool|null
+     */
     public static function userBannato(string $username): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT * FROM " . self::$nomeTabellaBan .
                 " WHERE " . self::$chiaveTabellaBan . " = '" . $username . "';";
@@ -117,13 +134,17 @@ class FUser {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // mette lo user nella tabella Ban del DB
+    /**
+     * Metodo che banna uno user
+     * @param string $username
+     * @return void
+     */
     public static function bannaUser(string $username): void {
 
         if(FUser::exist($username)) {
@@ -142,20 +163,25 @@ class FUser {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nInserimento annullato!";
             }
         }
     }
 
 
-    // toglie uno User (Member o Admin) dalla tabella Ban del DB
+    /**
+     * Metodo che sbanna uno user
+     * @param string $username
+     * @return void
+     */
     public static function sbannaUser(string $username): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
             if(FUser::userBannato($username)) {
+                $username = addslashes($username);
                 $query =
                     "DELETE FROM " . self::$nomeTabellaBan .
                     " WHERE " . self::$chiaveTabellaBan . " = '" . $username . "';";
@@ -166,19 +192,24 @@ class FUser {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }
 
 
-    // cancella uno User dal DB, per cancellare un member o un admin usare la loro delete
+    /**
+     * Metodo che cancella uno user dal DB
+     * @param string $username
+     * @return void
+     */
     public static function delete(string $username): void {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
             if(FUser::exist($username)) {
+                $username = addslashes($username);
                 $query =
                     "DELETE FROM " . self::$nomeTabella .
                     " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
@@ -189,7 +220,7 @@ class FUser {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }

@@ -2,7 +2,7 @@
 
 class FPersona {
 
-    private static string $nomeClasse = "FPersona";  // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FPersona";  // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "persona";  // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "idPersona";   // da cambiare se cambia il nome della chiave in DB
 
@@ -11,10 +11,13 @@ class FPersona {
     private static string $chiave2TabellaPersoneFilm = "IdFilm"; // da cambiare se cambia il nome della chiave2 in DB
 
 
-    // metodo che verifica l'esistenza di una persona in db inserendo il valore della chiave idPersona
+    /**
+     * Metodo che verifica l'esistenza della persona nel DB
+     * @param int $idPersona
+     * @return bool|null
+     */
     public static function exist(int $idPersona): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -31,14 +34,18 @@ class FPersona {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che verifica l'esistenza di una persona nella tabella personefilm associato a un particolare idFilm
-    // poichè possono esserci diverse associazioni tra la stessa persona e diversi film
+    /**
+     * Metodo che verifica l'esistenza della persona nel DB legata ad un film particolare
+     * @param int $idPersona
+     * @param int $idFilm
+     * @return bool|null
+     */
     public static function existPersoneFilm(int $idPersona, int $idFilm): ?bool {
 
         $pdo = FConnectionDB::connect();
@@ -58,20 +65,25 @@ class FPersona {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-
-    // metodo che restituisce un array di film in cui l'attore o il regista hanno partecipato
+    /**
+     * Metodo che restituisce i film in cui la persona ha partecipato
+     * @param string $nome
+     * @param string $cognome
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadFilmByNomeECognome(string $nome, string $cognome): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
-            // si assume come al solito che non ci siano omonimi tra gli attori o tra i registi
+            // si assume per semplicità che non ci siano omonimi tra gli attori o tra i registi
             // ma può esserci un attore che è anche un regista e che quindi hanno id diversi
             $attore = FAttore::loadByNomeECognome($nome, $cognome);
             $regista = FRegista::loadByNomeECognome($nome, $cognome);
@@ -96,14 +108,17 @@ class FPersona {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-
-    // cancella una persona dalla tabella persona del DB
+    /**
+     * Metodo che cancella una persona dal DB
+     * @param int $idPersona
+     * @return void
+     */
     public static function delete(int $idPersona): void {
 
         $pdo = FConnectionDB::connect();
@@ -120,13 +135,18 @@ class FPersona {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }
 
 
-    // cancella una persona dalla tabella personafilm del DB
+    /**
+     * Metodo che cancella una persona, legata a un film, dal DB
+     * @param int $idPersona
+     * @param int $idFilm
+     * @return void
+     */
     public static function deletePersoneFilm(int $idPersona, int $idFilm): void {
 
         $pdo = FConnectionDB::connect();
@@ -144,7 +164,7 @@ class FPersona {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }

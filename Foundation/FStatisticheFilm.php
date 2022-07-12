@@ -2,7 +2,7 @@
 
 class FStatisticheFilm {
 
-    private static string $nomeClasse = "FStatisticheFilm";
+    // private static string $nomeClasse = "FStatisticheFilm";
     private static string $nomeTabellaFilm = "film";
     private static string $nomeTabellaRecensioni = "recensione";
     private static string $nomeAttributoIdFilmRecensito = "IdFilmRecensito";
@@ -16,7 +16,12 @@ class FStatisticheFilm {
     private static string $nomeAttributoIdFilm = "IdFilm";
 
 
-    // metodo che restituisce u n array di $numeroDiEstrazioni elementi contenente i film piu' visti
+    /**
+     * Metodo che restituisce i film più visti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaFilmPiuVisti(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -56,7 +61,12 @@ class FStatisticheFilm {
     }
 
 
-    // metodo che restituisce un array contenente i $numeroDiEstrazioni film piu' recensiti
+    /**
+     * Metodo che restituisce i film più recensiti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaFilmPiuRecensiti(int $numeroDiEstrazioni): ?array {
 
         $pdo=FConnectionDB::connect();
@@ -77,23 +87,17 @@ class FStatisticheFilm {
             $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $pdo->commit();
             $risultatoFilm = array();
-            // mi aspetto dalla fetchAll un array associativo multidimensionale con chiave il nome della colonna e
-            // valore il contenuto della colonna
 
             foreach ($queryResult as $ris) {
-                    //all'inizio creo il film con attributi che sono quelli della tabella Film
                     $filmResult = new EFilm($ris[self::$nomeAttributoIdFilm], $ris[self::$nomeAttributoTitolo],
                         new DateTime($ris[self::$nomeAttributoAnno]), $ris[self::$nomeAttributoDurata], $ris[self::$nomeAttributoSinossi],
                         0, null, null, null, null);
 
                     $views = FFilm::loadNumeroViews($filmResult->getId());
-                    $avg = FFilm::loadVotoMedio($filmResult->getId());
-                    /* nelle due variabili sopra sono contenuti i risultati delle query che mi restituiscono
-                    rispettivamente il numero views e il voto medio nelle 2 righe sotto vado ad aggiungere questi due
-                    attributi all'oggetto e lo aggiungo all'array
-                    */
+                    $votoMedio = FFilm::loadVotoMedio($filmResult->getId());
+
                     $filmResult->setNumeroViews($views);
-                    $filmResult->setVotoMedio($avg);
+                    $filmResult->setVotoMedio($votoMedio);
                     $risultatoFilm[] = $filmResult;
             }
             return $risultatoFilm;
@@ -106,7 +110,12 @@ class FStatisticheFilm {
     }
 
 
-    // metodo che restituisce un array con i $numeroDiEstrazioni film che hanno il voto medio piu' alto
+    /**
+     * Metodo che restituisce i film con voto medio più alto
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaFilmConVotoMedioPiuAlto(int $numeroDiEstrazioni): ?array {
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
@@ -133,13 +142,10 @@ class FStatisticheFilm {
                 $filmResult = new EFilm($ris[self::$nomeAttributoIdFilm], $ris[self::$nomeAttributoTitolo],
                     new DateTime($ris[self::$nomeAttributoAnno]), $ris[self::$nomeAttributoDurata], $ris[self::$nomeAttributoSinossi],
                     0, $ris["VotoMedio"], null, null, null);
-                // in questo caso il voto medio non lo carico qui perche' l'ho gia caricato nel costruttore
-                // avendolo preso dalla select direttamente a differenza delle altre query
 
                 $views = FFilm::loadNumeroViews($filmResult->getId());
                 $filmResult->setNumeroViews($views);
                 $risultatoFilm[] = $filmResult;
-
             }
             return $risultatoFilm;
         }
@@ -151,7 +157,12 @@ class FStatisticheFilm {
     }
 
 
-    // metodo che restituisce un array contenente i $numeroDiEstrazioni Film piu' recenti
+    /**
+     * Metodo che restituisce i film recenti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaFilmRecenti(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();

@@ -2,7 +2,7 @@
 
 class FAttore {
 
-    private static string $nomeClasse = "FAttore"; // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FAttore"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "persona"; // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "IdPersona"; // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoNome = "Nome";  // da cambiare se cambia il nome dell'attributo in DB
@@ -11,18 +11,24 @@ class FAttore {
     private static string $valoreAttributoRuolo = "Attore";    // da cambiare se cambia il nome dell'attributo in DB
 
     private static string $nomeTabellaPersoneFilm = "personefilm"; // da cambiare se cambia il nome della tabella in DB
-    private static string $chiave1TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave1 in DB
-    private static string $chiave2TabellaPersoneFilm = "IdFilm"; // da cambiare se cambia il nome della chiave2 in DB
+    // private static string $chiave1TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave1 in DB
+    // private static string $chiave2TabellaPersoneFilm = "IdFilm"; // da cambiare se cambia il nome della chiave2 in DB
 
 
-    // per l'exist per id e il delete si userà quello di FPersona
-    // metodo che verifica l'esistenza di un attore in db inserendo il valore dei valori nome, cognome e ruolo
+    // existById e delete si faranno con quelli di FPersona
+    /**
+     * Metodo che verifica l'esistenza di un attore nel DB
+     * @param string $nome
+     * @param string $cognome
+     * @return bool|null
+     */
     public static function exist(string $nome, string $cognome): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $nome = addslashes($nome);
+            $cognome = addslashes($cognome);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoNome . " = '" . $nome . "'" .
@@ -38,13 +44,17 @@ class FAttore {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto attore passando come parametro la chiave idPersona
+    /**
+     * Metodo che carica un attore dal DB
+     * @param int $idPersona
+     * @return EAttore|null
+     */
     public static function loadById(int $idPersona): ?EAttore {
 
         $pdo = FConnectionDB::connect();
@@ -59,25 +69,31 @@ class FAttore {
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) {
+            if($queryResult)
                 return new EAttore($queryResult[self::$chiaveTabella], $queryResult[self::$nomeAttributoNome],
                     $queryResult[self::$nomeAttributoCognome]);
-            }
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto attore passando come parametro la chiave idPersona
+    /**
+     * Metodo che carica un attore dal DB
+     * @param string $nome
+     * @param string $cognome
+     * @return EAttore|null
+     */
     public static function loadByNomeECognome(string $nome, string $cognome): ?EAttore {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $nome = addslashes($nome);
+            $cognome = addslashes($cognome);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoNome . " = '" . $nome . "'" .
@@ -88,23 +104,26 @@ class FAttore {
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) {
+            if($queryResult)
                 return new EAttore($queryResult[self::$chiaveTabella], $queryResult[self::$nomeAttributoNome],
                     $queryResult[self::$nomeAttributoCognome]);
-            }
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // salva l'oggetto attore nella tabella persone del DB, da usare insieme a storePersoneFilm
+    // se l'attore che si sta salvando è associato a un film, usare anche storePersoneFilm
+    /**
+     * Metodo che salva un attore nel DB
+     * @param EAttore $attore
+     * @return void
+     */
     public static function store(EAttore $attore): void {
 
-        // si controlla se l'attore non sia già presente in DB prima di procedere
         if(!(FAttore::exist($attore->getNome(), $attore->getCognome()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
@@ -122,14 +141,19 @@ class FAttore {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nInserimento annullato!";
             }
         }
     }
 
 
-    // salva l'oggetto attore nella tabella PersoneFilm del DB, da usare insieme alla store
+    /**
+     * Metodo che salva un attore nel DB legandolo a un film in particolare
+     * @param EAttore $attore
+     * @param EFilm $film
+     * @return void
+     */
     public static function storePersoneFilm(EAttore $attore, EFilm $film): void {
 
         $pdo = FConnectionDB::connect();
@@ -147,19 +171,27 @@ class FAttore {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nInserimento annullato!";
         }
     }
 
 
-    // aggiorna l'oggetto attore nella tabella Persona del DB
+    /**
+     * Metodo che aggiorna un attributo di un attore nel DB
+     * @param EAttore $attore
+     * @param string $nomeAttributo
+     * @param string $nuovoValore
+     * @return void
+     */
     public static function update(EAttore $attore, string $nomeAttributo, string $nuovoValore): void {
 
         if(FAttore::exist($attore->getNome(), $attore->getCognome())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nomeAttributo = addslashes($nomeAttributo);
+                $nuovoValore = addslashes($nuovoValore);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
@@ -172,7 +204,7 @@ class FAttore {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }

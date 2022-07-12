@@ -4,25 +4,25 @@ class FMember {
 
     private static int $maxSizeImmagineProfilo = 524288; // corrisponde ad mezzo Mebibyte, circa mezzo Megabyte (sui 16MiB di size massima consentita)
 
-    private static string $nomeClasse = "FMember"; // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FMember"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "member";   // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "Username"; // da cambiare se cambia il nome della chiave in DB
-    private static string $nomeAttributoPassword = "Password";
+    private static string $nomeAttributoPassword = "Password";  // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoBio = "Bio";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoWarning = "Warning";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoDataIscrizione = "DataIscrizione";   // da cambiare se cambia il nome dell'attributo in DB
-    private static string $nomeAttributoImmagineProfilo = "ImmagineProfilo";
-    private static string $nomeAttributoTipoImmagineProfilo = "TipoImmagineProfilo";
-    private static string $nomeAttributoSizeImmagineProfilo = "SizeImmagineProfilo";
+    private static string $nomeAttributoImmagineProfilo = "ImmagineProfilo";    // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoTipoImmagineProfilo = "TipoImmagineProfilo";    // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoSizeImmagineProfilo = "SizeImmagineProfilo";    // da cambiare se cambia il nome dell'attributo in DB
 
-    private static string $nomeTabellaRisposta = "risposta";
-    private static string $chiave1TabellaRisposta = "UsernameAutore";
-    private static string $nomeAttributoRispostaDataScrittura = "DataScrittura";
-    private static string $nomeAttributoRispostaTesto = "Testo";
-    private static string $nomeAttributoRispostaUsernameAutoreRecensione = "UsernameAutoreRecensione";
-    private static string $nomeAttributoRispostaIdFilmRecensito = "IdFilmRecensito";
+    private static string $nomeTabellaRisposta = "risposta";    // da cambiare se cambia il nome della tabella in DB
+    private static string $chiave1TabellaRisposta = "UsernameAutore";   // da cambiare se cambia il nome della chiave in DB
+    private static string $nomeAttributoRispostaDataScrittura = "DataScrittura";    // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoRispostaTesto = "Testo";    // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoRispostaUsernameAutoreRecensione = "UsernameAutoreRecensione";  // da cambiare se cambia il nome dell'attributo in DB
+    private static string $nomeAttributoRispostaIdFilmRecensito = "IdFilmRecensito";    // da cambiare se cambia il nome dell'attributo in DB
 
-    private static string $nomeTabellaUser = "user";
+    private static string $nomeTabellaUser = "user";    // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabellaUser = "Username"; // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoUserPassword = "Password";   // da cambiare se cambia il nome dell'attributo in DB
     private static string $nomeAttributoUserRuolo = "Ruolo";   // da cambiare se cambia il nome dell'attributo in DB
@@ -45,7 +45,7 @@ class FMember {
     private static string $nomeAttributoFilmAnno = "Anno";  // nome dell'attributo anno nel DB
     private static string $nomeAttributoFilmDurata = "Durata";  // nome dell'attributo anno nel DB
     private static string $nomeAttributoFilmSinossi = "Sinossi";  // nome dell'attributo anno nel DB
-    private static string $nomeAttributoFilmVotoMedio = "VotoMedio";  // nome dell'attributo voto nel DB
+    // private static string $nomeAttributoFilmVotoMedio = "VotoMedio";  // nome dell'attributo voto nel DB
 
     private static string $nomeTabellaFilmVisti = "filmvisti";   // da cambiare se cambia il nome della tabella in DB
     private static string $chiave1TabellaFilmVisti = "IdFilmVisto";   // da cambiare se cambia il nome della chiave1 in DB
@@ -62,9 +62,10 @@ class FMember {
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $usernameSlash = addslashes($username);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
-                " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
+                " WHERE " . self::$chiaveTabella . " = '" . $usernameSlash . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -72,19 +73,23 @@ class FMember {
 
             // caricamento lista film se $listaFilmVisti è settato a true
             $queryResultFilmVisti = array();
-            if($listaFilmVisti) $queryResultFilmVisti = FMember::loadListaFilmVisti($username);
+            if($listaFilmVisti)
+                $queryResultFilmVisti = FMember::loadListaFilmVisti($username);
 
             // caricamento lista follower se $listaFollower è settato a true
             $queryResultFollower = array();
-            if($listaFollower) $queryResultFollower = FMember::loadListaFollower($username);
+            if($listaFollower)
+                $queryResultFollower = FMember::loadListaFollower($username);
 
             // caricamento lista following se $listaFollowing è settato a true
             $queryResultFollowing = array();
-            if($listaFollowing) $queryResultFollowing = FMember::loadListaFollowing($username);
+            if($listaFollowing)
+                $queryResultFollowing = FMember::loadListaFollowing($username);
 
             // caricamento lista recensioni se $recensioniScritte è settato a true
             $queryResultRecensioni = array();
-            if($recensioniScritte) $queryResultRecensioni = FMember::loadListaRecensioni($username);
+            if($recensioniScritte)
+                $queryResultRecensioni = FMember::loadListaRecensioni($username);
 
             if($queryResult) {
                 return new EMember($queryResult[self::$chiaveTabella], new DateTime($queryResult[self::$nomeAttributoDataIscrizione]),
@@ -94,7 +99,7 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -102,10 +107,10 @@ class FMember {
 
     public static function loadListaFilmVisti($username): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT " . "f." . self::$chiaveTabellaFilm . ", f." . self::$nomeAttributoFilmTitolo .
                 ", f." . self::$nomeAttributoFilmAnno . ", f." . self::$nomeAttributoFilmDurata .
@@ -143,7 +148,7 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -180,6 +185,7 @@ class FMember {
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT " . "f." . self::$chiaveTabella . ", f." . self::$nomeAttributoBio .
                 ", f." . self::$nomeAttributoDataIscrizione . ", f." . self::$nomeAttributoWarning .
@@ -208,19 +214,19 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
     // restituisce un array di member che lo username inserito per parametro segue
-    public static function loadListaFollowing($username): ?array {
+    public static function loadListaFollowing(string $username): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT " . "f." . self::$chiaveTabella . ", f." . self::$nomeAttributoBio .
                 ", f." . self::$nomeAttributoDataIscrizione . ", f." . self::$nomeAttributoWarning .
@@ -249,18 +255,18 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    public static function loadListaRecensioni($username): ?array {
+    public static function loadListaRecensioni(string $username): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT " . "r." . self::$chiave1TabellaRecensione . ", r." . self::$chiave2TabellaRecensione .
                 ", r." . self::$nomeAttributoRecensioneVoto . ", r." . self::$nomeAttributoRecensioneTesto .
@@ -289,7 +295,7 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -321,11 +327,8 @@ class FMember {
 
                     // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
                     $immagineProfilo = file_get_contents($immagineProfiloPath);
-                    // eseguo l'escape
-                    // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
-                    // $immagineProfilo = addslashes($immagineProfilo);
                 }
-                else{
+                else {
                     $immagineProfilo = null;
                     $arrayGetImageSize['mime'] = null;
                 }
@@ -359,7 +362,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nInserimento annullato!";
             }
         }
@@ -385,7 +388,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nInserimento annullato!";
         }
     }
@@ -407,7 +410,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }
@@ -435,7 +438,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nInserimento annullato!";
         }
     }
@@ -460,7 +463,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }
@@ -473,6 +476,7 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nuovaBio = addslashes($nuovaBio);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoBio . " = '" . $nuovaBio . "'" .
@@ -483,7 +487,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
@@ -497,6 +501,7 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $username = addslashes($username);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoWarning . " = " . self::$nomeAttributoWarning . " +1" .
@@ -507,7 +512,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
@@ -521,6 +526,7 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $username = addslashes($username);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoWarning . " = " . self::$nomeAttributoWarning . " -1" .
@@ -531,7 +537,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
@@ -555,14 +561,14 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
     }
 
 
-    // cancella un Member dalla tabella user del DB e,  grazie alle FK, anche da tutte le altre dove potrebbe comparire
+    // cancella un Member dalla tabella user del DB e, grazie alle FK, anche da tutte le altre dove potrebbe comparire
     public static function delete(string $username): void {
 
         $pdo = FConnectionDB::connect();
@@ -570,6 +576,7 @@ class FMember {
         try {
             if(FUser::exist($username)) {
                 // eliminazione dalla tabella user
+                $username = addslashes($username);
                 $query =
                     "DELETE FROM " . self::$nomeTabellaUser .
                     " WHERE " . self::$chiaveTabellaUser . " = '" . $username . "';";
@@ -580,7 +587,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nCancellazione annullata!";
         }
     }
@@ -593,11 +600,11 @@ class FMember {
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $username = addslashes($username);
             $query =
                 "SELECT * FROM " . self::$nomeTabellaUser .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "'" .
                 " AND " . self::$nomeAttributoUserRuolo . " = '" . self::$valoreAttributoUserRuolo . "';";
-                // . " AND BINARY " . self::$nomeAttributoPassword . " = '" . $password . "';";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -609,7 +616,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -861,9 +868,7 @@ class FMember {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtente($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtente($member,$numeroDiEstrazioni/2);
-        $arrayUltimeAttivita = array_merge($arrayRecensioni, $arrayRisposte);
-        // shuffle($arrayUltimeAttivita);
-        return $arrayUltimeAttivita;
+        return array_merge($arrayRecensioni, $arrayRisposte);
     }
 
 
@@ -957,9 +962,7 @@ class FMember {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtentiSeguiti($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtentiSeguiti($member,$numeroDiEstrazioni/2);
-        $arrayUltimeAttivita = array_merge($arrayRecensioni, $arrayRisposte);
-        // shuffle($arrayUltimeAttivita);
-        return $arrayUltimeAttivita;
+        return array_merge($arrayRecensioni, $arrayRisposte);
     }
 
 
@@ -983,7 +986,7 @@ class FMember {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -1008,7 +1011,6 @@ class FMember {
 
             if($queryResultMember) {
                 // se $grande è settato a true si caricherà l'immagine profilo grande
-                // il resize gestisce anche il null come input ;)
                 // $immagineProfilo sarà una stringa, presa dal db come blob
                 if($grande) {
                     $immagineProfilo = EMember::resizeImmagineProfilo($queryResultMember[self::$nomeAttributoImmagineProfilo],
@@ -1030,7 +1032,7 @@ class FMember {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
@@ -1078,7 +1080,7 @@ class FMember {
             // eseguo l'escape
             $nuovaImmagineStringa = addslashes($nuovaImmagineStringa);
         }
-        else{
+        else {
             $nuovaImmagineStringa = null;
             $arrayGetImageSize['mime'] = null;
         }
@@ -1087,6 +1089,7 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $username = addslashes($username);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoImmagineProfilo . " = '" . $nuovaImmagineStringa . "', " .
@@ -1099,7 +1102,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
@@ -1113,6 +1116,7 @@ class FMember {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $username = addslashes($username);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . self::$nomeAttributoImmagineProfilo . " = null, " .
@@ -1125,7 +1129,7 @@ class FMember {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }

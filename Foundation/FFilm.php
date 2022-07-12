@@ -4,7 +4,7 @@ class FFilm {
 
     private static int $maxSizeImmagineLocandina = 524288; // corrisponde ad mezzo Mebibyte, circa mezzo Megabyte (sui 16MiB di size massima consentita)
 
-    private static string $nomeClasse = "FFilm";  // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FFilm";  // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "film";  // da cambiare se cambia il nome della tabella Film in DB
     private static string $chiaveTabella = "IdFilm";   // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoTitolo = "Titolo";  // nome dell'attributo titolo nel DB
@@ -44,8 +44,11 @@ class FFilm {
     private static string $nomeChiave2TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave in DB
 
 
-
-    // metodo che verifica l'esistenza di un film in db passando il EFilm, tramite il valore della chiave idFilm
+    /**
+     * Metodo che verifica l'esistenza di un film nel DB
+     * @param int $idFilm
+     * @return bool|null
+     */
     public static function existById(int $idFilm): ?bool {
 
         $pdo = FConnectionDB::connect();
@@ -64,18 +67,23 @@ class FFilm {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che verifica l'esistenza di un film in db passando EFilm, attraverso il titolo del film
+    /**
+     * Metodo che verifica l'esistenza di un film nel DB
+     * @param string $titolo
+     * @return bool|null
+     */
     public static function existByTitolo(string $titolo): ?bool {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $titolo = addslashes($titolo);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "';";
@@ -89,19 +97,24 @@ class FFilm {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che verifica l'esistenza di un film in db passando EFilm, attraverso il titolo e l'anno del film
+    /**
+     * Metodo che verifica l'esistenza di un film nel DB
+     * @param string $titolo
+     * @param int $anno
+     * @return bool|null
+     */
     public static function existByTitoloEAnno(string $titolo, int $anno): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $titolo = addslashes($titolo);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
@@ -116,15 +129,22 @@ class FFilm {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto film passando EFilm, attraverso la chiave idFilm
-    // settando i valori booleani a true si caricheranno anche gli array che costituiscono i rispettivi attributi
-    // di EFilm
+    // settando i valori bool a true si farà il load anche degli array dei rispettivi attributi del film
+    /**
+     * Metodo che carica un film dal DB
+     * @param int $id
+     * @param bool $registi
+     * @param bool $attori
+     * @param bool $recensioni
+     * @return EFilm|null
+     * @throws Exception
+     */
     public static function loadById(int $id, bool $registi, bool $attori, bool $recensioni): ?EFilm {
 
         $pdo = FConnectionDB::connect();
@@ -165,20 +185,24 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto film passando il titolo come parametro
-    // questa servirà solo per caricare una lista di film ordinati cronologicamente per anno da cui scegliere e poi
-    // fare una loadById e caricarlo con tutti gli altri parametri
+    /**
+     * Metodo che carica un film dal DB
+     * @param string $titolo
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadByTitolo(string $titolo): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $titolo = addslashes($titolo);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
@@ -202,20 +226,25 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto film passando il titolo e l'anno come parametro
-    // potrebbe non servire ma era praticamente gratis, ho lasciato aperta la possibilità che possa dare più di
-    // un risultato da cui scegliere e poi fare una loadById e caricarlo con tutti gli altri parametri
+    /**
+     * Metodo che carica un film dal DB
+     * @param string $titolo
+     * @param int $anno
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadByTitoloEAnno(string $titolo, int $anno): ?array {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $titolo = addslashes($titolo);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoTitolo . " = '" . $titolo . "'" .
@@ -239,13 +268,17 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // caricamento del numero di views del film passato per parametro, usando il suo id
+    /**
+     * Metodo che carica il numero di views del film
+     * @param int $id
+     * @return int|null
+     */
     public static function loadNumeroViews(int $id): ?int {
 
         $pdo = FConnectionDB::connect();
@@ -265,12 +298,17 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
-    // caricamento del voto medio del film passato per parametro, usando il suo id
+
+    /**
+     * Metodo che carica il voto medio del film
+     * @param int $id
+     * @return float|null
+     */
     public static function loadVotoMedio(int $id): ?float {
 
         $pdo = FConnectionDB::connect();
@@ -288,17 +326,21 @@ class FFilm {
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            return $queryResult["VotoMedio"]; // questo sarà un solo valore float, anche zero
+            return $queryResult["VotoMedio"];
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // carica tutti i registi associati al film passato per parametro, restituendoli in un array di ERegisti
+    /**
+     * Metodo che carica la lista dei registi del film
+     * @param int $id
+     * @return array|null
+     */
     public static function loadListaRegisti(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -332,13 +374,17 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // carica tutti gli attori associati al film passato per parametro, restituendoli in un array di EAttori
+    /**
+     * Metodo che carica la lista dei registi del film
+     * @param int $id
+     * @return array|null
+     */
     public static function loadListaAttori(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -372,16 +418,18 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // carica tutte le recensioni associate al film passato per parametro, restituendole in un array di ERecensioni
-    // le risposte di ciascuna recensione non verranno caricate in questo momento ma solo quando si selezionerà una di
-    // esse cliccandoci sopra
-    // TODO considerare un numero limite di recensioni da caricare, da passare per parametro (le prime $n)
+    /**
+     * Metodo che carica la lista delle recensioni del film
+     * @param int $id
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadListaRecensioniFilm(int $id): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -412,11 +460,17 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
+
+    /**
+     *  Metodo che restituisce il numero delle recensioni del film
+     * @param int $id
+     * @return int|null
+     */
     public static function calcolaNumeroRecensioniFilm(int $id): ?int {
 
         $pdo = FConnectionDB::connect();
@@ -437,18 +491,25 @@ class FFilm {
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // salva l'oggetto film sul DB incluse le lise attori e registi, se non si vuole salvare la locandina per il
-    // momento inserire null nei 3 parametri relativi a essa
+    /**
+     * Metodo che salva il film sul DB
+     * @param EFilm $film
+     * @param array|null $listaAttori
+     * @param array|null $listaRegisti
+     * @param string|null $locandinaPath
+     * @param string|null $tipoLocandina
+     * @param string|null $sizeLocandina
+     * @return void
+     */
     public static function store(EFilm $film, ?array $listaAttori, ?array $listaRegisti,
                                  ?string $locandinaPath, ?string $tipoLocandina, ?string $sizeLocandina): void {
 
-        // si controlla se il film non è presente in DB prima di procedere
         if(!(FFilm::existByTitoloEAnno($film->getTitolo(), $film->getAnno()->format('Y')))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
@@ -457,21 +518,19 @@ class FFilm {
                     print("Il file caricato è troppo grande!");
                     return;
                 }
+
                 if($locandinaPath != null) {
                     // ricavo l'array con le info dell'immagine
                     $arrayGetImageSize = getimagesize($locandinaPath);
 
                     // si accettano solo jpeg e png
-                    if ($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
+                    if($arrayGetImageSize['mime'] == !"image/jpeg" || $arrayGetImageSize['mime'] == "image/png")
                         return;
 
                     // si recupera il file da $_FILES['file']['tmp_name'] sottoforma di stringa
                     $locandina = file_get_contents($locandinaPath);
-                    // eseguo l'escape
-                    // questo addslashes non serve perchè execute qui e solo qui fa l'escape'
-                    // $locandina = addslashes($locandina);
                 }
-                else{
+                else {
                     $locandina = null;
                     $arrayGetImageSize['mime'] = null;
                 }
@@ -489,6 +548,7 @@ class FFilm {
                     ":TipoLocandina" => $arrayGetImageSize['mime'],
                     ":SizeLocandina" => $sizeLocandina));
 
+                // TODO provare a mettere il commit qui e lasciare le store dove sono--> già provato!
                 // ogni attore della lista, se non vuota, verrà salvato in persona e in personefilm
                 //if($listaAttori) FFilm::storeAttori($film, $listaAttori);
 
@@ -497,25 +557,30 @@ class FFilm {
 
                 $pdo->commit();
                 echo "\nInserimento avvenuto con successo!";
-
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nInserimento annullato!";
             }
         }
     }
 
-    // metodo che salva gli attori nel DB legati ad un particolare film $film
-    // l'array è settato anche con di null perchè ci fa comodo con il Persistent Manager, dove chiamiamo
-    // i due metodi storeAttori e storeRegisti insieme
+
+    /**
+     * Metodo che salva gli attori del film nel DB
+     * @param EFilm $film
+     * @param array|null $listaAttori
+     * @return void
+     */
     private static function storeAttori(EFilm $film, ?array $listaAttori): void {
 
         foreach ($listaAttori as $attore) {
             FAttore::store($attore);
         }
-        foreach($listaAttori as $attore){
+
+        $listaAttoriId = array();
+        foreach($listaAttori as $attore) {
             //creo questo array perché se faccio subito lo storePersoneFilm, gli passo degli oggetti
             //attore senza l'id, quindi, prima li salvo nel db e poi li recupero completi
             $listaAttoriId[] = FAttore::loadbyNomeECognome($attore->getNome(), $attore->getCognome());
@@ -523,35 +588,47 @@ class FFilm {
         foreach ($listaAttoriId as $attore) {
             FAttore::storePersoneFilm($attore, $film);
         }
-
     }
 
 
-    // metodo che salva i registi nel DB legati ad un particolare film $film
-    // l'array è settato anche con di null perchè ci fa comodo con il Persistent Manager, dove chiamiamo
-    // i due metodi storeAttori e storeRegisti insieme
+    /**
+     * Metodo che salva i registi del film nel DB
+     * @param EFilm $film
+     * @param array|null $listaRegisti
+     * @return void
+     */
     private static function storeRegisti(EFilm $film, ?array $listaRegisti): void {
 
         foreach ($listaRegisti as $regista) {
             FRegista::store($regista);
         }
-        foreach ($listaRegisti as $regista){
+
+        $listaRegistiId = array();
+        foreach ($listaRegisti as $regista) {
             $listaRegistiId[] = FRegista::loadByNomeECognome($regista->getNome(), $regista->getCognome());
         }
-        foreach ($listaRegistiId as $regista){
+
+        foreach ($listaRegistiId as $regista) {
             FRegista::storePersoneFilm($regista, $film);
         }
     }
 
 
-    // questo update, per ora, salverà solo i seguenti attributi di EFilm nel DB: Titolo, Durata e Sinossi (la durata
-    // anche se intera verrà convertita in stringa con la concatenazione)
+    /**
+     * Metodo che aggiorna un attributo del film con un nuovo valore
+     * @param EFilm $film
+     * @param string $nomeAttributo
+     * @param string $nuovoValore
+     * @return void
+     */
     public static function update(EFilm $film, string $nomeAttributo, string $nuovoValore): void {
 
         if((FFilm::existById($film->getId()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nomeAttributo = addslashes($nomeAttributo);
+                $nuovoValore = addslashes($nuovoValore);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
@@ -562,14 +639,19 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
     }
 
 
-    // questo update aggiorna solo la data di uscita del film, che sul DB si chiama Anno
+    /**
+     * Metodo che aggiorna la data di uscita del film
+     * @param EFilm $film
+     * @param DateTime $nuovaData
+     * @return void
+     */
     public static function updateData(EFilm $film, DateTime $nuovaData): void {
 
         if((FFilm::existById($film->getId()))) {
@@ -586,43 +668,45 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
     }
 
 
-    // L'update è intesto come sostituzione di un vecchio parametro con un nuovo ma in questo caso si tratta di più
-    // parametri che vanno aggiornati, quindi, non potendo usare una singola istruzione di update, si procederà
-    // con la cancellazione degli esistenti e l'inserimento dei nuovi
+    /**
+     * Metodo che aggiorna la lista degli attori del film
+     * @param EFilm $film
+     * @param array|null $listaAttori
+     * @return void
+     */
     public static function updateAttori(EFilm $film, ?array $listaAttori): void {
 
-        // cancellando il film dalla tabella PersoneFilm si eliminano tutti gli attori e registi ad esso collegato, che
-        // é proprio quello che vogliamo fare quì, e si considererà trascurabile l'aver inserito un attore o un regista
-        // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
-        // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
-        if($listaAttori) {
-            //FFilm::deleteFromPersoneFilm($film);
+        if($listaAttori)
             FFilm::storeAttori($film, $listaAttori);
-        }
     }
 
 
+    /**
+     * Metodo che aggiorna la lista dei registi del film
+     * @param EFilm $film
+     * @param array|null $listaRegisti
+     * @return void
+     */
     public static function updateRegisti(EFilm $film, ?array $listaRegisti): void {
 
-        // cancellando il film dalla tabella PersoneFilm si eliminano tutti gli attori e registi ad esso collegato, che
-        // é proprio quello che vogliamo fare quì, e si considererà trascurabile l'aver inserito un attore o un regista
-        // nella tabella persona che avrebbe dovuto essere eliminato poichè non associato a nessun film visto che
-        // potrebbe già esserci o magari sarebbe stato inserito comunque in futuro
-        if($listaRegisti) {
-            //FFilm::deleteFromPersoneFilm($film);
+        if($listaRegisti)
             FFilm::storeRegisti($film, $listaRegisti);
-        }
     }
 
 
-    // cancella un film dal db ovvero dalle tabelle film, filmvisti recensione e risposta
+    // cancella un film dalle tabelle film, filmvisti, recensione e risposta
+    /**
+     * Metodo che elimina il film dal DB
+     * @param EFilm $film
+     * @return void
+     */
     public static function delete(EFilm $film): void {
 
         if(FFilm::existById($film->getId())) {
@@ -634,24 +718,7 @@ class FFilm {
                     " WHERE " . self::$chiaveTabella . " = '" . $film->getId() . "';";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
-                /* il codice seguete, funzionante, è sostituito dal FFilm::deleteFromPersoneFilm
-                // ogni attore, se l'array è di almeno un elemento, verrà rimosso da personefilm
-                if($listaAttori) {
-                    foreach ($listaAttori as $attore) {
-                        $idPersona = $attore->getId();
-                        $idFilm = $film->getId();
-                        FPersona::deletePersoneFilm($idPersona, $idFilm);
-                    }
-                }
-                // ogni regista, se l'array è di almeno un elemento, verrà rimosso da personefilm
-                if($listaRegisti) {
-                    foreach ($listaRegisti as $regista) {
-                        $idPersona = $regista->getId();
-                        $idFilm = $film->getId();
-                        FPersona::deletePersoneFilm($idPersona, $idFilm);
-                    }
-                }
-                */
+
                 FFilm::deleteFromRecensione($film);
                 FFilm::deleteFromRisposta($film);
                 FFilm::deleteFromFilmVisti($film);
@@ -660,14 +727,18 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nCancellazione annullata!";
             }
         }
     }
 
 
-    // cancella le recensioni riferite al film passato per parametro dal DB
+    /**
+     * Metodo che elimina tutti gli attori e i registi legati al film
+     * @param EFilm $film
+     * @return void
+     */
     public static function deleteFromPersoneFilm(EFilm $film): void {
 
         if (FFilm::existById($film->getId())) {
@@ -683,14 +754,18 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nCancellazione annullata!";
             }
         }
     }
 
 
-    // cancella le recensioni riferite al film passato per parametro dal DB
+    /**
+     * Metodo che elimina tutte le recensioni del film
+     * @param EFilm $film
+     * @return void
+     */
     private static function deleteFromRecensione(EFilm $film): void {
 
         if (FFilm::existById($film->getId())) {
@@ -706,14 +781,18 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nCancellazione annullata!";
             }
         }
     }
 
 
-    // cancella le risposte riferite al film passato per parametro dal DB
+    /**
+     * Metodo che elimina tutte le risposte del film
+     * @param EFilm $film
+     * @return void
+     */
     private static function deleteFromRisposta(EFilm $film): void {
 
         if (FFilm::existById($film->getId())) {
@@ -729,14 +808,18 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nCancellazione annullata!";
             }
         }
     }
 
 
-    // cancella le risposte riferite al film passato per parametro dal DB
+    /**
+     * Metodo che elimina il film da quelli visti dagli utenti
+     * @param EFilm $film
+     * @return void
+     */
     private static function deleteFromFilmVisti(EFilm $film): void {
 
         if(FFilm::existById($film->getId())) {
@@ -752,14 +835,18 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nCancellazione annullata!";
             }
         }
     }
 
 
-    // metodo che verifica se per un dato film è presente la sua locandina
+    /**
+     * Metodo che verifica se esiste la locandina del film
+     * @param EFilm $film
+     * @return bool|null
+     */
     public static function existLocandina(EFilm $film): ?bool {
 
         $pdo = FConnectionDB::connect();
@@ -779,16 +866,20 @@ class FFilm {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che carica la locandina di un dato film, restituisce un array con i dati della locandina in base64,
-    // il tipo e la sua size.
-    // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
-    // quì quindi sono previste solo queste due dimensioni
+    // Metodo che restituisce un array con i dati della locandina in base64, il tipo e la sua size.
+    // Settando il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    /**
+     * Metodo che carica la locandina del film
+     * @param EFilm $film
+     * @param bool $grande
+     * @return array|null
+     */
     public static function loadLocandina(EFilm $film, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -804,8 +895,7 @@ class FFilm {
 
             if($queryResultFilm) {
                 // se $grande è settato a true si caricherà la locandina grande
-                // il resize gestisce anche il null come input ;)
-                // $locandina sarà una stringa, presa dal db come blob
+                // $locandina sarà una stringa, presa dal db come blob, e ridimensionata
                 if($grande) {
                     $locandina = EFilm::resizeLocandina($queryResultFilm[self::$nomeAttributoLocandina], true);
                     $size = "width='" . EFilm::$larghezzaGrande . "' " . "height='" . EFilm::$altezzaGrande ."'";
@@ -818,21 +908,25 @@ class FFilm {
                 // si procede all'encode come richiesto per il display della locandina
                 $locandina = EFilm::base64Encode($locandina);
 
-                /* si è considerato che la query potrebbe restituire una locandina null, in quel caso faremo un
-                display di una locandina neutra, una pellicola in bianco e nero  */
                 return array($locandina, $queryResultFilm[self::$nomeAttributoTipoLocandina], $size);
             }
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // metodo che restituisce un array con chiavi gli idFilm e valori array di locandine, tipo e size
+    // Restituisce un array con chiavi gli idFilm e valori array di locandine, tipo e size
     // se si setta il bool $grande a true si carica la corrispettiva locandina in formato grande, piccola se false
+    /**
+     * Metodo che carica le locandine di più film
+     * @param array $arrayFilms
+     * @param bool $grande
+     * @return array|null
+     */
     public static function loadLocandineFilms(array $arrayFilms, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -848,11 +942,18 @@ class FFilm {
     }
 
 
-    // metodo che inserisce una nuova locandina
     // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
     // questo $_FILES['file']['tmp_name'], cioè la $nuovaLocandina appena caricata, con $_FILES['file']['type'] il
     // $nuovoTipoLocandina dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeLocandina
-    public static function updateLocandina(EFilm $film, string $nuovaLocandinaPath, string $nuovoTipoLocandina,
+    /**
+     * Metodo che aggiorna la locandina del film
+     * @param EFilm $film
+     * @param string $nuovaLocandinaPath
+     * @param string $nuovoTipoLocandina
+     * @param string $nuovaSizeLocandina
+     * @return void
+     */
+    public static function updateLocandina(EFilm  $film, string $nuovaLocandinaPath, string $nuovoTipoLocandina,
                                            string $nuovaSizeLocandina): void {
 
         if($nuovaSizeLocandina > self::$maxSizeImmagineLocandina) {
@@ -894,14 +995,19 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }
     }
 
 
-    // metodo che modifica una locandina facendo "update a null"
+    // si fa un update a null
+    /**
+     * Metodo che cancella la locandina del film
+     * @param EFilm $film
+     * @return void
+     */
     public static function deleteLocandina(EFilm $film): void {
 
         if((FFilm::existById($film->getId()))) {
@@ -920,7 +1026,7 @@ class FFilm {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nUpdate annullato!";
             }
         }

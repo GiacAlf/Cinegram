@@ -1,7 +1,5 @@
 <?php
 
-// if(file_exists("config.php")) require_once "config.php";
-
 class FConnectionDB {
 
     public static function connect(): ?object {
@@ -11,7 +9,7 @@ class FConnectionDB {
                 $GLOBALS["username"], $GLOBALS["password"]);
         }
         catch(PDOException $e) {
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             return null;
         }
     }

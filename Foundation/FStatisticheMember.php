@@ -2,7 +2,7 @@
 
 class FStatisticheMember {
 
-    private static string $nomeClasse = "FStatisticheMember";
+    // private static string $nomeClasse = "FStatisticheMember";
     private static string $nomeTabellaFilmVisti = "filmvisti";
     private static string $nomeAttributoUtenteCheHaVistoFilm = "UtenteCheHaVisto";
     private static string $nomeTabellaMember = "member";
@@ -27,6 +27,12 @@ class FStatisticheMember {
     private static string $nomeAttributoIdFilmRecensitoTabellaRisposta = "IdFilmRecensito";
 
 
+    /**
+     * Metodo che carica gli utenti con più film visti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiConPiuFilmVisti(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -62,6 +68,12 @@ class FStatisticheMember {
     }
 
 
+    /**
+     * Metodo che carica gli utenti con più recensioni
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiConPiuRecensioni(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -98,6 +110,12 @@ class FStatisticheMember {
     }
 
 
+    /**
+     * Metodo che carica gli utenti con più risposte recenti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiConPiuRisposteRecenti(int $numeroDiEstrazioni): ?array {
 
         $data = FStatisticheMember::convertiDataAttualeinDataPrecedente();
@@ -139,6 +157,12 @@ class FStatisticheMember {
     }
 
 
+    /**
+     * Metodo che carica gli utenti con più follower
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiConPiuFollower(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -174,6 +198,12 @@ class FStatisticheMember {
     }
 
 
+    /**
+     * Metodo che carica gli utenti con più following
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiConPiuFollowing(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -209,7 +239,10 @@ class FStatisticheMember {
     }
 
 
-    // a partire dalla data attuale crea una data con giorno = 1 e il mese precedente all'attuale
+    /**
+     * Metodo che restituisce, a partire dalla data attuale, una data con giorno = 1 e mese precedente all'attuale
+     * @return DateTime
+     */
     private static function convertiDataAttualeInDataPrecedente(): DateTime {
 
         $data = new Datetime();
@@ -228,10 +261,17 @@ class FStatisticheMember {
         $finalDate = new Datetime();
         $finalDate->setDate($anno, $mese, $giorno);
         $finalDate->setTime(0,0,0);
+
         return ($finalDate);
     }
 
 
+    /**
+     * Metodo che carica gli utenti più popolari
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUtentiPiuPopolari(int $numeroDiEstrazioni): ?array {
 
         $arrayFollower = FStatisticheMember::caricaUtentiConPiuFollower($numeroDiEstrazioni);
@@ -253,11 +293,17 @@ class FStatisticheMember {
         // si prendono i primi $numeroDiEstrazioni elementi
         $arrayPopolari = array_slice($arrayPopolari, 0, $numeroDiEstrazioni, false);
         shuffle($arrayPopolari);
+
         return $arrayPopolari;
     }
 
 
-    // carica un array delle ultime recensioni scritte sul forum
+    /**
+     * Metodo che carica le ultime recensioni scritte
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRecensioniScritte(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -292,7 +338,12 @@ class FStatisticheMember {
     }
 
 
-    // carica un array delle ultime risposte scritte sul forum
+    /**
+     * Metodo che carica le ultime risposte scritte
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRisposteScritte(int $numeroDiEstrazioni): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -334,13 +385,16 @@ class FStatisticheMember {
     }
 
 
-    // inserire come $numeroDiEstrazioni un numero pari!
+    /**
+     * Metodo che carica le ultime attività degli utenti
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeAttivita(int $numeroDiEstrazioni): ?array {
 
         $arrayRecensioni = FStatisticheMember::caricaUltimeRecensioniScritte($numeroDiEstrazioni/2);
         $arrayRisposte = FStatisticheMember::caricaUltimeRisposteScritte($numeroDiEstrazioni/2);
-        $arrayUltimeAttivita = array_merge($arrayRecensioni, $arrayRisposte);
-        // shuffle($arrayUltimeAttivita);
-        return $arrayUltimeAttivita;
+        return array_merge($arrayRecensioni, $arrayRisposte);
     }
 }

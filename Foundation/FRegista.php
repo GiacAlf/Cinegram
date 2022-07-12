@@ -2,7 +2,7 @@
 
 class FRegista {
 
-    private static string $nomeClasse = "FRegista"; // ci potrebbe essere utile con il FPersistentManager
+    // private static string $nomeClasse = "FRegista"; // ci potrebbe essere utile con il FPersistentManager
     private static string $nomeTabella = "persona"; // da cambiare se cambia il nome della tabella in DB
     private static string $chiaveTabella = "IdPersona"; // da cambiare se cambia il nome della chiave in DB
     private static string $nomeAttributoNome = "Nome";  // da cambiare se cambia il nome dell'attributo in DB
@@ -11,18 +11,24 @@ class FRegista {
     private static string $valoreAttributoRuolo = "Regista";    // da cambiare se cambia il nome dell'attributo in DB
 
     private static string $nomeTabellaPersoneFilm = "personefilm"; // da cambiare se cambia il nome della tabella in DB
-    private static string $chiave1TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave1 in DB
-    private static string $chiave2TabellaPersoneFilm = "IdFilm"; // da cambiare se cambia il nome della chiave2 in DB
+    // private static string $chiave1TabellaPersoneFilm = "IdPersona"; // da cambiare se cambia il nome della chiave1 in DB
+    // private static string $chiave2TabellaPersoneFilm = "IdFilm"; // da cambiare se cambia il nome della chiave2 in DB
 
 
-    // per l'exist per id e il delete si userà quello di FPersona
-    // metodo che verifica l'esistenza di un regista in db inserendo il valore dei valori nome, cognome e ruolo
+    // existById e delete saranno quelli di FPersona
+    /**
+     * Metodo che verifica la presenza del regista nel DB
+     * @param string $nome
+     * @param string $cognome
+     * @return bool|null
+     */
     public static function exist(string $nome, string $cognome): ?bool {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $nome = addslashes($nome);
+            $cognome = addslashes($cognome);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoNome . " = '" . $nome . "'" .
@@ -38,13 +44,17 @@ class FRegista {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto regista passando come parametro la chiave idPersona
+    /**
+     * Metodo che carica il regista dal DB
+     * @param int $idPersona
+     * @return ERegista|null
+     */
     public static function loadById(int $idPersona): ?ERegista {
 
         $pdo = FConnectionDB::connect();
@@ -59,25 +69,31 @@ class FRegista {
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) {
+            if($queryResult)
                 return new ERegista($queryResult[self::$chiaveTabella], $queryResult[self::$nomeAttributoNome],
                     $queryResult[self::$nomeAttributoCognome]);
-            }
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // recupero dati dal DB per creazione oggetto regista passando come parametro la chiave idPersona
+    /**
+     * Metodo che carica il regista dal DB
+     * @param string $nome
+     * @param string $cognome
+     * @return ERegista|null
+     */
     public static function loadByNomeECognome(string $nome, string $cognome): ?ERegista {
 
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
+            $nome = addslashes($nome);
+            $cognome = addslashes($cognome);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$nomeAttributoNome . " = '" . $nome . "'" .
@@ -88,23 +104,25 @@ class FRegista {
             $queryResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
 
-            if($queryResult) {
+            if($queryResult)
                 return new ERegista($queryResult[self::$chiaveTabella], $queryResult[self::$nomeAttributoNome],
                     $queryResult[self::$nomeAttributoCognome]);
-            }
         }
         catch(PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
         }
         return null;
     }
 
 
-    // salva l'oggetto regista nella tabella persona del DB, da usare insieme alla storePersoneFilm
+    /**
+     * Metodo che salva il regista nel DB
+     * @param ERegista $regista
+     * @return void
+     */
     public static function store(ERegista $regista): void {
 
-        // si controlla se il regista non sia già presente in DB prima di procedere
         if(!(FRegista::exist($regista->getNome(), $regista->getCognome()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
@@ -122,14 +140,19 @@ class FRegista {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+                echo "\nAttenzione errore: " . $e->getMessage();
                 echo "\nInserimento annullato!";
             }
         }
     }
 
 
-    // salva l'oggetto regista nella tabella PersoneFilm del DB, da usare insieme alla store
+    /**
+     * Metodo che salva il regista nel DB legandolo a un film
+     * @param ERegista $regista
+     * @param EFilm $film
+     * @return void
+     */
     public static function storePersoneFilm(ERegista $regista, EFilm $film): void {
 
         $pdo = FConnectionDB::connect();
@@ -147,19 +170,27 @@ class FRegista {
         }
         catch (PDOException $e) {
             $pdo->rollback();
-            echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
+            echo "\nAttenzione errore: " . $e->getMessage();
             echo "\nInserimento annullato!";
         }
     }
 
 
-    // aggiorna l'oggetto Regista nella tabella Persona del DB
+    /**
+     * Metodo che aggiorna un attributo del regista con uno nuovo
+     * @param ERegista $regista
+     * @param string $nomeAttributo
+     * @param string $nuovoValore
+     * @return void
+     */
     public static function update(ERegista $regista, string $nomeAttributo, string $nuovoValore): void {
 
         if(FRegista::exist($regista->getNome(), $regista->getCognome())) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
             try {
+                $nomeAttributo = addslashes($nomeAttributo);
+                $nuovoValore = addslashes($nuovoValore);
                 $query =
                     "UPDATE " . self::$nomeTabella .
                     " SET " . $nomeAttributo . " = '" . $nuovoValore . "'" .
@@ -172,8 +203,8 @@ class FRegista {
             }
             catch (PDOException $e) {
                 $pdo->rollback();
-                echo "\nAttenzione errore: " . $e->getMessage();    // TODO da salvare poi invece sul log degli errori
-                echo "\nUpdate annullato!";  // poi capiremo dove stampano queste echo
+                echo "\nAttenzione errore: " . $e->getMessage();
+                echo "\nUpdate annullato!";
             }
         }
     }
