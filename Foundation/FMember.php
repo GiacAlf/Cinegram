@@ -52,10 +52,18 @@ class FMember {
     private static string $chiave2TabellaFilmVisti = "UtenteCheHaVisto";   // da cambiare se cambia il nome della chiave2 in DB
 
     // si userà l'exist di User per verificare l'esistenza di un member
-
-    // recupero dati dal DB per creazione oggetto member passando come parametro la chiave username, da fare dopo
     // autenticazione con FUser::userRegistrato e FUser::tipoUserRegistrato
     // con i parametri booleani si caricheranno anche gli array che fanno da attributo
+    /**
+     * Metodo che carica un member dal DB
+     * @param string $username
+     * @param bool $listaFilmVisti
+     * @param bool $listaFollower
+     * @param bool $listaFollowing
+     * @param bool $recensioniScritte
+     * @return EMember|null
+     * @throws Exception
+     */
     public static function load(string $username, bool $listaFilmVisti, bool $listaFollower, bool $listaFollowing,
                                 bool $recensioniScritte): ?EMember {
 
@@ -105,6 +113,12 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che carica la lista dei film visti
+     * @param $username
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadListaFilmVisti($username): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -126,11 +140,6 @@ class FMember {
             $stmt->execute();
             $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $pdo->commit();
-
-            // quì si potrebbero caricare anche il numero di views e il voto medio di ciascun film ma necessiterebbe
-            // probabilmente molto tempo, facendo un for di load da DB. Allora si costruiscono film con null come
-            // valore in questi due campi e, all'eventuale click, si associerà il load by id che carica anche il numero
-            // views e il voto medio
 
             // array di EFilm
             $filmResult = array();
@@ -154,7 +163,13 @@ class FMember {
     }
 
 
-    // ritorna true se lo $username ha visto il film dell'$idFilm fornito
+    /**
+     * Metodo che verifica se un member ha visto un film
+     * @param string $username
+     * @param int $idFilm
+     * @return bool|null
+     * @throws Exception
+     */
     public static function loHaiVisto(string $username, int $idFilm): ?bool {
 
         $filmVisti = FMember::loadListaFilmVisti($username);
@@ -166,7 +181,13 @@ class FMember {
     }
 
 
-    // ritorna true se lo $username segue lo $usernameFollowing
+    /**
+     * Metodo che verifica se un member ne segue un altro
+     * @param string $username
+     * @param string $usernameFollowing
+     * @return bool|null
+     * @throws Exception
+     */
     public static function loSegui(string $username, string $usernameFollowing): ?bool {
 
         $listaFollowing = FMember::loadListaFollowing($username);
@@ -178,10 +199,14 @@ class FMember {
     }
 
 
-    // restituisce un array di member follower dello username inserito per parametro
+    /**
+     * Metodo che restituisce la lista dei follower del member
+     * @param $username
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadListaFollower($username): ?array {
 
-        // connessione al DB con oggetto $pdo
         $pdo = FConnectionDB::connect();
         $pdo->beginTransaction();
         try {
@@ -220,7 +245,12 @@ class FMember {
     }
 
 
-    // restituisce un array di member che lo username inserito per parametro segue
+    /**
+     * Metodo che carica la lista dei following del member
+     * @param string $username
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadListaFollowing(string $username): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -261,6 +291,12 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che carica le lista delle recensioni del member
+     * @param string $username
+     * @return array|null
+     * @throws Exception
+     */
     public static function loadListaRecensioni(string $username): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -300,14 +336,20 @@ class FMember {
         return null;
     }
 
-
-    // salva l'oggetto member sul DB insieme alla sua immagine profilo, se non si vuole salvare l'immagine del profilo
-    // per il momento inserire null nei 3 parametri relativi a essa
+    // se non si vuole salvare l'immagine del profilo inserire null nei 3 parametri relativi a essa
     // la password verrà criptata
+    /**
+     * Metodo che salva il member nel DB
+     * @param EMember $member
+     * @param string $password
+     * @param string|null $immagineProfiloPath
+     * @param string|null $tipoImmagineProfilo
+     * @param string|null $sizeImmagineProfilo
+     * @return void
+     */
     public static function store(EMember $member, string $password, ?string $immagineProfiloPath, ?string $tipoImmagineProfilo,
                                  ?string $sizeImmagineProfilo): void {
 
-        // si controlla se il member non sia già presente in DB prima di procedere
         if(!(FUser::exist($member->getUsername()))) {
             $pdo = FConnectionDB::connect();
             $pdo->beginTransaction();
@@ -369,7 +411,12 @@ class FMember {
     }
 
 
-    // salva il film con id $idFilm guardato dal member $username nella tabella filmVisti
+    /**
+     * Metodo che salva la visione di un film da parte del member nel DB
+     * @param EMember $member
+     * @param EFilm $film
+     * @return void
+     */
     public static function vediFilm(EMember $member, EFilm $film): void {
 
         $pdo = FConnectionDB::connect();
@@ -394,7 +441,12 @@ class FMember {
     }
 
 
-    // rimuove il film con $idFilm guardato dal member $username dalla tabella filmVisti
+    /**
+     * Metodo che rimuove la visione di un film da parte del member nel DB
+     * @param EMember $member
+     * @param EFilm $film
+     * @return void
+     */
     public static function rimuoviFilmVisto(EMember $member, EFilm $film): void {
 
         $pdo = FConnectionDB::connect();
@@ -416,9 +468,13 @@ class FMember {
     }
 
 
-
-    // da usare quando l'EMember usa il metodo follow verso uno $usernameFollowing
     // inserisce uno $usernameFollower nella tabella parteSocial del DB che seguirà lo $usernameFollowing
+    /**
+     * Metodo che salva il segui del member nei confronti di un altro member
+     * @param EMember $follower
+     * @param EMember $following
+     * @return void
+     */
     public static function follow(EMember $follower, EMember $following): void {
 
         $pdo = FConnectionDB::connect();
@@ -444,8 +500,13 @@ class FMember {
     }
 
 
-    // da usare quando l'EMember usa il metodo unfollow
     // cancella un $usernameFollowing dalla tabella partesocial del DB che figura come following del $usernameFollower
+    /**
+     * Metodo che rimuove il segui del member nei confronti di un altro member
+     * @param EMember $follower
+     * @param EMember $following
+     * @return void
+     */
     public static function unfollow(EMember $follower, EMember $following): void {
 
         $pdo = FConnectionDB::connect();
@@ -469,7 +530,12 @@ class FMember {
     }
 
 
-    // update da usare per aggiornare l'attributo Bio
+    /**
+     * Metodo che aggiorna la bio del member
+     * @param EMember $member
+     * @param string|null $nuovaBio
+     * @return void
+     */
     public static function updateBio(EMember $member, ?string $nuovaBio): void {
 
         if((FUser::exist($member->getUsername()))) {
@@ -494,7 +560,11 @@ class FMember {
     }
 
 
-    // update da usare per aumentare il numero dei warning del member e si verifica anche che non sia già bannato
+    /**
+     * Metodo che incrementa i warning del member
+     * @param string $username
+     * @return void
+     */
     public static function incrementaWarning(string $username): void {
 
         if(FUser::exist($username) && !FUser::userBannato($username)) {
@@ -519,7 +589,11 @@ class FMember {
     }
 
 
-    // update da usare per diminuire il numero dei warning del member e si verifica anche che non sia già bannato
+    /**
+     * Metodo che decrementa i warning del member
+     * @param string $username
+     * @return void
+     */
     public static function decrementaWarning(string $username): void {
 
         if(FUser::exist($username) && !FUser::userBannato($username)) {
@@ -544,7 +618,12 @@ class FMember {
     }
 
 
-    // aggiorna la password del member nella tabella User del DB
+    /**
+     * Metodo che aggiorna la password del member
+     * @param EMember $member
+     * @param string $nuovaPassword
+     * @return void
+     */
     public static function updatePassword(EMember $member, string $nuovaPassword): void {
 
         if(FUser::exist($member->getUsername())) {
@@ -568,7 +647,12 @@ class FMember {
     }
 
 
-    // cancella un Member dalla tabella user del DB e, grazie alle FK, anche da tutte le altre dove potrebbe comparire
+    // razie alle FK, viene rimosso anche da tutte le altre dove potrebbe comparire
+    /**
+     * Metodo che rimuove il member dal DB
+     * @param string $username
+     * @return void
+     */
     public static function delete(string $username): void {
 
         $pdo = FConnectionDB::connect();
@@ -593,8 +677,12 @@ class FMember {
     }
 
 
-    // metodo che verifica l'esistenza di un member registrato in db inserendo il valore della chiave Username
-    // e l'attributo password
+    /**
+     * Metodo che verifica l'esistenza di un member registrato ne DB
+     * @param string $username
+     * @param string $password
+     * @return bool|null
+     */
     public static function memberRegistrato(string $username, string $password): ?bool {
 
         $pdo = FConnectionDB::connect();
@@ -622,6 +710,11 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che restituisce il numero dei film visti dal member
+     * @param EMember $member
+     * @return int|null
+     */
     public static function calcolaNumeroFilmVisti(EMember $member): ?int {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -653,6 +746,11 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che restituisce il numero dei following del member
+     * @param EMember $member
+     * @return int|null
+     */
     public static function calcolaNumeroFollowing(EMember $member): ?int {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -685,6 +783,11 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che restituisce il numero dei follower del member
+     * @param EMember $member
+     * @return int|null
+     */
     public static function calcolaNumeroFollower(EMember $member): ?int {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -716,6 +819,11 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che restituisce il numero delle recensioni del member
+     * @param EMember $member
+     * @return int|null
+     */
     public static function calcolaNumeroRecensioni(EMember $member): ?int {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -748,6 +856,11 @@ class FMember {
     }
 
 
+    /**
+     * Metodo che restituisce il numero delle risposte del member
+     * @param EMember $member
+     * @return int|null
+     */
     public static function calcolaNumeroRisposte(EMember $member): ?int {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -780,7 +893,13 @@ class FMember {
     }
 
 
-    // metodo che restituisce un array contenente le ultime Recensioni scritte dal member passato come parametro
+    /**
+     * Metodo che restituisce le ultime recensioni scritte dal member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRecensioniScritteUtente(EMember $member, int $numeroDiEstrazioni): ?array {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -818,7 +937,13 @@ class FMember {
     }
 
 
-    // metodo che restituisce un array contenente le ultime risposte scritte dal member passato come parametro
+    /**
+     * Metodo che restituisce le ultime risposte scritte dal member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRisposteScritteUtente(EMember $member, int $numeroDiEstrazioni): ?array {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -863,8 +988,14 @@ class FMember {
     }
 
 
-    //metodo che carica le ultime attivita' svolte dal member passato come parametro
-    public static function caricaUltimeAttivitaMember( EMember $member, int $numeroDiEstrazioni): ?array {
+    /**
+     * Metodo che restituisce le ultime attività del member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
+    public static function caricaUltimeAttivitaMember(EMember $member, int $numeroDiEstrazioni): ?array {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtente($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtente($member,$numeroDiEstrazioni/2);
@@ -872,8 +1003,13 @@ class FMember {
     }
 
 
-    // metodo che restituisce un array contenente le ultime Risposte scritte dai membri seguiti dal membro
-    // passato come parametro
+    /**
+     * Metodo che restituisce le ultime recensioni scritte dagli utenti seguiti dal member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRecensioniScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -914,8 +1050,13 @@ class FMember {
     }
 
 
-    //metodo che restituisce un array contenente le ultime Recensioni scritte dai membri seguiti dal membro
-    // passato come parametro
+    /**
+     * Metodo che restituisce le ultime risposte scritte dagli utenti seguiti dal member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
     public static function caricaUltimeRisposteScritteUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
 
         if(!(FUser::exist($member->getUsername()))) {
@@ -956,9 +1097,15 @@ class FMember {
     }
 
 
-    // metodo che carica le ultime attività dei membri seguiti dal member passato come parametro
     // passare un $numeroDiEstrazioni pari!!
-    public static function caricaUltimeAttivitaUtentiSeguiti( EMember $member, int $numeroDiEstrazioni): ?array {
+    /**
+     * Metodo che restituisce le ultime attività degli utenti seguiti dal member
+     * @param EMember $member
+     * @param int $numeroDiEstrazioni
+     * @return array|null
+     * @throws Exception
+     */
+    public static function caricaUltimeAttivitaUtentiSeguiti(EMember $member, int $numeroDiEstrazioni): ?array {
 
         $arrayRecensioni = FMember::caricaUltimeRecensioniScritteUtentiSeguiti($member,$numeroDiEstrazioni/2);
         $arrayRisposte = FMember::caricaUltimeRisposteScritteUtentiSeguiti($member,$numeroDiEstrazioni/2);
@@ -966,7 +1113,11 @@ class FMember {
     }
 
 
-    // metodo che verifica se per un dato member è presente la sua immagine profilo
+    /**
+     * Metodo che verifica l'esistenza dell'immagine profilo del member
+     * @param EMember $member
+     * @return bool|null
+     */
     public static function existImmagineProfilo(EMember $member): ?bool {
 
         $pdo = FConnectionDB::connect();
@@ -992,10 +1143,14 @@ class FMember {
     }
 
 
-    // metodo che carica l'immagine profilo di un dato member, restituisce un array con i dati dell'immagine in base64,
-    // il tipo e la sua size.
-    // se si setta il bool $grande a true si carica la corrispettiva immagine in formato grande, piccola se false
-    // quì quindi sono previste solo queste due dimensioni
+    // Restituisce un array con i dati dell'immagine in base64, il tipo e la sua size.
+    // Se si setta il bool $grande a true si carica la corrispettiva immagine in formato grande, piccola se false
+    /**
+     * Metodo che carica l'immagine profilo del member
+     * @param EMember $member
+     * @param bool $grande
+     * @return array|null
+     */
     public static function loadImmagineProfilo(EMember $member, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -1038,8 +1193,14 @@ class FMember {
     }
 
 
-    // metodo che restituisce un array con chiavi gli username e valori array d'immagini profilo, tipo e size
+    // L'array ha come chiavi gli username e valori array d'immagini profilo, tipo e size
     // se si setta il bool $grande a true si carica la corrispettiva immagine profilo in formato grande, piccola se false
+    /**
+     * Metodo che restituisce le immagini profilo di più member
+     * @param array $arrayMembers
+     * @param bool $grande
+     * @return array|null
+     */
     public static function loadImmaginiProfiloMembers(array $arrayMembers, bool $grande): ?array {
 
         $pdo = FConnectionDB::connect();
@@ -1055,12 +1216,19 @@ class FMember {
     }
 
 
-    // metodo che inserisce una nuova immagine profilo, quella di default è l'omino grigio
     // quì il controllore, chiedendo alla view, fornisce a questo metodo il valore associato a
     // questo $_FILES['file']['tmp_name'], cioè la $nuovaImmagine appena caricata, con $_FILES['file']['type'] il
     // $nuovoTipoImmagine dell'immagine e con $_FILES['file']['size'] la sua $nuovaSizeImmagine
+    /**
+     * Metodo che aggiorna l'immagine profilo
+     * @param string $username
+     * @param string $nuovaImmaginePath
+     * @param string $nuovoTipoImmagine
+     * @param string $nuovaSizeImmagine
+     * @return void
+     */
     public static function updateImmagineProfilo(string $username, string $nuovaImmaginePath, string $nuovoTipoImmagine,
-                                           string $nuovaSizeImmagine): void {
+                                                 string $nuovaSizeImmagine): void {
 
         if($nuovaSizeImmagine > self::$maxSizeImmagineProfilo) {
             print("Il file caricato è troppo grande!");
@@ -1109,7 +1277,12 @@ class FMember {
     }
 
 
-    // metodo che cancella un'immagine profilo facendo "update a null"
+    // si procede facendo update a null
+    /**
+     * Metodo che cancella l'immagine profilo del member
+     * @param string $username
+     * @return void
+     */
     public static function deleteImmagineProfilo(string $username): void {
 
         if((FUser::exist($username))) {
