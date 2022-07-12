@@ -1,10 +1,24 @@
 <?php
 
+/**
+ * Classe che modella il concetto di attore
+ */
 class EAttore extends EPersona {
 
+    /**
+     * Attributo caratterizzante il ruolo della persona in questione
+     * cioè l'attore
+     * @var string
+     */
     private string $ioSono = "Attore";
 
-    // quando si costruisce ex novo passare null ad idPersona, il campo sarà popolato solo dopo caricamento dal DB
+    /**
+     * Costruttore della classe EAttore, che necessita di un id numerico,
+     * un nome e un cognome
+     * @param int|null $idPersona
+     * @param string $nome
+     * @param string $cognome
+     */
     public function __construct(?int $idPersona, string $nome, string $cognome) {
         $this->idPersona = $idPersona;
         $this->nome = $nome;
@@ -12,6 +26,10 @@ class EAttore extends EPersona {
     }
 
 
+    /**
+     * Metodo che restituisce il ruolo dell'attore, e cioè "Attore"
+     * @return string
+     */
     public function chiSei(): string {
         return $this->ioSono;
     }
