@@ -418,8 +418,9 @@ class EMember extends EUser {
      */
     public static function getSrc(?array $immagineProfilo): ?string {
 
+        // per gestire l'avatar nullo
         if($immagineProfilo[0] == null)
-            return "Src/Avatar_Nullo.jpeg";
+            return "https://{\$root_dir}/Cinegram/Src/Avatar_Nullo.png";
 
         $encodeBase64 = $immagineProfilo[0];
         $type = $immagineProfilo[1];
