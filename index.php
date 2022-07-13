@@ -6,4 +6,3 @@ require_once("Utility/config.php");
 
 $FrontController = new CFrontController();
 $FrontController->run();
-
