@@ -6,6 +6,15 @@
  */
 class VUtility {
 
+    public static function getHttpHost(): ?string {
+        return $_SERVER['HTTP_HOST'];
+    }
+
+
+    public static function getRequestUri(): ?string {
+        return $_SERVER['REQUEST_URI'];
+    }
+
     /**
      * Metodo che restituisce il nome del server che ospita l'applicazione
      * @return string|null

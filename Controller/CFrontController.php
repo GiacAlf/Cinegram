@@ -69,7 +69,7 @@ class CFrontController {
      */
     private function parsingFrontControllerUrl(): string {
 
-        $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $url = VUtility::getHttpHost() . VUtility::getRequestUri();
         $url_base = $GLOBALS["URLBASE"];
         return str_replace($url_base, "", $url);
     }
