@@ -420,7 +420,7 @@ class EMember extends EUser {
 
         // per gestire l'avatar nullo
         if($immagineProfilo[0] == null)
-            return "https://{\$root_dir}/Cinegram/Src/Avatar_Nullo.png";
+            return "https://" . VUtility::getRootDir() . "/Cinegram/Src/Avatar_Nullo.png";
 
         $encodeBase64 = $immagineProfilo[0];
         $type = $immagineProfilo[1];
