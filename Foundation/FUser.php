@@ -55,7 +55,6 @@ class FUser {
         $pdo->beginTransaction();
         try {
             $username = addslashes($username);
-            $password = addslashes($password);
             $query =
                 "SELECT * FROM " . self::$nomeTabella .
                 " WHERE " . self::$chiaveTabella . " = '" . $username . "';";
