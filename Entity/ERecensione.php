@@ -1,27 +1,57 @@
 <?php
 
+/**
+ * Classe che modella il concetto di recensione di un film
+ * scritta da un utente
+ */
 class ERecensione {
 
+    /**
+     * L'id numerico del film recensito
+     * @var int
+     */
     private int $idFilmRecensito;
+    /**
+     * Lo username dell'autore della recensione
+     * @var string
+     */
     private string $usernameAutore;
+    /**
+     * Il voto della recensione
+     * @var int|null
+     */
     private ?int $voto;
+    /**
+     * Il testo della recensione
+     * @var string|null
+     */
     private ?string $testo;
+    /**
+     * La data di scrittura della recensione
+     * @var DateTime
+     */
     private DateTime $dataScrittura; // da salvare in timestamp con secondi, in visualizzazione anche solo gg/mm/aaaa
+    /**
+     * La lista di risposte alla recensione
+     * @var array|null
+     */
     private ?array $risposteDellaRecensione;    // array di ERisposte
 
 
-     /**
-      * @param int $idFilmRecensito
-      * @param string $usernameAutore
-      * @param int|null $voto
-      * @param string|null $testo
-      * @param DateTime $dataScrittura
-      * @param array|null $risposteDellaRecensione
-      */
      // quando si crea ex novo passare null all'array delle risposte, se caricato avrà le risposte relative
      // se voglio la data di adesso passare una $dataScrittura = new DateTime("now")
-     public function __construct(int $idFilmRecensito, string $usernameAutore, ?int $voto, ?string $testo,
-                                 DateTime $dataScrittura, ?array $risposteDellaRecensione) {
+    /**
+     * Costruttore dell'oggetto ERecensione, dove i parametri fondamentali sono
+     * l'id del film recensito e lo username dell'autore
+     * @param int $idFilmRecensito
+     * @param string $usernameAutore
+     * @param int|null $voto
+     * @param string|null $testo
+     * @param DateTime $dataScrittura
+     * @param array|null $risposteDellaRecensione
+     */
+    public function __construct(int $idFilmRecensito, string $usernameAutore, ?int $voto, ?string $testo,
+                                DateTime $dataScrittura, ?array $risposteDellaRecensione) {
          $this->idFilmRecensito = $idFilmRecensito;
          $this->usernameAutore = $usernameAutore;
          $this->voto = $voto;
@@ -31,19 +61,22 @@ class ERecensione {
      }
 
 
-     public function AggiungiRisposta(ERisposta $risposta): void {
+    /**
+     * Metodo che aggiunge una nuova risposta alla lista di risposte della recensione
+     * @param ERisposta $risposta
+     * @return void
+     */
+    public function AggiungiRisposta(ERisposta $risposta): void {
          $this->risposteDellaRecensione[] = $risposta;
      }
 
-    /*
-     public function RimuoviRisposta(ERisposta $risposta): void {
-         if(($key = array_search($risposta, $this->risposteDellaRecensione)) !== false && $this->risposteDellaRecensione[$key]->getAutoreRisposta() == $username)
-                 unset($this->risposteDellaRecensione[$key]);
-         else print ("L'autore inserito è sbagliato, la risposta non è stata cancellata");
-     }
-    */
 
     // forse così è più semplice
+    /**
+     * Metodo che rimuove una nuova risposta dalla lista di risposte della recensione
+     * @param ERisposta $risposta
+     * @return void
+     */
     public function RimuoviRisposta(ERisposta $risposta): void {
         foreach ($this->risposteDellaRecensione as $risp) {
             if($risp->getUsernameAutore() == $risposta->getUsernameAutore() && $risp->getDataScrittura() == $risposta->getDataScrittura())
@@ -52,19 +85,23 @@ class ERecensione {
     }
 
     /**
+     * Metodo che restituisce l'id del film recensito
      * @return int
      */
     public function getIdFilmRecensito(): int {
         return $this->idFilmRecensito;
     }
 
-    /**
-     * @param int $idFilmRecensito
-     */
+    /*
     public function setIdFilmRecensito(int $idFilmRecensito): void {
         $this->idFilmRecensito = $idFilmRecensito;
     }
+    */
 
+    /**
+     * Metodo che restituisce il titolo del film recensito, sapendo il suo id
+     * @return string
+     */
     public function getTitoloById(): string {
         $idFilm = $this->getIdFilmRecensito();
         $film = FPersistentManager::load("EFilm", $idFilm, null, null, null, null,
@@ -73,20 +110,21 @@ class ERecensione {
     }
 
     /**
+     * Metodo che restituisce lo username dell'autore della recensione
      * @return string
      */
     public function getUsernameAutore(): string {
         return $this->usernameAutore;
     }
 
-    /**
-     * @param string $usernameAutore
-     */
+    /*
     public function setUsernameAutore(string $usernameAutore): void {
         $this->usernameAutore = $usernameAutore;
     }
+    */
 
     /**
+     * Metodo che restituisce il voto della recensione
      * @return int|null
      */
     public function getVoto(): ?int {
@@ -94,6 +132,7 @@ class ERecensione {
     }
 
     /**
+     * Metodo che aggiorna il voto della recensione
      * @param int|null $voto
      */
     public function setVoto(?int $voto): void {
@@ -101,6 +140,7 @@ class ERecensione {
     }
 
     /**
+     * Metodo che restituisce il testo della recensione
      * @return string|null
      */
     public function getTesto(): ?string {
@@ -108,6 +148,7 @@ class ERecensione {
     }
 
     /**
+     * Metodo che aggiorna il testo della recensione
      * @param string|null $testo
      */
     public function setTesto(?string $testo): void {
@@ -115,6 +156,7 @@ class ERecensione {
     }
 
     /**
+     * Metodo che restituisce la data di scrittura della recensione
      * @return string
      */
     public function getDataScrittura(): DateTime {
@@ -122,6 +164,7 @@ class ERecensione {
     }
 
     /**
+     * Metodo che aggiorna la data di scrittura della recensione
      * @param string $dataScrittura
      */
     public function setDataScrittura(DateTime $dataScrittura): void {
@@ -129,16 +172,19 @@ class ERecensione {
     }
 
     /**
+     * Metodo che restituisce le risposte della recensione
      * @return array|null
      */
     public function getRisposteDellaRecensione(): ?array {
         return $this->risposteDellaRecensione;
     }
 
+
     /**
+     * Metodo che aggiorna le risposte della recensione
      * @param array|null $risposteDellaRecensione
+     * @return void
      */
-    // può essere utile se si crea la recensione dal DB assegnando direttamente l'array di tutte le risposte
     public function setRisposteDellaRecensione(?array $risposteDellaRecensione): void {
         $this->risposteDellaRecensione = $risposteDellaRecensione;
     }
