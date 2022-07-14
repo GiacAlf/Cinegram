@@ -459,7 +459,7 @@ class EFilm {
     public static function getSrc(?array $locandina): ?string {
 
         if($locandina[0] === null)
-            return "/Src/Locandina_Nulla.jpeg";
+            return null;
 
         $encodeBase64 = $locandina[0];
         $type = $locandina[1];
