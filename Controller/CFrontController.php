@@ -16,7 +16,7 @@ class CFrontController {
 
         $path = $this->parsingFrontControllerUrl();
         $arrayPath = explode("/","$path");
-        array_shift($arrayPath);
+        array_shift($arrayPath);    // perché il primo valore è sempre vuoto
         $controller = "C". ucfirst($arrayPath[0]);
         array_shift($arrayPath);
         $method = $this->capisciUrl($arrayPath[0]);
@@ -70,7 +70,7 @@ class CFrontController {
     private function parsingFrontControllerUrl(): string {
 
         $url = VUtility::getHttpHost() . VUtility::getRequestUri();
-        $url_base = VUtility::getRootDir();
+        $url_base = $GLOBALS["URLBASE"];    // gestita ad hoc: aggiungere in config l'eventuale ~nomeutente concatenandola se in public_html
         return str_replace($url_base, "", $url);
     }
 }
