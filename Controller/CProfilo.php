@@ -148,12 +148,11 @@ class CProfilo {
             $nuovaPassword = $view->aggiornaPassword();
             $confermaNuovaPassword = $view->verificaConfermaPassword();
 
-            //TODO:fare un metodo in foundation che prende uno username mi dice la sua password attuale
             $esattezzaVecchiaPassword = FPersistentManager::userRegistrato($username,$vecchiaPassword);
 
             //QUANDO è CHE FACCIO VEDERE LA SCHERMATA DI ERRORE:
             //1) se la nuova pw è null
-            //2) se la vecchia password non coincide con quella attuale -> una roba tipo getPassword()(il TODO SOPRA9
+            //2) se la vecchia password non coincide con quella attuale -> una roba tipo getPassword()(il
             //3) se le nuova pw e la conferma pw sono due stringhe diverse
             //se nuova password è null, si chiama da qua la schermata di errore? -> bisognerà controllare qua anche l'espressione
             //regolare? O lo si fa nella view?

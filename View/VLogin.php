@@ -84,8 +84,6 @@ class VLogin {
     }
 
 
-    //TODO: metodo per registrarsi, devo discriminare dai campi login -> MANCA IL CONFERMA PASSWORD
-
     /**
      * Metodo che recupera tutte le credenziali inserite dall'utente necessarie per loggarsi: username, password
      * conferma della password ed, eventualmente, una bio
