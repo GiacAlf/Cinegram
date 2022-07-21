@@ -80,22 +80,22 @@
                 <form action="https://{$root_dir}/admin/carica-film" method="POST" id="inserisci_film" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="titolo">Titolo:</label>
-                        <input type="text" name="titolo" class="form-control" form="inserisci_film" id="titolo" placeholder="Inserisci il titolo" required>*
+                        <input type="text" name="titolo" class="form-control" form="inserisci_film" id="titolo" placeholder="Inserisci il titolo" required>
                     </div>
 
                     <div class="form-group">
                         <label for="data_uscita">Anno:</label>
-                        <input type="date" name="data" class="form-control" form="inserisci_film" id="data_uscita" placeholder="Inserisci la data di uscita" required>*
+                        <input type="date" name="data" class="form-control" form="inserisci_film" id="data_uscita" placeholder="Inserisci la data di uscita" required>
                     </div>
 
                     <div class="form-group">
                         <label for="durata">Durata:</label>
-                        <input type="number" name="durata" class="form-control" form="inserisci_film" id="durata" placeholder="Inserisci la durata" required>*
+                        <input type="number" name="durata" class="form-control" form="inserisci_film" id="durata" placeholder="Inserisci la durata" required>
                     </div>
 
                     <div class="form-group">
                         <label for="sinossi">Sinossi:</label>
-                        <input type="text" name="sinossi" class="form-control" form="inserisci_film" id="sinossi" placeholder="Inserisci la sinossi" required>*
+                        <input type="text" name="sinossi" class="form-control" form="inserisci_film" id="sinossi" placeholder="Inserisci la sinossi" required>
                     </div>
 
                     <!--<div class="form-group">
@@ -111,7 +111,7 @@
                     <div class="form-group">
                         <label for="locandina">Inserisci la locandina del film:</label>
                         <p>Inserire jpeg o png, di peso non superiore a 500 KB</p>
-                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required>* <!-- forse l"unico non required?-->
+                        <input type="file" name="locandina" class="form-control" form="inserisci_film" id="locandina" required> <!-- forse l"unico non required?-->
                     </div>
 
                     <div id="div">

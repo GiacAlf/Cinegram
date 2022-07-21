@@ -24,7 +24,7 @@ class CHomepage {
         $immaginiUtentiPopolari = FPersistentManager::loadImmaginiProfiloMembers($utentiPopolari, false);
 
         // per ora no agli avatar vicino alle recensioni (e risposte) ci mettiamo solo gli username
-        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte(6);
+        $ultimeRecensioniScritte = FPersistentManager::caricaUltimeRecensioniScritte(4);
 
         //nel template ci sono i film più visti, prima qua c'erano i più recensiti
         //sceglieremo poi

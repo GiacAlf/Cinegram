@@ -10,4 +10,4 @@ $GLOBALS["password"]= "";   // dovranno essere modificati
 
 // CONFIGURAZIONE PATH E SERVER
 
-$GLOBALS["URLBASE"] = $_SERVER['HTTP_HOST'];
+$GLOBALS["URLBASE"] = $_SERVER['HTTP_HOST'] . "/~giacomoalfani";

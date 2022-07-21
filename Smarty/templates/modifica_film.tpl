@@ -105,20 +105,18 @@
                     </div>
 
                     <div class="form-group">
-                        <h4>Registi attuali:</h4>
-                        {foreach $registi as $regista}
-                            <span>{$regista->getNome()} {$regista->getCognome()}, </span>
-                        {/foreach}
-                        <label for="registi">Nuova lista registi:<h6>Inserire nome e cognome, separati da una " , ", del regista, ciascun regista separato dall"altro dal " ; "</h6></label>
+                        <h4>Registi attuali: {foreach $registi as $regista}
+                            <span>{$regista->getNome()} {$regista->getCognome() } </span>
+                        {/foreach}</h4>
+                        <label for="registi">Nuova lista registi:<h6>Inserire nome e cognome del regista separati da una " , " e ciascun regista separato dall"altro da un " ; " <br>(importante: non inserire il ";" finale.  Esempio: Steven,Spielberg;James,Cameron)</h6></label>
                         <input type="text" name="modifica_registi" form="modifica_film" class="form-control" id="registi" placeholder="">
                     </div>
 
                     <div class="form-group">
-                        <h4>Attori attuali: </h4>
-                        {foreach $attori as $attore}
-                            <span>{$attore->getNome()} {$attore->getCognome()}, </span>
-                        {/foreach}
-                        <label for="attori">Nuova lista attori:<h6>Inserire nome e cognome, separati da una " , ", dell'attore, ciascun attore separato dall"altro dal " ; "</h6></label>
+                        <h4>Attori attuali: {foreach $attori as $attore}
+                            <span>{$attore->getNome()} {$attore->getCognome() } </span>
+                        {/foreach}</h4>
+                        <label for="attori">Nuova lista attori:<h6>Inserire nome e cognome dell'attore separati da una " , " e ciascun attore separato dall"altro dal " ; " <br>(importante: non inserire il ";" finale.  Esempio: Harrison,Ford)</h6></label>
                         <input type="text" name="modifica_attori" form="modifica_film" class="form-control" id="attori" placeholder="">
                     </div>
 
