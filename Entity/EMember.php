@@ -352,8 +352,6 @@ class EMember extends EUser {
      */
     public static function resizeImmagineProfilo(?string $immagineDaQuery, bool $grande): ?string {
 
-        /* il member potrebbe non aver caricato l'immagine, in questo modo se la query trova il suo valore a null
-        restituirà sempre null */
         if(is_null($immagineDaQuery))
             return null;
 
@@ -382,16 +380,6 @@ class EMember extends EUser {
         ob_start();
         imagejpeg($immagineRidimensionata);
         $immagineRidimensionataString = ob_get_clean();
-
-        // si svuota la variabile (fanno tutti così!)
-        // imagedestroy($immagine);
-
-        // questa è per provare che il resize funzioni, salva su file system
-        // imagejpeg($immagineRidimensionata, "/Users/giacomoalfani/Downloads/immagineRidimensionata.jpeg", 100);
-        // anche questa è per provare, stampa su browser (o console Phpstorm)
-        // imagejpeg($immagineRidimensionata, null, 100);
-
-        // l'immagine ritornata è una stringa
         return $immagineRidimensionataString;
     }
 
